@@ -66,6 +66,10 @@ const router = createBrowserRouter([
     errorElement: <Error />,
     children: [
       {
+        index: true,
+        element: <Home />,
+      },
+      {
         path: "Clientes",
         children: [
           {
@@ -124,10 +128,6 @@ const router = createBrowserRouter([
             ],
           },
         ],
-      },
-      {
-        path: "Home",
-        element: <Home />,
       },
       {
         path: "Orcamentos",
