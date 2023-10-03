@@ -67,16 +67,22 @@ const router = createBrowserRouter([
     children: [
       {
         path: "Clientes",
-        element: <Clientes />,
         children: [
+          {
+            index: true,
+            element: <Clientes />,
+          },
           {
             path: "Novo",
             element: <CriarCliente />,
           },
           {
             path: ":id",
-            element: <Cliente />,
             children: [
+              {
+                index: true,
+                element: <Cliente />,
+              },
               {
                 path: "editar",
                 element: <EditarCliente />,
@@ -91,16 +97,22 @@ const router = createBrowserRouter([
       },
       {
         path: "Fornecedores",
-        element: <Fornecedores />,
         children: [
+          {
+            index: true,
+            element: <Fornecedores />,
+          },
           {
             path: "Novo",
             element: <CriarFornecedor />,
           },
           {
             path: ":id",
-            element: <Fornecedor />,
             children: [
+              {
+                index: true,
+                element: <Fornecedor />,
+              },
               {
                 path: "editar",
                 element: <EditarFornecedor />,
@@ -119,16 +131,22 @@ const router = createBrowserRouter([
       },
       {
         path: "Orcamentos",
-        element: <Orcamentos />,
         children: [
+          {
+            index: true,
+            element: <Orcamentos />,
+          },
           {
             path: "Novo",
             element: <CriarOrcamento />,
           },
           {
             path: ":id",
-            element: <Orcamento />,
             children: [
+              {
+                index: true,
+                element: <Orcamento />,
+              },
               {
                 path: "editar",
                 element: <EditarOrcamento />,
@@ -143,16 +161,22 @@ const router = createBrowserRouter([
       },
       {
         path: "Pedidos",
-        element: <Pedidos />,
         children: [
+          {
+            index: true,
+            element: <Pedidos />,
+          },
           {
             path: "Novo",
             element: <CriarPedido />,
           },
           {
             path: ":id",
-            element: <Pedido />,
             children: [
+              {
+                index: true,
+                element: <Pedido />,
+              },
               {
                 path: "editar",
                 element: <EditarPedido />,
@@ -167,16 +191,22 @@ const router = createBrowserRouter([
       },
       {
         path: "Insumos",
-        element: <Insumos />,
         children: [
+          {
+            index: true,
+            element: <Insumos />,
+          },
           {
             path: "Novo",
             element: <CriarInsumo />,
           },
           {
             path: ":id",
-            element: <Insumo />,
             children: [
+              {
+                index: true,
+                element: <Insumo />,
+              },
               {
                 path: "editar",
                 element: <EditarInsumo />,
@@ -191,16 +221,22 @@ const router = createBrowserRouter([
       },
       {
         path: "Categorias",
-        element: <Categorias />,
         children: [
+          {
+            index: true,
+            element: <Categorias />,
+          },
           {
             path: "Novo",
             element: <CriarCategoria />,
           },
           {
             path: ":id",
-            element: <Categoria />,
             children: [
+              {
+                index: true,
+                element: <Categoria />,
+              },
               {
                 path: "editar",
                 element: <EditarCategoria />,
