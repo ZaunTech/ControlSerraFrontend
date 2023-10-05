@@ -57,7 +57,8 @@ function SideMenu({ sideWidth }: SideMenuProps) {
   const { themeName } = useAppThemeContext();
   const theme = useTheme();
   const smDown = useMediaQuery(theme.breakpoints.down("sm"));
-  const { isDrawerOpen, toggleDrawerOpen } = useAppDrawerContext();
+  const { isDrawerOpen, toggleDrawerOpen, drawerOptions } =
+    useAppDrawerContext();
   return (
     <Drawer
       open={isDrawerOpen}
@@ -90,54 +91,15 @@ function SideMenu({ sideWidth }: SideMenuProps) {
         <Divider sx={{ width: "100%" }} />
 
         <List component={"nav"} sx={{ flexGrow: 1 }}>
-          <ListItemLink
-            label="Home"
-            icon="home"
-            to="/"
-            onClick={smDown ? toggleDrawerOpen : undefined}
-          />
-          <ListItemLink
-            label="Clientes"
-            icon="person"
-            to="/clientes"
-            onClick={smDown ? toggleDrawerOpen : undefined}
-          />
-          <ListItemLink
-            label="Orçamentos"
-            icon="description"
-            to="/orcamentos"
-            onClick={smDown ? toggleDrawerOpen : undefined}
-          />
-          <ListItemLink
-            label="Pedidos"
-            icon="shoppingcart"
-            to="/pedidos"
-            onClick={smDown ? toggleDrawerOpen : undefined}
-          />
-          <ListItemLink
-            label="Insumos"
-            icon="construction"
-            to="/insumos"
-            onClick={smDown ? toggleDrawerOpen : undefined}
-          />
-          <ListItemLink
-            label="Fornecedores"
-            icon="store"
-            to="/fornecedores"
-            onClick={smDown ? toggleDrawerOpen : undefined}
-          />
-          <ListItemLink
-            label="Configurações"
-            icon="settings"
-            to="/configuracoes"
-            onClick={smDown ? toggleDrawerOpen : undefined}
-          />
-          <ListItemLink
-            label="Logout"
-            icon="logout"
-            to="/login"
-            onClick={smDown ? toggleDrawerOpen : undefined}
-          />
+          {drawerOptions.map((drawerOption) => (
+            <ListItemLink
+              key={drawerOption.path}
+              icon={drawerOption.icon}
+              label={drawerOption.label}
+              to={drawerOption.path}
+              onClick={smDown ? toggleDrawerOpen : undefined}
+            />
+          ))}
         </List>
       </Box>
     </Drawer>
