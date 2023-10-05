@@ -1,0 +1,147 @@
+import {
+  Drawer,
+  List,
+  ListItemText,
+  ListItemButton,
+  ListItemIcon,
+  Typography,
+  Box,
+  Divider,
+  useTheme,
+  useMediaQuery,
+} from "@mui/material";
+import { useMatch, useNavigate, useResolvedPath } from "react-router-dom";
+import {
+  useAppDrawerContext,
+  useAppThemeContext,
+} from "../../../data/contexts";
+import Icon from "@mui/material/Icon";
+
+interface IListItemLinkProps {
+  label?: string;
+  icon?: string;
+  to: string;
+  onClick?: (() => void) | undefined;
+}
+
+const ListItemLink: React.FC<IListItemLinkProps> = ({
+  to,
+  icon,
+  label,
+  onClick,
+}) => {
+  const navigate = useNavigate();
+  const resolvedPath = useResolvedPath(to);
+  const match = useMatch({ path: resolvedPath.pathname, end: true });
+
+  const handleClick = () => {
+    navigate(to);
+    onClick?.();
+  };
+
+  return (
+    <ListItemButton selected={!!match} onClick={handleClick}>
+      <ListItemIcon>
+        <Icon>{icon}</Icon>
+      </ListItemIcon>
+      <ListItemText primary={label} />
+    </ListItemButton>
+  );
+};
+
+interface SideMenuProps {
+  sideWidth: string;
+}
+
+function SideMenu({ sideWidth }: SideMenuProps) {
+  const { themeName } = useAppThemeContext();
+  const theme = useTheme();
+  const smDown = useMediaQuery(theme.breakpoints.down("sm"));
+  const { isDrawerOpen, toggleDrawerOpen } = useAppDrawerContext();
+  return (
+    <Drawer
+      open={isDrawerOpen}
+      variant={smDown ? "temporary" : "permanent"}
+      anchor="left"
+      sx={{ width: "100%" }}
+      onClose={toggleDrawerOpen}
+    >
+      <Box
+        width={sideWidth}
+        height={"100%"}
+        display={"flex"}
+        flexDirection={"column"}
+        justifyContent={"space-around"}
+        alignItems={"center"}
+      >
+        <Box
+          display={"flex"}
+          flexDirection={"row"}
+          alignItems={"center"}
+          justifyContent={"center"}
+          width={"100%"}
+          height={theme.spacing(20)}
+          gap={theme.spacing(1)}
+        >
+          <Icon>home</Icon>
+          <Typography variant="h5">Control Serra</Typography>
+        </Box>
+
+        <Divider sx={{ width: "100%" }} />
+
+        <List component={"nav"} sx={{ flexGrow: 1 }}>
+          <ListItemLink
+            label="Home"
+            icon="home"
+            to="/"
+            onClick={smDown ? toggleDrawerOpen : undefined}
+          />
+          <ListItemLink
+            label="Clientes"
+            icon="person"
+            to="/clientes"
+            onClick={smDown ? toggleDrawerOpen : undefined}
+          />
+          <ListItemLink
+            label="Orçamentos"
+            icon="description"
+            to="/orcamentos"
+            onClick={smDown ? toggleDrawerOpen : undefined}
+          />
+          <ListItemLink
+            label="Pedidos"
+            icon="shoppingcart"
+            to="/pedidos"
+            onClick={smDown ? toggleDrawerOpen : undefined}
+          />
+          <ListItemLink
+            label="Insumos"
+            icon="construction"
+            to="/insumos"
+            onClick={smDown ? toggleDrawerOpen : undefined}
+          />
+          <ListItemLink
+            label="Fornecedores"
+            icon="store"
+            to="/fornecedores"
+            onClick={smDown ? toggleDrawerOpen : undefined}
+          />
+          <ListItemLink
+            label="Configurações"
+            icon="settings"
+            to="/configuracoes"
+            onClick={smDown ? toggleDrawerOpen : undefined}
+          />
+          <ListItemLink
+            label="Logout"
+            icon="logout"
+            to="/login"
+            onClick={smDown ? toggleDrawerOpen : undefined}
+          />
+        </List>
+      </Box>
+    </Drawer>
+  );
+}
+
+export default SideMenu;

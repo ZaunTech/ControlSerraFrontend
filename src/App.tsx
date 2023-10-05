@@ -1,10 +1,14 @@
 import { Outlet } from "react-router-dom";
+import SideMenu from "./ui/components/navigation/SideMenu";
+import { Box, useTheme, useMediaQuery } from "@mui/material";
 
 function App() {
+  const theme = useTheme();
+  const smDown = useMediaQuery(theme.breakpoints.down("sm"));
+  const menuSize = theme.spacing(28);
   return (
     <>
-      <h1>Titulo da pagina</h1>
-      <h2>Sidebar</h2>
+      <SideMenu sideWidth={menuSize} />
       <Outlet />
       <h2>Footer</h2>
     </>
