@@ -19,7 +19,6 @@ function App() {
       { icon: "construction", label: "Insumos", path: "/insumos" },
       { icon: "store", label: "Fornecedores", path: "/fornecedores" },
       { icon: "settings", label: "Configurações", path: "/configuracoes" },
-      { icon: "logout", label: "Logout", path: "/login" },
     ]);
   }, []);
 

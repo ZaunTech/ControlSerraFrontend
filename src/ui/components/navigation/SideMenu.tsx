@@ -54,7 +54,7 @@ interface SideMenuProps {
 }
 
 function SideMenu({ sideWidth }: SideMenuProps) {
-  const { themeName } = useAppThemeContext();
+  const { themeName, toggleTheme } = useAppThemeContext();
   const theme = useTheme();
   const smDown = useMediaQuery(theme.breakpoints.down("sm"));
   const { isDrawerOpen, toggleDrawerOpen, drawerOptions } =
@@ -100,6 +100,18 @@ function SideMenu({ sideWidth }: SideMenuProps) {
               onClick={smDown ? toggleDrawerOpen : undefined}
             />
           ))}
+          <ListItemButton onClick={toggleTheme}>
+            <ListItemIcon>
+              <Icon>{themeName === "light" ? "dark_mode" : "light_mode"}</Icon>
+            </ListItemIcon>
+            <ListItemText primary={"Trocar Tema"} />
+          </ListItemButton>
+          <ListItemButton onClick={() => {}}>
+            <ListItemIcon>
+              <Icon>logout</Icon>
+            </ListItemIcon>
+            <ListItemText primary={"Logout"} />
+          </ListItemButton>
         </List>
       </Box>
     </Drawer>
