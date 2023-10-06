@@ -84,7 +84,7 @@ function SideMenu({ sideWidth }: SideMenuProps) {
           height={theme.spacing(20)}
           gap={theme.spacing(1)}
         >
-          <Icon>home</Icon>
+          <Icon>handyman</Icon>
           <Typography variant="h5">Control Serra</Typography>
         </Box>
 

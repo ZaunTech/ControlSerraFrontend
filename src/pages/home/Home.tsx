@@ -1,7 +1,8 @@
 import React from "react";
+import { PaginaBase } from "../../ui/layouts";
 
 function Home() {
-  return <div>Home</div>;
+  return <PaginaBase titulo="Home">Home</PaginaBase>;
 }
 
 export default Home;
