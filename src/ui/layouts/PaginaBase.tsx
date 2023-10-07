@@ -12,13 +12,19 @@ import {
   Button,
 } from "@mui/material";
 import { useAppDrawerContext } from "../../data/contexts";
+import React from "react";
 
 interface IPaginaBase {
   children: React.ReactNode;
   titulo: string;
+  barraDeFerramentas?: React.ReactNode;
 }
 
-export const PaginaBase: React.FC<IPaginaBase> = ({ children, titulo }) => {
+export const PaginaBase: React.FC<IPaginaBase> = ({
+  children,
+  titulo,
+  barraDeFerramentas,
+}) => {
   const theme = useTheme();
   const smDown = useMediaQuery(theme.breakpoints.down("sm"));
   const menuSize = theme.spacing(28);
@@ -59,9 +65,8 @@ export const PaginaBase: React.FC<IPaginaBase> = ({ children, titulo }) => {
                   variant="h6"
                   whiteSpace={"nowrap"}
                   overflow={"hidden"}
-                >
-                  Título da Página
-                </Typography>
+                ></Typography>
+                {titulo}
               </Box>
               <Box
                 display={"flex"}
@@ -70,23 +75,6 @@ export const PaginaBase: React.FC<IPaginaBase> = ({ children, titulo }) => {
                 justifyContent={"center"}
                 gap={theme.spacing(2)}
               >
-                <Input
-                  sx={{
-                    backgroundColor: "#f5f5f5",
-                    borderRadius: "5px",
-                    padding: "8px",
-                    width: {
-                      xs: "100%",
-                      sm: "200px",
-                    },
-                  }}
-                  placeholder="Pesquisar..."
-                  endAdornment={
-                    <IconButton>
-                      <Icon>search</Icon>
-                    </IconButton>
-                  }
-                />
                 <IconButton>
                   <Icon>notifications</Icon>
                 </IconButton>
@@ -98,6 +86,7 @@ export const PaginaBase: React.FC<IPaginaBase> = ({ children, titulo }) => {
           </Toolbar>
         </AppBar>
       </Box>
+      {barraDeFerramentas ? barraDeFerramentas : undefined}
       <Box flex={1} overflow={"auto"}>
         {children}
       </Box>

@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
-import SideMenu from "./ui/components/navigation/SideMenu";
 import { Box, useTheme, useMediaQuery } from "@mui/material";
+import { SideMenu } from "./ui/components";
 import { useAppDrawerContext } from "./data/contexts";
 import { useEffect } from "react";
 

@@ -53,7 +53,7 @@ interface SideMenuProps {
   sideWidth: string;
 }
 
-function SideMenu({ sideWidth }: SideMenuProps) {
+export function SideMenu({ sideWidth }: SideMenuProps) {
   const { themeName, toggleTheme } = useAppThemeContext();
   const theme = useTheme();
   const smDown = useMediaQuery(theme.breakpoints.down("sm"));
@@ -117,5 +117,3 @@ function SideMenu({ sideWidth }: SideMenuProps) {
     </Drawer>
   );
 }
-
-export default SideMenu;
