@@ -1,8 +1,16 @@
 import React from "react";
+import { PaginaBase } from "../../ui/layouts";
+import { FerramentasDeDetalhes } from "../../ui/components";
 
 function Clientes() {
-
-  return <div>Clientes</div>;
+  return (
+    <PaginaBase
+      titulo="Clientes"
+      barraDeFerramentas={<FerramentasDeDetalhes />}
+    >
+      Clientes
+    </PaginaBase>
+  );
 }
 
 export default Clientes;

@@ -64,9 +64,11 @@ export const PaginaBase: React.FC<IPaginaBase> = ({
                 <Typography
                   variant="h6"
                   whiteSpace={"nowrap"}
+                  textOverflow={"ellipsis"}
                   overflow={"hidden"}
-                ></Typography>
-                {titulo}
+                >
+                  {titulo}
+                </Typography>
               </Box>
               <Box
                 display={"flex"}
