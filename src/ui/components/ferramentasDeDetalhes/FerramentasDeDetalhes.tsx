@@ -99,7 +99,7 @@ export const FerramentasDeDetalhes: React.FC<IFerramentasDeDetalhes> = ({
             textOverflow={"ellipsis"}
             overflow={"hidden"}
           >
-            Salvar e voltar
+            Salvar e fechar
           </Typography>
         </Button>
       )}
