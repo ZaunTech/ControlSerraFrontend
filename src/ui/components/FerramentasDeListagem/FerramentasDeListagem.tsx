@@ -7,6 +7,7 @@ import {
   useTheme,
   InputAdornment,
 } from "@mui/material";
+import { Environment } from "../../../data/environment";
 
 interface IFerramentasDaListagem {
   textoDaBusca?: string;
@@ -41,7 +42,7 @@ export const FerramentasDaListagem: React.FC<IFerramentasDaListagem> = ({
       {mostrarInputBusca && (
         <TextField
           size={"small"}
-          placeholder="Pesquisar..."
+          placeholder={Environment.INPUT_DE_BUSCA}
           value={textoDaBusca}
           onChange={(e) => {
             onChangeBuscaTexto?.(e.target.value);
