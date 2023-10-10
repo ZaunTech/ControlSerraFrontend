@@ -31,7 +31,6 @@ export const FerramentasDaListagem: React.FC<IFerramentasDaListagem> = ({
     <Box
       component={Paper}
       height={theme.spacing(8)}
-      marginX={1}
       padding={1}
       paddingX={2}
       display={"flex"}
