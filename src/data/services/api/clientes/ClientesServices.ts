@@ -43,7 +43,7 @@ const getById = async (id: number): Promise<ICliente | Error> => {
     const urlRelativa = `/clientes/${id}`;
     const { data } = await Api.get<ICliente>(urlRelativa);
     if (data) {
-      return data.id;
+      return data;
     }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {
@@ -59,9 +59,7 @@ const create = async (dados: Omit<ICliente, "id">): Promise<number | Error> => {
     const urlRelativa = `/clientes`;
     const { data } = await Api.post<ICliente>(urlRelativa, dados);
     if (data) {
-      return {
-        data.id,
-      };
+      return data.id;
     }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {
@@ -72,7 +70,10 @@ const create = async (dados: Omit<ICliente, "id">): Promise<number | Error> => {
     );
   }
 };
-const updateById = async (id: number, dados: ICliente): Promise<void | Error> => {
+const updateById = async (
+  id: number,
+  dados: ICliente
+): Promise<void | Error> => {
   try {
     const urlRelativa = `/clientes/${id}`;
     await Api.put(urlRelativa, dados);
