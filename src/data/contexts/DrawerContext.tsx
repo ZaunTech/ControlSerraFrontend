@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
 
 interface IDrawerOption {
   icon: string;
@@ -18,13 +18,16 @@ export const useAppDrawerContext = () => {
   return useContext(DrawerContext);
 };
 
-type Props = {
-  children?: React.ReactNode;
+interface IDrawerProvider {
+  children: React.ReactNode;
+  DrawerOptions?: IDrawerOption[];
 };
 
-export const AppDrawerProvider: React.FC<Props> = ({ children }) => {
+export const AppDrawerProvider: React.FC<IDrawerProvider> = ({ children, DrawerOptions }) => {
   const [isDrawerOpen, setIsDraweropen] = useState(false);
   const [drawerOptions, setDrawerOptions] = useState<IDrawerOption[]>([]);
+
+  useEffect(() => { if (DrawerOptions !== undefined) setDrawerOptions(DrawerOptions) }, [DrawerOptions])
 
   const toggleDrawerOpen = useCallback(() => {
     setIsDraweropen((isDrawerOpen) => !isDrawerOpen);
