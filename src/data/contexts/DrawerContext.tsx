@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 
-interface IDrawerOption {
+export interface IDrawerOption {
   icon: string;
   label: string;
   path: string;
