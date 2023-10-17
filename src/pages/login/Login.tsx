@@ -12,11 +12,12 @@ import {
   Link,
   IconButton,
   Button,
-  TextField,
   OutlinedInput,
   Checkbox,
   FormControlLabel,
+  CircularProgress,
 } from "@mui/material";
+import { useAuthContext } from "../../data/contexts";
 
 const createUserFormSchema = z.object({
   email: z.string().min(1, "Faltou o nome").email("isso não é email"),
@@ -35,7 +36,22 @@ export function Login() {
   } = useForm({
     resolver: zodResolver(createUserFormSchema),
   });
+
+
   const [output, setOutput] = useState("");
+
+  const [isLoading, setIsLoading] = useState(false);
+  const { login } = useAuthContext();
+
+  const handleSubSubmit = () => {
+    setIsLoading(true);
+    login(email, password).then(() => {
+      setIsLoading(false)
+    }
+    ).catch(() => {
+      setIsLoading(false)
+    })
+  }
 
   return (
     <Box id="Main" flexDirection={"row"} display={"flex"}>
@@ -116,6 +132,7 @@ export function Login() {
             <Typography variant="h5">Faça login para continuar</Typography>
           </Box>
           <OutlinedInput
+            disabled={isLoading}
             type="email"
             size="small"
             placeholder="Email"
@@ -125,6 +142,7 @@ export function Login() {
           {errors.email && <span>{errors.email.message?.toString()}</span>}
 
           <OutlinedInput
+            disabled={isLoading}
             type="password"
             size="small"
             placeholder="Senha"
@@ -157,7 +175,8 @@ export function Login() {
             </Link>
           </Box>
 
-          <Button variant="contained" type="submit">
+          <Button disabled={isLoading}
+            variant="contained" type="submit" endIcon={isLoading ? <CircularProgress size={20} variant="indeterminate" color="inherit" /> : undefined}>
             Login
           </Button>
         </Box>

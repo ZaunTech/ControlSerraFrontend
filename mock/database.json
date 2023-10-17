@@ -13,12 +13,6 @@
       "telefone": "15 8888-8888"
     },
     {
-      "id": 3,
-      "nome": "Matheus",
-      "email": "matheus@gmail.com",
-      "telefone": "15 7777-7777"
-    },
-    {
       "id": 4,
       "nome": "Ana",
       "email": "ana@gmail.com",
@@ -55,5 +49,7 @@
       "telefone": "15 9999-8888"
     }
   ],
-  "auth": { "accessToken": "toek.diferenciado" }
+  "auth": {
+    "accessToken": "bypassAuth"
+  }
 }

@@ -7,9 +7,7 @@ import {
   Typography,
   IconButton,
   Icon,
-  Input,
   Avatar,
-  Button,
 } from "@mui/material";
 import { useAppDrawerContext } from "../../data/contexts";
 import React from "react";

@@ -14,6 +14,7 @@ import { useMatch, useNavigate, useResolvedPath } from "react-router-dom";
 import {
   useAppDrawerContext,
   useAppThemeContext,
+  useAuthContext,
 } from "../../../data/contexts";
 import Icon from "@mui/material/Icon";
 
@@ -59,6 +60,8 @@ export function SideMenu({ sideWidth }: SideMenuProps) {
   const smDown = useMediaQuery(theme.breakpoints.down("sm"));
   const { isDrawerOpen, toggleDrawerOpen, drawerOptions } =
     useAppDrawerContext();
+
+  const { logout } = useAuthContext();
   return (
     <Drawer
       open={isDrawerOpen}
@@ -106,7 +109,7 @@ export function SideMenu({ sideWidth }: SideMenuProps) {
             </ListItemIcon>
             <ListItemText primary={"Trocar Tema"} />
           </ListItemButton>
-          <ListItemButton onClick={() => {}}>
+          <ListItemButton onClick={() => { logout() }}>
             <ListItemIcon>
               <Icon>logout</Icon>
             </ListItemIcon>

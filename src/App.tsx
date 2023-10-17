@@ -36,9 +36,14 @@ const AppInner = ({ menuSize, DrawerOptions }: AppInnerProps) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      navigate('/login');
-    }
+    const timer = setTimeout(() => {
+      if (!isAuthenticated) {
+        navigate('/login');
+      }
+
+    }, 5)
+
+    return () => clearTimeout(timer);
   }, [isAuthenticated])
 
   const renderContent = () => {
@@ -48,6 +53,7 @@ const AppInner = ({ menuSize, DrawerOptions }: AppInnerProps) => {
         <Outlet />
       </>
     }
+    return "Nao ta logado"
   }
 
   return (
