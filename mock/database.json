@@ -54,5 +54,6 @@
       "email": "pedro@gmail.com",
       "telefone": "15 9999-8888"
     }
-  ]
+  ],
+  "auth": { "accessToken": "toek.diferenciado" }
 }
