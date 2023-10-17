@@ -51,14 +51,23 @@ import {
 
 import Configuracoes from "./pages/Configuracoes/Configuracoes.tsx";
 import Home from "./pages/home/Home.tsx";
-import Login from "./pages/login/Login.tsx";
 import Error from "./pages/error/Error.tsx";
+import { Login, RecuperarSenha } from "./pages/login/index.ts";
 
 const router = createBrowserRouter([
   {
     path: "/login",
-    element: <Login />,
     errorElement: <Error />,
+    children: [
+      {
+        index: true,
+        element: <Login />,
+      },
+      {
+        path: "RecuperarSenha",
+        element: <RecuperarSenha />,
+      },
+    ],
   },
   {
     path: "/",
