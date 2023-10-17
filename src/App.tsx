@@ -1,7 +1,8 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { useTheme, useMediaQuery } from "@mui/material";
 import { SideMenu } from "./ui/components";
-import { AppDrawerProvider, AuthProvider } from "./data/contexts";
+import { AppDrawerProvider, AuthProvider, IDrawerOption, useAuthContext } from "./data/contexts";
+import { useEffect } from "react";
 
 const App = () => {
   const theme = useTheme();
@@ -20,12 +21,39 @@ const App = () => {
 
   return (
     <AuthProvider>
-      <AppDrawerProvider DrawerOptions={DrawerOptions}>
+      <AppInner menuSize={menuSize} DrawerOptions={DrawerOptions} />
+    </AuthProvider>
+  );
+}
+
+interface AppInnerProps {
+  menuSize: string;
+  DrawerOptions: IDrawerOption[];
+}
+
+const AppInner = ({ menuSize, DrawerOptions }: AppInnerProps) => {
+  const { isAuthenticated } = useAuthContext();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/login');
+    }
+  }, [isAuthenticated])
+
+  const renderContent = () => {
+    if (isAuthenticated) {
+      return <>
         <SideMenu sideWidth={menuSize} />
         <Outlet />
-        <h2>Footer</h2>
-      </AppDrawerProvider>
-    </AuthProvider>
+      </>
+    }
+  }
+
+  return (
+    <AppDrawerProvider DrawerOptions={DrawerOptions}>
+      {renderContent()}
+    </AppDrawerProvider>
   );
 }
 
