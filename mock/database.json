@@ -3,26 +3,56 @@
     {
       "id": 1,
       "nome": "Gabriel",
-      "email": "Gabriel@gmail.com",
-      "telefone": "15 999999999"
+      "email": "gabriel@gmail.com",
+      "telefone": "15 9999-9999"
     },
     {
       "id": 2,
       "nome": "Henrique",
       "email": "henrique@gmail.com",
-      "telefone": "15 988888888"
+      "telefone": "15 8888-8888"
     },
     {
       "id": 3,
-      "nome": "Antonio",
-      "email": "Antonio@gmail.com",
-      "telefone": "15 977777777"
+      "nome": "Matheus",
+      "email": "matheus@gmail.com",
+      "telefone": "15 7777-7777"
     },
     {
       "id": 4,
-      "nome": "Matheus",
-      "email": "Matheus@gmail.com",
-      "telefone": "15 966666666"
+      "nome": "Ana",
+      "email": "ana@gmail.com",
+      "telefone": "15 6666-6666"
+    },
+    {
+      "id": 5,
+      "nome": "Luana",
+      "email": "luana@gmail.com",
+      "telefone": "15 5555-5555"
+    },
+    {
+      "id": 6,
+      "nome": "Rafael",
+      "email": "rafael@gmail.com",
+      "telefone": "15 4444-4444"
+    },
+    {
+      "id": 7,
+      "nome": "Maria",
+      "email": "maria@gmail.com",
+      "telefone": "15 3333-3333"
+    },
+    {
+      "id": 9,
+      "nome": "Isabela",
+      "email": "isabela@gmail.com",
+      "telefone": "15 1111-1111"
+    },
+    {
+      "id": 10,
+      "nome": "Pedro",
+      "email": "pedro@gmail.com",
+      "telefone": "15 9999-8888"
     }
   ]
 }

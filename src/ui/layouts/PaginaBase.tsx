@@ -34,7 +34,6 @@ export const PaginaBase: React.FC<IPaginaBase> = ({
     <Box
       display={"flex"}
       flexDirection={"column"}
-      height={"100vh"}
       marginLeft={smDown ? 0 : menuSize}
     >
       <Box>

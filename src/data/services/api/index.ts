@@ -1,3 +1,3 @@
 export { Api } from "./axios-config";
 
-export { ClientesService } from "./clientes/ClientesServices";
+export * from "./clientes/ClientesServices";

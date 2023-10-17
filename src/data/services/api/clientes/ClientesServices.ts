@@ -1,7 +1,7 @@
 import { Api } from "..";
 import { Environment } from "../../../environment";
 
-interface ICliente {
+export interface ICliente {
   id: number;
   nome: string;
   email: string;
@@ -9,7 +9,7 @@ interface ICliente {
   endereco: string;
 }
 
-type TClientesComTotalCount = {
+export type TClientesComTotalCount = {
   data: ICliente[];
   totalCount: number;
 };
@@ -19,7 +19,7 @@ const getAll = async (
   filter = ""
 ): Promise<TClientesComTotalCount | Error> => {
   try {
-    const urlRelativa = `/clientes?_page=${page}&_limite=${Environment.LIMITE_DE_LINHAS}&nome_like=${filter}`;
+    const urlRelativa = `/clientes?_page=${page}&_limit=${Environment.LIMITE_DE_LINHAS}&nome_like=${filter}`;
     const { data, headers } = await Api.get(urlRelativa);
     if (data) {
       return {
@@ -76,7 +76,10 @@ const updateById = async (
 ): Promise<void | Error> => {
   try {
     const urlRelativa = `/clientes/${id}`;
-    await Api.put(urlRelativa, dados);
+    const data = await Api.put(urlRelativa, dados);
+    if (data.statusText === "OK") {
+      return data.data.id;
+    }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {
     console.error(error);
@@ -89,7 +92,10 @@ const updateById = async (
 const deleteById = async (id: number): Promise<any> => {
   try {
     const urlRelativa = `/clientes/${id}`;
-    await Api.delete(urlRelativa);
+    const data = await Api.delete(urlRelativa);
+    if (data.statusText === "OK") {
+      return data.data.id;
+    }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {
     console.error(error);
