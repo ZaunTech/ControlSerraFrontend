@@ -19,6 +19,7 @@ const App = () => {
     { icon: "description", label: "Orçamentos", path: "/orcamentos" },
     { icon: "shoppingcart", label: "Pedidos", path: "/pedidos" },
     { icon: "construction", label: "Insumos", path: "/insumos" },
+    { icon: "local_offer", label: "Categorias", path: "/categorias" },
     { icon: "store", label: "Fornecedores", path: "/fornecedores" },
     { icon: "settings", label: "Configurações", path: "/configuracoes" },
   ];
