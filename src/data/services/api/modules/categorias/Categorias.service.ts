@@ -1,6 +1,7 @@
 import { Api } from "../..";
 import { Environment } from "../../../../environment";
-import { ICategoria, TListCategorias } from "./ICategoria";
+import { ICategoria } from "./Interfaces/ICategoria";
+import { TListCategorias } from "./Interfaces/TListCategorias";
 import { CreateCategoriaDto } from "./dto/create-categoria.dto";
 import { UpdateCategoriaDto } from "./dto/update-categoria.dto";
 
