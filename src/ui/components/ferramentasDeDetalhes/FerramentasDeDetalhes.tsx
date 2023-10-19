@@ -8,6 +8,7 @@ import {
   Skeleton,
   Typography,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 interface IFerramentasDeDetalhes {
   textoBotaoNovo?: string;
@@ -53,6 +54,11 @@ export const FerramentasDeDetalhes: React.FC<IFerramentasDeDetalhes> = ({
   skeletonVoltar,
 }) => {
   const theme = useTheme();
+  const navigate = useNavigate();
+
+  const voltar = () => {
+    navigate(-1);
+  }
   return (
     <Box
       component={Paper}
@@ -151,7 +157,7 @@ export const FerramentasDeDetalhes: React.FC<IFerramentasDeDetalhes> = ({
           variant="outlined"
           disableElevation
           startIcon={<Icon>arrow_back</Icon>}
-          onClick={onClickVoltar}
+          onClick={onClickVoltar || voltar}
         >
           <Typography
             variant="button"
