@@ -26,10 +26,6 @@ const createUserFormSchema = z.object({
 });
 
 export function Login() {
-  function createUser(data: any) {
-    console.log(data);
-  }
-
   const {
     register,
     handleSubmit,
@@ -45,8 +41,7 @@ export function Login() {
 
   const navigate = useNavigate();
 
-  const handleSubSubmit = (data) => {
-    console.log("firstfrostdas");
+  const handleFormLoginSubmit = (data: any) => {
     const { email, password } = data;
     setIsLoading(true);
     login(email, password)
@@ -119,9 +114,7 @@ export function Login() {
       </Box>
       <Box
         component={"form"}
-        onSubmit={() => {
-          //handleSubmit(createUser);
-        }}
+        onSubmit={handleFormLoginSubmit}
         width={"60vw"}
         height={"100vh"}
         display={"flex"}
@@ -201,9 +194,7 @@ export function Login() {
                 />
               ) : undefined
             }
-            onClick={() => {
-              handleSubSubmit({ email: "gab@gmail.com", password: "123" });
-            }}
+            onClick={handleFormLoginSubmit}
           >
             Login
           </Button>

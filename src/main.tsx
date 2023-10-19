@@ -1,14 +1,16 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import Routes from "./routes.tsx";
-import { AppThemeProvider } from "./data/contexts";
+import { AppThemeProvider, AuthProvider } from "./data/contexts";
 import { CssBaseline } from "@mui/material";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-      <AppThemeProvider>
+    <AppThemeProvider>
+      <AuthProvider>
         <CssBaseline />
         <Routes />
-      </AppThemeProvider>
+      </AuthProvider>
+    </AppThemeProvider>
   </React.StrictMode>
 );

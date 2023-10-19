@@ -1,7 +1,11 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import { useTheme, useMediaQuery } from "@mui/material";
 import { SideMenu } from "./ui/components";
-import { AppDrawerProvider, AuthProvider, IDrawerOption, useAuthContext } from "./data/contexts";
+import {
+  AppDrawerProvider,
+  IDrawerOption,
+  useAuthContext,
+} from "./data/contexts";
 import { useEffect } from "react";
 
 const App = () => {
@@ -19,12 +23,8 @@ const App = () => {
     { icon: "settings", label: "Configurações", path: "/configuracoes" },
   ];
 
-  return (
-    <AuthProvider>
-      <AppInner menuSize={menuSize} DrawerOptions={DrawerOptions} />
-    </AuthProvider>
-  );
-}
+  return <AppInner menuSize={menuSize} DrawerOptions={DrawerOptions} />;
+};
 
 interface AppInnerProps {
   menuSize: string;
@@ -38,29 +38,30 @@ const AppInner = ({ menuSize, DrawerOptions }: AppInnerProps) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       if (!isAuthenticated) {
-        navigate('/login');
+        navigate("/login");
       }
-
-    }, 5)
+    }, 5);
 
     return () => clearTimeout(timer);
-  }, [isAuthenticated])
+  }, [isAuthenticated]);
 
   const renderContent = () => {
     if (isAuthenticated) {
-      return <>
-        <SideMenu sideWidth={menuSize} />
-        <Outlet />
-      </>
+      return (
+        <>
+          <SideMenu sideWidth={menuSize} />
+          <Outlet />
+        </>
+      );
     }
-    return "Nao ta logado"
-  }
+    return "Nao ta logado";
+  };
 
   return (
     <AppDrawerProvider DrawerOptions={DrawerOptions}>
       {renderContent()}
     </AppDrawerProvider>
   );
-}
+};
 
 export default App;

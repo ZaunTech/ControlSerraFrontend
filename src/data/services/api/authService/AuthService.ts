@@ -11,7 +11,7 @@ const auth = async (
   try {
     const { data } = await Api.get("/auth", { data: { email, password } }); //Metodo get apenas para teste, pois nao foi implementado autenticação no mock do json server
     if (data) {
-      return data.accessToken;
+      return data;
     }
     return new Error("Erro ao efetuar o login");
   } catch (error) {
