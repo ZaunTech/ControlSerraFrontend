@@ -34,8 +34,6 @@ export function Login() {
     resolver: zodResolver(createUserFormSchema),
   });
 
-  const [output, setOutput] = useState("");
-
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuthContext();
 
@@ -114,7 +112,7 @@ export function Login() {
       </Box>
       <Box
         component={"form"}
-        onSubmit={handleFormLoginSubmit}
+        onSubmit={handleSubmit(handleFormLoginSubmit)}
         width={"60vw"}
         height={"100vh"}
         display={"flex"}
@@ -194,7 +192,6 @@ export function Login() {
                 />
               ) : undefined
             }
-            onClick={handleFormLoginSubmit}
           >
             Login
           </Button>
