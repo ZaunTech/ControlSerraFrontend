@@ -48,6 +48,13 @@ import {
   CriarFornecedor,
   ExcluirFornecedor,
 } from "./pages/fornecedores/index.tsx";
+import {
+  Produto,
+  Produtos,
+  EditarProduto,
+  CriarProduto,
+  ExcluirProduto,
+} from "./pages/produtos/index.tsx";
 
 import Configuracoes from "./pages/Configuracoes/Configuracoes.tsx";
 import Home from "./pages/home/Home.tsx";
@@ -253,6 +260,36 @@ const router = createBrowserRouter([
               {
                 path: "excluir",
                 element: <ExcluirCategoria />,
+              },
+            ],
+          },
+        ],
+      },
+      {
+        path: "Produtos",
+        children: [
+          {
+            index: true,
+            element: <Produtos />,
+          },
+          {
+            path: "Novo",
+            element: <CriarProduto />,
+          },
+          {
+            path: ":id",
+            children: [
+              {
+                index: true,
+                element: <Produto />,
+              },
+              {
+                path: "editar",
+                element: <EditarProduto />,
+              },
+              {
+                path: "excluir",
+                element: <EditarProduto />,
               },
             ],
           },
