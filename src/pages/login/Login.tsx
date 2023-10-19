@@ -18,6 +18,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { useAuthContext } from "../../data/contexts";
+import { useNavigate } from "react-router-dom";
 
 const createUserFormSchema = z.object({
   email: z.string().min(1, "Faltou o nome").email("isso não é email"),
@@ -37,21 +38,31 @@ export function Login() {
     resolver: zodResolver(createUserFormSchema),
   });
 
-
   const [output, setOutput] = useState("");
 
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuthContext();
 
-  const handleSubSubmit = () => {
+  const navigate = useNavigate();
+
+  const handleSubSubmit = (data) => {
+    console.log("firstfrostdas");
+    const { email, password } = data;
     setIsLoading(true);
-    login(email, password).then(() => {
-      setIsLoading(false)
-    }
-    ).catch(() => {
-      setIsLoading(false)
-    })
-  }
+    login(email, password)
+      .then((result) => {
+        setIsLoading(false);
+        if (result instanceof Error) {
+          return result.message;
+        }
+        navigate("/clientes");
+        return;
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        return err;
+      });
+  };
 
   return (
     <Box id="Main" flexDirection={"row"} display={"flex"}>
@@ -108,7 +119,9 @@ export function Login() {
       </Box>
       <Box
         component={"form"}
-        onSubmit={handleSubmit(createUser)}
+        onSubmit={() => {
+          //handleSubmit(createUser);
+        }}
         width={"60vw"}
         height={"100vh"}
         display={"flex"}
@@ -175,8 +188,23 @@ export function Login() {
             </Link>
           </Box>
 
-          <Button disabled={isLoading}
-            variant="contained" type="submit" endIcon={isLoading ? <CircularProgress size={20} variant="indeterminate" color="inherit" /> : undefined}>
+          <Button
+            disabled={isLoading}
+            variant="contained"
+            type="submit"
+            endIcon={
+              isLoading ? (
+                <CircularProgress
+                  size={20}
+                  variant="indeterminate"
+                  color="inherit"
+                />
+              ) : undefined
+            }
+            onClick={() => {
+              handleSubSubmit({ email: "gab@gmail.com", password: "123" });
+            }}
+          >
             Login
           </Button>
         </Box>
