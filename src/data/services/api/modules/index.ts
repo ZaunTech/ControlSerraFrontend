@@ -1,4 +1,4 @@
-export { CategoriasService } from './categorias/Categorias.service'
-export { InsumosService } from './insumos/Insumos.service'
-export { FornecedoresService } from './fornecedores/Fornecedores.service'
-export { ClientesService } from './clientes/ClientesServices'
+export * from './categorias'
+export * from './insumos'
+export * from './fornecedores'
+export * from './clientes'

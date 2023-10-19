@@ -1,0 +1,5 @@
+export * from './Fornecedores.service'
+export * from './Interfaces/IFornecedor'
+export * from './Interfaces/TListFornecedor'
+export * from './dto/create-fornecedor.dto'
+export * from './dto/update-fornecedor.dto'

@@ -1,0 +1,5 @@
+export * from './Insumos.service'
+export * from './Interfaces/IInsumo'
+export * from './Interfaces/TListInsumo'
+export * from './dto/create-insumo.dto'
+export * from './dto/update-insumo.dto'
