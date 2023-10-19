@@ -98,7 +98,7 @@ const deleteById = async (id: number): Promise<any> => {
     }
 };
 
-export const CategoriasService = {
+export const InsumosService = {
     getAll,
     getById,
     create,
