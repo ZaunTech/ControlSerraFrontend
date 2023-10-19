@@ -1,6 +1,7 @@
 import { Api } from "../..";
 import { Environment } from "../../../../environment";
-import { IInsumo, TListInsumos } from "./IInsumo";
+import { IInsumo } from "./Interfaces/IInsumo";
+import { TListInsumos } from "./Interfaces/TListInsumos";
 import { CreateInsumoDto } from "./dto/create-insumo.dto";
 import { UpdateInsumoDto } from "./dto/update-insumo.dto";
 

@@ -1,4 +1,4 @@
-import { ICategoria } from "../categorias/ICategoria";
+import { ICategoria } from "../../categorias/Interfaces/ICategoria";
 
 export interface IInsumo {
     id: number;
@@ -11,7 +11,4 @@ export interface IInsumo {
     updatedAt?: Date;
 }
 
-export type TListInsumos = {
-    data: IInsumo[];
-    totalCount: number;
-}
+

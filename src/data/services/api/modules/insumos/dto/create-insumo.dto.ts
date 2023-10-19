@@ -1,4 +1,4 @@
-import { ICategoria } from "../../categorias/ICategoria";
+import { ICategoria } from "../../categorias/Interfaces/ICategoria";
 
 export interface CreateInsumoDto {
     titulo: string;
