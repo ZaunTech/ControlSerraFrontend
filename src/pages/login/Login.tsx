@@ -50,7 +50,7 @@ export function Login() {
         if (result instanceof Error) {
           return result.message;
         }
-        navigate("/home");
+        navigate("/");
         return;
       })
       .catch((err) => {
