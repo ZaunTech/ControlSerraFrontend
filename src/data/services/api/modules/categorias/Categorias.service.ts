@@ -12,7 +12,7 @@ const getAll = async (
     filter = ""
 ): Promise<TListCategorias | Error> => {
     try {
-        const urlRelativa = `/${rota}?_page=${page}&_limit=${Environment.LIMITE_DE_LINHAS}&nome_like=${filter}`;
+        const urlRelativa = `/${rota}?_page=${page}&_limit=${Environment.LIMITE_DE_LINHAS}&titulo_like=${filter}`;
         const { data, headers } = await Api.get(urlRelativa);
         if (data) {
             return {

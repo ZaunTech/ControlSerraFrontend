@@ -3,12 +3,14 @@ import { Environment } from "../../../../environment";
 import { ICliente } from "./Interfaces/ICliente";
 import { TListCliente } from "./Interfaces/TListCliente";
 
+const rota = 'clientes';
+
 const getAll = async (
   page = 1,
   filter = ""
 ): Promise<TListCliente | Error> => {
   try {
-    const urlRelativa = `/clientes?_page=${page}&_limit=${Environment.LIMITE_DE_LINHAS}&nome_like=${filter}`;
+    const urlRelativa = `/${rota}?_page=${page}&_limit=${Environment.LIMITE_DE_LINHAS}&nome_like=${filter}`;
     const { data, headers } = await Api.get(urlRelativa);
     if (data) {
       return {
@@ -29,7 +31,7 @@ const getAll = async (
 };
 const getById = async (id: number): Promise<ICliente | Error> => {
   try {
-    const urlRelativa = `/clientes/${id}`;
+    const urlRelativa = `/${rota}/${id}`;
     const { data } = await Api.get<ICliente>(urlRelativa);
     if (data) {
       return data;
@@ -45,7 +47,7 @@ const getById = async (id: number): Promise<ICliente | Error> => {
 };
 const create = async (dados: Omit<ICliente, "id">): Promise<number | Error> => {
   try {
-    const urlRelativa = `/clientes`;
+    const urlRelativa = `/${rota}`;
     const { data } = await Api.post<ICliente>(urlRelativa, dados);
     if (data) {
       return data.id;
@@ -64,7 +66,7 @@ const updateById = async (
   dados: ICliente
 ): Promise<void | Error> => {
   try {
-    const urlRelativa = `/clientes/${id}`;
+    const urlRelativa = `/${rota}/${id}`;
     const data = await Api.put(urlRelativa, dados);
     if (data.statusText === "OK") {
       return data.data.id;
@@ -80,7 +82,7 @@ const updateById = async (
 };
 const deleteById = async (id: number): Promise<any> => {
   try {
-    const urlRelativa = `/clientes/${id}`;
+    const urlRelativa = `/${rota}/${id}`;
     const data = await Api.delete(urlRelativa);
     if (data.statusText === "OK") {
       return data.data.id;

@@ -12,7 +12,7 @@ import {
 import { useAppDrawerContext } from "../../data/contexts";
 import React from "react";
 
-interface IPaginaBase {
+export interface IPaginaBase {
   children: React.ReactNode;
   titulo: string;
   barraDeFerramentas?: React.ReactNode;

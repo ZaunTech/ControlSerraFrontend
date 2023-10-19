@@ -7,12 +7,6 @@
       "telefone": "15 9999-9999"
     },
     {
-      "id": 2,
-      "nome": "Henrique",
-      "email": "henrique@gmail.com",
-      "telefone": "15 8888-8888"
-    },
-    {
       "id": 5,
       "nome": "Luana",
       "email": "luana@gmail.com",
@@ -45,5 +39,87 @@
   ],
   "auth": {
     "accessToken": "bypassAuth"
-  }
+  },
+  "fornecedores": [
+    {
+      "id": 1,
+      "nome": "Gabriel",
+      "email": "gabriel@gmail.com",
+      "telefone": "15 9999-9999"
+    },
+    {
+      "id": 5,
+      "nome": "Luana",
+      "email": "luana@gmail.com",
+      "telefone": "15 5555-5555"
+    },
+    {
+      "id": 6,
+      "nome": "Rafael",
+      "email": "rafael@gmail.com",
+      "telefone": "15 4444-4444"
+    },
+    {
+      "id": 7,
+      "nome": "Maria",
+      "email": "maria@gmail.com",
+      "telefone": "15 3333-3333"
+    },
+    {
+      "id": 9,
+      "nome": "Isabela",
+      "email": "isabela@gmail.com",
+      "telefone": "15 1111-1111"
+    },
+    {
+      "id": 10,
+      "nome": "Pedro",
+      "email": "pedro@gmail.com",
+      "telefone": "15 9999-8888"
+    }
+  ],
+  "insumos": [
+    {
+      "id": 1,
+      "titulo": "MDF Diferenciado",
+      "idCategoria": 1
+    },
+    {
+      "id": 2,
+      "titulo": "Barra de metal 30mm X 30mm",
+      "idCategoria": 2
+    },
+    {
+      "id": 3,
+      "titulo": "Chapa de metalon",
+      "idCategoria": 3
+    },
+    {
+      "id": 4,
+      "titulo": "Servidor",
+      "idCategoria": 4
+    }
+  ],
+  "categorias": [
+    {
+      "id": 1,
+      "tipo": "Material",
+      "titulo": "Madeira"
+    },
+    {
+      "id": 2,
+      "tipo": "Material",
+      "titulo": "Metal"
+    },
+    {
+      "id": 3,
+      "tipo": "Material",
+      "titulo": "Ceramica"
+    },
+    {
+      "id": 4,
+      "tipo": "Mao de obra",
+      "titulo": "Pintura"
+    }
+  ]
 }
