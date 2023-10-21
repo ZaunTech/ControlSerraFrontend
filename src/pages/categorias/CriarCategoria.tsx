@@ -13,8 +13,13 @@ const createUserFormSchema = z
     descricao: z.string(),
   
   });
+
  console.log("teste");
   
+
+ 
+console.log("Teste");  
+
 function CriarCategoria() {
   const {
     register,
