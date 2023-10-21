@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useEffect } from "react";
 import { useState } from "react";
 import { useMemo } from "react";
 import { PaginaBase } from "../../ui/layouts";
@@ -25,7 +25,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useForm } from "react-hook-form";
 import { useSubmit } from "react-router-dom";
-import { getCep } from "../../data/services/api/axios-config/actions/cep";
+import  getCepData  from "../../data/services/api/axios-config/actions/cep";
 import { ReplySharp } from "@mui/icons-material";
 
 const createUserFormSchema = z
@@ -40,12 +40,6 @@ const createUserFormSchema = z
     email: z.string().min(1, "Faltou o nome").email("isso não é email"),
     telefone: z.string(),
     celular: z.string(),
-    cep: z.number().min(8, "Cep invalido").max(8, "Cep Invalido"),
-    endereco: z.string(),
-    rua: z.string(),
-    bairro: z.string(),
-    cidade: z.string(),
-    estado: z.string(),
     numero: z.string(),
     pais: z.string(),
     complemento: z.string(),
@@ -55,7 +49,35 @@ const createUserFormSchema = z
     message: "Os emails precisam ser iguais",
   });
 
+  const createCepFormSchema = z.object({
+    cep: z
+      .string()
+      .min(8, "O cep precisa de 8 digitos")
+      .max(8, "O cep precisa de 8 digitos"),
+    pais: z.string(),
+    estado: z.string(),
+    cidade: z.string(),
+    bairro: z.string(),
+    rua: z.string(),
+    numero: z.string(),
+    complemento: z.string(),
+  });
+  type createCepFormData = z.infer<typeof createCepFormSchema>;
+
 function CriarFornecedor() {
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+  
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(createUserFormSchema),
+  });
+  const [output, setOutput] = useState("");
+
+
   const [tipo, setTipo] = React.useState("juridico");
   const handleChange = (event: SelectChangeEvent) => {
     setTipo(event.target.value as string);
@@ -67,41 +89,48 @@ function CriarFornecedor() {
     setValue("razaoSocial", "");
   };
 
-  const buscarCep = async (e: any) => {
-    const cep = e.target.value.replace(/\D/g, "");
+  const handleSetFormData = useCallback(
+    (viacepResponse: IViacepResponse) => {
+      setValue("pais", "Brasil");
+      setValue("endereco", viacepResponse.logradouro + " - " + viacepResponse.bairro + " - " + viacepResponse.localidade);
+      
+      setValue("estado", viacepResponse.uf);
+      setValue("cidade", viacepResponse.localidade);
+      setValue("bairro", viacepResponse.bairro);
+      setValue("rua", viacepResponse.logradouro);
+    },
+    [setValue]
+  );
+  const handleFormSubmit = async (data: createCepFormData) => {};
 
-    try {
-      const response = await getCep(cep);
-      if (response) {
-        const data = response.data;
-        console.log(data);
-        setValue("rua", data.logradouro);
-        setValue("bairro", data.bairro);
-        setValue("cidade", data.localidade);
-        setValue("estado", data.uf);
-        setValue(
-          "endereco",
-          data.logradouro + " - " + data.localidade + " - " + data.bairro
-        );
-      }
-    } catch (error) {
-      console.error(error);
+  
+  const handleGetCepData = useCallback(
+    async (cep: string) => {
+      const data = await getCepData(cep);
+      console.log(data);
+      handleSetFormData(data);
+    },
+    [handleSetFormData]
+  );
+
+  const cep = watch("cep");
+
+  useEffect(() => {
+    const isCepValid = createCepFormSchema.shape.cep.safeParse(cep).success;
+
+
+    if (isCepValid) {
+      console.log("Cep valido");
+    
+      handleGetCepData(cep);
     }
-  };
+  }, [handleGetCepData, cep]);
 
   function createUser(data: any) {
     console.log(data);
   }
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-  } = useForm({
-    resolver: zodResolver(createUserFormSchema),
-  });
-  const [output, setOutput] = useState("");
+
 
   return (
     <PaginaBase
@@ -239,7 +268,7 @@ function CriarFornecedor() {
                 <TextField
                   placeholder="CEP"
                   {...register("cep")}
-                  onBlur={buscarCep}
+                 
                 />
               </Grid>
               <Grid item xs={5}>
