@@ -14,7 +14,7 @@ const createUserFormSchema = z
   
   });
  
-  
+console.log("Teste");  
 function CriarCategoria() {
   const {
     register,
