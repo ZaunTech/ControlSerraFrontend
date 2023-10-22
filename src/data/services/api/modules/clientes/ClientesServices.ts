@@ -3,12 +3,9 @@ import { Environment } from "../../../../environment";
 import { ICliente } from "./Interfaces/ICliente";
 import { TListCliente } from "./Interfaces/TListCliente";
 
-const rota = 'clientes';
+const rota = "clientes";
 
-const getAll = async (
-  page = 1,
-  filter = ""
-): Promise<TListCliente | Error> => {
+const getAll = async (page = 1, filter = ""): Promise<TListCliente | Error> => {
   try {
     const urlRelativa = `/${rota}?_page=${page}&_limit=${Environment.LIMITE_DE_LINHAS}&nome_like=${filter}`;
     const { data, headers } = await Api.get(urlRelativa);
@@ -25,7 +22,7 @@ const getAll = async (
     console.error(error);
     return new Error(
       (error as { message: string }).message ||
-      Environment.ERRO_AO_ACESSAR_DADOS
+        Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -41,7 +38,7 @@ const getById = async (id: number): Promise<ICliente | Error> => {
     console.error(error);
     return new Error(
       (error as { message: string }).message ||
-      Environment.ERRO_AO_ACESSAR_DADOS
+        Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -57,7 +54,7 @@ const create = async (dados: Omit<ICliente, "id">): Promise<number | Error> => {
     console.error(error);
     return new Error(
       (error as { message: string }).message ||
-      Environment.ERRO_AO_ACESSAR_DADOS
+        Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -76,7 +73,7 @@ const updateById = async (
     console.error(error);
     return new Error(
       (error as { message: string }).message ||
-      Environment.ERRO_AO_ACESSAR_DADOS
+        Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -92,7 +89,24 @@ const deleteById = async (id: number): Promise<any> => {
     console.error(error);
     return new Error(
       (error as { message: string }).message ||
-      Environment.ERRO_AO_ACESSAR_DADOS
+        Environment.ERRO_AO_ACESSAR_DADOS
+    );
+  }
+};
+
+const getCount = async (): Promise<number | Error> => {
+  try {
+    const urlRelativa = `/${rota}/count`;
+    const data = await Api.get(urlRelativa);
+    if (data.statusText === "OK") {
+      return data.data;
+    }
+    return new Error(Environment.ERRO_AO_LISTAR_DADOS);
+  } catch (error) {
+    console.error(error);
+    return new Error(
+      (error as { message: string }).message ||
+        Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -103,4 +117,5 @@ export const ClientesService = {
   create,
   updateById,
   deleteById,
+  getCount,
 };
