@@ -41,12 +41,19 @@ const createUserFormSchema = z
     contaTipo: z.string(),
     email: z.string().min(1, "Faltou o nome").email("isso não é email"),
     telefone: z.string(),
-    
+    cep: z.string().min(8),
+    pais: z.string(),
+    estado: z.string(),
+    cidade: z.string(),
+    bairro: z.string(),
+    rua: z.string(),
+    numero: z.string(),
+    complemento: z.string(),
    
   })
   
   const createCepFormSchema = z.object({
-    cep: z.coerce.number().min(8),
+    cep: z.string().min(8),
     pais: z.string(),
     estado: z.string(),
     cidade: z.string(),
@@ -90,7 +97,7 @@ function CriarCliente() {
       setValue("pais", "Brasil");
       setValue("estado", viacepResponse.uf);
       setValue("cidade", viacepResponse.localidade);
-      setValue("endereco", viacepResponse.logradouro + " - " + viacepResponse.bairro + " - " + viacepResponse.localidade);
+    
       setValue("bairro", viacepResponse.bairro);
       setValue("rua", viacepResponse.logradouro);
     },
@@ -272,14 +279,8 @@ function CriarCliente() {
               />
               {errors.cep && <span>{errors.cep.message?.toString()}</span>}
             </Grid>
-            <Grid item xs={5}>
-              <Typography>Endereço</Typography>
-              <TextField
-                placeholder="Endereço"
-                fullWidth
-                {...register("endereco")}
-              />
-            </Grid>
+            
+            
             <Grid item>
               <Typography>Rua</Typography>
               <TextField placeholder="Rua" {...register("rua")} />
