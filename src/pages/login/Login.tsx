@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import { z } from "zod";
 
@@ -56,6 +56,15 @@ export function Login() {
         return err;
       });
   };
+
+  const { isAuthenticated } = useAuthContext();
+
+  useEffect(() => {
+    console.log(isAuthenticated);
+    if (isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated]);
 
   return (
     <Box id="Main" flexDirection={"row"} display={"flex"}>
