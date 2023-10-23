@@ -2,7 +2,7 @@ import { useMemo, useEffect } from "react";
 import { PaginaBase } from "../../ui/layouts";
 import { FerramentasDaListagem } from "../../ui/components";
 import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
-import { IInsumo, IProdutoBase, InsumosService, ProdutosBaseService } from "../../data/services/api";
+import { IProdutoBase, ProdutosBaseService } from "../../data/services/api";
 import { useDebounce } from "../../data/hooks";
 import { useState } from "react";
 import {
@@ -21,7 +21,6 @@ import {
   Icon,
 } from "@mui/material";
 import { Environment } from "../../data/environment";
-import { IProduto, ProdutosService } from "../../data/services/api/modules/produtos";
 
 const Produtos = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -95,7 +94,7 @@ const Produtos = () => {
             <TableRow>
               <TableCell style={{ fontWeight: "bold" }}>Ações</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Titulo</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Categoria</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Observações</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -123,7 +122,7 @@ const Produtos = () => {
                   <Typography>{row.titulo}</Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{row.id}</Typography>
+                  <Typography>{row.observacoes}</Typography>
                 </TableCell>
               </TableRow>
             ))}

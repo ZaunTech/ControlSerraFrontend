@@ -94,8 +94,9 @@ const Pedidos = () => {
           <TableHead>
             <TableRow>
               <TableCell style={{ fontWeight: "bold" }}>Ações</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Titulo</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Categoria</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Id</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Cliente</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Status</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -120,10 +121,13 @@ const Pedidos = () => {
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{row.titulo}</Typography>
+                  <Typography>{row.id}</Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{row.descricao}</Typography>
+                  <Typography>{row.orcamento.cliente.nome || row.orcamento.cliente.nomeFantasia || row.orcamento.cliente.razaoSocial}</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography>{row.status}</Typography>
                 </TableCell>
               </TableRow>
             ))}

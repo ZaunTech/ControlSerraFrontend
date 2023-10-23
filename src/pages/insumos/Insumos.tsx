@@ -94,6 +94,8 @@ const Insumos = () => {
               <TableCell style={{ fontWeight: "bold" }}>Ações</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Titulo</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Categoria</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Unidade de Medida</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Descrição</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -121,7 +123,13 @@ const Insumos = () => {
                   <Typography>{row.titulo}</Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{row.idCategoria}</Typography>
+                  <Typography>{row.categoria?.titulo}</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography>{row.unidadeMedida}</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography>{row.descricao}</Typography>
                 </TableCell>
               </TableRow>
             ))}
