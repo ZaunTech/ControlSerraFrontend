@@ -1,7 +1,6 @@
 import { CreateProdutoDto, IProduto, TListProdutos, UpdateProdutoDto } from ".";
 import { Api } from "../..";
 import { Environment } from "../../../../environment";
-import { UpdatePedidoDto } from "../pedidos";
 
 const rota = "produtos";
 
@@ -24,23 +23,22 @@ const getAll = async (
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
 const getById = async (id: number): Promise<IProduto | Error> => {
   try {
     const urlRelativa = `/${rota}/${id}`;
-    const { data } = await Api.get<IProduto>(urlRelativa);
-    if (data) {
-      return data;
+    const response = await Api.get<IProduto>(urlRelativa);
+    if (response) {
+      return response.data;
     }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {
-    console.error(error);
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -57,7 +55,7 @@ const create = async (
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -67,16 +65,15 @@ const updateById = async (
 ): Promise<IProduto | Error> => {
   try {
     const urlRelativa = `/${rota}/${id}`;
-    const data = await Api.put(urlRelativa, updateProdutoDto);
-    if (data.statusText === "OK") {
-      return data.data.id;
+    const response = await Api.patch(urlRelativa, updateProdutoDto);
+    if (response.statusText === "OK") {
+      return response.data;
     }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {
-    console.error(error);
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -91,7 +88,7 @@ const deleteById = async (id: number): Promise<IProduto | Error> => {
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -107,7 +104,7 @@ const getCount = async (): Promise<number | Error> => {
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };

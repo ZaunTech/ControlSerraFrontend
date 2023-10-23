@@ -19,7 +19,6 @@ const getAll = async (page = 1, filter = ""): Promise<TListCotacao | Error> => {
     }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {
-    console.error(error);
     return new Error(
       (error as { message: string }).message ||
         Environment.ERRO_AO_ACESSAR_DADOS
@@ -29,13 +28,12 @@ const getAll = async (page = 1, filter = ""): Promise<TListCotacao | Error> => {
 const getById = async (id: number): Promise<ICotacao | Error> => {
   try {
     const urlRelativa = `/${rota}/${id}`;
-    const { data } = await Api.get<ICotacao>(urlRelativa);
-    if (data) {
-      return data;
+    const response  = await Api.get<ICotacao>(urlRelativa);
+    if (response) {
+      return response.data;
     }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {
-    console.error(error);
     return new Error(
       (error as { message: string }).message ||
         Environment.ERRO_AO_ACESSAR_DADOS
@@ -66,13 +64,12 @@ const updateById = async (
 ): Promise<ICotacao | Error> => {
   try {
     const urlRelativa = `/${rota}/${id}`;
-    const response = await Api.put(urlRelativa, dados);
+    const response = await Api.patch(urlRelativa, dados);
     if (response.statusText === "OK") {
       return response.data.id;
     }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {
-    console.error(error);
     return new Error(
       (error as { message: string }).message ||
         Environment.ERRO_AO_ACESSAR_DADOS
@@ -84,7 +81,7 @@ const deleteById = async (id: number): Promise<ICotacao | Error> => {
     const urlRelativa = `/${rota}/${id}`;
     const response = await Api.delete(urlRelativa);
     if (response.statusText === "OK") {
-      return response.data.id;
+      return response.data;
     }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {

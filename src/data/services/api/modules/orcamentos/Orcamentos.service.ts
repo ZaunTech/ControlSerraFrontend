@@ -1,16 +1,13 @@
+import { CreateOrcamentoDto, IOrcamento, TListOrcamentos, UpdateOrcamentoDto } from ".";
 import { Api } from "../..";
 import { Environment } from "../../../../environment";
-import { ICategoria } from "./Interfaces/ICategoria";
-import { TListCategorias } from "./Interfaces/TListCategoria";
-import { CreateCategoriaDto } from "./dto/create-categoria.dto";
-import { UpdateCategoriaDto } from "./dto/update-categoria.dto";
 
 const rota = "orcamentos";
 
 const getAll = async (
   page = 1,
   filter = ""
-): Promise<TListCategorias | Error> => {
+): Promise<TListOrcamentos | Error> => {
   try {
     const urlRelativa = `/${rota}?_page=${page}&_limit=${Environment.LIMITE_DE_LINHAS}&titulo_like=${filter}`;
     const { data, headers } = await Api.get(urlRelativa);
@@ -27,79 +24,75 @@ const getAll = async (
     console.error(error);
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
-const getById = async (id: number): Promise<ICategoria | Error> => {
+const getById = async (id: number): Promise<IOrcamento | Error> => {
   try {
     const urlRelativa = `/${rota}/${id}`;
-    const { data } = await Api.get<ICategoria>(urlRelativa);
-    if (data) {
-      return data;
+    const response = await Api.get<IOrcamento>(urlRelativa);
+    if (response) {
+      return response.data;
     }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {
-    console.error(error);
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
 const create = async (
-  createCategoriaDto: CreateCategoriaDto
-): Promise<number | Error> => {
+  createOrcamentoDto: CreateOrcamentoDto
+): Promise<IOrcamento | Error> => {
   try {
     const urlRelativa = `/${rota}`;
-    const { data } = await Api.post<ICategoria>(
+    const response = await Api.post<IOrcamento>(
       urlRelativa,
-      createCategoriaDto
+      createOrcamentoDto
     );
-    if (data) {
-      return data.id;
+    if (response) {
+      return response.data;
     }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {
-    console.error(error);
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
 const updateById = async (
   id: number,
-  updateCategoriaDto: UpdateCategoriaDto
-): Promise<void | Error> => {
+  updateOrcamentoDto: UpdateOrcamentoDto
+): Promise<IOrcamento | Error> => {
   try {
     const urlRelativa = `/${rota}/${id}`;
-    const data = await Api.put(urlRelativa, updateCategoriaDto);
-    if (data.statusText === "OK") {
-      return data.data.id;
+    const response = await Api.patch(urlRelativa, updateOrcamentoDto);
+    if (response.statusText === "OK") {
+      return response.data;
     }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {
-    console.error(error);
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
-const deleteById = async (id: number): Promise<any> => {
+const deleteById = async (id: number): Promise<IOrcamento | Error> => {
   try {
     const urlRelativa = `/${rota}/${id}`;
-    const data = await Api.delete(urlRelativa);
-    if (data.statusText === "OK") {
-      return data.data.id;
+    const response = await Api.delete(urlRelativa);
+    if (response.statusText === "OK") {
+      return response.data;
     }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {
-    console.error(error);
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -107,16 +100,15 @@ const deleteById = async (id: number): Promise<any> => {
 const getCount = async (): Promise<number | Error> => {
   try {
     const urlRelativa = `/${rota}/count`;
-    const data = await Api.get(urlRelativa);
-    if (data.statusText === "OK") {
-      return data.data;
+    const response = await Api.get(urlRelativa);
+    if (response.statusText === "OK") {
+      return response.data;
     }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {
-    console.error(error);
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };

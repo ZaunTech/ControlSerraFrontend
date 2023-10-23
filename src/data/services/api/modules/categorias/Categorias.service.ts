@@ -24,10 +24,9 @@ const getAll = async (
     }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {
-    console.error(error);
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -43,7 +42,7 @@ const getById = async (id: number): Promise<ICategoria | Error> => {
     console.error(error);
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -64,7 +63,7 @@ const create = async (
     console.error(error);
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -74,7 +73,7 @@ const updateById = async (
 ): Promise<ICategoria | Error> => {
   try {
     const urlRelativa = `/${rota}/${id}`;
-    const response = await Api.put(urlRelativa, updateCategoriaDto);
+    const response = await Api.patch(urlRelativa, updateCategoriaDto);
     if (response.statusText === "OK") {
       return response.data;
     }
@@ -83,7 +82,7 @@ const updateById = async (
     console.error(error);
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -99,7 +98,7 @@ const deleteById = async (id: number): Promise<ICategoria | Error> => {
     console.error(error);
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -116,7 +115,7 @@ const getCount = async (): Promise<number | Error> => {
     console.error(error);
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };

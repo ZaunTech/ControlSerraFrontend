@@ -20,22 +20,22 @@ const getAll = async (page = 1, filter = ""): Promise<TListPedidos | Error> => {
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
 const getById = async (id: number): Promise<IPedido | Error> => {
   try {
     const urlRelativa = `/${rota}/${id}`;
-    const { data } = await Api.get<IPedido>(urlRelativa);
-    if (data) {
-      return data;
+    const response = await Api.get<IPedido>(urlRelativa);
+    if (response) {
+      return response.data;
     }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -52,7 +52,7 @@ const create = async (
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -62,7 +62,7 @@ const updateById = async (
 ): Promise<IPedido | Error> => {
   try {
     const urlRelativa = `/${rota}/${id}`;
-    const response = await Api.put(urlRelativa, updatePedidoDto);
+    const response = await Api.patch(urlRelativa, updatePedidoDto);
     if (response.statusText === "OK") {
       return response.data;
     }
@@ -70,11 +70,11 @@ const updateById = async (
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
-const deleteById = async (id: number): Promise<any> => {
+const deleteById = async (id: number): Promise<IPedido | Error> => {
   try {
     const urlRelativa = `/${rota}/${id}`;
     const response = await Api.delete(urlRelativa);
@@ -85,7 +85,7 @@ const deleteById = async (id: number): Promise<any> => {
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -101,7 +101,7 @@ const getCount = async (): Promise<number | Error> => {
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
