@@ -2,7 +2,7 @@ import { useMemo, useEffect } from "react";
 import { PaginaBase } from "../../ui/layouts";
 import { FerramentasDaListagem } from "../../ui/components";
 import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
-import { IInsumo, InsumosService } from "../../data/services/api";
+import { IOrcamento, OrcamentosService } from "../../data/services/api";
 import { useDebounce } from "../../data/hooks";
 import { useState } from "react";
 import {
@@ -21,7 +21,6 @@ import {
   Icon,
 } from "@mui/material";
 import { Environment } from "../../data/environment";
-import { IOrcamento, OrcamentosService } from "../../data/services/api/modules/orcamentos";
 
 const Orcamentos = () => {
   const [searchParams, setSearchParams] = useSearchParams();

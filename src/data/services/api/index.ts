@@ -1,5 +1,5 @@
 export { Api } from "./axios-config";
 
-export * from './authService/AuthService'
+export * from './auth'
 
 export * from './modules'

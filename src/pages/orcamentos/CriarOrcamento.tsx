@@ -7,7 +7,6 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useFieldArray, useForm } from "react-hook-form";
-import { IProduto, ProdutosService } from '../../data/services/api/modules/produtos';
 import { IProdutoBase, ProdutosBaseService } from '../../data/services/api';
 
 const createUserFormSchema = z.object({
@@ -32,21 +31,21 @@ function CriarOrcamento() {
     setValue,
     watch,
     control,
-  
+
     formState: { errors },
   } = useForm({
     resolver: zodResolver(createUserFormSchema),
   });
-  const {fields , append, remove} = useFieldArray({
-    control, 
+  const { fields, append, remove } = useFieldArray({
+    control,
     name: "produtos",
   })
 
-  function addNovoProduto(){
-    append({titulo: ''})
+  function addNovoProduto() {
+    append({ titulo: '' })
   }
-  
-  const  [opcoes, setOpcoes] = useState<IProdutoBase[]>([]);
+
+  const [opcoes, setOpcoes] = useState<IProdutoBase[]>([]);
   useEffect(() => {
     ProdutosBaseService.getAll()
       .then((response) => {
@@ -59,7 +58,7 @@ function CriarOrcamento() {
         }
 
         if (response && Array.isArray(response.data)) {
-         
+
           const produtosMapeadas = response.data;
           console.log(produtosMapeadas);
           setOpcoes(produtosMapeadas);
@@ -68,7 +67,7 @@ function CriarOrcamento() {
         }
       })
       .catch((error) => {
-        console.error('Erro ao buscar categorias:', error);     
+        console.error('Erro ao buscar categorias:', error);
       });
   }, []);
 
@@ -80,12 +79,12 @@ function CriarOrcamento() {
           mostrarBotaoApagar={false}
           mostrarBotaoSalvar
           mostrarBotaoVoltar
-         
+
         />
       }
     >
 
-    <Box component={"form"} >
+      <Box component={"form"} >
         <Box
           display={"flex"}
           margin={1}
@@ -102,7 +101,7 @@ function CriarOrcamento() {
             <Grid container item direction="row" spacing={4}>
               <Grid item>
                 <Typography>Cliente</Typography>
-                <TextField placeholder='Cliente'/>
+                <TextField placeholder='Cliente' />
               </Grid>
               <Grid item>
                 <Typography>Data de Vencimento</Typography>
@@ -115,7 +114,7 @@ function CriarOrcamento() {
                   id="tipo"
                   value={tipo}
                   {...register("tipo")}
-                   onChange={handleChange}
+                  onChange={handleChange}
                 >
                   <MenuItem value={"Pendente"}>Pendente</MenuItem>
                   <MenuItem value={"Iniciado"}>Iniciado</MenuItem>
@@ -125,9 +124,9 @@ function CriarOrcamento() {
               </Grid>
             </Grid>
           </Grid>
-         </Box> 
+        </Box>
 
-         <Box
+        <Box
           display={"flex"}
           margin={1}
           flexDirection={"column"}
@@ -141,57 +140,57 @@ function CriarOrcamento() {
               </Grid>
               <Grid item>
                 <Box display={'flex'} alignItems={'end'}>
-              <Button variant="contained" onClick={addNovoProduto}>Adicionar Produto Base</Button>
-              </Box>
-             </Grid>
+                  <Button variant="contained" onClick={addNovoProduto}>Adicionar Produto Base</Button>
+                </Box>
+              </Grid>
             </Grid>
 
 
-            {fields.map((field,index) => {
-                return (
+            {fields.map((field, index) => {
+              return (
 
-                <Grid container item direction="row" spacing={4} key={field.id }>
-                <Grid item>
-                <Typography>Titulo</Typography>
-                <Autocomplete
-                  disablePortal
-                  id="combo-box-demo"
-                  options={opcoes}
-                  getOptionLabel={(option) => option.titulo}
-                  sx={{ width: 225 }}
-                  renderInput={(params) => <TextField {...params} />}
-                  onChange={(_, value) => {
-                    if (value !== null) {
-                    setValue(`produtos.${index}.id`, value.id);   
-                    }
-                  }}
-                />
+                <Grid container item direction="row" spacing={4} key={field.id}>
+                  <Grid item>
+                    <Typography>Titulo</Typography>
+                    <Autocomplete
+                      disablePortal
+                      id="combo-box-demo"
+                      options={opcoes}
+                      getOptionLabel={(option) => option.titulo}
+                      sx={{ width: 225 }}
+                      renderInput={(params) => <TextField {...params} />}
+                      onChange={(_, value) => {
+                        if (value !== null) {
+                          setValue(`produtos.${index}.id`, value.id);
+                        }
+                      }}
+                    />
+                  </Grid>
+                  <Grid item >
+                    <Typography>Quantidade</Typography>
+                    <TextField type='text' placeholder='Quantidade' {...register(`produtos.${index}.quantidade`)} />
+                  </Grid>
+                  <Grid item>
+                    <Button variant="contained" size='small' onClick={() => remove(index)}>Remover Produto</Button>
+                  </Grid>
+
+
                 </Grid>
-                <Grid item >
-                <Typography>Quantidade</Typography>
-                <TextField type='text' placeholder='Quantidade' {...register(`produtos.${index}.quantidade`)} />
-                </Grid>
-                <Grid item>
-                <Button variant="contained" size='small' onClick={() => remove(index)}>Remover Produto</Button>
-                </Grid>
-                
-                
-                </Grid>
-                
-            
-            )
-              }) }
+
+
+              )
+            })}
           </Grid>
-         </Box> 
-       </Box> 
+        </Box>
+      </Box>
 
 
 
-      
+
 
 
     </PaginaBase>
-   
+
   )
 }
 
