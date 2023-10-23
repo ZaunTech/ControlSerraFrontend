@@ -11,7 +11,7 @@ export interface IFornecedor {
     cidade?: string
     estado?: string
     pais?: string
-    Nome?: string
+    nome?: string
     cpf?: string
     rg?: string
     nomeFantasia?: string

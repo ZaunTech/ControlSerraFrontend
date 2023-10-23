@@ -8,7 +8,6 @@ export interface IOrcamento {
     dataOrcamento: Date;
     totalMaoObra?: number;
     totalMateriais?: number;
-    valorPago?: number;
     status: status;
     prazoEstimadoProducao: number;
     observacoes?: string;

@@ -4,69 +4,54 @@ import App from "./App";
 import {
   Cliente,
   Clientes,
-  EditarCliente,
   CriarCliente,
-  ExcluirCliente,
 } from "./pages/clientes/index.tsx";
 
 import {
   Insumo,
   Insumos,
-  EditarInsumo,
   CriarInsumo,
-  ExcluirInsumo,
 } from "./pages/insumos/index.tsx";
 
 import {
   Orcamento,
   Orcamentos,
-  EditarOrcamento,
   CriarOrcamento,
-  ExcluirOrcamento,
-} from "./pages/orcamentos/index.tsx";
+} from "./pages/orcamentos";
 
 import {
   Pedido,
   Pedidos,
-  EditarPedido,
   CriarPedido,
-  ExcluirPedido,
-} from "./pages/pedidos/index.tsx";
+} from "./pages/pedidos";
 
 import {
   Categoria,
   Categorias,
-  EditarCategoria,
   CriarCategoria,
-  ExcluirCategoria,
-} from "./pages/categorias/index.tsx";
+} from "./pages/categorias";
 
 import {
   Fornecedor,
   Fornecedores,
-  EditarFornecedor,
   CriarFornecedor,
-  ExcluirFornecedor,
-} from "./pages/fornecedores/index.tsx";
+} from "./pages/fornecedores";
+
 import {
   Produto,
   Produtos,
-  EditarProduto,
   CriarProduto,
-  ExcluirProduto,
-} from "./pages/produtos/index.tsx";
+} from "./pages/produtos";
 
 import Configuracoes from "./pages/Configuracoes/Configuracoes.tsx";
 import Home from "./pages/home/Home.tsx";
 import Error from "./pages/error/Error.tsx";
-import { Login, RecuperarSenha } from "./pages/login/index.ts";
+import { Login, RecuperarSenha } from "./pages/login";
 import {
   Cotacoes,
   Cotacao,
   CriarCotacao,
-  EditarCotacao,
-  ExcluirCotacao,
-} from "./pages/cotacoes/index.tsx";
+} from "./pages/cotacoes";
 
 const router = createBrowserRouter([
   {
@@ -105,20 +90,7 @@ const router = createBrowserRouter([
           },
           {
             path: ":id",
-            children: [
-              {
-                index: true,
-                element: <Cliente />,
-              },
-              {
-                path: "editar",
-                element: <EditarCliente />,
-              },
-              {
-                path: "excluir",
-                element: <ExcluirCliente />,
-              },
-            ],
+            element: <Cliente />,
           },
         ],
       },
@@ -135,20 +107,7 @@ const router = createBrowserRouter([
           },
           {
             path: ":id",
-            children: [
-              {
-                index: true,
-                element: <Fornecedor />,
-              },
-              {
-                path: "editar",
-                element: <EditarFornecedor />,
-              },
-              {
-                path: "excluir",
-                element: <ExcluirFornecedor />,
-              },
-            ],
+            element: <Fornecedor />,
           },
         ],
       },
@@ -165,20 +124,7 @@ const router = createBrowserRouter([
           },
           {
             path: ":id",
-            children: [
-              {
-                index: true,
-                element: <Orcamento />,
-              },
-              {
-                path: "editar",
-                element: <EditarOrcamento />,
-              },
-              {
-                path: "excluir",
-                element: <ExcluirOrcamento />,
-              },
-            ],
+            element: <Orcamento />,
           },
         ],
       },
@@ -195,20 +141,7 @@ const router = createBrowserRouter([
           },
           {
             path: ":id",
-            children: [
-              {
-                index: true,
-                element: <Pedido />,
-              },
-              {
-                path: "editar",
-                element: <EditarPedido />,
-              },
-              {
-                path: "excluir",
-                element: <ExcluirPedido />,
-              },
-            ],
+            element: <Pedido />,
           },
         ],
       },
@@ -225,20 +158,7 @@ const router = createBrowserRouter([
           },
           {
             path: ":id",
-            children: [
-              {
-                index: true,
-                element: <Insumo />,
-              },
-              {
-                path: "editar",
-                element: <EditarInsumo />,
-              },
-              {
-                path: "excluir",
-                element: <ExcluirInsumo />,
-              },
-            ],
+            element: <Insumo />,
           },
         ],
       },
@@ -255,20 +175,7 @@ const router = createBrowserRouter([
           },
           {
             path: ":id",
-            children: [
-              {
-                index: true,
-                element: <Cotacao />,
-              },
-              {
-                path: "editar",
-                element: <EditarCotacao />,
-              },
-              {
-                path: "excluir",
-                element: <ExcluirCotacao />,
-              },
-            ],
+            element: <Cotacao />,
           },
         ],
       },
@@ -285,20 +192,7 @@ const router = createBrowserRouter([
           },
           {
             path: ":id",
-            children: [
-              {
-                index: true,
-                element: <Categoria />,
-              },
-              {
-                path: "editar",
-                element: <EditarCategoria />,
-              },
-              {
-                path: "excluir",
-                element: <ExcluirCategoria />,
-              },
-            ],
+            element: <Categoria />,
           },
         ],
       },
@@ -315,20 +209,7 @@ const router = createBrowserRouter([
           },
           {
             path: ":id",
-            children: [
-              {
-                index: true,
-                element: <Produto />,
-              },
-              {
-                path: "editar",
-                element: <EditarProduto />,
-              },
-              {
-                path: "excluir",
-                element: <EditarProduto />,
-              },
-            ],
+            element: <Produto />,
           },
         ],
       },

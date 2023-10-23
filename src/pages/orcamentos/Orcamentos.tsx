@@ -94,8 +94,9 @@ const Orcamentos = () => {
           <TableHead>
             <TableRow>
               <TableCell style={{ fontWeight: "bold" }}>Ações</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Titulo</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Categoria</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Id</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Cliente</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Status</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -123,7 +124,10 @@ const Orcamentos = () => {
                   <Typography>{row.id}</Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{row.idCliente}</Typography>
+                  <Typography>{row.cliente.nome || row.cliente.nomeFantasia || row.cliente.razaoSocial}</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography>{row.status}</Typography>
                 </TableCell>
               </TableRow>
             ))}

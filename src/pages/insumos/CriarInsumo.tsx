@@ -17,10 +17,10 @@ import { Categorias } from '../categorias';
 
 
 const createUserFormSchema = z.object({
-titulo: z.string(),
-idCategoria: z.coerce.number(),
-descricao: z.string(),
-unidadeMedida: z.string(),
+  titulo: z.string(),
+  idCategoria: z.coerce.number(),
+  descricao: z.string(),
+  unidadeMedida: z.string(),
 
 });
 
@@ -30,7 +30,7 @@ function CriarInsumo() {
     handleSubmit,
     setValue,
     watch,
-  
+
     formState: { errors },
   } = useForm({
     resolver: zodResolver(createUserFormSchema),
@@ -39,13 +39,13 @@ function CriarInsumo() {
   function createUser(data: any) {
     console.log(data);
 
-    InsumosService.create(data).catch((erro) =>{
+    InsumosService.create(data).catch((erro) => {
       console.log(erro);
     })
   }
-  const  [opcoes, setOpcoes] = useState<ICategoria[]>([]);
+  const [opcoes, setOpcoes] = useState<ICategoria[]>([]);
 
-  
+
   useEffect(() => {
     CategoriasService.getAll()
       .then((response) => {
@@ -58,7 +58,7 @@ function CriarInsumo() {
         }
 
         if (response && Array.isArray(response.data)) {
-         
+
           const categoriasMapeadas = response.data;
           console.log(categoriasMapeadas);
           setOpcoes(categoriasMapeadas);
@@ -67,35 +67,35 @@ function CriarInsumo() {
         }
       })
       .catch((error) => {
-        console.error('Erro ao buscar categorias:', error);     
+        console.error('Erro ao buscar categorias:', error);
       });
   }, []);
-  
- 
+
+
   return (
     <PaginaBase
-    titulo="Insumos"
-    barraDeFerramentas={<FerramentasDeDetalhes  
-      mostrarBotaoApagar={false}
-      onClickSalvar={handleSubmit(createUser)}
-    />}>
-  <Box component={'form'}  onSubmit={handleSubmit(createUser)}>
-   <Box
+      titulo="Insumos"
+      barraDeFerramentas={<FerramentasDeDetalhes
+        mostrarBotaoApagar={false}
+        onClickSalvar={handleSubmit(createUser)}
+      />}>
+      <Box component={'form'} onSubmit={handleSubmit(createUser)}>
+        <Box
           display={"flex"}
           margin={1}
           flexDirection={"column"}
           component={Paper}
           variant="outlined"
         >
-      <Grid container direction="column" padding={2} spacing={3}>
+          <Grid container direction="column" padding={2} spacing={3}>
             <Grid container item direction="column" spacing={4}>
               <Grid item>
                 <Typography>Titulo</Typography>
-              <TextField placeholder='Titulo' {...register("titulo")}/>
+                <TextField placeholder='Titulo' {...register("titulo")} />
               </Grid>
               <Grid item>
-              <Typography>Categoria</Typography>
-              <Autocomplete
+                <Typography>Categoria</Typography>
+                <Autocomplete
                   disablePortal
                   id="combo-box-demo"
                   options={opcoes}
@@ -104,27 +104,27 @@ function CriarInsumo() {
                   renderInput={(params) => <TextField {...params} />}
                   onChange={(_, value) => {
                     if (value !== null) {
-                    setValue("categoria", [value]);
-                    setValue("idCategoria", value.id)
+                      setValue("categoria", [value]);
+                      setValue("idCategoria", value.id)
                     }
                   }}
                 />
               </Grid>
               <Grid item>
                 <Typography>Descrição</Typography>
-              <TextField placeholder='Descrição'  {...register("descricao")}/>
+                <TextField placeholder='Descrição'  {...register("descricao")} />
               </Grid>
               <Grid item>
                 <Typography>Unidade de Medida</Typography>
-              <TextField placeholder='Unidade de Medida' {...register('unidadeMedida')}/>
+                <TextField placeholder='Unidade de Medida' {...register('unidadeMedida')} />
               </Grid>
-             
-           </Grid>
-      </Grid>
-      </Box>
-  </Box>
 
-  </PaginaBase>
+            </Grid>
+          </Grid>
+        </Box>
+      </Box>
+
+    </PaginaBase>
   )
 }
 

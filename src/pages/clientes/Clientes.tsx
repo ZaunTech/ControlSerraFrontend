@@ -122,7 +122,7 @@ function Clientes() {
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{row.nome}</Typography>
+                  <Typography>{row.nome || row.nomeFantasia || row.razaoSocial}</Typography>
                 </TableCell>
                 <TableCell>
                   <Typography>{row.email}</Typography>
@@ -131,7 +131,7 @@ function Clientes() {
                   <Typography>{row.telefone}</Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{row.endereco}</Typography>
+                  <Typography>{`${row.rua} ${row.numero} / ${row.bairro} - ${row.cidade}`}</Typography>
                 </TableCell>
               </TableRow>
             ))}
