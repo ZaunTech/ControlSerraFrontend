@@ -21,12 +21,13 @@ import {
   Icon,
 } from "@mui/material";
 import { Environment } from "../../data/environment";
+import { IPedido, PedidosService } from "../../data/services/api/modules/pedidos";
 
 const Pedidos = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { debounce } = useDebounce();
 
-  const [rows, setRows] = useState<IInsumo[]>([]);
+  const [rows, setRows] = useState<IPedido[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -44,7 +45,7 @@ const Pedidos = () => {
   useEffect(() => {
     setIsLoading(true);
     debounce(() => {
-      InsumosService.getAll(pagina, busca).then((result) => {
+      PedidosService.getAll(pagina, busca).then((result) => {
         if (result instanceof Error) {
           alert(result.message);
           return;
@@ -59,7 +60,7 @@ const Pedidos = () => {
 
   const handleDelete = (id: number) => {
     if (confirm("Você realmente quer apagar?")) {
-      InsumosService.deleteById(id).then((result) => {
+      PedidosService.deleteById(id).then((result) => {
         if (result instanceof Error) {
           alert(result.message);
           return;
@@ -122,7 +123,7 @@ const Pedidos = () => {
                   <Typography>{row.titulo}</Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{row.idCategoria}</Typography>
+                  <Typography>{row.descricao}</Typography>
                 </TableCell>
               </TableRow>
             ))}

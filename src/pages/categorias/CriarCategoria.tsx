@@ -6,11 +6,13 @@ import { register } from 'module'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { CategoriasService } from '../../data/services/api'
 
 const createUserFormSchema = z
   .object({
     titulo: z.string().min(1,'Preencha esta campo'),
     descricao: z.string(),
+    tipo: z.string()
   
   });
 
@@ -25,6 +27,8 @@ function CriarCategoria() {
   });
   function createUser(data: any) {
     console.log(data);
+
+    CategoriasService.create(data);
   }
   return (
     <PaginaBase
@@ -52,6 +56,10 @@ function CriarCategoria() {
               <Grid item>
                <Typography>Titulo</Typography> 
                <TextField placeholder='Titulo' {...register("titulo")}/>
+              </Grid>
+              <Grid item>
+               <Typography>tipo</Typography> 
+               <TextField placeholder='tipo' {...register("tipo")}/>
               </Grid>
               <Grid item>
                <Typography>Descricao</Typography> 

@@ -7,7 +7,8 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useForm } from "react-hook-form";
-import { ICategoria } from '../../data/services/api';
+import { CategoriasService, ICategoria, InsumosService, TListCategorias } from '../../data/services/api';
+import { Categorias } from '../categorias';
 
 
 
@@ -17,15 +18,9 @@ import { ICategoria } from '../../data/services/api';
 
 const createUserFormSchema = z.object({
 titulo: z.string(),
-categoria: z.array(z.object({
-  id: z.number(),
-  tipo: z.string(),
-  titulo: z.string(),
-  descricao: z.string().optional(),
- 
-})),
+idCategoria: z.coerce.number(),
 descricao: z.string(),
-unidade: z.string(),
+unidadeMedida: z.string(),
 
 });
 
@@ -43,18 +38,39 @@ function CriarInsumo() {
 
   function createUser(data: any) {
     console.log(data);
+
+    InsumosService.create(data).catch((erro) =>{
+      console.log(erro);
+    })
   }
   const  [opcoes, setOpcoes] = useState<ICategoria[]>([]);
 
-  useEffect(()=>{
-    const data: ICategoria[] = [
-      { titulo: "Metal", id: 1, descricao: "", tipo: ""},
-      {titulo: "Barra", id:2, descricao: "", tipo: ""}
-      ];
-    console.log(data);
-  setOpcoes(data);
   
-  },[]);
+  useEffect(() => {
+    CategoriasService.getAll()
+      .then((response) => {
+        // Verifique se data é um array
+        console.log('Resposta do serviço:', response);
+        if (response instanceof Error) {
+          console.error('Erro ao buscar categorias:', response);
+          // Trate o erro conforme necessário, você pode querer mostrar uma mensagem de erro para o usuário
+          return;
+        }
+
+        if (response && Array.isArray(response.data)) {
+         
+          const categoriasMapeadas = response.data;
+          console.log(categoriasMapeadas);
+          setOpcoes(categoriasMapeadas);
+        } else {
+          console.error('A resposta não é uma array válida de categorias:', response);
+        }
+      })
+      .catch((error) => {
+        console.error('Erro ao buscar categorias:', error);     
+      });
+  }, []);
+  
  
   return (
     <PaginaBase
@@ -89,6 +105,7 @@ function CriarInsumo() {
                   onChange={(_, value) => {
                     if (value !== null) {
                     setValue("categoria", [value]);
+                    setValue("idCategoria", value.id)
                     }
                   }}
                 />
@@ -99,7 +116,7 @@ function CriarInsumo() {
               </Grid>
               <Grid item>
                 <Typography>Unidade de Medida</Typography>
-              <TextField placeholder='Unidade de Medida' {...register('unidade')}/>
+              <TextField placeholder='Unidade de Medida' {...register('unidadeMedida')}/>
               </Grid>
              
            </Grid>

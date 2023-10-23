@@ -2,7 +2,7 @@ import { useMemo, useEffect } from "react";
 import { PaginaBase } from "../../ui/layouts";
 import { FerramentasDaListagem } from "../../ui/components";
 import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
-import { IInsumo, InsumosService } from "../../data/services/api";
+import { IInsumo, IProdutoBase, InsumosService, ProdutosBaseService } from "../../data/services/api";
 import { useDebounce } from "../../data/hooks";
 import { useState } from "react";
 import {
@@ -21,12 +21,13 @@ import {
   Icon,
 } from "@mui/material";
 import { Environment } from "../../data/environment";
+import { IProduto, ProdutosService } from "../../data/services/api/modules/produtos";
 
 const Produtos = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { debounce } = useDebounce();
 
-  const [rows, setRows] = useState<IInsumo[]>([]);
+  const [rows, setRows] = useState<IProdutoBase[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -44,7 +45,7 @@ const Produtos = () => {
   useEffect(() => {
     setIsLoading(true);
     debounce(() => {
-      InsumosService.getAll(pagina, busca).then((result) => {
+      ProdutosBaseService.getAll(pagina, busca).then((result) => {
         if (result instanceof Error) {
           alert(result.message);
           return;
@@ -59,7 +60,7 @@ const Produtos = () => {
 
   const handleDelete = (id: number) => {
     if (confirm("Você realmente quer apagar?")) {
-      InsumosService.deleteById(id).then((result) => {
+      ProdutosBaseService.deleteById(id).then((result) => {
         if (result instanceof Error) {
           alert(result.message);
           return;
@@ -122,7 +123,7 @@ const Produtos = () => {
                   <Typography>{row.titulo}</Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{row.idCategoria}</Typography>
+                  <Typography>{row.id}</Typography>
                 </TableCell>
               </TableRow>
             ))}

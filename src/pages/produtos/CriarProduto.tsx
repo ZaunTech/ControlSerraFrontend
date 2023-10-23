@@ -7,14 +7,15 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useFieldArray, useForm } from "react-hook-form";
-import { IInsumo } from '../../data/services/api';
+import { IInsumo, InsumosService, ProdutosBaseService, TListInsumos } from '../../data/services/api';
+import { IInsumosProdutoBase, InsumosProdutoBaseService } from '../../data/services/api/modules/insumosProdutoBase';
 
 const createUserFormSchema = z.object({
   titulo: z.string(),
   observacao: z.string(),
   insumos: z.array(z.object({
     
-    id: z.coerce.number(),
+    idInsumo: z.coerce.number(),
     quantidade: z.coerce.number(),
   }))
 });
@@ -41,20 +42,74 @@ function CriarProduto() {
     append({titulo: ''})
   }
   function createUser(data: any) {
-    console.log(data);
+
+   ProdutosBaseService.create(data).then((result)=>{
+   
+      if (!(result instanceof Error)) {
+
+        console.log('IDs dos insumos:', data.insumos.map((insumo: IInsumosProdutoBase) => insumo.idInsumo));
+    const dataInsumos: IInsumosProdutoBase[] = data.insumos.map((insumo : IInsumosProdutoBase) => ({
+      
+      ...insumo,
+      idProdutoBase: result.id
+   
+      // Associando o insumo ao produto recém-criado
+    }));
+
+    console.log(dataInsumos);
+    Promise.all(
+      dataInsumos.map((insumo) =>{ 
+     
+        InsumosProdutoBaseService.create(insumo)
+      })
+    )
+      .then((insumosProdutoBaseResults) => {
+        // Aqui você tem um array de resultados das chamadas InsumosProdutoBaseService.create
+        console.log('deu certo: ' , insumosProdutoBaseResults);
+
+        // Faça qualquer coisa adicional que você precise fazer após salvar InsumosProdutoBase
+      })
+      .catch((error) => {
+        console.error('Erro ao criar InsumosProdutoBase:', error);
+        // Trate o erro conforme necessário, você pode querer mostrar uma mensagem de erro para o usuário
+      });
+  }})
+  .catch((error) => {
+    console.error('Erro ao criar ProdutosBase:', error);
+    // Trate o erro conforme necessário, você pode querer mostrar uma mensagem de erro para o usuário
+  });
+   
+      
   }
 
   const  [opcoes, setOpcoes] = useState<IInsumo[]>([]);
-
-  useEffect(()=>{
-    const data: IInsumo[] = [
-      { titulo: "Metal", id: 1, descricao: ""},
-        {titulo: "Barra", id:2, descricao: ""}
-      ];
-    console.log(data);
-  setOpcoes(data);
+    useEffect(() => {
+      InsumosService.getAll()
+        .then((response) => {
+          // Verifique se data é um array
+          console.log('Resposta do serviço:', response);
+          if (response instanceof Error) {
+            console.error('Erro ao buscar categorias:', response);
+            // Trate o erro conforme necessário, você pode querer mostrar uma mensagem de erro para o usuário
+            return;
+          }
   
-  },[]);
+          if (response && Array.isArray(response.data)) {
+           
+            const insumosMapeadas = response.data;
+            console.log(insumosMapeadas);
+            setOpcoes(insumosMapeadas);
+          } else {
+            console.error('A resposta não é uma array válida de categorias:', response);
+          }
+        })
+        .catch((error) => {
+          console.error('Erro ao buscar categorias:', error);     
+        });
+    }, []);
+
+  
+
 
   return (
     <PaginaBase
@@ -119,7 +174,7 @@ function CriarProduto() {
                   renderInput={(params) => <TextField {...params} />}
                   onChange={(_, value) => {
                     if (value !== null) {
-                    setValue(`insumos.${index}.id`, value.id);   
+                    setValue(`insumos.${index}.idInsumo`, value.id);   
                     }
                   }}
                 />

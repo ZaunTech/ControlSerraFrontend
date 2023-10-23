@@ -7,7 +7,7 @@ import {
 } from "../..";
 import { Environment } from "../../../../environment";
 
-const rota = "produtos";
+const rota = "produtos-base";
 
 const getAll = async (
   page = 1,

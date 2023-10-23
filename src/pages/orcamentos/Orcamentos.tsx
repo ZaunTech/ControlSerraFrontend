@@ -21,12 +21,13 @@ import {
   Icon,
 } from "@mui/material";
 import { Environment } from "../../data/environment";
+import { IOrcamento, OrcamentosService } from "../../data/services/api/modules/orcamentos";
 
 const Orcamentos = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { debounce } = useDebounce();
 
-  const [rows, setRows] = useState<IInsumo[]>([]);
+  const [rows, setRows] = useState<IOrcamento[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -44,7 +45,7 @@ const Orcamentos = () => {
   useEffect(() => {
     setIsLoading(true);
     debounce(() => {
-      InsumosService.getAll(pagina, busca).then((result) => {
+      OrcamentosService.getAll(pagina, busca).then((result) => {
         if (result instanceof Error) {
           alert(result.message);
           return;
@@ -59,7 +60,7 @@ const Orcamentos = () => {
 
   const handleDelete = (id: number) => {
     if (confirm("Você realmente quer apagar?")) {
-      InsumosService.deleteById(id).then((result) => {
+      OrcamentosService.deleteById(id).then((result) => {
         if (result instanceof Error) {
           alert(result.message);
           return;
@@ -119,10 +120,10 @@ const Orcamentos = () => {
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{row.titulo}</Typography>
+                  <Typography>{row.id}</Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{row.idCategoria}</Typography>
+                  <Typography>{row.idCliente}</Typography>
                 </TableCell>
               </TableRow>
             ))}

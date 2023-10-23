@@ -117,7 +117,7 @@ const getCount = async (): Promise<number | Error> => {
   }
 };
 
-export const PedidosService = {
+export const InsumosProdutoBaseService = {
   getAll,
   getById,
   create,

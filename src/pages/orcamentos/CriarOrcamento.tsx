@@ -82,19 +82,14 @@ function CriarOrcamento() {
                   {...register("tipo")}
                    onChange={handleChange}
                 >
-                  <MenuItem value={"1"}>Em Andamento</MenuItem>
-                  <MenuItem value={"2"}>Parcial</MenuItem>
-                  <MenuItem value={"3"}>Concluido</MenuItem>
+                  <MenuItem value={"Pendente"}>Pendente</MenuItem>
+                  <MenuItem value={"Iniciado"}>Iniciado</MenuItem>
+                  <MenuItem value={"Em_Processo"}>Em Processo</MenuItem>
+                  <MenuItem value={"Concluido"}>Concluido</MenuItem>
                 </Select>
               </Grid>
             </Grid>
-
           </Grid>
-          
-
-
-
-
          </Box> 
        </Box> 
 

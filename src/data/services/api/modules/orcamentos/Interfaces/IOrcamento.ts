@@ -3,7 +3,7 @@ import { ICliente } from "../../clientes";
 
 
 export interface IOrcamento {
-    id: Number;
+    id: number;
     validade?: Date;
     dataOrcamento: Date;
     totalMaoObra?: number;

@@ -27,6 +27,7 @@ import { useForm } from "react-hook-form";
 import { useSubmit } from "react-router-dom";
 import  getCepData  from "../../data/services/api/axios-config/actions/cep";
 import { ReplySharp } from "@mui/icons-material";
+import { ClientesService } from "../../data/services/api";
 
 
 const createUserFormSchema = z
@@ -37,29 +38,15 @@ const createUserFormSchema = z
     rg: z.string(),
     cpf: z.string(),
     cnpj: z.string(),
-    tipo: z.string(),
+    contaTipo: z.string(),
     email: z.string().min(1, "Faltou o nome").email("isso não é email"),
     telefone: z.string(),
-    celular: z.string(),
-    cep: z.number().min(8, "Cep invalido").max(8, "Cep Invalido"),
-    endereco: z.string(),
-    rua: z.string(),
-    bairro: z.string(),
-    cidade: z.string(),
-    estado: z.string(),
-    numero: z.string(),
-    pais: z.string(),
-    complemento: z.string(),
+    
+   
   })
-  .refine((fileds) => fileds.tipo === "juridico", {
-    path: ["confemail"],
-    message: "Os emails precisam ser iguais",
-  });
+  
   const createCepFormSchema = z.object({
-    cep: z
-      .string()
-      .min(8, "O cep precisa de 8 digitos")
-      .max(8, "O cep precisa de 8 digitos"),
+    cep: z.coerce.number().min(8),
     pais: z.string(),
     estado: z.string(),
     cidade: z.string(),
@@ -82,9 +69,12 @@ function CriarCliente() {
     resolver: zodResolver(createUserFormSchema),
   });
   const [output, setOutput] = useState("");
+  enum contaTipo {
+    Fisico,
+    Juridico,
+  }
 
-
-  const [tipo, setTipo] = React.useState("juridico");
+  const [tipo, setTipo] = React.useState("Juridica");
   const handleChange = (event: SelectChangeEvent) => {
     setTipo(event.target.value as string);
     setValue("nome", "");
@@ -130,7 +120,13 @@ function CriarCliente() {
   }, [handleGetCepData, cep]);
 
   function createUser(data: any) {
+
+
     console.log(data);
+
+    ClientesService.create(data).catch((erro)=>{
+      console.log(erro.data);
+    });
   }
 
   
@@ -162,19 +158,21 @@ function CriarCliente() {
           </Grid>
           <Grid container item direction="row" spacing={4}>
             <Grid item>
-              <InputLabel id="tipo">Tipo</InputLabel>
-              <Select
-                labelId="tipo"
-                id="tipo"
-                value={tipo}
-                {...register("tipo")}
-                onChange={handleChange}
-              >
-                <MenuItem value={"fisico"}>Fisico</MenuItem>
-                <MenuItem value={"juridico"}>Juridico</MenuItem>
-              </Select>
+            <InputLabel id="tipo">Tipo</InputLabel>
+                <Select
+                  labelId="contaTipo"
+                  id="contaTipo"
+                  value={tipo}
+                  {...register("contaTipo")}
+                  onChange={handleChange}
+                >
+                  <MenuItem value={"Fisica"}>Fisico</MenuItem>
+                  <MenuItem value={"Juridica"}>Juridico</MenuItem>
+                </Select>
+
+              {errors.contaTipo && <span>{errors.contaTipo.message?.toString()}</span>}
             </Grid>
-            {tipo === "juridico" && (
+            {tipo === "Juridica" && (
               <>
                 <Grid item>
                   <Typography>Razão Social</Typography>
@@ -196,7 +194,7 @@ function CriarCliente() {
                 </Grid>
               </>
             )}
-            {tipo === "fisico" && (
+            {tipo === "Fisica" && (
               <>
                 <Grid item>
                   <Typography>Nome Completo</Typography>
@@ -270,8 +268,9 @@ function CriarCliente() {
               <TextField
                 placeholder="CEP"
                 {...register("cep")}
-               
+                
               />
+              {errors.cep && <span>{errors.cep.message?.toString()}</span>}
             </Grid>
             <Grid item xs={5}>
               <Typography>Endereço</Typography>
