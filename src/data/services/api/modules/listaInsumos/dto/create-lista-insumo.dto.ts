@@ -3,7 +3,7 @@ import { IInsumo } from "../../insumos";
 import { IProduto } from "../../produtos";
 
 export interface CreateListaInsumosDto {
-    id: number;
+   
     quantidade: number;
     idProduto: number;
     idInsumo: number;
@@ -11,6 +11,5 @@ export interface CreateListaInsumosDto {
     produto: IProduto;
     insumo: IInsumo;
     cotacao?: ICotacao;
-    createdAt: Date;
-    updatedAt: Date;
+    
 }

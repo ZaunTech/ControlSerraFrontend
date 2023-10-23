@@ -1,7 +1,7 @@
 import { ICliente } from "../..";
 
 export interface UpdateOrcamentoDto {
-    id: Number;
+    
     validade?: Date;
     dataOrcamento: Date;
     totalMaoObra?: number;
@@ -13,8 +13,7 @@ export interface UpdateOrcamentoDto {
     idCliente: number;
     idPedido?: number;
     cliente: ICliente;
-    createdAt?: Date;
-    updatedAt?: Date;
+   
     
 }
 
