@@ -60,6 +60,13 @@ import Configuracoes from "./pages/Configuracoes/Configuracoes.tsx";
 import Home from "./pages/home/Home.tsx";
 import Error from "./pages/error/Error.tsx";
 import { Login, RecuperarSenha } from "./pages/login/index.ts";
+import {
+  Cotacoes,
+  Cotacao,
+  CriarCotacao,
+  EditarCotacao,
+  ExcluirCotacao,
+} from "./pages/cotacoes/index.tsx";
 
 const router = createBrowserRouter([
   {
@@ -230,6 +237,36 @@ const router = createBrowserRouter([
               {
                 path: "excluir",
                 element: <ExcluirInsumo />,
+              },
+            ],
+          },
+        ],
+      },
+      {
+        path: "Cotacoes",
+        children: [
+          {
+            index: true,
+            element: <Cotacoes />,
+          },
+          {
+            path: "Novo",
+            element: <CriarCotacao />,
+          },
+          {
+            path: ":id",
+            children: [
+              {
+                index: true,
+                element: <Cotacao />,
+              },
+              {
+                path: "editar",
+                element: <EditarCotacao />,
+              },
+              {
+                path: "excluir",
+                element: <ExcluirCotacao />,
               },
             ],
           },

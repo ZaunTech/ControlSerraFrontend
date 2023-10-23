@@ -1,11 +1,11 @@
 import { Api } from "../..";
 import { Environment } from "../../../../environment";
-import { ICliente } from "./Interfaces/ICliente";
-import { TListCliente } from "./Interfaces/TListCliente";
+import { ICotacao } from "./Interfaces/ICotacao";
+import { TListCotacao } from "./Interfaces/TListCotacao";
 
-const rota = "clientes";
+const rota = "cotacoes";
 
-const getAll = async (page = 1, filter = ""): Promise<TListCliente | Error> => {
+const getAll = async (page = 1, filter = ""): Promise<TListCotacao | Error> => {
   try {
     const urlRelativa = `/${rota}?_page=${page}&_limit=${Environment.LIMITE_DE_LINHAS}&nome_like=${filter}`;
     const { data, headers } = await Api.get(urlRelativa);
@@ -26,10 +26,10 @@ const getAll = async (page = 1, filter = ""): Promise<TListCliente | Error> => {
     );
   }
 };
-const getById = async (id: number): Promise<ICliente | Error> => {
+const getById = async (id: number): Promise<ICotacao | Error> => {
   try {
     const urlRelativa = `/${rota}/${id}`;
-    const { data } = await Api.get<ICliente>(urlRelativa);
+    const { data } = await Api.get<ICotacao>(urlRelativa);
     if (data) {
       return data;
     }
@@ -42,12 +42,14 @@ const getById = async (id: number): Promise<ICliente | Error> => {
     );
   }
 };
-const create = async (dados: Omit<ICliente, "id">): Promise<number | Error> => {
+const create = async (
+  dados: Omit<ICotacao, "id">
+): Promise<ICotacao | Error> => {
   try {
     const urlRelativa = `/${rota}`;
-    const { data } = await Api.post<ICliente>(urlRelativa, dados);
-    if (data) {
-      return data.id;
+    const response = await Api.post<ICotacao>(urlRelativa, dados);
+    if (response) {
+      return response.data;
     }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {
@@ -60,13 +62,13 @@ const create = async (dados: Omit<ICliente, "id">): Promise<number | Error> => {
 };
 const updateById = async (
   id: number,
-  dados: ICliente
-): Promise<void | Error> => {
+  dados: ICotacao
+): Promise<ICotacao | Error> => {
   try {
     const urlRelativa = `/${rota}/${id}`;
-    const data = await Api.put(urlRelativa, dados);
-    if (data.statusText === "OK") {
-      return data.data.id;
+    const response = await Api.put(urlRelativa, dados);
+    if (response.statusText === "OK") {
+      return response.data.id;
     }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {
@@ -77,12 +79,12 @@ const updateById = async (
     );
   }
 };
-const deleteById = async (id: number): Promise<any> => {
+const deleteById = async (id: number): Promise<ICotacao | Error> => {
   try {
     const urlRelativa = `/${rota}/${id}`;
-    const data = await Api.delete(urlRelativa);
-    if (data.statusText === "OK") {
-      return data.data.id;
+    const response = await Api.delete(urlRelativa);
+    if (response.statusText === "OK") {
+      return response.data.id;
     }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {
@@ -97,9 +99,9 @@ const deleteById = async (id: number): Promise<any> => {
 const getCount = async (): Promise<number | Error> => {
   try {
     const urlRelativa = `/${rota}/count`;
-    const data = await Api.get(urlRelativa);
-    if (data.statusText === "OK") {
-      return data.data;
+    const response = await Api.get(urlRelativa);
+    if (response.statusText === "OK") {
+      return response.data;
     }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {
@@ -111,7 +113,7 @@ const getCount = async (): Promise<number | Error> => {
   }
 };
 
-export const ClientesService = {
+export const CotacoesService = {
   getAll,
   getById,
   create,

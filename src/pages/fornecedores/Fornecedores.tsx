@@ -73,7 +73,7 @@ const Fornecedores = () => {
 
   return (
     <PaginaBase
-      titulo="Clientes"
+      titulo="Fornecedores"
       barraDeFerramentas={
         <FerramentasDaListagem
           mostrarInputBusca

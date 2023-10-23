@@ -72,7 +72,7 @@ const Produtos = () => {
 
   return (
     <PaginaBase
-      titulo="Pedidos"
+      titulo="Produtos"
       barraDeFerramentas={
         <FerramentasDaListagem
           mostrarInputBusca

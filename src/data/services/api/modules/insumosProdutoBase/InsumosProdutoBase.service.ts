@@ -1,16 +1,18 @@
+import {
+  CreateInsumosProdutoBaseDto,
+  IInsumosProdutoBase,
+  TListInsumosProdutoBase,
+  UpdateInsumosProdutoBaseDto,
+} from ".";
 import { Api } from "../..";
 import { Environment } from "../../../../environment";
-import { ICategoria } from "./Interfaces/ICategoria";
-import { TListCategorias } from "./Interfaces/TListCategoria";
-import { CreateCategoriaDto } from "./dto/create-categoria.dto";
-import { UpdateCategoriaDto } from "./dto/update-categoria.dto";
 
-const rota = "pedidos";
+const rota = "insumos-produtos-base";
 
 const getAll = async (
   page = 1,
   filter = ""
-): Promise<TListCategorias | Error> => {
+): Promise<TListInsumosProdutoBase | Error> => {
   try {
     const urlRelativa = `/${rota}?_page=${page}&_limit=${Environment.LIMITE_DE_LINHAS}&titulo_like=${filter}`;
     const { data, headers } = await Api.get(urlRelativa);
@@ -24,23 +26,21 @@ const getAll = async (
     }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {
-    console.error(error);
     return new Error(
       (error as { message: string }).message ||
         Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
-const getById = async (id: number): Promise<ICategoria | Error> => {
+const getById = async (id: number): Promise<IInsumosProdutoBase | Error> => {
   try {
     const urlRelativa = `/${rota}/${id}`;
-    const { data } = await Api.get<ICategoria>(urlRelativa);
-    if (data) {
-      return data;
+    const response = await Api.get<IInsumosProdutoBase>(urlRelativa);
+    if (response) {
+      return response.data;
     }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {
-    console.error(error);
     return new Error(
       (error as { message: string }).message ||
         Environment.ERRO_AO_ACESSAR_DADOS
@@ -48,20 +48,19 @@ const getById = async (id: number): Promise<ICategoria | Error> => {
   }
 };
 const create = async (
-  createCategoriaDto: CreateCategoriaDto
-): Promise<number | Error> => {
+  createInsumosProdutoBaseDto: CreateInsumosProdutoBaseDto
+): Promise<IInsumosProdutoBase | Error> => {
   try {
     const urlRelativa = `/${rota}`;
-    const { data } = await Api.post<ICategoria>(
+    const { data: response } = await Api.post<IInsumosProdutoBase>(
       urlRelativa,
-      createCategoriaDto
+      createInsumosProdutoBaseDto
     );
-    if (data) {
-      return data.id;
+    if (response) {
+      return response;
     }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {
-    console.error(error);
     return new Error(
       (error as { message: string }).message ||
         Environment.ERRO_AO_ACESSAR_DADOS
@@ -70,33 +69,31 @@ const create = async (
 };
 const updateById = async (
   id: number,
-  updateCategoriaDto: UpdateCategoriaDto
-): Promise<void | Error> => {
+  updateInsumosProdutoBaseDto: UpdateInsumosProdutoBaseDto
+): Promise<IInsumosProdutoBase | Error> => {
   try {
     const urlRelativa = `/${rota}/${id}`;
-    const data = await Api.put(urlRelativa, updateCategoriaDto);
-    if (data.statusText === "OK") {
-      return data.data.id;
+    const response = await Api.put(urlRelativa, updateInsumosProdutoBaseDto);
+    if (response.statusText === "OK") {
+      return response.data;
     }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {
-    console.error(error);
     return new Error(
       (error as { message: string }).message ||
         Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
-const deleteById = async (id: number): Promise<any> => {
+const deleteById = async (id: number): Promise<IInsumosProdutoBase | Error> => {
   try {
     const urlRelativa = `/${rota}/${id}`;
-    const data = await Api.delete(urlRelativa);
-    if (data.statusText === "OK") {
-      return data.data.id;
+    const response = await Api.delete(urlRelativa);
+    if (response.statusText === "OK") {
+      return response.data;
     }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {
-    console.error(error);
     return new Error(
       (error as { message: string }).message ||
         Environment.ERRO_AO_ACESSAR_DADOS
@@ -107,13 +104,12 @@ const deleteById = async (id: number): Promise<any> => {
 const getCount = async (): Promise<number | Error> => {
   try {
     const urlRelativa = `/${rota}/count`;
-    const data = await Api.get(urlRelativa);
-    if (data.statusText === "OK") {
-      return data.data;
+    const response = await Api.get(urlRelativa);
+    if (response.statusText === "OK") {
+      return response.data;
     }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {
-    console.error(error);
     return new Error(
       (error as { message: string }).message ||
         Environment.ERRO_AO_ACESSAR_DADOS

@@ -2,7 +2,7 @@ import { useMemo, useEffect } from "react";
 import { PaginaBase } from "../../ui/layouts";
 import { FerramentasDaListagem } from "../../ui/components";
 import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
-import { IInsumo, InsumosService } from "../../data/services/api";
+import { FornecedoresService, IFornecedor } from "../../data/services/api";
 import { useDebounce } from "../../data/hooks";
 import { useState } from "react";
 import {
@@ -21,12 +21,16 @@ import {
   Icon,
 } from "@mui/material";
 import { Environment } from "../../data/environment";
+import {
+  CotacoesService,
+  ICotacao,
+} from "../../data/services/api/modules/cotacoes";
 
-const Insumos = () => {
+const Cotacoes = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { debounce } = useDebounce();
 
-  const [rows, setRows] = useState<IInsumo[]>([]);
+  const [rows, setRows] = useState<ICotacao[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -44,7 +48,7 @@ const Insumos = () => {
   useEffect(() => {
     setIsLoading(true);
     debounce(() => {
-      InsumosService.getAll(pagina, busca).then((result) => {
+      CotacoesService.getAll(pagina, busca).then((result) => {
         if (result instanceof Error) {
           alert(result.message);
           return;
@@ -58,7 +62,8 @@ const Insumos = () => {
 
   const handleDelete = (id: number) => {
     if (confirm("Você realmente quer apagar?")) {
-      InsumosService.deleteById(id).then((result) => {
+      CotacoesService.deleteById(id).then((result) => {
+        console.log(result);
         if (result instanceof Error) {
           alert(result.message);
           return;
@@ -71,7 +76,7 @@ const Insumos = () => {
 
   return (
     <PaginaBase
-      titulo="Insumos"
+      titulo="Cotações"
       barraDeFerramentas={
         <FerramentasDaListagem
           mostrarInputBusca
@@ -92,8 +97,10 @@ const Insumos = () => {
           <TableHead>
             <TableRow>
               <TableCell style={{ fontWeight: "bold" }}>Ações</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Titulo</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Categoria</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Nome</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Email</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Telefone</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Endereço</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -118,10 +125,16 @@ const Insumos = () => {
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{row.titulo}</Typography>
+                  <Typography>{row.nome}</Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{row.idCategoria}</Typography>
+                  <Typography>{row.email}</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography>{row.telefone}</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography>{row.endereco}</Typography>
                 </TableCell>
               </TableRow>
             ))}
@@ -162,6 +175,6 @@ const Insumos = () => {
       </TableContainer>
     </PaginaBase>
   );
-}
+};
 
-export default Insumos;
+export default Cotacoes;

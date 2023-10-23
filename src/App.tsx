@@ -20,6 +20,7 @@ const App = () => {
     { icon: "shoppingcart", label: "Pedidos", path: "/pedidos" },
     { icon: "construction", label: "Insumos", path: "/insumos" },
     { icon: "inventory", label: "Produtos", path: "/produtos" },
+    { icon: "attach_money", label: "Cotações", path: "/cotacoes" },
     { icon: "local_offer", label: "Categorias", path: "/categorias" },
     { icon: "store", label: "Fornecedores", path: "/fornecedores" },
     { icon: "settings", label: "Configurações", path: "/configuracoes" },

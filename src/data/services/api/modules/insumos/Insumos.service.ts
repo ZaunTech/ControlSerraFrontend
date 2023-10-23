@@ -11,8 +11,6 @@ const getAll = async (page = 1, filter = ""): Promise<TListInsumos | Error> => {
   try {
     const urlRelativa = `/${rota}?_page=${page}&_limit=${Environment.LIMITE_DE_LINHAS}&titulo_like=${filter}`;
     const { data, headers } = await Api.get(urlRelativa);
-    console.log(urlRelativa);
-    console.log(data);
     if (data) {
       return {
         data,
@@ -23,7 +21,6 @@ const getAll = async (page = 1, filter = ""): Promise<TListInsumos | Error> => {
     }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {
-    console.error(error);
     return new Error(
       (error as { message: string }).message ||
         Environment.ERRO_AO_ACESSAR_DADOS

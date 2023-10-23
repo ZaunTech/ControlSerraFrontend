@@ -1,16 +1,14 @@
+import { CreateProdutoDto, IProduto, TListProdutos, UpdateProdutoDto } from ".";
 import { Api } from "../..";
 import { Environment } from "../../../../environment";
-import { ICategoria } from "./Interfaces/ICategoria";
-import { TListCategorias } from "./Interfaces/TListCategoria";
-import { CreateCategoriaDto } from "./dto/create-categoria.dto";
-import { UpdateCategoriaDto } from "./dto/update-categoria.dto";
+import { UpdatePedidoDto } from "../pedidos";
 
 const rota = "produtos";
 
 const getAll = async (
   page = 1,
   filter = ""
-): Promise<TListCategorias | Error> => {
+): Promise<TListProdutos | Error> => {
   try {
     const urlRelativa = `/${rota}?_page=${page}&_limit=${Environment.LIMITE_DE_LINHAS}&titulo_like=${filter}`;
     const { data, headers } = await Api.get(urlRelativa);
@@ -24,17 +22,16 @@ const getAll = async (
     }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {
-    console.error(error);
     return new Error(
       (error as { message: string }).message ||
         Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
-const getById = async (id: number): Promise<ICategoria | Error> => {
+const getById = async (id: number): Promise<IProduto | Error> => {
   try {
     const urlRelativa = `/${rota}/${id}`;
-    const { data } = await Api.get<ICategoria>(urlRelativa);
+    const { data } = await Api.get<IProduto>(urlRelativa);
     if (data) {
       return data;
     }
@@ -48,20 +45,16 @@ const getById = async (id: number): Promise<ICategoria | Error> => {
   }
 };
 const create = async (
-  createCategoriaDto: CreateCategoriaDto
-): Promise<number | Error> => {
+  createProdutoDto: CreateProdutoDto
+): Promise<IProduto | Error> => {
   try {
     const urlRelativa = `/${rota}`;
-    const { data } = await Api.post<ICategoria>(
-      urlRelativa,
-      createCategoriaDto
-    );
-    if (data) {
-      return data.id;
+    const response = await Api.post<IProduto>(urlRelativa, createProdutoDto);
+    if (response) {
+      return response.data;
     }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {
-    console.error(error);
     return new Error(
       (error as { message: string }).message ||
         Environment.ERRO_AO_ACESSAR_DADOS
@@ -70,11 +63,11 @@ const create = async (
 };
 const updateById = async (
   id: number,
-  updateCategoriaDto: UpdateCategoriaDto
-): Promise<void | Error> => {
+  updateProdutoDto: UpdateProdutoDto
+): Promise<IProduto | Error> => {
   try {
     const urlRelativa = `/${rota}/${id}`;
-    const data = await Api.put(urlRelativa, updateCategoriaDto);
+    const data = await Api.put(urlRelativa, updateProdutoDto);
     if (data.statusText === "OK") {
       return data.data.id;
     }
@@ -87,16 +80,15 @@ const updateById = async (
     );
   }
 };
-const deleteById = async (id: number): Promise<any> => {
+const deleteById = async (id: number): Promise<IProduto | Error> => {
   try {
     const urlRelativa = `/${rota}/${id}`;
-    const data = await Api.delete(urlRelativa);
-    if (data.statusText === "OK") {
-      return data.data.id;
+    const response = await Api.delete(urlRelativa);
+    if (response.statusText === "OK") {
+      return response.data;
     }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {
-    console.error(error);
     return new Error(
       (error as { message: string }).message ||
         Environment.ERRO_AO_ACESSAR_DADOS
@@ -107,13 +99,12 @@ const deleteById = async (id: number): Promise<any> => {
 const getCount = async (): Promise<number | Error> => {
   try {
     const urlRelativa = `/${rota}/count`;
-    const data = await Api.get(urlRelativa);
-    if (data.statusText === "OK") {
-      return data.data;
+    const response = await Api.get(urlRelativa);
+    if (response.statusText === "OK") {
+      return response.data;
     }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {
-    console.error(error);
     return new Error(
       (error as { message: string }).message ||
         Environment.ERRO_AO_ACESSAR_DADOS
