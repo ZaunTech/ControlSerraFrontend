@@ -49,7 +49,7 @@ const getById = async (id: number): Promise<ICategoria | Error> => {
 };
 const create = async (
   createCategoriaDto: CreateCategoriaDto
-): Promise<number | Error> => {
+): Promise<ICategoria | Error> => {
   try {
     const urlRelativa = `/${rota}`;
     const { data } = await Api.post<ICategoria>(
@@ -57,7 +57,7 @@ const create = async (
       createCategoriaDto
     );
     if (data) {
-      return data.id;
+      return data;
     }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {
@@ -71,12 +71,12 @@ const create = async (
 const updateById = async (
   id: number,
   updateCategoriaDto: UpdateCategoriaDto
-): Promise<void | Error> => {
+): Promise<ICategoria | Error> => {
   try {
     const urlRelativa = `/${rota}/${id}`;
-    const data = await Api.put(urlRelativa, updateCategoriaDto);
-    if (data.statusText === "OK") {
-      return data.data.id;
+    const response = await Api.put(urlRelativa, updateCategoriaDto);
+    if (response.statusText === "OK") {
+      return response.data;
     }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {
@@ -87,12 +87,12 @@ const updateById = async (
     );
   }
 };
-const deleteById = async (id: number): Promise<any> => {
+const deleteById = async (id: number): Promise<ICategoria | Error> => {
   try {
     const urlRelativa = `/${rota}/${id}`;
-    const data = await Api.delete(urlRelativa);
-    if (data.statusText === "OK") {
-      return data.data.id;
+    const response = await Api.delete(urlRelativa);
+    if (response.statusText === "OK") {
+      return response.data;
     }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {
@@ -107,9 +107,9 @@ const deleteById = async (id: number): Promise<any> => {
 const getCount = async (): Promise<number | Error> => {
   try {
     const urlRelativa = `/${rota}/count`;
-    const data = await Api.get(urlRelativa);
-    if (data.statusText === "OK") {
-      return data.data;
+    const response = await Api.get(urlRelativa);
+    if (response.statusText === "OK") {
+      return response.data;
     }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {

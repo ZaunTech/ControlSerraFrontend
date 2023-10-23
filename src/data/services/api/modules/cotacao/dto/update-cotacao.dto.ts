@@ -1,9 +1,6 @@
 export interface UpdateCotacaoDto {
-    id: number;
-    data: Date;
+    data?: Date;
     valor?: number;
-    idFornecedor: number;
-    idInsumo: number;
-    createdAt: Date;
-    updatedAt: Date;
+    idFornecedor?: number;
+    idInsumo?: number;
 }

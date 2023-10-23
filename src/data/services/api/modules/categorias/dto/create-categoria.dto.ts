@@ -1,5 +1,5 @@
 export interface CreateCategoriaDto {
-    tipo:      string
-    titulo:    string
-    descricao?: string
+  tipo: string;
+  titulo: string;
+  descricao?: string;
 }

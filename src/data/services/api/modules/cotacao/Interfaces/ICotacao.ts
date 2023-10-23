@@ -1,7 +1,7 @@
 export interface ICotacao {
   id: number;
   data: Date;
-  valor?: number;
+  valor: number;
   idFornecedor: number;
   idInsumo: number;
   createdAt: Date;

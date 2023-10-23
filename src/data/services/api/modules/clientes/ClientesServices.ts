@@ -19,7 +19,6 @@ const getAll = async (page = 1, filter = ""): Promise<TListCliente | Error> => {
     }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {
-    console.error(error);
     return new Error(
       (error as { message: string }).message ||
         Environment.ERRO_AO_ACESSAR_DADOS
@@ -29,29 +28,29 @@ const getAll = async (page = 1, filter = ""): Promise<TListCliente | Error> => {
 const getById = async (id: number): Promise<ICliente | Error> => {
   try {
     const urlRelativa = `/${rota}/${id}`;
-    const { data } = await Api.get<ICliente>(urlRelativa);
-    if (data) {
-      return data;
+    const response = await Api.get<ICliente>(urlRelativa);
+    if (response) {
+      return response.data;
     }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {
-    console.error(error);
     return new Error(
       (error as { message: string }).message ||
         Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
-const create = async (dados: Omit<ICliente, "id">): Promise<number | Error> => {
+const create = async (
+  dados: Omit<ICliente, "id">
+): Promise<ICliente | Error> => {
   try {
     const urlRelativa = `/${rota}`;
-    const { data } = await Api.post<ICliente>(urlRelativa, dados);
-    if (data) {
-      return data.id;
+    const response = await Api.post<ICliente>(urlRelativa, dados);
+    if (response) {
+      return response.data;
     }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {
-    console.error(error);
     return new Error(
       (error as { message: string }).message ||
         Environment.ERRO_AO_ACESSAR_DADOS
@@ -61,32 +60,30 @@ const create = async (dados: Omit<ICliente, "id">): Promise<number | Error> => {
 const updateById = async (
   id: number,
   dados: ICliente
-): Promise<void | Error> => {
+): Promise<ICliente | Error> => {
   try {
     const urlRelativa = `/${rota}/${id}`;
-    const data = await Api.put(urlRelativa, dados);
-    if (data.statusText === "OK") {
-      return data.data.id;
+    const response = await Api.put(urlRelativa, dados);
+    if (response.statusText === "OK") {
+      return response.data;
     }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {
-    console.error(error);
     return new Error(
       (error as { message: string }).message ||
         Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
-const deleteById = async (id: number): Promise<any> => {
+const deleteById = async (id: number): Promise<ICliente | Error> => {
   try {
     const urlRelativa = `/${rota}/${id}`;
-    const data = await Api.delete(urlRelativa);
-    if (data.statusText === "OK") {
-      return data.data.id;
+    const response = await Api.delete(urlRelativa);
+    if (response.statusText === "OK") {
+      return response.data;
     }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {
-    console.error(error);
     return new Error(
       (error as { message: string }).message ||
         Environment.ERRO_AO_ACESSAR_DADOS
@@ -97,13 +94,12 @@ const deleteById = async (id: number): Promise<any> => {
 const getCount = async (): Promise<number | Error> => {
   try {
     const urlRelativa = `/${rota}/count`;
-    const data = await Api.get(urlRelativa);
-    if (data.statusText === "OK") {
-      return data.data;
+    const response = await Api.get(urlRelativa);
+    if (response.statusText === "OK") {
+      return response.data;
     }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {
-    console.error(error);
     return new Error(
       (error as { message: string }).message ||
         Environment.ERRO_AO_ACESSAR_DADOS
