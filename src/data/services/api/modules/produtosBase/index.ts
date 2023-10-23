@@ -1,0 +1,5 @@
+export * from './ProdutoBase.service'
+export * from './Interfaces/IProdutoBase'
+export * from './Interfaces/TListProdutosBase'
+export * from './dto/create-produto-base.dto'
+export * from './dto/update-produto-base.dto'

@@ -24,9 +24,9 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useForm } from "react-hook-form";
-import { useSubmit } from "react-router-dom";
+
 import  getCepData  from "../../data/services/api/axios-config/actions/cep";
-import { ReplySharp } from "@mui/icons-material";
+
 
 const createUserFormSchema = z
   .object({
@@ -92,8 +92,7 @@ function CriarFornecedor() {
   const handleSetFormData = useCallback(
     (viacepResponse: IViacepResponse) => {
       setValue("pais", "Brasil");
-      setValue("endereco", viacepResponse.logradouro + " - " + viacepResponse.bairro + " - " + viacepResponse.localidade);
-      
+      setValue("endereco", viacepResponse.logradouro + " - " + viacepResponse.bairro + " - " + viacepResponse.localidade);  
       setValue("estado", viacepResponse.uf);
       setValue("cidade", viacepResponse.localidade);
       setValue("bairro", viacepResponse.bairro);

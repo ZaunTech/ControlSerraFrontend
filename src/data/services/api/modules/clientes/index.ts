@@ -1,3 +1,5 @@
 export * from './ClientesServices'
 export * from './Interfaces/ICliente'
 export * from './Interfaces/TListCliente'
+export * from './dto/update-cliente.dto'
+export * from './dto/create-cliente.dto'
