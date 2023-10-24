@@ -1,10 +1,17 @@
+import { useState } from "react";
+
 import Typography from "@mui/material/Typography";
 
 import {
   Icon,
   Box,
+  Link,
+  IconButton,
   Button,
+  TextField,
   OutlinedInput,
+  Checkbox,
+  FormControlLabel,
 } from "@mui/material";
 
 import { z } from "zod";
@@ -36,6 +43,7 @@ export function RecuperarSenha() {
   } = useForm({
     resolver: zodResolver(createUserFormSchema),
   });
+  const [output, setOutput] = useState("");
   return (
     <Box id="Main" flexDirection={"row"} display={"flex"}>
       <Box

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { FerramentasDeDetalhes } from '../../ui/components'
 import { PaginaBase } from '../../ui/layouts'
 import { Autocomplete, Box, Grid, Paper, TextField, Typography } from '@mui/material'
@@ -7,7 +7,14 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useForm } from "react-hook-form";
-import { CategoriasService, ICategoria, InsumosService } from '../../data/services/api';
+import { CategoriasService, ICategoria, InsumosService, TListCategorias } from '../../data/services/api';
+import { Categorias } from '../categorias';
+
+
+
+
+
+
 
 const createUserFormSchema = z.object({
   titulo: z.string(),

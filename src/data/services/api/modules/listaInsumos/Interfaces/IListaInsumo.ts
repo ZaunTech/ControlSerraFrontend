@@ -1,4 +1,4 @@
-import { ICotacao } from "../../cotacoes";
+import { ICotacao } from "../../cotacao";
 import { IInsumo } from "../../insumos/Interfaces/IInsumo"
 import { IProduto } from "../../produtos";
 

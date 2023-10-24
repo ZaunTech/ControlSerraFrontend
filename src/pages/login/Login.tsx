@@ -19,7 +19,6 @@ import {
 } from "@mui/material";
 import { useAuthContext } from "../../data/contexts";
 import { useNavigate } from "react-router-dom";
-import { ILogin } from "../../data/services/api";
 
 const createUserFormSchema = z.object({
   email: z.string().min(1, "Faltou o nome").email("isso não é email"),
@@ -40,7 +39,7 @@ export function Login() {
 
   const navigate = useNavigate();
 
-  const handleFormLoginSubmit = (data: ILogin) => {
+  const handleFormLoginSubmit = (data: any) => {
     const { email, password } = data;
     setIsLoading(true);
     login(email, password)

@@ -1,9 +1,9 @@
-import { ICotacao } from "../../cotacoes";
+import { ICotacao } from "../../cotacao";
 import { IInsumo } from "../../insumos";
 import { IProduto } from "../../produtos";
 
 export interface UpdateListaInsumosDto {
-
+    
     quantidade: number;
     idProduto: number;
     idInsumo: number;
@@ -11,5 +11,5 @@ export interface UpdateListaInsumosDto {
     produto: IProduto;
     insumo: IInsumo;
     cotacao?: ICotacao;
-
+    
 }
