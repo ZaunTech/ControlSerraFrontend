@@ -7,6 +7,7 @@ export interface IInsumosProdutoBase {
     idProdutoBase: number;
     idInsumo: number;
     produtoBase?: IProdutoBase;
+    dimensoes: string;
     insumo?: IInsumo;
     createdAt?: Date;
     updatedAt?: Date;
