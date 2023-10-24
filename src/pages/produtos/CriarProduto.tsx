@@ -40,6 +40,7 @@ function CriarProduto() {
     watch,
     control,
 
+
     formState: { errors },
   } = useForm({
     resolver: zodResolver(createUserFormSchema),
@@ -86,6 +87,7 @@ function CriarProduto() {
                   <span>{errors.titulo.message?.toString()}</span>
                 )}
               </Grid>
+
 
               <Grid item>
                 <Typography>Observações</Typography>

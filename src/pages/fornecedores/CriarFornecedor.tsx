@@ -1,15 +1,10 @@
 import React, { useCallback, useEffect } from "react";
-import { useState } from "react";
-import { useMemo } from "react";
 import { PaginaBase } from "../../ui/layouts";
 import {
-  FerramentasDaListagem,
   FerramentasDeDetalhes,
 } from "../../ui/components";
 import {
-  Autocomplete,
   Box,
-  FormControl,
   Grid,
   InputLabel,
   MenuItem,
@@ -25,6 +20,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useForm } from "react-hook-form";
 
+import getCepData from "../../data/services/api/axios-config/actions/cep";
 import getCepData from "../../data/services/api/axios-config/actions/cep";
 import { FornecedoresService } from "../../data/services/api";
 
@@ -93,7 +89,6 @@ function CriarFornecedor() {
   } = useForm({
     resolver: zodResolver(createUserFormSchema),
   });
-  const [output, setOutput] = useState("");
   enum contaTipo {
     Fisico,
     Juridico,
@@ -146,6 +141,7 @@ function CriarFornecedor() {
     if (isCepValid) {
       console.log("Cep valido");
 
+
       handleGetCepData(cep);
     }
   }, [handleGetCepData, cep]);
@@ -153,6 +149,7 @@ function CriarFornecedor() {
   function createUser(data: any) {
     console.log(data);
 
+    FornecedoresService.create(data).catch((erro) => {
     FornecedoresService.create(data).catch((erro) => {
       console.log(erro);
     });
@@ -322,6 +319,55 @@ function CriarFornecedor() {
                 <TextField placeholder="Rua" {...register("rua")} />
               </Grid>
 
+              <Grid item>
+                <Typography>Bairro</Typography>
+                <TextField placeholder="Bairro" {...register("bairro")} />
+              </Grid>
+            </Grid>
+            <Grid container item direction="row" spacing={2}>
+              <Grid item xs={3}>
+                <Typography>Cidade</Typography>
+                <TextField
+                  placeholder="Cidade"
+                  fullWidth
+                  {...register("cidade")}
+                />
+              </Grid>
+              <Grid item xs={3}>
+                <Typography>Estado</Typography>
+                <TextField
+                  placeholder="Estado"
+                  fullWidth
+                  {...register("estado")}
+                />
+              </Grid>
+              <Grid item xs={3}>
+                <Typography>Numero</Typography>
+                <TextField
+                  placeholder="Numero"
+                  fullWidth
+                  {...register("numero")}
+                />
+              </Grid>
+              <Grid item xs={3}>
+                <Typography>Pais</Typography>
+                <TextField placeholder="Pais" fullWidth {...register("pais")} />
+              </Grid>
+            </Grid>
+            <Grid container item direction="row" spacing={2}>
+              <Grid item xs={9}>
+                <Typography>Complemento</Typography>
+                <TextField
+                  placeholder="Complemento"
+                  fullWidth
+                  {...register("complemento")}
+                />
+              </Grid>
+            </Grid>
+          </Grid>
+        </Box>
+      </Box>
+    </PaginaBase>
               <Grid item>
                 <Typography>Bairro</Typography>
                 <TextField placeholder="Bairro" {...register("bairro")} />

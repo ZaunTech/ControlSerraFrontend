@@ -1,5 +1,5 @@
 import { Outlet, useNavigate } from "react-router-dom";
-import { useTheme, useMediaQuery } from "@mui/material";
+import { useTheme } from "@mui/material";
 import { SideMenu } from "./ui/components";
 import {
   AppDrawerProvider,
@@ -10,7 +10,6 @@ import { useEffect } from "react";
 
 const App = () => {
   const theme = useTheme();
-  const smDown = useMediaQuery(theme.breakpoints.down("sm"));
   const menuSize = theme.spacing(28);
 
   const DrawerOptions = [
