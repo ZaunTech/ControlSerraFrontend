@@ -122,6 +122,7 @@ function Cliente() {
 
         if (!isNaN(clienteId)) {
           const data: ICliente | null = await ClientesService.getById(clienteId);
+          
           setCliente(data);
           setValue("nome", data?.nome);
           setValue("nomeFantasia", data?.nomeFantasia);
@@ -140,9 +141,8 @@ function Cliente() {
           setValue("numero",data?.numero);
           setValue("complemento",data?.complemento)
           setTipo(data?.contaTipo);
-       
-
           console.log(data);
+
         } else {
           console.log('ID do cliente inválido');
         }

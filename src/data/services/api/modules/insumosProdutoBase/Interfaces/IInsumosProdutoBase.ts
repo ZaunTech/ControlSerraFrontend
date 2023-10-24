@@ -6,9 +6,9 @@ export interface IInsumosProdutoBase {
     quantidade?: number;
     idProdutoBase: number;
     idInsumo: number;
-    produtoBase: IProdutoBase;
-    insumo: IInsumo;
-    createdAt: Date;
-    updatedAt: Date;
+    produtoBase?: IProdutoBase;
+    insumo?: IInsumo;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
 

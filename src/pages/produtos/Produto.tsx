@@ -22,14 +22,18 @@ import {
   TListInsumos,
 } from "../../data/services/api";
 import {
+  CreateInsumosProdutoBaseDto,
   IInsumosProdutoBase,
   InsumosProdutoBaseService,
 } from "../../data/services/api/modules/insumosProdutoBase";
+import { useParams } from "react-router-dom";
 
 const createUserFormSchema = z.object({
   titulo: z.string(),
   observacoes: z.string(),
 });
+
+
 
 function Produto() {
   const {
@@ -48,52 +52,17 @@ function Produto() {
     control,
     name: "insumos",
   });
-
+  const [isAddingInsumo, setIsAddingInsumo] = useState<boolean>(false);
   function addNovoInsumo() {
     append({ titulo: "" });
-    setIsAddingInsumo(true);
+    
   }
 
   function createUser(data: any) {
     console.log(data);
     ProdutosBaseService.create(data)
       .then((result) => {
-        if (!(result instanceof Error)) {
-          console.log(
-            "IDs dos insumos:",
-            data.insumos.map((insumo: IInsumosProdutoBase) => insumo.idInsumo)
-          );
-          const dataInsumos: IInsumosProdutoBase[] = data.insumos.map(
-            (insumo: IInsumosProdutoBase) => ({
-              ...insumo,
-              idProdutoBase: result.id,
-
-              // Associando o insumo ao produto recém-criado
-            })
-          );
-
-          console.log(dataInsumos);
-          Promise.all(
-            dataInsumos.map((insumo) => {
-              InsumosProdutoBaseService.create(insumo);
-            })
-          )
-            .then((insumosProdutoBaseResults) => {
-              // Aqui você tem um array de resultados das chamadas InsumosProdutoBaseService.create
-              console.log("deu certo: ", insumosProdutoBaseResults);
-
-              // Faça qualquer coisa adicional que você precise fazer após salvar InsumosProdutoBase
-            })
-            .catch((error) => {
-              console.error("Erro ao criar InsumosProdutoBase:", error);
-              // Trate o erro conforme necessário, você pode querer mostrar uma mensagem de erro para o usuário
-            });
-        }
       })
-      .catch((error) => {
-        console.error("Erro ao criar ProdutosBase:", error);
-        // Trate o erro conforme necessário, você pode querer mostrar uma mensagem de erro para o usuário
-      });
   }
 
   const [opcoes, setOpcoes] = useState<IInsumo[]>([]);
@@ -124,7 +93,7 @@ function Produto() {
       });
   }, []);
 
-  const [isAddingInsumo, setIsAddingInsumo] = useState<boolean>(false);
+ 
 
   return (
     <PaginaBase
@@ -181,9 +150,9 @@ function Produto() {
             {fields.map((field, index) => {
               return  <InsumoDoProduto
               opcoes={opcoes}
-              insumos={insumos}
-              index={index}
-              key={index}
+              key={field.id}
+              field={field}
+              remove={() => remove(index)} // Use 'index' as the key
              />; //Mudar de index para o id do insumo
             })}
             <Grid item>
@@ -202,10 +171,14 @@ export default Produto;
 
 interface IInsumoDoProdutoBase {
   opcoes: IInsumo[];
+  remove: (index: number) => void;
 }
 
-const InsumoDoProduto = ({ opcoes }: IInsumoDoProdutoBase) => {
+
+const InsumoDoProduto = ({ opcoes , field, remove }: IInsumoDoProdutoBase & { field: any }) =>{
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [selectedInsumo, setSelectedInsumo] = useState<IInsumo | null>(null);
+  const [qtde, setQuantidade] = useState<number | null>(null);
 
   const insumoSchema = z.object({
     idInsumo: z.number(),
@@ -213,6 +186,11 @@ const InsumoDoProduto = ({ opcoes }: IInsumoDoProdutoBase) => {
     quantidade: z.number(),
   });
 
+  const { id } = useParams();
+  const productId: number = Number(id) ?? 0;
+  useEffect(() => {
+    console.log(selectedInsumo);
+  }, [selectedInsumo]);
   
   return (
     
@@ -228,10 +206,8 @@ const InsumoDoProduto = ({ opcoes }: IInsumoDoProdutoBase) => {
           sx={{ width: 225 }}
           renderInput={(params) => <TextField {...params} />}
           onChange={(_, value) => {
-            if (value !== null) {
-              setValue(`insumos.${index}.idInsumo`, value.id);
-              setValue(`insumos.${index}.titulo`, value.titulo);
-            }
+            setSelectedInsumo(value)
+            
           }}
           disabled={!isEditing}
         />
@@ -241,7 +217,9 @@ const InsumoDoProduto = ({ opcoes }: IInsumoDoProdutoBase) => {
         <TextField
           type="text"
           placeholder="Quantidade"
-          //{...register(`insumos.${index}.quantidade`)}
+          onChange={(e)=>{
+            setQuantidade(Number(e.target.value))
+          }}
           disabled={!isEditing}
         />
       </Grid>
@@ -251,14 +229,16 @@ const InsumoDoProduto = ({ opcoes }: IInsumoDoProdutoBase) => {
             <Button
               variant="contained"
               onClick={() => {
-                if (id == null) {
-                  InsumosProdutoBaseService.create(data);
-                  setIsEditing(false);
-                  return;
+
+                console.log(selectedInsumo,qtde);
+
+                const data : CreateInsumosProdutoBaseDto  = {
+                  idProdutoBase: Number(id),
+                  idInsumo: selectedInsumo?.id ? Number(selectedInsumo?.id) : 0,
+                  quantidade: qtde || 0,
                 }
-                InsumosProdutoBaseService.updateById(id, data);
-                setIsEditing(false);
-                return;
+
+                InsumosProdutoBaseService.create(data)
               }}>
               Salvar
             </Button>
@@ -287,7 +267,8 @@ const InsumoDoProduto = ({ opcoes }: IInsumoDoProdutoBase) => {
             <Button
               variant="contained"
               onClick={() => {
-                //remove(index)}
+                remove(field.id)
+              
               }}>
               Remover
             </Button>
