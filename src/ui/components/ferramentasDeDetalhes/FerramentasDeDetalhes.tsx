@@ -58,7 +58,7 @@ export const FerramentasDeDetalhes: React.FC<IFerramentasDeDetalhes> = ({
 
   const voltar = () => {
     navigate(-1);
-  }
+  };
   return (
     <Box
       component={Paper}
@@ -148,26 +148,28 @@ export const FerramentasDeDetalhes: React.FC<IFerramentasDeDetalhes> = ({
           </Typography>
         </Button>
       )}
-      <Divider variant="middle" orientation="vertical" />
 
       {skeletonVoltar && <Skeleton width={110} height={60} />}
       {mostrarBotaoVoltar && !skeletonVoltar && (
-        <Button
-          color="primary"
-          variant="outlined"
-          disableElevation
-          startIcon={<Icon>arrow_back</Icon>}
-          onClick={onClickVoltar || voltar}
-        >
-          <Typography
-            variant="button"
-            whiteSpace={"nowrap"}
-            textOverflow={"ellipsis"}
-            overflow={"hidden"}
+        <>
+          <Divider variant="middle" orientation="vertical" />
+          <Button
+            color="primary"
+            variant="outlined"
+            disableElevation
+            startIcon={<Icon>arrow_back</Icon>}
+            onClick={onClickVoltar || voltar}
           >
-            Voltar
-          </Typography>
-        </Button>
+            <Typography
+              variant="button"
+              whiteSpace={"nowrap"}
+              textOverflow={"ellipsis"}
+              overflow={"hidden"}
+            >
+              Voltar
+            </Typography>
+          </Button>
+        </>
       )}
     </Box>
   );

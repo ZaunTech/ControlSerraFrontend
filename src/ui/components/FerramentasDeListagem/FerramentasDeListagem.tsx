@@ -85,24 +85,26 @@ export const FerramentasDaListagem: React.FC<IFerramentasDaListagem> = ({
           </Button>
         </Box>
       )}
-      <Divider variant="middle" orientation="vertical" />
       {mostrarBotaoVoltar && (
-        <Button
-          color="primary"
-          variant="outlined"
-          disableElevation
-          startIcon={<Icon>arrow_back</Icon>}
-          onClick={onClickBotaoVoltar || voltar}
-        >
-          <Typography
-            variant="button"
-            whiteSpace={"nowrap"}
-            textOverflow={"ellipsis"}
-            overflow={"hidden"}
+        <>
+          <Divider variant="middle" orientation="vertical" />
+          <Button
+            color="primary"
+            variant="outlined"
+            disableElevation
+            startIcon={<Icon>arrow_back</Icon>}
+            onClick={onClickBotaoVoltar || voltar}
           >
-            Voltar
-          </Typography>
-        </Button>
+            <Typography
+              variant="button"
+              whiteSpace={"nowrap"}
+              textOverflow={"ellipsis"}
+              overflow={"hidden"}
+            >
+              Voltar
+            </Typography>
+          </Button>
+        </>
       )}
     </Box>
   );
