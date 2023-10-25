@@ -49,39 +49,63 @@ const Cotacoes = () => {
     return Number(searchParams.get("pagina") || "1");
   }, [searchParams]);
 
-  useEffect(() => {
-    setIsLoading(true);
-    debounce(() => {
-      CotacoesService.getAll(pagina, busca).then((result) => {
-        if (result instanceof Error) {
-          alert(result.message);
-          return;
-        }
+ 
 
-        result.data.forEach((cotacao) => {
-          FornecedoresService.getById(cotacao.idFornecedor).then((result2) => {
+  const setDados = async () => {
+    try {
+      setIsLoading(true);
+
+      const result = await CotacoesService.getAll(pagina, busca);
+
+      if (result instanceof Error) {
+        alert(result.message);
+        return;
+      }
+
+      // Usar Promise.all para aguardar todas as chamadas assíncronas dentro do loop
+      const cotacoesData = await Promise.all(
+        result.data.map(async (cotacao) => {
+          try {
+            const result2 = await FornecedoresService.getById(cotacao.idFornecedor);
+
             if (result2 instanceof Error) {
               alert(result2.message);
-              return;
+              return null;
             }
-            cotacao.fornecedor = result2;
-          });
 
-          InsumosService.getById(cotacao.idInsumo).then((result3) => {
+            const result3 = await InsumosService.getById(cotacao.idInsumo);
+
             if (result3 instanceof Error) {
               alert(result3.message);
-              return;
+              return null;
             }
 
+            cotacao.fornecedor = result2;
             cotacao.insumo = result3;
-          });
-        });
-        setRows(result.data);
-        console.log(result.data);
-        setTotalCount(result.totalCount);
-        setIsLoading(false);
-      });
-    });
+
+            return cotacao;
+          } catch (error) {
+            console.error('Error fetching data:', error);
+            return null;
+          }
+        })
+      );
+     
+
+      // Atribuir ao estado
+      setRows(cotacoesData);
+      setTotalCount(result.totalCount);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      alert('Error fetching data.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    setIsLoading(true);
+    setDados();
   }, [busca, pagina]);
 
   const handleDelete = (id: number) => {
@@ -127,7 +151,6 @@ const Cotacoes = () => {
           </TableHead>
           <TableBody>
             {rows.map((row) => {
-              console.log("Linha", row);
               return (
                 <TableRow key={row.id}>
                   <TableCell>
