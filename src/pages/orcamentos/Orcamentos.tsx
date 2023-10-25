@@ -2,7 +2,7 @@ import { useMemo, useEffect } from "react";
 import { PaginaBase } from "../../ui/layouts";
 import { FerramentasDaListagem } from "../../ui/components";
 import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
-import { IInsumo, InsumosService } from "../../data/services/api";
+import { ClientesService, IInsumo, InsumosService } from "../../data/services/api";
 import { useDebounce } from "../../data/hooks";
 import { useState } from "react";
 import {
@@ -41,6 +41,44 @@ const Orcamentos = () => {
   const pagina = useMemo(() => {
     return Number(searchParams.get("pagina") || "1");
   }, [searchParams]);
+  const setDados = async () => {
+    try {
+      setIsLoading(true);
+
+      const result = await OrcamentosService.getAll(pagina, busca);
+
+      if (result instanceof Error) {
+        alert(result.message);
+        return;
+      }
+
+      const orcamentosData = await Promise.all(
+        result.data.map(async (orcamento: IOrcamento) => {
+          try {
+            const result2 = await ClientesService.getById(orcamento.idCliente);
+
+            if (result2 instanceof Error) {
+              alert(result2.message);
+              return null;
+            }
+
+            orcamento.cliente = result2;
+            return orcamento;
+          } catch (error) {
+            console.error('Error fetching data:', error);
+            return null;
+          }
+        })
+      );
+      setRows(orcamentosData);
+      setTotalCount(result.totalCount);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      alert('Error fetching data.');
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   useEffect(() => {
     setIsLoading(true);

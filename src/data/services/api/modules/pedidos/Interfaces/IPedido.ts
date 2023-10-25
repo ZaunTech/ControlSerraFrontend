@@ -5,6 +5,7 @@ export interface IPedido {
   tipo: string;
   titulo: string;
   descricao?: string;
+  idOrcamento: number;
   orcamento: IOrcamento;
   status: status;
   createdAt?: Date;

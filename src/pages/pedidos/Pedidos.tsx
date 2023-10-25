@@ -2,7 +2,7 @@ import { useMemo, useEffect } from "react";
 import { PaginaBase } from "../../ui/layouts";
 import { FerramentasDaListagem } from "../../ui/components";
 import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
-import { IInsumo, InsumosService } from "../../data/services/api";
+import { ClientesService, IInsumo, InsumosService } from "../../data/services/api";
 import { useDebounce } from "../../data/hooks";
 import { useState } from "react";
 import {
@@ -22,6 +22,7 @@ import {
 } from "@mui/material";
 import { Environment } from "../../data/environment";
 import { IPedido, PedidosService } from "../../data/services/api/modules/pedidos";
+import { OrcamentosService } from "../../data/services/api/modules/orcamentos";
 
 const Pedidos = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -41,6 +42,55 @@ const Pedidos = () => {
   const pagina = useMemo(() => {
     return Number(searchParams.get("pagina") || "1");
   }, [searchParams]);
+
+  const setDados = async () => {
+    try {
+      setIsLoading(true);
+
+      const result = await PedidosService.getAll(pagina, busca);
+
+      if (result instanceof Error) {
+        alert(result.message);
+        return;
+      }
+
+      const pedidosData = await Promise.all(
+        result.data.map(async (pedido: IPedido) => {
+          try {
+            const result2 = await OrcamentosService.getById(pedido.idOrcamento);
+
+            if (result2 instanceof Error) {
+              alert(result2.message);
+              return null;
+            }
+
+            pedido.orcamento = result2;
+            try {
+              const result3 = await ClientesService.getById(pedido.orcamento.idCliente);
+              if (result3 instanceof Error) {
+                alert(result3.message);
+                return;
+              }
+              pedido.orcamento.cliente = result3;
+            } catch (error) {
+              console.log("Erro ao obter o cliente")
+            }
+            return pedido;
+          } catch (error) {
+            console.error('Error fetching data:', error);
+            return null;
+          }
+        })
+      );
+      setRows(pedidosData);
+      setTotalCount(result.totalCount);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      alert('Error fetching data.');
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   useEffect(() => {
     setIsLoading(true);

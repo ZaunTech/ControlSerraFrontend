@@ -7,7 +7,7 @@ import {
   useLocation,
   useParams,
 } from "react-router-dom";
-import { IProdutoBase, ProdutosBaseService } from "../../data/services/api";
+import { IProdutoBase, InsumosService, ProdutosBaseService } from "../../data/services/api";
 import { useDebounce } from "../../data/hooks";
 import { useState } from "react";
 import {
@@ -51,7 +51,7 @@ const Produto = () => {
     return Number(searchParams.get("pagina") || "1");
   }, [searchParams]);
 
-  const [produtoName, setProdutoName] = useState<String>("");
+  const [produtoName, setProdutoName] = useState<string>("");
 
   useEffect(() => {
     if (id === null || id === undefined) {
@@ -66,19 +66,48 @@ const Produto = () => {
     });
   }, []);
 
+  const setDados = async () => {
+    try {
+      setIsLoading(true);
+
+      const result = await InsumosProdutoBaseService.getAll(pagina, busca);
+
+      if (result instanceof Error) {
+        alert(result.message);
+        return;
+      }
+
+      const insumosData = await Promise.all(
+        result.data.map(async (insumoProdutoBase: IInsumosProdutoBase) => {
+          try {
+            const result2 = await InsumosService.getById(insumoProdutoBase.idInsumo);
+
+            if (result2 instanceof Error) {
+              alert(result2.message);
+              return null;
+            }
+
+            insumoProdutoBase.insumo = result2;
+            return insumoProdutoBase;
+          } catch (error) {
+            console.error('Error fetching data:', error);
+            return null;
+          }
+        })
+      );
+      setRows(insumosData);
+      setTotalCount(result.totalCount);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      alert('Error fetching data.');
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   useEffect(() => {
     setIsLoading(true);
-    debounce(() => {
-      InsumosProdutoBaseService.getAll(pagina, busca).then((result) => {
-        if (result instanceof Error) {
-          alert(result.message);
-          return;
-        }
-        setRows(result.data);
-        setTotalCount(result.totalCount);
-        setIsLoading(false);
-      });
-    });
+    setDados();
   }, [busca, pagina]);
 
   const handleDelete = (id: number) => {

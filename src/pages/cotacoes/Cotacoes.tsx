@@ -49,7 +49,7 @@ const Cotacoes = () => {
     return Number(searchParams.get("pagina") || "1");
   }, [searchParams]);
 
- 
+
 
   const setDados = async () => {
     try {
@@ -62,9 +62,8 @@ const Cotacoes = () => {
         return;
       }
 
-      // Usar Promise.all para aguardar todas as chamadas assíncronas dentro do loop
       const cotacoesData = await Promise.all(
-        result.data.map(async (cotacao) => {
+        result.data.map(async (cotacao: ICotacao) => {
           try {
             const result2 = await FornecedoresService.getById(cotacao.idFornecedor);
 
@@ -90,9 +89,6 @@ const Cotacoes = () => {
           }
         })
       );
-     
-
-      // Atribuir ao estado
       setRows(cotacoesData);
       setTotalCount(result.totalCount);
     } catch (error) {
