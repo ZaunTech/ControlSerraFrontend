@@ -26,14 +26,13 @@ import {
   InsumosProdutoBaseService,
 } from "../../data/services/api/modules/insumosProdutoBase";
 import { useNavigate } from "react-router-dom";
-import { setTimeout } from "timers/promises";
 
 const createUserFormSchema = z.object({
   titulo: z.string(),
   observacoes: z.string(),
 });
 
-function CriarProduto() {
+function CriarItemInsumoProdutoBase() {
   const {
     register,
     handleSubmit,
@@ -53,7 +52,7 @@ function CriarProduto() {
     ProdutosBaseService.create(data)
       .then((result) => {
         if (!(result instanceof Error)) {
-          navigate(`/produtos/${result.id}`);
+          navigate(-1);
         }
       })
       .catch((error) => {
@@ -64,7 +63,7 @@ function CriarProduto() {
 
   return (
     <PaginaBase
-      titulo="Criar Produto"
+      titulo="Criar Insumo para o Produto"
       barraDeFerramentas={
         <FerramentasDeDetalhes
           mostrarBotaoApagar={false}
@@ -108,4 +107,4 @@ function CriarProduto() {
   );
 }
 
-export default CriarProduto;
+export default CriarItemInsumoProdutoBase;

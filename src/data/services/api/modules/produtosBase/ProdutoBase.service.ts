@@ -28,7 +28,7 @@ const getAll = async (
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-      Environment.ERRO_AO_ACESSAR_DADOS
+        Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -43,7 +43,7 @@ const getById = async (id: number): Promise<IProdutoBase | Error> => {
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-      Environment.ERRO_AO_ACESSAR_DADOS
+        Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -57,13 +57,14 @@ const create = async (
       CreateProdutoBaseDto
     );
     if (response) {
+      console.log(response);
       return response.data;
     }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-      Environment.ERRO_AO_ACESSAR_DADOS
+        Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -81,7 +82,7 @@ const updateById = async (
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-      Environment.ERRO_AO_ACESSAR_DADOS
+        Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -96,7 +97,7 @@ const deleteById = async (id: number): Promise<IProdutoBase | Error> => {
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-      Environment.ERRO_AO_ACESSAR_DADOS
+        Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -112,7 +113,7 @@ const getCount = async (): Promise<number | Error> => {
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-      Environment.ERRO_AO_ACESSAR_DADOS
+        Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };

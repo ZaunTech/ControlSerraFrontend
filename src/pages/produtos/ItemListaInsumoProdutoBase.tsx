@@ -26,14 +26,13 @@ import {
   InsumosProdutoBaseService,
 } from "../../data/services/api/modules/insumosProdutoBase";
 import { useNavigate } from "react-router-dom";
-import { setTimeout } from "timers/promises";
 
 const createUserFormSchema = z.object({
   titulo: z.string(),
   observacoes: z.string(),
 });
 
-function CriarProduto() {
+function ItemListaInsumoProdutoBase() {
   const {
     register,
     handleSubmit,
@@ -53,7 +52,7 @@ function CriarProduto() {
     ProdutosBaseService.create(data)
       .then((result) => {
         if (!(result instanceof Error)) {
-          navigate(`/produtos/${result.id}`);
+          navigate(-1);
         }
       })
       .catch((error) => {
@@ -70,16 +69,14 @@ function CriarProduto() {
           mostrarBotaoApagar={false}
           onClickSalvar={handleSubmit(createUser)}
         />
-      }
-    >
+      }>
       <Box component={"form"} onSubmit={handleSubmit(createUser)}>
         <Box
           display={"flex"}
           margin={1}
           flexDirection={"column"}
           component={Paper}
-          variant="outlined"
-        >
+          variant="outlined">
           <Grid container direction="column" padding={2} spacing={3}>
             <Grid container item direction="row" spacing={4}>
               <Grid item>
@@ -108,4 +105,4 @@ function CriarProduto() {
   );
 }
 
-export default CriarProduto;
+export default ItemListaInsumoProdutoBase;

@@ -1,280 +1,195 @@
-import React, { useEffect, useState } from "react";
-import { FerramentasDeDetalhes } from "../../ui/components";
+import { useMemo, useEffect } from "react";
 import { PaginaBase } from "../../ui/layouts";
+import { FerramentasDaListagem } from "../../ui/components";
 import {
-  Autocomplete,
-  Box,
-  Button,
-  Grid,
+  useNavigate,
+  useSearchParams,
+  useLocation,
+  useParams,
+} from "react-router-dom";
+import { IProdutoBase, ProdutosBaseService } from "../../data/services/api";
+import { useDebounce } from "../../data/hooks";
+import { useState } from "react";
+import {
   Paper,
-  TextField,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
   Typography,
+  TableFooter,
+  LinearProgress,
+  Pagination,
+  IconButton,
+  Icon,
 } from "@mui/material";
-import { z } from "zod";
-
-import { zodResolver } from "@hookform/resolvers/zod";
-
-import { useFieldArray, useForm } from "react-hook-form";
+import { Environment } from "../../data/environment";
 import {
-  IInsumo,
-  InsumosService,
-  ProdutosBaseService,
-  TListInsumos,
-} from "../../data/services/api";
-import {
-  CreateInsumosProdutoBaseDto,
   IInsumosProdutoBase,
   InsumosProdutoBaseService,
 } from "../../data/services/api/modules/insumosProdutoBase";
-import { useParams } from "react-router-dom";
 
-const createUserFormSchema = z.object({
-  titulo: z.string(),
-  observacoes: z.string(),
-});
+const Produto = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { debounce } = useDebounce();
 
+  const [rows, setRows] = useState<IInsumosProdutoBase[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { id } = useParams();
 
-function Produto() {
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    watch,
-    control,
+  const busca = useMemo(() => {
+    return searchParams.get("busca") || "";
+  }, [searchParams]);
 
-    formState: { errors },
-  } = useForm({
-    resolver: zodResolver(createUserFormSchema),
-  });
+  const pagina = useMemo(() => {
+    return Number(searchParams.get("pagina") || "1");
+  }, [searchParams]);
 
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: "insumos",
-  });
-  const [isAddingInsumo, setIsAddingInsumo] = useState<boolean>(false);
-  function addNovoInsumo() {
-    append({ titulo: "" });
-    
-  }
+  const [produtoName, setProdutoName] = useState<String>("");
 
-  function createUser(data: any) {
-    console.log(data);
-    ProdutosBaseService.create(data)
-      .then((result) => {
-      })
-  }
-
-  const [opcoes, setOpcoes] = useState<IInsumo[]>([]);
   useEffect(() => {
-    InsumosService.getAll()
-      .then((response) => {
-        // Verifique se data é um array
-        console.log("Resposta do serviço:", response);
-        if (response instanceof Error) {
-          console.error("Erro ao buscar categorias:", response);
-          // Trate o erro conforme necessário, você pode querer mostrar uma mensagem de erro para o usuário
-          return;
-        }
-
-        if (response && Array.isArray(response.data)) {
-          const insumosMapeadas = response.data;
-          console.log(insumosMapeadas);
-          setOpcoes(insumosMapeadas);
-        } else {
-          console.error(
-            "A resposta não é uma array válida de categorias:",
-            response
-          );
-        }
-      })
-      .catch((error) => {
-        console.error("Erro ao buscar categorias:", error);
-      });
+    if (id === null || id === undefined) {
+      return;
+    }
+    ProdutosBaseService.getById(Number(id)).then((result) => {
+      if (result instanceof Error) {
+        alert(result.message);
+        return;
+      }
+      setProdutoName(result.titulo);
+    });
   }, []);
 
- 
+  useEffect(() => {
+    setIsLoading(true);
+    debounce(() => {
+      InsumosProdutoBaseService.getAll(pagina, busca).then((result) => {
+        if (result instanceof Error) {
+          alert(result.message);
+          return;
+        }
+        setRows(result.data);
+        setTotalCount(result.totalCount);
+        setIsLoading(false);
+      });
+    });
+  }, [busca, pagina]);
+
+  const handleDelete = (id: number) => {
+    if (confirm("Você realmente quer apagar?")) {
+      InsumosProdutoBaseService.deleteById(id).then((result) => {
+        if (result instanceof Error) {
+          alert(result.message);
+          return;
+        }
+        setRows((oldRows) => [...oldRows.filter((oldRow) => oldRow.id !== id)]);
+        alert("Registro apagado com sucesso");
+      });
+    }
+  };
 
   return (
     <PaginaBase
-      titulo="Criar Produto"
+      titulo={`Lista de insumos do produto ${produtoName}`}
       barraDeFerramentas={
-        <FerramentasDeDetalhes
-          mostrarBotaoApagar={false}
-          onClickSalvar={handleSubmit(createUser)}
+        <FerramentasDaListagem
+          mostrarInputBusca
+          textoDaBusca={busca}
+          onChangeBuscaTexto={(texto) =>
+            setSearchParams({ busca: texto, pagina: "1" }, { replace: true })
+          }
+          onClickBotaoNovo={() => navigate(`${location.pathname}/novo`)}
+          mostrarBotaoVoltar
         />
-      }>
-      <Box component={"form"} onSubmit={handleSubmit(createUser)}>
-        <Box
-          display={"flex"}
-          margin={1}
-          flexDirection={"column"}
-          component={Paper}
-          variant="outlined">
-          <Grid container direction="column" padding={2} spacing={3}>
-            <Grid container item direction="row" spacing={4}>
-              <Grid item>
-                <Typography>Titulo</Typography>
-                <TextField placeholder="Titulo" {...register("titulo")} />
-                {errors.titulo && (
-                  <span>{errors.titulo.message?.toString()}</span>
-                )}
-              </Grid>
-
-              <Grid item>
-                <Typography>Observações</Typography>
-                <TextField
-                  placeholder="Observações"
-                  {...register("observacao")}
-                />
-                {errors.observacao && (
-                  <span>{errors.observacao.message?.toString()}</span>
-                )}
-              </Grid>
-            </Grid>
-          </Grid>
-        </Box>
-        <Box
-          display={"flex"}
-          margin={1}
-          flexDirection={"column"}
-          component={Paper}
-          variant="outlined">
-          <Grid container direction="column" padding={2} spacing={3}>
-            <Grid container item direction="row" spacing={4}>
-              <Grid item xs={5}>
-                <Typography>Insumos</Typography>
-              </Grid>
-            </Grid>
-
-            {fields.map((field, index) => {
-              return  <InsumoDoProduto
-              opcoes={opcoes}
-              key={field.id}
-              field={field}
-              remove={() => remove(index)} // Use 'index' as the key
-             />; //Mudar de index para o id do insumo
-            })}
-            <Grid item>
-              <Button onClick={addNovoInsumo} disabled={isAddingInsumo}>
-                Adicionar Insumo
-              </Button>
-            </Grid>
-          </Grid>
-        </Box>
-      </Box>
+      }
+    >
+      <TableContainer
+        component={Paper}
+        variant="outlined"
+        sx={{ m: 1, width: "auto" }}
+      >
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell style={{ fontWeight: "bold" }}>Ações</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Titulo</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Quantidade</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Dimensões</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((row) => (
+              <TableRow key={row.id}>
+                <TableCell>
+                  <Typography>
+                    <IconButton
+                      onClick={() => navigate(`${location.pathname}/${row.id}`)}
+                    >
+                      <Icon>edit</Icon>
+                    </IconButton>
+                    <IconButton
+                      onClick={() => {
+                        handleDelete(row.id);
+                      }}
+                    >
+                      <Icon>delete</Icon>
+                    </IconButton>
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography>{row.insumo?.titulo}</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography>{row.quantidade}</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography>{row.dimensoes}</Typography>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+          {totalCount === 0 && !isLoading && (
+            <caption>{Environment.LISTAGEM_VAZIA}</caption>
+          )}
+          <TableFooter>
+            {isLoading && (
+              <TableRow>
+                <TableCell colSpan={5}>
+                  <LinearProgress variant="indeterminate" />
+                </TableCell>
+              </TableRow>
+            )}
+            {!isLoading &&
+              totalCount > 0 &&
+              totalCount > Environment.LIMITE_DE_LINHAS && (
+                <TableRow>
+                  <TableCell colSpan={5}>
+                    <Pagination
+                      page={pagina}
+                      count={Math.ceil(
+                        totalCount / Environment.LIMITE_DE_LINHAS
+                      )}
+                      onChange={(_, newPage) => {
+                        setSearchParams(
+                          { busca, pagina: newPage.toString() },
+                          { replace: true }
+                        );
+                      }}
+                    />
+                  </TableCell>
+                </TableRow>
+              )}
+          </TableFooter>
+        </Table>
+      </TableContainer>
     </PaginaBase>
   );
-}
+};
 
 export default Produto;
-
-interface IInsumoDoProdutoBase {
-  opcoes: IInsumo[];
-  remove: (index: number) => void;
-}
-
-
-const InsumoDoProduto = ({ opcoes , field, remove }: IInsumoDoProdutoBase & { field: any }) =>{
-  const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [selectedInsumo, setSelectedInsumo] = useState<IInsumo | null>(null);
-  const [qtde, setQuantidade] = useState<number | null>(null);
-
-  const insumoSchema = z.object({
-    idInsumo: z.number(),
-    titulo: z.string(),
-    quantidade: z.number(),
-  });
-
-  const { id } = useParams();
-  const productId: number = Number(id) ?? 0;
-  useEffect(() => {
-    console.log(selectedInsumo);
-  }, [selectedInsumo]);
-  
-  return (
-    
-
-    <Grid container item direction="row" spacing={4}>
-      <Grid item>
-        <Typography>Titulo</Typography>
-        <Autocomplete
-          disablePortal
-          id="combo-box-demo"
-          options={opcoes}
-          getOptionLabel={(option) => option.titulo}
-          sx={{ width: 225 }}
-          renderInput={(params) => <TextField {...params} />}
-          onChange={(_, value) => {
-            setSelectedInsumo(value)
-            
-          }}
-          disabled={!isEditing}
-        />
-      </Grid>
-      <Grid item>
-        <Typography>Quantidade</Typography>
-        <TextField
-          type="text"
-          placeholder="Quantidade"
-          onChange={(e)=>{
-            setQuantidade(Number(e.target.value))
-          }}
-          disabled={!isEditing}
-        />
-      </Grid>
-      <Grid item container>
-        <Grid item>
-          {isEditing && (
-            <Button
-              variant="contained"
-              onClick={() => {
-
-                console.log(selectedInsumo,qtde);
-
-                const data : CreateInsumosProdutoBaseDto  = {
-                  idProdutoBase: Number(id),
-                  idInsumo: selectedInsumo?.id ? Number(selectedInsumo?.id) : 0,
-                  quantidade: qtde || 0,
-                }
-
-                InsumosProdutoBaseService.create(data)
-              }}>
-              Salvar
-            </Button>
-          )}
-          {!isEditing && (
-            <Button
-              variant="contained"
-              onClick={() => {
-                setIsEditing(true);
-              }}>
-              Editar
-            </Button>
-          )}
-        </Grid>
-        <Grid item>
-          {isEditing && (
-            <Button
-              variant="contained"
-              onClick={() => {
-                setIsEditing(false);
-              }}>
-              Cancelar
-            </Button>
-          )}
-          {!isEditing && (
-            <Button
-              variant="contained"
-              onClick={() => {
-                remove(field.id)
-              
-              }}>
-              Remover
-            </Button>
-          )}
-        </Grid>
-      </Grid>
-    </Grid>
-  );
-};
