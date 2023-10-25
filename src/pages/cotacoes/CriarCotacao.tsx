@@ -24,226 +24,176 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useForm } from "react-hook-form";
+import {
+  FornecedoresService,
+  IFornecedor,
+  IInsumo,
+  InsumosService,
+} from "../../data/services/api";
+import {
+  CotacoesService,
+  ICotacao,
+} from "../../data/services/api/modules/cotacoes";
+import { useNavigate } from "react-router-dom";
+function CriarCotacao() {
+  const [opcoes, setOpcoes] = useState<IFornecedor[]>([]);
+  const [fornecedor, setFornecedor] = useState<IFornecedor>();
+  const [insumo, setInsumo] = useState<IInsumo>();
 
-import  getCepData  from "../../data/services/api/axios-config/actions/cep";
+  const [opcaoiInsumos, setopcaoInsumo] = useState<IInsumo[]>([]);
 
-
-const createUserFormSchema = z
-  .object({
-    razaoSocial: z.string(),
-    nomeFantasia: z.string(),
-    nome: z.string(),
-    rg: z.string(),
-    cpf: z.string(),
-    cnpj: z.string(),
-    tipo: z.string(),
-    email: z.string().min(1, "Faltou o nome").email("isso não é email"),
-    telefone: z.string(),
-    celular: z.string(),
-    numero: z.string(),
-    pais: z.string(),
-    complemento: z.string(),
-  })
-  .refine((fileds) => fileds.tipo === "juridico", {
-    path: ["confemail"],
-    message: "Os emails precisam ser iguais",
+  const shemaCotacao = z.object({
+    idFornecedor: z.number(),
+    idInsumo: z.number(),
+    valor: z.coerce.number(),
+    dimensoes: z.string(),
+    data: z.coerce.date(),
   });
 
-  const createCepFormSchema = z.object({
-    cep: z
-      .string()
-      .min(8, "O cep precisa de 8 digitos")
-      .max(8, "O cep precisa de 8 digitos"),
-    pais: z.string(),
-    estado: z.string(),
-    cidade: z.string(),
-    bairro: z.string(),
-    rua: z.string(),
-    numero: z.string(),
-    complemento: z.string(),
-  });
-  type createCepFormData = z.infer<typeof createCepFormSchema>;
+  useEffect(() => {
+    InsumosService.getAll()
+      .then((response) => {
+        // Verifique se data é um array
+        console.log("Resposta do serviço:", response);
+        if (response instanceof Error) {
+          console.error("Erro ao buscar categorias:", response);
+          // Trate o erro conforme necessário, você pode querer mostrar uma mensagem de erro para o usuário
+          return;
+        }
 
-function CriarFornecedor() {
+        if (response && Array.isArray(response.data)) {
+          const InsumosMapeadas = response.data;
+          console.log(InsumosMapeadas);
+          setopcaoInsumo(InsumosMapeadas);
+        } else {
+          console.error(
+            "A resposta não é uma array válida de categorias:",
+            response
+          );
+        }
+      })
+      .catch((error) => {
+        console.error("Erro ao buscar categorias:", error);
+      });
+  }, []);
+
+  useEffect(() => {
+    FornecedoresService.getAll()
+      .then((response) => {
+        // Verifique se data é um array
+
+        if (response instanceof Error) {
+          console.error("Erro ao buscar categorias:", response);
+          // Trate o erro conforme necessário, você pode querer mostrar uma mensagem de erro para o usuário
+          return;
+        }
+
+        if (response && Array.isArray(response.data)) {
+          const FornecedoresMapeadas = response.data;
+          console.log(FornecedoresMapeadas);
+          setOpcoes(FornecedoresMapeadas);
+        } else {
+          console.error(
+            "A resposta não é uma array válida de categorias:",
+            response
+          );
+        }
+      })
+      .catch((error) => {
+        console.error("Erro ao buscar categorias:", error);
+      });
+  }, []);
+
   const {
     register,
     handleSubmit,
     setValue,
     watch,
-  
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(createUserFormSchema),
+    resolver: zodResolver(shemaCotacao),
   });
-  const [output, setOutput] = useState("");
 
-
-  const [tipo, setTipo] = React.useState("juridico");
-  const handleChange = (event: SelectChangeEvent) => {
-    setTipo(event.target.value as string);
-    setValue("nome", "");
-    setValue("nomeFantasia", "");
-    setValue("rg", "");
-    setValue("cpf", "");
-    setValue("cnpj", "");
-    setValue("razaoSocial", "");
-  };
-
-  const handleSetFormData = useCallback(
-    (viacepResponse: IViacepResponse) => {
-      setValue("pais", "Brasil");
-      setValue("endereco", viacepResponse.logradouro + " - " + viacepResponse.bairro + " - " + viacepResponse.localidade);  
-      setValue("estado", viacepResponse.uf);
-      setValue("cidade", viacepResponse.localidade);
-      setValue("bairro", viacepResponse.bairro);
-      setValue("rua", viacepResponse.logradouro);
-    },
-    [setValue]
-  );
-  const handleFormSubmit = async (data: createCepFormData) => {};
-
-  
-  const handleGetCepData = useCallback(
-    async (cep: string) => {
-      const data = await getCepData(cep);
-      console.log(data);
-      handleSetFormData(data);
-    },
-    [handleSetFormData]
-  );
-
-  const cep = watch("cep");
-
-  useEffect(() => {
-    const isCepValid = createCepFormSchema.shape.cep.safeParse(cep).success;
-
-
-    if (isCepValid) {
-      console.log("Cep valido");
-    
-      handleGetCepData(cep);
-    }
-  }, [handleGetCepData, cep]);
-
-  function createUser(data: any) {
-    console.log(data);
+  const navigate = useNavigate();
+  function createCotacao(data: any) {
+    CotacoesService.create(data)
+      .then(() => {
+        navigate(-1);
+      })
+      .catch(() => {
+        console.log("Deu Erro");
+      });
   }
-
-
 
   return (
     <PaginaBase
-      titulo="Criar Fornecedor"
+      titulo="Criar Cotação"
       barraDeFerramentas={
         <FerramentasDeDetalhes
           mostrarBotaoApagar={false}
           mostrarBotaoSalvar
           mostrarBotaoVoltar
-          onClickSalvar={handleSubmit(createUser)}
+          onClickSalvar={handleSubmit(createCotacao)}
         />
-      }
-    >
-      <Box component={"form"} onSubmit={handleSubmit(createUser)}>
+      }>
+      <Box component={"form"} onSubmit={handleSubmit(createCotacao)}>
         <Box
           display={"flex"}
           margin={1}
           flexDirection={"column"}
           component={Paper}
-          variant="outlined"
-        >
+          variant="outlined">
           <Grid container direction="column" padding={2} spacing={3}>
             <Grid container item direction="row" spacing={4}>
               <Grid item>
-                <Typography>Dados Básicos</Typography>
+                <Typography>Informação Fornecedor</Typography>
               </Grid>
             </Grid>
             <Grid container item direction="row" spacing={4}>
               <Grid item>
-                <InputLabel id="tipo">Tipo</InputLabel>
-                <Select
-                  labelId="tipo"
-                  id="tipo"
-                  value={tipo}
-                  {...register("tipo")}
-                  onChange={handleChange}
-                >
-                  <MenuItem value={"fisico"}>Fisico</MenuItem>
-                  <MenuItem value={"juridico"}>Juridico</MenuItem>
-                </Select>
-              </Grid>
-              {tipo === "juridico" && (
-                <>
-                  <Grid item>
-                    <Typography>Razão Social</Typography>
-                    <TextField
-                      placeholder="Razão Social"
-                      {...register("razaoSocial")}
-                    />
-                  </Grid>
-                  <Grid item>
-                    <Typography>Nome Fantasia</Typography>
-                    <TextField
-                      placeholder="Nome Fantasia"
-                      {...register("nomeFantasia")}
-                    />
-                  </Grid>
-                  <Grid item>
-                    <Typography>CNPJ</Typography>
-                    <TextField placeholder="CNPJ" {...register("cnpj")} />
-                  </Grid>
-                </>
-              )}
-              {tipo === "fisico" && (
-                <>
-                  <Grid item>
-                    <Typography>Nome Completo</Typography>
-                    <TextField
-                      placeholder="Nome Completo"
-                      {...register("nome")}
-                    />
-                  </Grid>
-                  <Grid item>
-                    <Typography>RG</Typography>
-                    <TextField placeholder="RG" {...register("rg")} />
-                  </Grid>
-                  <Grid item>
-                    <Typography>CPF</Typography>
-                    <TextField placeholder="CPF" {...register("cpf")} />
-                  </Grid>
-                </>
-              )}
-            </Grid>
-          </Grid>
-        </Box>
-        <Box
-          display={"flex"}
-          margin={1}
-          flexDirection={"column"}
-          component={Paper}
-          variant="outlined"
-        >
-          <Grid container direction="column" padding={2} spacing={3}>
-            <Grid container item direction="row" spacing={4}>
-              <Grid item>
-                <Typography>Contatos</Typography>
-              </Grid>
-            </Grid>
-            <Grid container item direction="row" spacing={4}>
-              <Grid item>
-                <Typography>Email</Typography>
-                <TextField
-                  placeholder="Email"
-                  type="email"
-                  {...register("email")}
+                <Typography>Selecione o Fonernecedor</Typography>
+                <Autocomplete
+                  disablePortal
+                  {...register("idFornecedor")}
+                  id="combo-box-demo"
+                  options={opcoes}
+                  getOptionLabel={(option) =>
+                    option.nomeFantasia ?? option.nome ?? option.razaoSocial
+                  }
+                  sx={{ width: 225 }}
+                  renderInput={(params) => <TextField {...params} />}
+                  onChange={(_, value) => {
+                    setFornecedor(value ?? undefined);
+                    setValue("idFornecedor", value?.id);
+                  }}
                 />
+
+                {errors.idFornecedor && (
+                  <span>{errors.idFornecedor.message?.toString()}</span>
+                )}
               </Grid>
               <Grid item>
-                <Typography>Telefone</Typography>
-                <TextField placeholder="Telefone" {...register("telefone")} />
+                <Typography>Valor Do Insumo</Typography>
+                <TextField
+                  type="number"
+                  placeholder="Valor do Insumo"
+                  {...register("valor")}
+                />
+                {errors.valor && (
+                  <span>{errors.valor.message?.toString()}</span>
+                )}
               </Grid>
               <Grid item>
-                <Typography>Celular</Typography>
-                <TextField placeholder="Celular" {...register("celular")} />
+                <Typography>Data que foi cotado</Typography>
+                <TextField
+                  type="date"
+                  placeholder="data"
+                  {...register("data")}
+                  onChange={(e) => {
+                    setValue("data", e.target.value);
+                  }}
+                />
+                {errors.data && <span>{errors.data.message?.toString()}</span>}
               </Grid>
             </Grid>
           </Grid>
@@ -253,79 +203,40 @@ function CriarFornecedor() {
           margin={1}
           flexDirection={"column"}
           component={Paper}
-          variant="outlined"
-        >
-          <Grid container direction="column" padding={2} spacing={2}>
-            <Grid container item direction="row" spacing={2}>
+          variant="outlined">
+          <Grid container direction="column" padding={2} spacing={3}>
+            <Grid container item direction="row" spacing={4}>
               <Grid item>
-                <Typography>Endereço</Typography>
+                <Typography>Informação Insumo</Typography>
               </Grid>
             </Grid>
-            <Grid container item direction="row" spacing={3}>
+            <Grid container item direction="row" spacing={4}>
               <Grid item>
-                <Typography>CEP</Typography>
-                <TextField
-                  placeholder="CEP"
-                  {...register("cep")}
-                 
+                <Typography>Selecione o Insumo</Typography>
+                <Autocomplete
+                  disablePortal
+                  id="combo-box-demo"
+                  {...register("idInsumo")}
+                  options={opcaoiInsumos}
+                  getOptionLabel={(opcaoiInsumos) => opcaoiInsumos.titulo ?? ""}
+                  sx={{ width: 225 }}
+                  renderInput={(params) => <TextField {...params} />}
+                  onChange={(_, value) => {
+                    setInsumo(value ?? undefined);
+                    setValue("idInsumo", value?.id);
+                  }}
                 />
-              </Grid>
-              <Grid item xs={5}>
-                <Typography>Endereço</Typography>
-                <TextField
-                  placeholder="Endereço"
-                  fullWidth
-                  {...register("endereco")}
-                />
-              </Grid>
-              <Grid item>
-                <Typography>Rua</Typography>
-                <TextField placeholder="Rua" {...register("rua")} />
+                {errors.idInsumo && (
+                  <span>{errors.idInsumo.message?.toString()}</span>
+                )}
               </Grid>
 
               <Grid item>
-                <Typography>Bairro</Typography>
-                <TextField placeholder="Bairro" {...register("bairro")} />
-              </Grid>
-            </Grid>
-            <Grid container item direction="row" spacing={2}>
-              <Grid item xs={3}>
-                <Typography>Cidade</Typography>
-                <TextField
-                  placeholder="Cidade"
-                  fullWidth
-                  {...register("cidade")}
-                />
-              </Grid>
-              <Grid item xs={3}>
-                <Typography>Estado</Typography>
-                <TextField
-                  placeholder="Estado"
-                  fullWidth
-                  {...register("estado")}
-                />
-              </Grid>
-              <Grid item xs={3}>
-                <Typography>Numero</Typography>
-                <TextField
-                  placeholder="Numero"
-                  fullWidth
-                  {...register("numero")}
-                />
-              </Grid>
-              <Grid item xs={3}>
-                <Typography>Pais</Typography>
-                <TextField placeholder="Pais" fullWidth {...register("pais")} />
-              </Grid>
-            </Grid>
-            <Grid container item direction="row" spacing={2}>
-              <Grid item xs={9}>
-                <Typography>Complemento</Typography>
-                <TextField
-                  placeholder="Complemento"
-                  fullWidth
-                  {...register("complemento")}
-                />
+                <Typography>Dimensões</Typography>
+                <TextField placeholder="Dimensões" {...register("dimensoes")} />
+                {errors.dimensoes && (
+                  <span>{errors.dimensoes.message?.toString()}</span>
+                )}
               </Grid>
             </Grid>
           </Grid>
@@ -335,4 +246,4 @@ function CriarFornecedor() {
   );
 }
 
-export default CriarFornecedor;
+export default CriarCotacao;

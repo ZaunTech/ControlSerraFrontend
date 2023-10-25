@@ -2,7 +2,11 @@ import { useMemo, useEffect } from "react";
 import { PaginaBase } from "../../ui/layouts";
 import { FerramentasDaListagem } from "../../ui/components";
 import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
-import { FornecedoresService, IFornecedor } from "../../data/services/api";
+import {
+  FornecedoresService,
+  IFornecedor,
+  InsumosService,
+} from "../../data/services/api";
 import { useDebounce } from "../../data/hooks";
 import { useState } from "react";
 import {
@@ -53,7 +57,27 @@ const Cotacoes = () => {
           alert(result.message);
           return;
         }
+
+        result.data.forEach((cotacao) => {
+          FornecedoresService.getById(cotacao.idFornecedor).then((result2) => {
+            if (result2 instanceof Error) {
+              alert(result2.message);
+              return;
+            }
+            cotacao.fornecedor = result2;
+          });
+
+          InsumosService.getById(cotacao.idInsumo).then((result3) => {
+            if (result3 instanceof Error) {
+              alert(result3.message);
+              return;
+            }
+
+            cotacao.insumo = result3;
+          });
+        });
         setRows(result.data);
+        console.log(result.data);
         setTotalCount(result.totalCount);
         setIsLoading(false);
       });
@@ -86,58 +110,61 @@ const Cotacoes = () => {
           }
           onClickBotaoNovo={() => navigate(`${location.pathname}/novo`)}
         />
-      }
-    >
+      }>
       <TableContainer
         component={Paper}
         variant="outlined"
-        sx={{ m: 1, width: "auto" }}
-      >
+        sx={{ m: 1, width: "auto" }}>
         <Table>
           <TableHead>
             <TableRow>
               <TableCell style={{ fontWeight: "bold" }}>Ações</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Nome</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Email</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Telefone</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Endereço</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Fornecedor</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Insumo</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Valor</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Data</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
-              <TableRow key={row.id}>
-                <TableCell>
-                  <Typography>
-                    <IconButton
-                      onClick={() =>
-                        navigate(`${location.pathname}/${row.id}/editar`)
-                      }
-                    >
-                      <Icon>edit</Icon>
-                    </IconButton>
-                    <IconButton
-                      onClick={() => {
-                        handleDelete(row.id);
-                      }}
-                    >
-                      <Icon>delete</Icon>
-                    </IconButton>
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography>{row.nome}</Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography>{row.email}</Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography>{row.telefone}</Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography>{row.endereco}</Typography>
-                </TableCell>
-              </TableRow>
-            ))}
+            {rows.map((row) => {
+              console.log("Linha", row);
+              return (
+                <TableRow key={row.id}>
+                  <TableCell>
+                    <Typography>
+                      <IconButton
+                        onClick={() =>
+                          navigate(`${location.pathname}/${row.id}/editar`)
+                        }>
+                        <Icon>edit</Icon>
+                      </IconButton>
+                      <IconButton
+                        onClick={() => {
+                          handleDelete(row.id);
+                        }}>
+                        <Icon>delete</Icon>
+                      </IconButton>
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography>
+                      {row.fornecedor?.nomeFantasia ||
+                        row.fornecedor?.nome ||
+                        row.fornecedor?.razaoSocial}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography>{row.insumo?.titulo || "Vazop"}</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography>{row.valor}</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography>{row.data.toString()}</Typography>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
           {totalCount === 0 && !isLoading && (
             <caption>{Environment.LISTAGEM_VAZIA}</caption>
