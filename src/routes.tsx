@@ -1,35 +1,15 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "./App";
 
-import {
-  Cliente,
-  Clientes,
-  CriarCliente,
-} from "./pages/clientes/index.tsx";
+import { Cliente, Clientes, CriarCliente } from "./pages/clientes/index.tsx";
 
-import {
-  Insumo,
-  Insumos,
-  CriarInsumo,
-} from "./pages/insumos/index.tsx";
+import { Insumo, Insumos, CriarInsumo } from "./pages/insumos/index.tsx";
 
-import {
-  Orcamento,
-  Orcamentos,
-  CriarOrcamento,
-} from "./pages/orcamentos";
+import { Orcamento, Orcamentos, CriarOrcamento } from "./pages/orcamentos";
 
-import {
-  Pedido,
-  Pedidos,
-  CriarPedido,
-} from "./pages/pedidos";
+import { Pedido, Pedidos, CriarPedido } from "./pages/pedidos";
 
-import {
-  Categoria,
-  Categorias,
-  CriarCategoria,
-} from "./pages/categorias";
+import { Categoria, Categorias, CriarCategoria } from "./pages/categorias";
 
 import {
   Fornecedor,
@@ -41,17 +21,15 @@ import {
   Produto,
   Produtos,
   CriarProduto,
+  CriarItemInsumoProdutoBase,
+  ItemListaInsumoProdutoBase,
 } from "./pages/produtos";
 
 import Configuracoes from "./pages/Configuracoes/Configuracoes.tsx";
 import Home from "./pages/home/Home.tsx";
 import Error from "./pages/error/Error.tsx";
 import { Login, RecuperarSenha } from "./pages/login";
-import {
-  Cotacoes,
-  Cotacao,
-  CriarCotacao,
-} from "./pages/cotacoes";
+import { Cotacoes, Cotacao, CriarCotacao } from "./pages/cotacoes";
 
 const router = createBrowserRouter([
   {
@@ -209,7 +187,20 @@ const router = createBrowserRouter([
           },
           {
             path: ":id",
-            element: <Produto />,
+            children: [
+              {
+                index: true,
+                element: <Produto />,
+              },
+              {
+                path: ":id",
+                element: <ItemListaInsumoProdutoBase />,
+              },
+              {
+                path: "Novo",
+                element: <CriarItemInsumoProdutoBase />,
+              },
+            ],
           },
         ],
       },
