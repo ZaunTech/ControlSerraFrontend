@@ -6,8 +6,11 @@ import {
   TextField,
   useTheme,
   InputAdornment,
+  Typography,
+  Divider,
 } from "@mui/material";
 import { Environment } from "../../../data/environment";
+import { useNavigate } from "react-router-dom";
 
 interface IFerramentasDaListagem {
   textoDaBusca?: string;
@@ -16,6 +19,8 @@ interface IFerramentasDaListagem {
   textoBotaoNovo?: string;
   mostrarBotaoNovo?: boolean;
   onClickBotaoNovo?: () => void;
+  mostrarBotaoVoltar?: boolean;
+  onClickBotaoVoltar?: () => void;
 }
 
 export const FerramentasDaListagem: React.FC<IFerramentasDaListagem> = ({
@@ -25,8 +30,15 @@ export const FerramentasDaListagem: React.FC<IFerramentasDaListagem> = ({
   textoBotaoNovo = "Novo",
   mostrarBotaoNovo = true,
   onClickBotaoNovo,
+  mostrarBotaoVoltar = false,
+  onClickBotaoVoltar,
 }) => {
   const theme = useTheme();
+  const navigate = useNavigate();
+
+  const voltar = () => {
+    navigate(-1);
+  };
   return (
     <Box
       component={Paper}
@@ -72,6 +84,25 @@ export const FerramentasDaListagem: React.FC<IFerramentasDaListagem> = ({
             {textoBotaoNovo}
           </Button>
         </Box>
+      )}
+      <Divider variant="middle" orientation="vertical" />
+      {mostrarBotaoVoltar && (
+        <Button
+          color="primary"
+          variant="outlined"
+          disableElevation
+          startIcon={<Icon>arrow_back</Icon>}
+          onClick={onClickBotaoVoltar || voltar}
+        >
+          <Typography
+            variant="button"
+            whiteSpace={"nowrap"}
+            textOverflow={"ellipsis"}
+            overflow={"hidden"}
+          >
+            Voltar
+          </Typography>
+        </Button>
       )}
     </Box>
   );
