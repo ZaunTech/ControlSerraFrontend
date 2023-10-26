@@ -87,7 +87,7 @@ const Orcamento = () => {
 
   return (
     <PaginaBase
-      titulo={`Orçamento ${id}`}
+      titulo={`Insumos do produto: ${id}`}
       barraDeFerramentas={
         <FerramentasDaListagem
           mostrarInputBusca
@@ -124,7 +124,7 @@ const Orcamento = () => {
                   <Typography>
                     <IconButton
                       onClick={() =>
-                        navigate(`${location.pathname}/${row.id}/editar`)
+                        navigate(`${location.pathname}/${row.id}`)
                       }
                     >
                       <Icon>edit</Icon>

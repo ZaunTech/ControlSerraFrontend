@@ -25,12 +25,16 @@ import {
   IInsumosProdutoBase,
   InsumosProdutoBaseService,
 } from "../../data/services/api/modules/insumosProdutoBase";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { setTimeout } from "timers/promises";
+import { CreateProdutoDto, IProduto, ProdutosService } from "../../data/services/api/modules/produtos";
+import { IOrcamento, OrcamentosService } from "../../data/services/api/modules/orcamentos";
 
 const createUserFormSchema = z.object({
-  titulo: z.string(),
+  titulo: z.string().min(1,"Titulo não pode ser vazio"),
   observacoes: z.string(),
+  orcamentoId: z.coerce.number(),
+  quantidade: z.coerce.number().min(1),
 });
 
 function CriarProduto() {
@@ -47,13 +51,18 @@ function CriarProduto() {
   });
 
   const navigate = useNavigate();
+  const {id} = useParams();
+  useEffect(()=>{
+
+    setValue("orcamentoId",id);
+  },[])
 
   function createUser(data: any) {
-    console.log(data);
-    ProdutosBaseService.create(data)
+        console.log(data);
+    ProdutosService.create(data)
       .then((result) => {
         if (!(result instanceof Error)) {
-          navigate(`/produtos/${result.id}`);
+          navigate(`/orcamentos/${id}`);
         }
       })
       .catch((error) => {
@@ -87,6 +96,16 @@ function CriarProduto() {
                 <TextField placeholder="Titulo" {...register("titulo")} />
                 {errors.titulo && (
                   <span>{errors.titulo.message?.toString()}</span>
+                )}
+              </Grid>
+              <Grid item>
+                <Typography>Quantidade</Typography>
+                <TextField type="number"
+                  placeholder="Quantidade"
+                  {...register("quantidade")}
+                />
+                {errors.quantidade && (
+                  <span>{errors.quantidade.message?.toString()}</span>
                 )}
               </Grid>
 
