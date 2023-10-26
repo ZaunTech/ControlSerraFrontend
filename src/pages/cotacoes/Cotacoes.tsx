@@ -5,6 +5,7 @@ import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import {
   FornecedoresService,
   IFornecedor,
+  IInsumo,
   InsumosService,
 } from "../../data/services/api";
 import { useDebounce } from "../../data/hooks";
@@ -23,12 +24,152 @@ import {
   Pagination,
   IconButton,
   Icon,
+  Autocomplete,
+  TextField,
+  Select,
+  MenuItem,
+  SelectChangeEvent,
 } from "@mui/material";
 import { Environment } from "../../data/environment";
 import {
   CotacoesService,
   ICotacao,
 } from "../../data/services/api/modules/cotacoes";
+import React from "react";
+
+interface IPesquisa {
+  setFiltro: (text: string) => void;
+  setFiltroId: (id: number | undefined) => void;
+}
+
+const Pesquisas: React.FC<IPesquisa> = ({ setFiltro, setFiltroId }) => {
+  const [opcoesFornecedor, setOpcoesFornecedor] = useState<IFornecedor[]>([]);
+  const [opcoesInsumos, setOpcoesInsumos] = useState<IInsumo[]>([]);
+  const [fornecedorSelecionado, setFornecedorSelecionado] =
+    useState<IFornecedor>();
+  const [insumoSelecionado, setInsumoSelecionado] = useState<IInsumo>();
+
+  useEffect(() => {
+    FornecedoresService.getAll()
+      .then((response) => {
+        // Verifique se data é um array
+        console.log("Resposta do serviço:", response);
+        if (response instanceof Error) {
+          console.error("Erro ao buscar categorias:", response);
+          // Trate o erro conforme necessário, você pode querer mostrar uma mensagem de erro para o usuário
+          return;
+        }
+
+        if (response && Array.isArray(response.data)) {
+          const FornecedoresMapeados = response.data;
+          console.log(FornecedoresMapeados);
+          setOpcoesFornecedor(FornecedoresMapeados);
+        } else {
+          console.error(
+            "A resposta não é uma array válida de categorias:",
+            response
+          );
+        }
+      })
+      .catch((error) => {
+        console.error("Erro ao buscar categorias:", error);
+      });
+  }, []);
+
+  useEffect(() => {
+    InsumosService.getAll()
+      .then((response) => {
+        // Verifique se data é um array
+        console.log("Resposta do serviço:", response);
+        if (response instanceof Error) {
+          console.error("Erro ao buscar categorias:", response);
+          // Trate o erro conforme necessário, você pode querer mostrar uma mensagem de erro para o usuário
+          return;
+        }
+
+        if (response && Array.isArray(response.data)) {
+          const InsumosMapeados = response.data;
+          console.log(InsumosMapeados);
+          setOpcoesInsumos(InsumosMapeados);
+        } else {
+          console.error(
+            "A resposta não é uma array válida de categorias:",
+            response
+          );
+        }
+      })
+      .catch((error) => {
+        console.error("Erro ao buscar categorias:", error);
+      });
+  }, []);
+
+  const [tipo, setTipo] = React.useState<string>("Todos");
+
+  const [idFiltro, setIdFiltro] = useState<number | undefined>();
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setTipo(event.target.value as string);
+  };
+
+  useEffect(() => {
+    setFiltro(tipo);
+  }, [tipo]);
+
+  useEffect(() => {
+    setFiltroId(idFiltro);
+  }, [idFiltro]);
+
+  return (
+    <>
+      <Select value={tipo} onChange={handleChange} size="small">
+        <MenuItem value={"Todos"}>Todos</MenuItem>
+        <MenuItem value={"Fornecedor"}>Fornecedor</MenuItem>
+        <MenuItem value={"Insumo"}>Insumo</MenuItem>
+      </Select>
+
+      {tipo === "Fornecedor" ? (
+        <Autocomplete
+          disablePortal
+          id="combo-box-demo"
+          options={opcoesFornecedor}
+          getOptionLabel={(option) =>
+            option.razaoSocial ?? option.nomeFantasia ?? option.nome ?? ""
+          }
+          sx={{ width: 225 }}
+          size="small"
+          renderInput={(params) => <TextField {...params} />}
+          onChange={(_, value) => {
+            if (value !== null) {
+              setFornecedorSelecionado(value);
+              setIdFiltro(value.id);
+            }
+          }}
+        />
+      ) : (
+        ""
+      )}
+      {tipo === "Insumo" ? (
+        <Autocomplete
+          disablePortal
+          id="combo-box-demo"
+          options={opcoesInsumos}
+          getOptionLabel={(option) => option.titulo ?? ""}
+          sx={{ width: 225 }}
+          size="small"
+          renderInput={(params) => <TextField {...params} />}
+          onChange={(_, value) => {
+            if (value !== null) {
+              setInsumoSelecionado(value);
+              setIdFiltro(value.id);
+            }
+          }}
+        />
+      ) : (
+        ""
+      )}
+    </>
+  );
+};
 
 const Cotacoes = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -49,13 +190,21 @@ const Cotacoes = () => {
     return Number(searchParams.get("pagina") || "1");
   }, [searchParams]);
 
-
+  const [filtro, setFiltro] = useState<string>();
+  const [filtroId, setFiltroId] = useState<number>();
 
   const setDados = async () => {
     try {
       setIsLoading(true);
+      let result;
 
-      const result = await CotacoesService.getAll(pagina, busca);
+      if (filtro === "Insumo" && filtroId != undefined) {
+        result = await CotacoesService.getByInsumo(filtroId, pagina, busca);
+      } else if (filtro === "Fornecedor" && filtroId != undefined) {
+        result = await CotacoesService.getByFornecdor(filtroId, pagina, busca);
+      } else {
+        result = await CotacoesService.getAll(pagina, busca);
+      }
 
       if (result instanceof Error) {
         alert(result.message);
@@ -65,7 +214,9 @@ const Cotacoes = () => {
       const cotacoesData = await Promise.all(
         result.data.map(async (cotacao: ICotacao) => {
           try {
-            const result2 = await FornecedoresService.getById(cotacao.idFornecedor);
+            const result2 = await FornecedoresService.getById(
+              cotacao.idFornecedor
+            );
 
             if (result2 instanceof Error) {
               alert(result2.message);
@@ -84,7 +235,7 @@ const Cotacoes = () => {
 
             return cotacao;
           } catch (error) {
-            console.error('Error fetching data:', error);
+            console.error("Error fetching data:", error);
             return null;
           }
         })
@@ -92,8 +243,8 @@ const Cotacoes = () => {
       setRows(cotacoesData);
       setTotalCount(result.totalCount);
     } catch (error) {
-      console.error('Error fetching data:', error);
-      alert('Error fetching data.');
+      console.error("Error fetching data:", error);
+      alert("Error fetching data.");
     } finally {
       setIsLoading(false);
     }
@@ -102,7 +253,7 @@ const Cotacoes = () => {
   useEffect(() => {
     setIsLoading(true);
     setDados();
-  }, [busca, pagina]);
+  }, [busca, pagina, filtro, filtroId]);
 
   const handleDelete = (id: number) => {
     if (confirm("Você realmente quer apagar?")) {
@@ -129,12 +280,17 @@ const Cotacoes = () => {
             setSearchParams({ busca: texto, pagina: "1" }, { replace: true })
           }
           onClickBotaoNovo={() => navigate(`${location.pathname}/novo`)}
+          componentePersonalizado={
+            <Pesquisas setFiltro={setFiltro} setFiltroId={setFiltroId} />
+          }
         />
-      }>
+      }
+    >
       <TableContainer
         component={Paper}
         variant="outlined"
-        sx={{ m: 1, width: "auto" }}>
+        sx={{ m: 1, width: "auto" }}
+      >
         <Table>
           <TableHead>
             <TableRow>
@@ -154,13 +310,15 @@ const Cotacoes = () => {
                       <IconButton
                         onClick={() =>
                           navigate(`${location.pathname}/${row.id}/editar`)
-                        }>
+                        }
+                      >
                         <Icon>edit</Icon>
                       </IconButton>
                       <IconButton
                         onClick={() => {
                           handleDelete(row.id);
-                        }}>
+                        }}
+                      >
                         <Icon>delete</Icon>
                       </IconButton>
                     </Typography>

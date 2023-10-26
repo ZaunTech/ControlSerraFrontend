@@ -21,6 +21,7 @@ interface IFerramentasDaListagem {
   onClickBotaoNovo?: () => void;
   mostrarBotaoVoltar?: boolean;
   onClickBotaoVoltar?: () => void;
+  componentePersonalizado?: React.ReactNode;
 }
 
 export const FerramentasDaListagem: React.FC<IFerramentasDaListagem> = ({
@@ -32,6 +33,7 @@ export const FerramentasDaListagem: React.FC<IFerramentasDaListagem> = ({
   onClickBotaoNovo,
   mostrarBotaoVoltar = false,
   onClickBotaoVoltar,
+  componentePersonalizado,
 }) => {
   const theme = useTheme();
   const navigate = useNavigate();
@@ -67,6 +69,7 @@ export const FerramentasDaListagem: React.FC<IFerramentasDaListagem> = ({
           }}
         />
       )}
+      {componentePersonalizado}
       {mostrarBotaoNovo && (
         <Box
           display={"flex"}

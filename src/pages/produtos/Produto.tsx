@@ -7,7 +7,11 @@ import {
   useLocation,
   useParams,
 } from "react-router-dom";
-import { IProdutoBase, InsumosService, ProdutosBaseService } from "../../data/services/api";
+import {
+  IProdutoBase,
+  InsumosService,
+  ProdutosBaseService,
+} from "../../data/services/api";
 import { useDebounce } from "../../data/hooks";
 import { useState } from "react";
 import {
@@ -80,7 +84,9 @@ const Produto = () => {
       const insumosData = await Promise.all(
         result.data.map(async (insumoProdutoBase: IInsumosProdutoBase) => {
           try {
-            const result2 = await InsumosService.getById(insumoProdutoBase.idInsumo);
+            const result2 = await InsumosService.getById(
+              insumoProdutoBase.idInsumo
+            );
 
             if (result2 instanceof Error) {
               alert(result2.message);
@@ -90,7 +96,7 @@ const Produto = () => {
             insumoProdutoBase.insumo = result2;
             return insumoProdutoBase;
           } catch (error) {
-            console.error('Error fetching data:', error);
+            console.error("Error fetching data:", error);
             return null;
           }
         })
@@ -98,12 +104,12 @@ const Produto = () => {
       setRows(insumosData);
       setTotalCount(result.totalCount);
     } catch (error) {
-      console.error('Error fetching data:', error);
-      alert('Error fetching data.');
+      console.error("Error fetching data:", error);
+      alert("Error fetching data.");
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
     setIsLoading(true);

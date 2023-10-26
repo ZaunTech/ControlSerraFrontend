@@ -25,10 +25,61 @@ const getAll = async (page = 1, filter = ""): Promise<TListCotacao | Error> => {
     );
   }
 };
+
+const getByFornecdor = async (
+  id: number,
+  page = 1,
+  filter = ""
+): Promise<TListCotacao | Error> => {
+  try {
+    const urlRelativa = `/${rota}/findByFornecedor/${id}?_page=${page}&_limit=${Environment.LIMITE_DE_LINHAS}&nome_like=${filter}`;
+    const { data, headers } = await Api.get(urlRelativa);
+    if (data) {
+      return {
+        data,
+        totalCount: Number(
+          headers["x-total-count"] || Environment.LIMITE_DE_LINHAS
+        ),
+      };
+    }
+    return new Error(Environment.ERRO_AO_LISTAR_DADOS);
+  } catch (error) {
+    return new Error(
+      (error as { message: string }).message ||
+        Environment.ERRO_AO_ACESSAR_DADOS
+    );
+  }
+};
+
+const getByInsumo = async (
+  id: number,
+  page = 1,
+  filter = ""
+): Promise<TListCotacao | Error> => {
+  try {
+    const urlRelativa = `/${rota}/findByInsumo/${id}?_page=${page}&_limit=${Environment.LIMITE_DE_LINHAS}&nome_like=${filter}`;
+    const { data, headers } = await Api.get(urlRelativa);
+    if (data) {
+      return {
+        data,
+        totalCount: Number(
+          headers["x-total-count"] || Environment.LIMITE_DE_LINHAS
+        ),
+      };
+    }
+    return new Error(Environment.ERRO_AO_LISTAR_DADOS);
+  } catch (error) {
+    return new Error(
+      (error as { message: string }).message ||
+        Environment.ERRO_AO_ACESSAR_DADOS
+    );
+  }
+};
+
 const getById = async (id: number): Promise<ICotacao | Error> => {
   try {
     const urlRelativa = `/${rota}/${id}`;
-    const response  = await Api.get<ICotacao>(urlRelativa);
+    const response = await Api.get<ICotacao>(urlRelativa);
     if (response) {
       return response.data;
     }
@@ -117,4 +168,6 @@ export const CotacoesService = {
   updateById,
   deleteById,
   getCount,
+  getByInsumo,
+  getByFornecdor,
 };
