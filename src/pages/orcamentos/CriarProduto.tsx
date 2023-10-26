@@ -55,7 +55,7 @@ function CriarProduto() {
   useEffect(()=>{
 
     setValue("orcamentoId",id);
-  },[])
+  },[]);
 
   function createUser(data: any) {
         console.log(data);

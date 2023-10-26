@@ -27,6 +27,7 @@ import { useForm } from "react-hook-form";
 
 import getCepData from "../../data/services/api/axios-config/actions/cep";
 import { ClientesService, FornecedoresService } from "../../data/services/api";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 
 const createUserFormSchema = z
   .object({
@@ -150,10 +151,13 @@ function CriarCliente() {
     }
   }, [handleGetCepData, cep]);
 
+  const navigate = useNavigate();
   function createUser(data: any) {
     console.log(data);
 
-    ClientesService.create(data).catch((erro) => {
+    ClientesService.create(data).then(()=>{
+        navigate(-1);
+    }).catch((erro) => {
       console.log(erro);
     });
   }
@@ -284,10 +288,7 @@ function CriarCliente() {
                 <Typography>Telefone</Typography>
                 <TextField placeholder="Telefone" {...register("telefone")} />
               </Grid>
-              <Grid item>
-                <Typography>Celular</Typography>
-                <TextField placeholder="Celular" {...register("celular")} />
-              </Grid>
+              
             </Grid>
           </Grid>
         </Box>

@@ -100,7 +100,7 @@ function CriarItemInsumoProdutoBase() {
 
   return (
     <PaginaBase
-      titulo="Adicionar Insumos"
+      titulo="Adicionar Insumos base"
       barraDeFerramentas={
         <FerramentasDeDetalhes
           mostrarBotaoApagar={false}
