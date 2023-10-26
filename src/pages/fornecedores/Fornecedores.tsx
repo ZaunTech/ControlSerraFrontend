@@ -107,7 +107,7 @@ const Fornecedores = () => {
                   <Typography>
                     <IconButton
                       onClick={() =>
-                        navigate(`${location.pathname}/${row.id}/editar`)
+                        navigate(`${location.pathname}/${row.id}`)
                       }
                     >
                       <Icon>edit</Icon>

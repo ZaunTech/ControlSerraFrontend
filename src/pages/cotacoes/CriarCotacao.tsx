@@ -158,7 +158,7 @@ function CriarCotacao() {
                   id="combo-box-demo"
                   options={opcoes}
                   getOptionLabel={(option) =>
-                    option.nomeFantasia ?? option.nome ?? option.razaoSocial
+                    option.nomeFantasia ?? option.nome ?? option.razaoSocial ?? ""
                   }
                   sx={{ width: 225 }}
                   renderInput={(params) => <TextField {...params} />}

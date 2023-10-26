@@ -101,7 +101,7 @@ const Produto = () => {
           }
         })
       );
-      setRows(insumosData);
+      setRows(insumosData) ;
       setTotalCount(result.totalCount);
     } catch (error) {
       console.error("Error fetching data:", error);

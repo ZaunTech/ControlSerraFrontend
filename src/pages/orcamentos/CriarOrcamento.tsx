@@ -23,25 +23,50 @@ import {
   IProduto,
   ProdutosService,
 } from "../../data/services/api/modules/produtos";
-import { IProdutoBase, ProdutosBaseService } from "../../data/services/api";
+import { ClientesService, ICliente, IProdutoBase, ProdutosBaseService } from "../../data/services/api";
+import { OrcamentosService } from "../../data/services/api/modules/orcamentos";
 
 const createUserFormSchema = z.object({
-  titulo: z.string(),
-
-  observacao: z.string(),
-  produtos: z.array(
-    z.object({
-      id: z.coerce.number(),
-      quantidade: z.coerce.number(),
-    })
-  ),
+  idCliente: z.coerce.number(),
+  observacoes: z.string(),
+  dataOrc: z.coerce.date(),
+  dataVec: z.coerce.date(),
+  status: z.string()
 });
 
+
 function CriarOrcamento() {
-  const [tipo, setTipo] = React.useState("1");
-  const handleChange = (event: SelectChangeEvent) => {
-    setTipo(event.target.value as string);
-  };
+  const [opcoes, setOpcoes] = useState<ICliente[]>([]);
+
+useEffect(() => {
+  ClientesService.getAll()
+    .then((response) => {
+      // Verifique se data é um array
+
+      if (response instanceof Error) {
+        console.error("Erro ao buscar categorias:", response);
+        // Trate o erro conforme necessário, você pode querer mostrar uma mensagem de erro para o usuário
+        return;
+      }
+
+      if (response && Array.isArray(response.data)) {
+        const FornecedoresMapeadas = response.data;
+        console.log(FornecedoresMapeadas);
+        setOpcoes(FornecedoresMapeadas);
+      } else {
+        console.error(
+          "A resposta não é uma array válida de categorias:",
+          response
+        );
+      }
+    })
+    .catch((error) => {
+      console.error("Erro ao buscar categorias:", error);
+    });
+}, []);
+
+
+
   const {
     register,
     handleSubmit,
@@ -53,42 +78,22 @@ function CriarOrcamento() {
   } = useForm({
     resolver: zodResolver(createUserFormSchema),
   });
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: "produtos",
-  });
+  const [tipo, setTipo] = React.useState("Pendente");
+  const handleChange = (event: SelectChangeEvent) => {
+    setTipo(event.target.value as string);
+   
+  };
+  function createOrcamento (data : any)
+  {
+     OrcamentosService.create(data).then(()=>{
+      console.log("Sucesso");
+     }).catch(()=>{
 
-  function addNovoProduto() {
-    append({ titulo: "" });
+     })
   }
 
-  const [opcoes, setOpcoes] = useState<IProdutoBase[]>([]);
-  useEffect(() => {
-    ProdutosBaseService.getAll()
-      .then((response) => {
-        // Verifique se data é um array
-        console.log("Resposta do serviço:", response);
-        if (response instanceof Error) {
-          console.error("Erro ao buscar categorias:", response);
-          // Trate o erro conforme necessário, você pode querer mostrar uma mensagem de erro para o usuário
-          return;
-        }
-
-        if (response && Array.isArray(response.data)) {
-          const produtosMapeadas = response.data;
-          console.log(produtosMapeadas);
-          setOpcoes(produtosMapeadas);
-        } else {
-          console.error(
-            "A resposta não é uma array válida de categorias:",
-            response
-          );
-        }
-      })
-      .catch((error) => {
-        console.error("Erro ao buscar categorias:", error);
-      });
-  }, []);
+  
+  
 
   return (
     <PaginaBase
@@ -98,10 +103,11 @@ function CriarOrcamento() {
           mostrarBotaoApagar={false}
           mostrarBotaoSalvar
           mostrarBotaoVoltar
+          onClickSalvar={handleSubmit(createOrcamento)}
         />
       }
     >
-      <Box component={"form"}>
+      <Box component={"form"} onSubmit={handleSubmit(createOrcamento)}>
         <Box
           display={"flex"}
           margin={1}
@@ -116,14 +122,78 @@ function CriarOrcamento() {
               </Grid>
             </Grid>
             <Grid container item direction="row" spacing={4}>
+            <Grid item>
+                <Typography>Selecione o Cliente</Typography>
+                <Autocomplete
+                  disablePortal
+                  {...register("idCliente")}
+                  id="combo-box-demo"
+                  options={opcoes}
+                 
+                  getOptionLabel={(option) =>
+                    option.nomeFantasia ?? option.nome ?? option.razaoSocial ?? ""
+                  }
+                  sx={{ width: 225 }}
+                  renderInput={(params) => <TextField {...params} />}
+                  onChange={(_, value) => {
+                    
+                    setValue("idCliente", value?.id);
+                  }}
+                />
+
+                {errors.idCliente && (
+                  <span>{errors.idCliente.message?.toString()}</span>
+                )}
+              </Grid>
+              <Grid item >
+                <InputLabel id="tipo">Status</InputLabel>
+                <Select 
+                  
+                  labelId="tipo"
+                  id="tipo"
+                  value={tipo}
+                  {...register("status")}
+                  onChange={handleChange}>
+                    <MenuItem value={"Pendente"}>Pendente</MenuItem>
+                  <MenuItem value={"Iniciado"}>Iniciado</MenuItem>
+                  <MenuItem value={"Em Processo"}>Em Processo</MenuItem>
+                  <MenuItem value={"Concluido"}>Concluido</MenuItem>
+                </Select>
+
+                {errors.contaTipo && (
+                  <span>{errors.contaTipo.message?.toString()}</span>
+                )}
+              </Grid>
               <Grid item>
-                <Typography>Cliente</Typography>
-                <TextField placeholder="Cliente" />
+                <Typography>Data Orçamento</Typography>
+                <TextField
+                  type="date"
+                  placeholder="data"
+                  {...register("dataOrc")}
+                  onChange={(e) => {
+                    setValue("dataOrc", e.target.value);
+                  }}
+                />
+                {errors.dataOrc && <span>{errors.dataOrc.message?.toString()}</span>}
+              </Grid>
+              <Grid item>
+                <Typography>Data de Validade</Typography>
+                <TextField
+                  type="date"
+                  placeholder="data"
+                  {...register("dataVec")}
+                  onChange={(e) => {
+                    setValue("dataVec", e.target.value);
+                  }}
+                />
+                {errors.dataVec && <span>{errors.dataVec.message?.toString()}</span>}
               </Grid>
               <Grid item>
                 <Typography>Observações</Typography>
-                <TextField type="text" placeholder="Observações" />
+                <TextField type="text" placeholder="Observações"  {...register("observacoes")}/>
+                {errors.dataVec && <span>{errors.dataVec.message?.toString()}</span>}
               </Grid>
+              
             </Grid>
           </Grid>
         </Box>

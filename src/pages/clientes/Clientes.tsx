@@ -107,7 +107,7 @@ function Clientes() {
                   <Typography>
                     <IconButton
                       onClick={() =>
-                        navigate(`${location.pathname}/${row.id}/cliente`)
+                        navigate(`${location.pathname}/${row.id}`)
                       }
                     >
                       <Icon>edit</Icon>

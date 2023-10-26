@@ -87,7 +87,7 @@ function Cliente() {
 
   
   const handleChange = (event: SelectChangeEvent) => {
-    setTipo(event.target.value as string);
+    
     setValue("nome", "");
     setValue("nomeFantasia", "");
     setValue("rg", "");
@@ -113,47 +113,43 @@ function Cliente() {
   const [cliente, setCliente] = useState<ICliente | null>(null);
 
   const { id } = useParams();
-  const [tipo, setTipo] = React.useState("Juridica");
+  const [tipo, setTipo] = React.useState<contaTipo>(contaTipo.Juridico);
 
-  useEffect(() => {
+  useEffect(()=>{
+
     const fetchData = async () => {
       try {
-        const clienteId: number = Number(id);
-
-        if (!isNaN(clienteId)) {
-          const data: ICliente | null = await ClientesService.getById(clienteId);
-          
-          setCliente(data);
-          setValue("nome", data?.nome);
-          setValue("nomeFantasia", data?.nomeFantasia);
-          setValue("rg", data?.rg);
-          setValue("cpf", data?.cpf);
-          setValue("cnpj", data?.cnpj);
-          setValue("razaoSocial", data?.razaoSocial);
-          setValue("pais", "Brasil");
-          setValue("estado", data?.cidade);
-          setValue("cidade", data?.cidade);
-          setValue("bairro", data?.bairro);
-          setValue("rua", data?.rua);
-          setValue("email",data?.email);
-          setValue("telefone",data?.telefone);
-          setValue("cep",data?.cep)
-          setValue("numero",data?.numero);
-          setValue("complemento",data?.complemento)
-          setTipo(data?.contaTipo);
-          console.log(data);
-
-        } else {
-          console.log('ID do cliente inválido');
+        const data: ICliente | Error = await ClientesService.getById(Number(id));
+        if(data instanceof Error){
+          return;
         }
+        setValue("razaoSocial",data.razaoSocial == null ? undefined : data.razaoSocial);
+        setValue("nomeFantasia",data.nomeFantasia == null ? undefined : data.nomeFantasia);
+        setValue("cnpj",data.cnpj == null ? undefined : data.cnpj);
+        setValue("rg",data.rg == null ? undefined : data.rg);
+        setValue("cpf",data.cpf == null ? undefined : data.cpf);
+        setValue("nome",data.nome == null ? undefined : data.nome);
+        setTipo(data.contaTipo);
+        setValue("email",data.email)
+        setValue("telefone",data.telefone)
+        setValue("cep",data.cep)
+        setValue("pais",data.pais)
+        setValue("estado",data.estado)
+        setValue("cidade",data.cidade)
+        setValue("bairro",data.bairro)
+        setValue("rua",data.rua)
+        setValue("numero",data.numero)
+        setValue("complemento",data.complemento)
+        // Do something with the 'data' here
       } catch (error) {
-        console.error('Erro ao buscar cliente:', error);
-        setCliente(null);
+        // Handle errors here
+        console.error('Error fetching data:', error);
       }
     };
-
+  
     fetchData();
-  }, [id]);
+
+  },[])
   
   const handleGetCepData = useCallback(
     async (cep: string) => {
@@ -218,17 +214,17 @@ function Cliente() {
                 <Select
                   labelId="contaTipo"
                   id="contaTipo"
-                  value={tipo}
+                  value={tipo == contaTipo.Fisico ?  "Fisico" : "Juridico"}
                   {...register("contaTipo")}
                   onChange={handleChange}
                 >
-                  <MenuItem value={"Fisica"}>Fisico</MenuItem>
-                  <MenuItem value={"Juridica"}>Juridico</MenuItem>
+                  <MenuItem value={contaTipo.Fisico}>Fisico</MenuItem>
+                  <MenuItem value={contaTipo.Juridico}>Juridico</MenuItem>
                 </Select>
 
               {errors.contaTipo && <span>{errors.contaTipo.message?.toString()}</span>}
             </Grid>
-            {tipo === "Juridica" && (
+            {tipo === 1 && (
               <>
                 <Grid item>
                   <Typography>Razão Social</Typography>
@@ -250,7 +246,7 @@ function Cliente() {
                 </Grid>
               </>
             )}
-            {tipo === "Fisica" && (
+            {tipo ===  0 && (
               <>
                 <Grid item>
                   <Typography>Nome Completo</Typography>

@@ -1,4 +1,4 @@
-import { Box, Grid, Paper, TextField, Typography } from '@mui/material'
+import { Box, Grid, InputLabel, MenuItem, Paper, Select, SelectChangeEvent, TextField, Typography } from '@mui/material'
 import React from 'react'
 import { PaginaBase } from '../../ui/layouts'
 import { FerramentasDeDetalhes } from '../../ui/components'
@@ -7,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { CategoriasService } from '../../data/services/api'
+import { useNavigate } from 'react-router-dom'
 
 const createUserFormSchema = z
   .object({
@@ -16,7 +17,14 @@ const createUserFormSchema = z
   
   });
 
+ 
+
 function CriarCategoria() {
+  const [tipo, setTipo] = React.useState("MaoDeObra");
+  const handleChange = (event: SelectChangeEvent) => {
+    setTipo(event.target.value as string);
+   
+  };
   const {
     register,
     handleSubmit,
@@ -25,10 +33,15 @@ function CriarCategoria() {
   } = useForm({
     resolver: zodResolver(createUserFormSchema),
   });
+  const navigate = useNavigate();
   function createUser(data: any) {
     console.log(data);
 
-    CategoriasService.create(data);
+    CategoriasService.create(data).then(()=>{
+    navigate(-1);  
+    }).catch((erro)=>{
+      console.log(erro);
+    });
   }
   return (
     <PaginaBase
@@ -57,9 +70,22 @@ function CriarCategoria() {
                <Typography>Titulo</Typography> 
                <TextField placeholder='Titulo' {...register("titulo")}/>
               </Grid>
-              <Grid item>
-               <Typography>tipo</Typography> 
-               <TextField placeholder='tipo' {...register("tipo")}/>
+              <Grid item xs={6}>
+                <InputLabel id="tipo">Tipo</InputLabel>
+                <Select
+                  labelId="tipo"
+                  id="tipo"
+                  value={tipo}
+                 
+                  {...register("tipo")}
+                  onChange={handleChange}>
+                  <MenuItem value={"Mão de Obra"}>Mão de Obra</MenuItem>
+                  <MenuItem value={"Insumo"}>Insumo</MenuItem>
+                </Select>
+
+                {errors.contaTipo && (
+                  <span>{errors.contaTipo.message?.toString()}</span>
+                )}
               </Grid>
               <Grid item>
                <Typography>Descricao</Typography> 

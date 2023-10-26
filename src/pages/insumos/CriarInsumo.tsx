@@ -9,6 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { CategoriasService, ICategoria, InsumosService, TListCategorias } from '../../data/services/api';
 import { Categorias } from '../categorias';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -17,8 +18,8 @@ import { Categorias } from '../categorias';
 
 
 const createUserFormSchema = z.object({
-  titulo: z.string(),
-  idCategoria: z.coerce.number(),
+  titulo: z.string().min(1,"Preencha o Titulo"),
+  idCategoria: z.coerce.number().optional(),
   descricao: z.string(),
   unidadeMedida: z.string(),
 
@@ -35,11 +36,13 @@ function CriarInsumo() {
   } = useForm({
     resolver: zodResolver(createUserFormSchema),
   });
-
+  const  navigate = useNavigate();
   function createUser(data: any) {
     console.log(data);
 
-    InsumosService.create(data).catch((erro) => {
+    InsumosService.create(data).then(()=>{
+        navigate(-1);
+    }).catch((erro) => {
       console.log(erro);
     })
   }
