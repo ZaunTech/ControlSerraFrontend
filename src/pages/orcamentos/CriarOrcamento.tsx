@@ -29,9 +29,10 @@ import { OrcamentosService } from "../../data/services/api/modules/orcamentos";
 const createUserFormSchema = z.object({
   idCliente: z.coerce.number(),
   observacoes: z.string(),
-  dataOrc: z.coerce.date(),
-  dataVec: z.coerce.date(),
-  status: z.string()
+  dataOrcamento: z.coerce.date(),
+  validade: z.coerce.date(),
+  status: z.string(),
+  prazoEstimadoProducao: z.coerce.number()
 });
 
 
@@ -154,7 +155,7 @@ useEffect(() => {
                   value={tipo}
                   {...register("status")}
                   onChange={handleChange}>
-                    <MenuItem value={"Pendente"}>Pendente</MenuItem>
+                  <MenuItem value={"Pendente"}>Pendente</MenuItem>
                   <MenuItem value={"Iniciado"}>Iniciado</MenuItem>
                   <MenuItem value={"Em Processo"}>Em Processo</MenuItem>
                   <MenuItem value={"Concluido"}>Concluido</MenuItem>
@@ -169,31 +170,35 @@ useEffect(() => {
                 <TextField
                   type="date"
                   placeholder="data"
-                  {...register("dataOrc")}
+                  {...register("dataOrcamento")}
                   onChange={(e) => {
-                    setValue("dataOrc", e.target.value);
+                    setValue("dataOrcamento", e.target.value);
                   }}
                 />
-                {errors.dataOrc && <span>{errors.dataOrc.message?.toString()}</span>}
+                {errors.dataOrcamento && <span>{errors.dataOrcamento.message?.toString()}</span>}
               </Grid>
               <Grid item>
                 <Typography>Data de Validade</Typography>
                 <TextField
                   type="date"
                   placeholder="data"
-                  {...register("dataVec")}
+                  {...register("validade")}
                   onChange={(e) => {
-                    setValue("dataVec", e.target.value);
+                    setValue("validade", e.target.value);
                   }}
                 />
-                {errors.dataVec && <span>{errors.dataVec.message?.toString()}</span>}
+                {errors.validade && <span>{errors.validade.message?.toString()}</span>}
               </Grid>
               <Grid item>
                 <Typography>Observações</Typography>
                 <TextField type="text" placeholder="Observações"  {...register("observacoes")}/>
                 {errors.dataVec && <span>{errors.dataVec.message?.toString()}</span>}
-              </Grid>
-              
+              </Grid> 
+              <Grid item>
+                <Typography>Prazo Estimado em Dias</Typography>
+                <TextField type="number" placeholder="Prazo Estimado em Dias"  {...register("prazoEstimadoProducao")}/>
+                {errors.prazoEstimadoProducao && <span>{errors.prazoEstimadoProducao.message?.toString()}</span>}
+              </Grid>  
             </Grid>
           </Grid>
         </Box>
