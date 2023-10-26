@@ -35,12 +35,16 @@ import {
   ProdutosService,
 } from "../../data/services/api/modules/produtos";
 import { OrcamentosService } from "../../data/services/api/modules/orcamentos";
+import {
+  IListaInsumo,
+  ListaInsumosService,
+} from "../../data/services/api/modules/listaInsumos";
 
-const Orcamento = () => {
+const InsumosDeUmProdutoOrcamento = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { debounce } = useDebounce();
 
-  const [rows, setRows] = useState<IProduto[]>([]);
+  const [rows, setRows] = useState<IListaInsumo[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -60,7 +64,8 @@ const Orcamento = () => {
   useEffect(() => {
     setIsLoading(true);
     debounce(() => {
-      ProdutosService.getAll(pagina, busca).then((result) => {
+      ListaInsumosService.getListaByIdProduto(Number(id)).then((result) => {
+        console.log(result);
         if (result instanceof Error) {
           alert(result.message);
           return;
@@ -110,10 +115,13 @@ const Orcamento = () => {
             <TableRow>
               <TableCell style={{ fontWeight: "bold" }}>Ações</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Titulo</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Quantidade</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Categoria</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>
-                Valor Unitario
+                Unidade de Medida
               </TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Descrição</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Fornecedor</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Cotação</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Valor Total</TableCell>
             </TableRow>
           </TableHead>
@@ -123,9 +131,7 @@ const Orcamento = () => {
                 <TableCell>
                   <Typography>
                     <IconButton
-                      onClick={() =>
-                        navigate(`${location.pathname}/${row.id}`)
-                      }
+                      onClick={() => navigate(`${location.pathname}/${row.id}`)}
                     >
                       <Icon>edit</Icon>
                     </IconButton>
@@ -139,16 +145,31 @@ const Orcamento = () => {
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{row.titulo}</Typography>
+                  <Typography>{row.insumo?.titulo}</Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{row.quantidade}</Typography>
+                  <Typography>{row.insumo?.categoria?.titulo}</Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{row.valorUnitario}</Typography>
+                  <Typography>{row.insumo?.unidadeMedida}</Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{row.valorUnitario * row.quantidade}</Typography>
+                  <Typography>{row.insumo?.descricao}</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography>
+                    {row.cotacao?.fornecedor?.nome ??
+                      row.cotacao?.fornecedor?.razaoSocial ??
+                      row.cotacao?.fornecedor?.nomeFantasia}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography>{row.cotacao?.valor}</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography>
+                    {row.quantidade * (row.cotacao?.valor ?? 0)}
+                  </Typography>
                 </TableCell>
               </TableRow>
             ))}
@@ -191,4 +212,4 @@ const Orcamento = () => {
   );
 };
 
-export default Orcamento;
+export default InsumosDeUmProdutoOrcamento;

@@ -32,6 +32,7 @@ import { Login, RecuperarSenha } from "./pages/login";
 import { Cotacoes, Cotacao, CriarCotacao } from "./pages/cotacoes";
 import AddProdutoBase from "./pages/orcamentos/AddProdutoBase.tsx";
 import CriarProduto from "./pages/orcamentos/CriarProduto.tsx";
+import InsumosDeUmProdutoOrcamento from "./pages/orcamentos/InsumosDeUmProdutoOrcamento.tsx";
 
 const router = createBrowserRouter([
   {
@@ -111,6 +112,10 @@ const router = createBrowserRouter([
               },
               { path: "AddProdutoBase", element: <AddProdutoBase /> },
               { path: "CriarProduto", element: <CriarProduto /> },
+              {
+                path: "produtos/:id",
+                element: <InsumosDeUmProdutoOrcamento />,
+              },
             ],
           },
         ],

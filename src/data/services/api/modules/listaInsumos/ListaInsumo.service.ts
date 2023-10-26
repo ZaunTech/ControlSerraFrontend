@@ -7,7 +7,7 @@ import {
 import { Api } from "../..";
 import { Environment } from "../../../../environment";
 
-const rota = "pedidos";
+const rota = "lista-insumos";
 
 const getAll = async (
   page = 1,
@@ -28,7 +28,7 @@ const getAll = async (
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-      Environment.ERRO_AO_ACESSAR_DADOS
+        Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -43,10 +43,36 @@ const getById = async (id: number): Promise<IListaInsumo | Error> => {
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-      Environment.ERRO_AO_ACESSAR_DADOS
+        Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
+
+const getListaByIdProduto = async (
+  id: number,
+  page = 1,
+  filter = ""
+): Promise<TListListaInsumos | Error> => {
+  try {
+    const urlRelativa = `/${rota}/produtos/${id}?_page=${page}&_limit=${Environment.LIMITE_DE_LINHAS}&titulo_like=${filter}`;
+    const { data, headers } = await Api.get(urlRelativa);
+    if (data) {
+      return {
+        data,
+        totalCount: Number(
+          headers["x-total-count"] || Environment.LIMITE_DE_LINHAS
+        ),
+      };
+    }
+    return new Error(Environment.ERRO_AO_LISTAR_DADOS);
+  } catch (error) {
+    return new Error(
+      (error as { message: string }).message ||
+        Environment.ERRO_AO_ACESSAR_DADOS
+    );
+  }
+};
+
 const create = async (
   createListaInsumosDto: CreateListaInsumosDto
 ): Promise<IListaInsumo | Error> => {
@@ -63,7 +89,7 @@ const create = async (
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-      Environment.ERRO_AO_ACESSAR_DADOS
+        Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -82,7 +108,7 @@ const updateById = async (
     console.error(error);
     return new Error(
       (error as { message: string }).message ||
-      Environment.ERRO_AO_ACESSAR_DADOS
+        Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -97,7 +123,7 @@ const deleteById = async (id: number): Promise<IListaInsumo | Error> => {
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-      Environment.ERRO_AO_ACESSAR_DADOS
+        Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -114,7 +140,7 @@ const getCount = async (): Promise<number | Error> => {
     console.error(error);
     return new Error(
       (error as { message: string }).message ||
-      Environment.ERRO_AO_ACESSAR_DADOS
+        Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -126,4 +152,5 @@ export const ListaInsumosService = {
   updateById,
   deleteById,
   getCount,
+  getListaByIdProduto,
 };
