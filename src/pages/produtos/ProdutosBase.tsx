@@ -22,7 +22,7 @@ import {
 } from "@mui/material";
 import { Environment } from "../../data/environment";
 
-const Produtos = () => {
+const ProdutosBase = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { debounce } = useDebounce();
 
@@ -103,9 +103,7 @@ const Produtos = () => {
                 <TableCell>
                   <Typography>
                     <IconButton
-                      onClick={() =>
-                        navigate(`${location.pathname}/${row.id}`)
-                      }
+                      onClick={() => navigate(`${location.pathname}/${row.id}`)}
                     >
                       <Icon>edit</Icon>
                     </IconButton>
@@ -165,4 +163,4 @@ const Produtos = () => {
   );
 };
 
-export default Produtos;
+export default ProdutosBase;

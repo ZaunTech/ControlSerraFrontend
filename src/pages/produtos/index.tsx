@@ -1,13 +1,13 @@
-import Produtos from "./Produtos";
-import Produto from "./Produto";
-import CriarProduto from "./CriarProduto";
+import ProdutosBase from "./ProdutosBase";
+import ProdutoBase from "./Produto";
+import CriarProdutoBase from "./CriarProdutoBase";
 import CriarItemInsumoProdutoBase from "./CriarItemInsumoProdutoBase";
 import ItemListaInsumoProdutoBase from "./ItemListaInsumoProdutoBase";
 
 export {
-  Produtos,
-  Produto,
-  CriarProduto,
+  ProdutosBase,
+  ProdutoBase,
+  CriarProdutoBase,
   CriarItemInsumoProdutoBase,
   ItemListaInsumoProdutoBase,
 };

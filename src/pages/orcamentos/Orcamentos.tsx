@@ -2,7 +2,11 @@ import { useMemo, useEffect } from "react";
 import { PaginaBase } from "../../ui/layouts";
 import { FerramentasDaListagem } from "../../ui/components";
 import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
-import { ClientesService, IInsumo, InsumosService } from "../../data/services/api";
+import {
+  ClientesService,
+  IInsumo,
+  InsumosService,
+} from "../../data/services/api";
 import { useDebounce } from "../../data/hooks";
 import { useState } from "react";
 import {
@@ -21,7 +25,10 @@ import {
   Icon,
 } from "@mui/material";
 import { Environment } from "../../data/environment";
-import { IOrcamento, OrcamentosService } from "../../data/services/api/modules/orcamentos";
+import {
+  IOrcamento,
+  OrcamentosService,
+} from "../../data/services/api/modules/orcamentos";
 
 const Orcamentos = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -65,7 +72,7 @@ const Orcamentos = () => {
             orcamento.cliente = result2;
             return orcamento;
           } catch (error) {
-            console.error('Error fetching data:', error);
+            console.error("Error fetching data:", error);
             return null;
           }
         })
@@ -73,27 +80,16 @@ const Orcamentos = () => {
       setRows(orcamentosData);
       setTotalCount(result.totalCount);
     } catch (error) {
-      console.error('Error fetching data:', error);
-      alert('Error fetching data.');
+      console.error("Error fetching data:", error);
+      alert("Error fetching data.");
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
     setIsLoading(true);
-    debounce(() => {
-      OrcamentosService.getAll(pagina, busca).then((result) => {
-        if (result instanceof Error) {
-          alert(result.message);
-          return;
-        }
-        console.log(result);
-        setRows(result.data);
-        setTotalCount(result.totalCount);
-        setIsLoading(false);
-      });
-    });
+    setDados();
   }, [busca, pagina]);
 
   const handleDelete = (id: number) => {
@@ -143,9 +139,7 @@ const Orcamentos = () => {
                 <TableCell>
                   <Typography>
                     <IconButton
-                      onClick={() =>
-                        navigate(`${location.pathname}/${row.id}/editar`)
-                      }
+                      onClick={() => navigate(`${location.pathname}/${row.id}`)}
                     >
                       <Icon>edit</Icon>
                     </IconButton>
@@ -162,7 +156,11 @@ const Orcamentos = () => {
                   <Typography>{row.id}</Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{row.cliente.nome || row.cliente.nomeFantasia || row.cliente.razaoSocial}</Typography>
+                  <Typography>
+                    {row.cliente.nome ??
+                      row.cliente.nomeFantasia ??
+                      row.cliente.razaoSocial}
+                  </Typography>
                 </TableCell>
                 <TableCell>
                   <Typography>{row.status}</Typography>

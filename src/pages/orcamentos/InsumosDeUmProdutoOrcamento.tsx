@@ -8,7 +8,7 @@ import {
   useParams,
 } from "react-router-dom";
 import {
-  IProdutoBase,
+  IInsumo,
   InsumosService,
   ProdutosBaseService,
 } from "../../data/services/api";
@@ -31,20 +31,22 @@ import {
 } from "@mui/material";
 import { Environment } from "../../data/environment";
 import {
-  IInsumosProdutoBase,
-  InsumosProdutoBaseService,
-} from "../../data/services/api/modules/insumosProdutoBase";
+  IProduto,
+  ProdutosService,
+} from "../../data/services/api/modules/produtos";
+import { OrcamentosService } from "../../data/services/api/modules/orcamentos";
 
-const ProdutoBase = () => {
+const Orcamento = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { debounce } = useDebounce();
 
-  const [rows, setRows] = useState<IInsumosProdutoBase[]>([]);
+  const [rows, setRows] = useState<IProduto[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
   const location = useLocation();
+
   const { id } = useParams();
 
   const busca = useMemo(() => {
@@ -55,70 +57,24 @@ const ProdutoBase = () => {
     return Number(searchParams.get("pagina") || "1");
   }, [searchParams]);
 
-  const [produtoName, setProdutoName] = useState<string>("");
-
-  useEffect(() => {
-    if (id === null || id === undefined) {
-      return;
-    }
-    ProdutosBaseService.getById(Number(id)).then((result) => {
-      if (result instanceof Error) {
-        alert(result.message);
-        return;
-      }
-      setProdutoName(result.titulo);
-    });
-  }, []);
-
-  const setDados = async () => {
-    try {
-      setIsLoading(true);
-
-      const result = await InsumosProdutoBaseService.getAll(pagina, busca);
-
-      if (result instanceof Error) {
-        alert(result.message);
-        return;
-      }
-
-      const insumosData = await Promise.all(
-        result.data.map(async (insumoProdutoBase: IInsumosProdutoBase) => {
-          try {
-            const result2 = await InsumosService.getById(
-              insumoProdutoBase.idInsumo
-            );
-
-            if (result2 instanceof Error) {
-              alert(result2.message);
-              return null;
-            }
-
-            insumoProdutoBase.insumo = result2;
-            return insumoProdutoBase;
-          } catch (error) {
-            console.error("Error fetching data:", error);
-            return null;
-          }
-        })
-      );
-      setRows(insumosData);
-      setTotalCount(result.totalCount);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      alert("Error fetching data.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   useEffect(() => {
     setIsLoading(true);
-    setDados();
+    debounce(() => {
+      ProdutosService.getAll(pagina, busca).then((result) => {
+        if (result instanceof Error) {
+          alert(result.message);
+          return;
+        }
+        setRows(result.data);
+        setTotalCount(result.totalCount);
+        setIsLoading(false);
+      });
+    });
   }, [busca, pagina]);
 
   const handleDelete = (id: number) => {
     if (confirm("Você realmente quer apagar?")) {
-      InsumosProdutoBaseService.deleteById(id).then((result) => {
+      ProdutosService.deleteById(id).then((result) => {
         if (result instanceof Error) {
           alert(result.message);
           return;
@@ -131,7 +87,7 @@ const ProdutoBase = () => {
 
   return (
     <PaginaBase
-      titulo={`Lista de insumos do produto ${produtoName}`}
+      titulo={`Orçamento ${id}`}
       barraDeFerramentas={
         <FerramentasDaListagem
           mostrarInputBusca
@@ -155,7 +111,10 @@ const ProdutoBase = () => {
               <TableCell style={{ fontWeight: "bold" }}>Ações</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Titulo</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Quantidade</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Dimensões</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>
+                Valor Unitario
+              </TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Valor Total</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -164,7 +123,9 @@ const ProdutoBase = () => {
                 <TableCell>
                   <Typography>
                     <IconButton
-                      onClick={() => navigate(`${location.pathname}/${row.id}`)}
+                      onClick={() =>
+                        navigate(`${location.pathname}/${row.id}/editar`)
+                      }
                     >
                       <Icon>edit</Icon>
                     </IconButton>
@@ -178,13 +139,16 @@ const ProdutoBase = () => {
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{row.insumo?.titulo}</Typography>
+                  <Typography>{row.titulo}</Typography>
                 </TableCell>
                 <TableCell>
                   <Typography>{row.quantidade}</Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{row.dimensoes}</Typography>
+                  <Typography>{row.valorUnitario}</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography>{row.valorUnitario * row.quantidade}</Typography>
                 </TableCell>
               </TableRow>
             ))}
@@ -227,4 +191,4 @@ const ProdutoBase = () => {
   );
 };
 
-export default ProdutoBase;
+export default Orcamento;

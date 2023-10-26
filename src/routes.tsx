@@ -18,9 +18,9 @@ import {
 } from "./pages/fornecedores";
 
 import {
-  Produto,
-  Produtos,
-  CriarProduto,
+  ProdutosBase,
+  ProdutoBase,
+  CriarProdutoBase,
   CriarItemInsumoProdutoBase,
   ItemListaInsumoProdutoBase,
 } from "./pages/produtos";
@@ -30,6 +30,8 @@ import Home from "./pages/home/Home.tsx";
 import Error from "./pages/error/Error.tsx";
 import { Login, RecuperarSenha } from "./pages/login";
 import { Cotacoes, Cotacao, CriarCotacao } from "./pages/cotacoes";
+import AddProdutoBase from "./pages/orcamentos/AddProdutoBase.tsx";
+import CriarProduto from "./pages/orcamentos/CriarProduto.tsx";
 
 const router = createBrowserRouter([
   {
@@ -102,7 +104,14 @@ const router = createBrowserRouter([
           },
           {
             path: ":id",
-            element: <Orcamento />,
+            children: [
+              {
+                index: true,
+                element: <Orcamento />,
+              },
+              { path: "AddProdutoBase", element: <AddProdutoBase /> },
+              { path: "CriarProduto", element: <CriarProduto /> },
+            ],
           },
         ],
       },
@@ -179,18 +188,18 @@ const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <Produtos />,
+            element: <ProdutosBase />,
           },
           {
             path: "Novo",
-            element: <CriarProduto />,
+            element: <CriarProdutoBase />,
           },
           {
             path: ":id",
             children: [
               {
                 index: true,
-                element: <Produto />,
+                element: <ProdutoBase />,
               },
               {
                 path: ":id",

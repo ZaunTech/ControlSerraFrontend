@@ -28,6 +28,7 @@ import {
   Pagination,
   IconButton,
   Icon,
+  Button,
 } from "@mui/material";
 import { Environment } from "../../data/environment";
 import {
@@ -35,6 +36,27 @@ import {
   ProdutosService,
 } from "../../data/services/api/modules/produtos";
 import { OrcamentosService } from "../../data/services/api/modules/orcamentos";
+
+const BotoesOrcamento: React.FC = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  return (
+    <>
+      <Button
+        variant="contained"
+        onClick={() => navigate(`${location.pathname}/CriarProduto`)}
+      >
+        Novo Produto
+      </Button>
+      <Button
+        variant="contained"
+        onClick={() => navigate(`${location.pathname}/AddProdutoBase`)}
+      >
+        Add Produto Base
+      </Button>
+    </>
+  );
+};
 
 const Orcamento = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -95,8 +117,9 @@ const Orcamento = () => {
           onChangeBuscaTexto={(texto) =>
             setSearchParams({ busca: texto, pagina: "1" }, { replace: true })
           }
-          onClickBotaoNovo={() => navigate(`${location.pathname}/novo`)}
+          mostrarBotaoNovo={false}
           mostrarBotaoVoltar
+          componentePersonalizado={<BotoesOrcamento />}
         />
       }
     >
