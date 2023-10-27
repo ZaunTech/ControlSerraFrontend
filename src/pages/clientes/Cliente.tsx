@@ -24,9 +24,8 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useForm } from "react-hook-form";
-import { useNavigate, useParams, useSubmit } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import getCepData from "../../data/services/api/axios-config/actions/cep";
-import { ReplySharp } from "@mui/icons-material";
 import { ClientesService, ICliente } from "../../data/services/api";
 
 const createUserFormSchema = z.object({
@@ -105,9 +104,6 @@ export const Cliente = () => {
     },
     [setValue]
   );
-  const handleFormSubmit = async (data: createCepFormData) => {};
-
-  const [cliente, setCliente] = useState<ICliente | null>(null);
 
   const { id } = useParams();
   const [tipo, setTipo] = React.useState("Juridica");
@@ -144,11 +140,7 @@ export const Cliente = () => {
         setValue("rua", data.rua);
         setValue("numero", data.numero);
         setValue("complemento", data.complemento);
-        // Do something with the 'data' here
-      } catch (error) {
-        // Handle errors here
-        console.error("Error fetching data:", error);
-      }
+      } catch (error) {}
     };
 
     fetchData();
@@ -157,7 +149,6 @@ export const Cliente = () => {
   const handleGetCepData = useCallback(
     async (cep: string) => {
       const data = await getCepData(cep);
-      console.log(data);
       handleSetFormData(data);
     },
     [handleSetFormData]
@@ -168,8 +159,6 @@ export const Cliente = () => {
   useEffect(() => {
     const isCepValid = createCepFormSchema.shape.cep.safeParse(cep).success;
     if (isCepValid) {
-      console.log("Cep valido");
-
       handleGetCepData(cep);
     }
   }, [handleGetCepData, cep]);
@@ -179,9 +168,7 @@ export const Cliente = () => {
       .then(() => {
         navigate(-1);
       })
-      .catch((erro) => {
-        console.log(erro.data);
-      });
+      .catch((erro) => {});
   }
 
   return (

@@ -49,7 +49,6 @@ export const ProdutosBase = () => {
           alert(result.message);
           return;
         }
-        console.log(result);
         setRows(result.data);
         setTotalCount(result.totalCount);
         setIsLoading(false);

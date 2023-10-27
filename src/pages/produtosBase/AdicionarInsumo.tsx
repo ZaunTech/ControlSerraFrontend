@@ -37,28 +37,17 @@ export const AdicionarInsumo = () => {
   useEffect(() => {
     InsumosService.getAll()
       .then((response) => {
-        // Verifique se data é um array
-        console.log("Resposta do serviço:", response);
         if (response instanceof Error) {
-          console.error("Erro ao buscar categorias:", response);
-          // Trate o erro conforme necessário, você pode querer mostrar uma mensagem de erro para o usuário
           return;
         }
 
         if (response && Array.isArray(response.data)) {
           const InsumosMapeadas = response.data;
-          console.log(InsumosMapeadas);
           setopcaoInsumo(InsumosMapeadas);
         } else {
-          console.error(
-            "A resposta não é uma array válida de categorias:",
-            response
-          );
         }
       })
-      .catch((error) => {
-        console.error("Erro ao buscar categorias:", error);
-      });
+      .catch((error) => {});
   }, []);
 
   const navigate = useNavigate();
@@ -69,18 +58,13 @@ export const AdicionarInsumo = () => {
   });
 
   function createUser(data: any) {
-    console.log(data);
-
     InsumosProdutoBaseService.create(data)
       .then((result) => {
         if (!(result instanceof Error)) {
           navigate(-1);
         }
       })
-      .catch((error) => {
-        console.error("Erro ao criar ProdutosBase:", error);
-        // Trate o erro conforme necessário, você pode querer mostrar uma mensagem de erro para o usuário
-      });
+      .catch((error) => {});
   }
 
   return (

@@ -21,7 +21,10 @@ import {
   Icon,
 } from "@mui/material";
 import { Environment } from "../../data/environment";
-import { IPedido, PedidosService } from "../../data/services/api/modules/pedidos";
+import {
+  IPedido,
+  PedidosService,
+} from "../../data/services/api/modules/pedidos";
 import { OrcamentosService } from "../../data/services/api/modules/orcamentos";
 
 export const Pedidos = () => {
@@ -66,18 +69,17 @@ export const Pedidos = () => {
 
             pedido.orcamento = result2;
             try {
-              const result3 = await ClientesService.getById(pedido.orcamento.idCliente);
+              const result3 = await ClientesService.getById(
+                pedido.orcamento.idCliente
+              );
               if (result3 instanceof Error) {
                 alert(result3.message);
                 return;
               }
               pedido.orcamento.cliente = result3;
-            } catch (error) {
-              console.log("Erro ao obter o cliente")
-            }
+            } catch (error) {}
             return pedido;
           } catch (error) {
-            console.error('Error fetching data:', error);
             return null;
           }
         })
@@ -85,12 +87,11 @@ export const Pedidos = () => {
       setRows(pedidosData);
       setTotalCount(result.totalCount);
     } catch (error) {
-      console.error('Error fetching data:', error);
-      alert('Error fetching data.');
+      alert("Error fetching data.");
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
     setIsLoading(true);
@@ -100,7 +101,6 @@ export const Pedidos = () => {
           alert(result.message);
           return;
         }
-        console.log(result);
         setRows(result.data);
         setTotalCount(result.totalCount);
         setIsLoading(false);
@@ -174,7 +174,11 @@ export const Pedidos = () => {
                   <Typography>{row.id}</Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{row.orcamento.cliente.nome || row.orcamento.cliente.nomeFantasia || row.orcamento.cliente.razaoSocial}</Typography>
+                  <Typography>
+                    {row.orcamento.cliente.nome ||
+                      row.orcamento.cliente.nomeFantasia ||
+                      row.orcamento.cliente.razaoSocial}
+                  </Typography>
                 </TableCell>
                 <TableCell>
                   <Typography>{row.status}</Typography>

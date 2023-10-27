@@ -1,15 +1,8 @@
 import React, { useCallback, useEffect } from "react";
-import { useState } from "react";
-import { useMemo } from "react";
 import { PaginaBase } from "../../ui/layouts";
+import { FerramentasDeDetalhes } from "../../ui/components";
 import {
-  FerramentasDaListagem,
-  FerramentasDeDetalhes,
-} from "../../ui/components";
-import {
-  Autocomplete,
   Box,
-  FormControl,
   Grid,
   InputLabel,
   MenuItem,
@@ -127,7 +120,6 @@ export const CriarFornecedor = () => {
   const handleGetCepData = useCallback(
     async (cep: string) => {
       const data = await getCepData(cep);
-      console.log(data);
       handleSetFormData(data);
     },
     [handleSetFormData]
@@ -138,26 +130,22 @@ export const CriarFornecedor = () => {
   useEffect(() => {
     const isCepValid = createCepFormSchema.shape.cep.safeParse(cep).success;
     if (isCepValid) {
-      console.log("Cep valido");
-
       handleGetCepData(cep);
     }
   }, [handleGetCepData, cep]);
 
   const navigate = useNavigate();
   function createUser(data: any) {
-    console.log(data);
-
-      FornecedoresService.create(data).then(()=>{
+    FornecedoresService.create(data)
+      .then(() => {
         navigate(-1);
-      }).catch((erro) => {
-      console.log(erro);
-    });
+      })
+      .catch((erro) => {});
   }
 
   return (
     <PaginaBase
-      titulo="Criar Cliente"
+      titulo="Novo Fornecedor"
       barraDeFerramentas={
         <FerramentasDeDetalhes
           mostrarBotaoApagar={false}
@@ -165,14 +153,16 @@ export const CriarFornecedor = () => {
           mostrarBotaoVoltar
           onClickSalvar={handleSubmit(createUser)}
         />
-      }>
+      }
+    >
       <Box component={"form"} onSubmit={handleSubmit(createUser)}>
         <Box
           display={"flex"}
           margin={1}
           flexDirection={"column"}
           component={Paper}
-          variant="outlined">
+          variant="outlined"
+        >
           <Grid container direction="column" padding={2} spacing={3}>
             <Grid container item direction="row" spacing={4}>
               <Grid item>
@@ -187,7 +177,8 @@ export const CriarFornecedor = () => {
                   id="contaTipo"
                   value={tipo}
                   {...register("contaTipo")}
-                  onChange={handleChange}>
+                  onChange={handleChange}
+                >
                   <MenuItem value={"Fisica"}>Fisico</MenuItem>
                   <MenuItem value={"Juridica"}>Juridico</MenuItem>
                 </Select>
@@ -261,7 +252,8 @@ export const CriarFornecedor = () => {
           margin={1}
           flexDirection={"column"}
           component={Paper}
-          variant="outlined">
+          variant="outlined"
+        >
           <Grid container direction="column" padding={2} spacing={3}>
             <Grid container item direction="row" spacing={4}>
               <Grid item>
@@ -281,7 +273,6 @@ export const CriarFornecedor = () => {
                 <Typography>Telefone</Typography>
                 <TextField placeholder="Telefone" {...register("telefone")} />
               </Grid>
-              
             </Grid>
           </Grid>
         </Box>
@@ -290,7 +281,8 @@ export const CriarFornecedor = () => {
           margin={1}
           flexDirection={"column"}
           component={Paper}
-          variant="outlined">
+          variant="outlined"
+        >
           <Grid container direction="column" padding={2} spacing={2}>
             <Grid container item direction="row" spacing={2}>
               <Grid item>
@@ -366,4 +358,4 @@ export const CriarFornecedor = () => {
       </Box>
     </PaginaBase>
   );
-}
+};

@@ -49,55 +49,33 @@ const Pesquisas: React.FC<IPesquisa> = ({ setFiltro, setFiltroId }) => {
   useEffect(() => {
     FornecedoresService.getAll()
       .then((response) => {
-        // Verifique se data é um array
-        console.log("Resposta do serviço:", response);
         if (response instanceof Error) {
-          console.error("Erro ao buscar categorias:", response);
-          // Trate o erro conforme necessário, você pode querer mostrar uma mensagem de erro para o usuário
           return;
         }
 
         if (response && Array.isArray(response.data)) {
           const FornecedoresMapeados = response.data;
-          console.log(FornecedoresMapeados);
           setOpcoesFornecedor(FornecedoresMapeados);
         } else {
-          console.error(
-            "A resposta não é uma array válida de categorias:",
-            response
-          );
         }
       })
-      .catch((error) => {
-        console.error("Erro ao buscar categorias:", error);
-      });
+      .catch((error) => {});
   }, []);
 
   useEffect(() => {
     InsumosService.getAll()
       .then((response) => {
-        // Verifique se data é um array
-        console.log("Resposta do serviço:", response);
         if (response instanceof Error) {
-          console.error("Erro ao buscar categorias:", response);
-          // Trate o erro conforme necessário, você pode querer mostrar uma mensagem de erro para o usuário
           return;
         }
 
         if (response && Array.isArray(response.data)) {
           const InsumosMapeados = response.data;
-          console.log(InsumosMapeados);
           setOpcoesInsumos(InsumosMapeados);
         } else {
-          console.error(
-            "A resposta não é uma array válida de categorias:",
-            response
-          );
         }
       })
-      .catch((error) => {
-        console.error("Erro ao buscar categorias:", error);
-      });
+      .catch((error) => {});
   }, []);
 
   const [tipo, setTipo] = React.useState<string>("Todos");
@@ -229,7 +207,6 @@ export const Cotacoes = () => {
 
             return cotacao;
           } catch (error) {
-            console.error("Error fetching data:", error);
             return null;
           }
         })
@@ -237,7 +214,6 @@ export const Cotacoes = () => {
       setRows(cotacoesData);
       setTotalCount(result.totalCount);
     } catch (error) {
-      console.error("Error fetching data:", error);
       alert("Error fetching data.");
     } finally {
       setIsLoading(false);
@@ -252,7 +228,6 @@ export const Cotacoes = () => {
   const handleDelete = (id: number) => {
     if (confirm("Você realmente quer apagar?")) {
       CotacoesService.deleteById(id).then((result) => {
-        console.log(result);
         if (result instanceof Error) {
           alert(result.message);
           return;

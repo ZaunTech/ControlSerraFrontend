@@ -75,7 +75,6 @@ const createCepFormSchema = z.object({
   numero: z.string(),
   complemento: z.string(),
 });
-type createCepFormData = z.infer<typeof createCepFormSchema>;
 
 export const CriarCliente = () => {
   const {
@@ -121,7 +120,6 @@ export const CriarCliente = () => {
   const handleGetCepData = useCallback(
     async (cep: string) => {
       const data = await getCepData(cep);
-      console.log(data);
       handleSetFormData(data);
     },
     [handleSetFormData]
@@ -132,28 +130,22 @@ export const CriarCliente = () => {
   useEffect(() => {
     const isCepValid = createCepFormSchema.shape.cep.safeParse(cep).success;
     if (isCepValid) {
-      console.log("Cep valido");
-
       handleGetCepData(cep);
     }
   }, [handleGetCepData, cep]);
 
   const navigate = useNavigate();
   function createUser(data: any) {
-    console.log(data);
-
     ClientesService.create(data)
       .then(() => {
         navigate(-1);
       })
-      .catch((erro) => {
-        console.log(erro);
-      });
+      .catch((erro) => {});
   }
 
   return (
     <PaginaBase
-      titulo="Criar Cliente"
+      titulo="Novo Cliente"
       barraDeFerramentas={
         <FerramentasDeDetalhes
           mostrarBotaoApagar={false}

@@ -40,15 +40,11 @@ export const Categoria = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   function createUser(data: any) {
-    console.log(data);
-
     CategoriasService.updateById(Number(id), data)
       .then(() => {
         navigate(-1);
       })
-      .catch((erro) => {
-        console.log(erro);
-      });
+      .catch((erro) => {});
   }
 
   useEffect(() => {
@@ -63,11 +59,7 @@ export const Categoria = () => {
         setValue("titulo", data.titulo);
         setValue("descricao", data.descricao);
         setTipo(data.tipo);
-
-        // Do something with the 'data' here
       } catch (error) {
-        // Handle errors here
-        console.error("Error fetching data:", error);
       }
     };
 

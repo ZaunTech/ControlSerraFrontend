@@ -59,7 +59,6 @@ export const Categorias = () => {
   const handleDelete = (id: number) => {
     if (confirm("Você realmente quer apagar?")) {
       CategoriasService.deleteById(id).then((result) => {
-        console.log(result);
         if (result instanceof Error) {
           alert(result.message);
           return;

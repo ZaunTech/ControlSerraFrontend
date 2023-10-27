@@ -40,28 +40,17 @@ export const AddProdutoBase = () => {
   useEffect(() => {
     ProdutosBaseService.getAll()
       .then((response) => {
-        // Verifique se data é um array
-        console.log("Resposta do serviço:", response);
         if (response instanceof Error) {
-          console.error("Erro ao buscar categorias:", response);
-          // Trate o erro conforme necessário, você pode querer mostrar uma mensagem de erro para o usuário
           return;
         }
 
         if (response && Array.isArray(response.data)) {
           const InsumosMapeadas = response.data;
-          console.log(InsumosMapeadas);
           setopcaoInsumo(InsumosMapeadas);
         } else {
-          console.error(
-            "A resposta não é uma array válida de categorias:",
-            response
-          );
         }
       })
-      .catch((error) => {
-        console.error("Erro ao buscar categorias:", error);
-      });
+      .catch((error) => {});
   }, []);
 
   const { id } = useParams();
@@ -75,14 +64,12 @@ export const AddProdutoBase = () => {
         if (!(result instanceof Error)) {
         }
       })
-      .catch((error) => {
-        console.error("Erro ao criar ProdutosBase:", error);
-      });
+      .catch((error) => {});
   }
 
   return (
     <PaginaBase
-      titulo="Criar Produto"
+      titulo="Adicionar Produto Base ao Orçamento"
       barraDeFerramentas={
         <FerramentasDeDetalhes
           mostrarBotaoApagar={false}

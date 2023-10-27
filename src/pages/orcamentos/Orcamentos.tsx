@@ -66,7 +66,6 @@ export const Orcamentos = () => {
             orcamento.cliente = result2;
             return orcamento;
           } catch (error) {
-            console.error("Error fetching data:", error);
             return null;
           }
         })
@@ -74,7 +73,6 @@ export const Orcamentos = () => {
       setRows(orcamentosData);
       setTotalCount(result.totalCount);
     } catch (error) {
-      console.error("Error fetching data:", error);
       alert("Error fetching data.");
     } finally {
       setIsLoading(false);

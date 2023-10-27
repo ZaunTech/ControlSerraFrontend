@@ -55,7 +55,6 @@ export const InsumosDeUmProdutoOrcamento = () => {
     setIsLoading(true);
     debounce(() => {
       ListaInsumosService.getListaByIdProduto(Number(id)).then((result) => {
-        console.log(result);
         if (result instanceof Error) {
           alert(result.message);
           return;

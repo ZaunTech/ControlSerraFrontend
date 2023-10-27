@@ -43,43 +43,28 @@ export const Insumo = () => {
 
   const navigate = useNavigate();
   function createUser(data: any) {
-    console.log(data);
-
     InsumosService.updateById(Number(id), data)
       .then(() => {
         navigate(-1);
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => {});
   }
   const [opcoes, setOpcoes] = useState<ICategoria[]>([]);
 
   useEffect(() => {
     CategoriasService.getAll()
       .then((response) => {
-        // Verifique se data é um array
-        console.log("Resposta do serviço:", response);
         if (response instanceof Error) {
-          console.error("Erro ao buscar categorias:", response);
-          // Trate o erro conforme necessário, você pode querer mostrar uma mensagem de erro para o usuário
           return;
         }
 
         if (response && Array.isArray(response.data)) {
           const categoriasMapeadas = response.data;
-          console.log(categoriasMapeadas);
           setOpcoes(categoriasMapeadas);
         } else {
-          console.error(
-            "A resposta não é uma array válida de categorias:",
-            response
-          );
         }
       })
-      .catch((error) => {
-        console.error("Erro ao buscar categorias:", error);
-      });
+      .catch((error) => {});
   }, []);
 
   useEffect(() => {
@@ -93,11 +78,7 @@ export const Insumo = () => {
         setValue("descricao", data.descricao);
         setValue("unidadeMedida", data.unidadeMedida);
         setValue("idCategoria", data.idCategoria);
-        // Do something with the 'data' here
-      } catch (error) {
-        // Handle errors here
-        console.error("Error fetching data:", error);
-      }
+      } catch (error) {}
     };
 
     fetchData();

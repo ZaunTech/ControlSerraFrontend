@@ -34,22 +34,18 @@ export const CriarProduto = () => {
   }, []);
 
   function createUser(data: any) {
-    console.log(data);
     ProdutosService.create(data)
       .then((result) => {
         if (!(result instanceof Error)) {
           navigate(`/orcamentos/${id}`);
         }
       })
-      .catch((error) => {
-        console.error("Erro ao criar ProdutosBase:", error);
-        // Trate o erro conforme necessário, você pode querer mostrar uma mensagem de erro para o usuário
-      });
+      .catch((error) => {});
   }
 
   return (
     <PaginaBase
-      titulo="Criar Produto"
+      titulo="Novo Produto"
       barraDeFerramentas={
         <FerramentasDeDetalhes
           mostrarBotaoApagar={false}

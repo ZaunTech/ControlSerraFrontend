@@ -35,28 +35,17 @@ export const CriarOrcamento = () => {
   useEffect(() => {
     ClientesService.getAll()
       .then((response) => {
-        // Verifique se data é um array
-
         if (response instanceof Error) {
-          console.error("Erro ao buscar categorias:", response);
-          // Trate o erro conforme necessário, você pode querer mostrar uma mensagem de erro para o usuário
           return;
         }
 
         if (response && Array.isArray(response.data)) {
           const FornecedoresMapeadas = response.data;
-          console.log(FornecedoresMapeadas);
           setOpcoes(FornecedoresMapeadas);
         } else {
-          console.error(
-            "A resposta não é uma array válida de categorias:",
-            response
-          );
         }
       })
-      .catch((error) => {
-        console.error("Erro ao buscar categorias:", error);
-      });
+      .catch((error) => {});
   }, []);
 
   const {
@@ -83,7 +72,7 @@ export const CriarOrcamento = () => {
 
   return (
     <PaginaBase
-      titulo="Criar Orcamento"
+      titulo="Novo Orcamento"
       barraDeFerramentas={
         <FerramentasDeDetalhes
           mostrarBotaoApagar={false}

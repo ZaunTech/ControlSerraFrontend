@@ -34,48 +34,33 @@ export const CriarInsumo = () => {
   });
   const navigate = useNavigate();
   function createUser(data: any) {
-    console.log(data);
-
     InsumosService.create(data)
       .then(() => {
         navigate(-1);
       })
-      .catch((erro) => {
-        console.log(erro);
-      });
+      .catch((erro) => {});
   }
   const [opcoes, setOpcoes] = useState<ICategoria[]>([]);
 
   useEffect(() => {
     CategoriasService.getAll()
       .then((response) => {
-        // Verifique se data é um array
-        console.log("Resposta do serviço:", response);
         if (response instanceof Error) {
-          console.error("Erro ao buscar categorias:", response);
-          // Trate o erro conforme necessário, você pode querer mostrar uma mensagem de erro para o usuário
           return;
         }
 
         if (response && Array.isArray(response.data)) {
           const categoriasMapeadas = response.data;
-          console.log(categoriasMapeadas);
           setOpcoes(categoriasMapeadas);
         } else {
-          console.error(
-            "A resposta não é uma array válida de categorias:",
-            response
-          );
         }
       })
-      .catch((error) => {
-        console.error("Erro ao buscar categorias:", error);
-      });
+      .catch((error) => {});
   }, []);
 
   return (
     <PaginaBase
-      titulo="Insumos"
+      titulo="Novo Insumo"
       barraDeFerramentas={
         <FerramentasDeDetalhes
           mostrarBotaoApagar={false}

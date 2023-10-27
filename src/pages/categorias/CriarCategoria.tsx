@@ -39,8 +39,6 @@ export const CriarCategoria = () => {
   });
   const navigate = useNavigate();
   function createUser(data: any) {
-    console.log(data);
-
     CategoriasService.create(data)
       .then(() => {
         navigate(-1);
@@ -50,7 +48,7 @@ export const CriarCategoria = () => {
 
   return (
     <PaginaBase
-      titulo="Criar Categoria"
+      titulo="Nova Categoria"
       barraDeFerramentas={
         <FerramentasDeDetalhes
           mostrarBotaoApagar={false}

@@ -90,7 +90,6 @@ export const ProdutoBase = () => {
             insumoProdutoBase.insumo = result2;
             return insumoProdutoBase;
           } catch (error) {
-            console.error("Error fetching data:", error);
             return null;
           }
         })
@@ -98,7 +97,6 @@ export const ProdutoBase = () => {
       setRows(insumosData);
       setTotalCount(result.totalCount);
     } catch (error) {
-      console.error("Error fetching data:", error);
       alert("Error fetching data.");
     } finally {
       setIsLoading(false);

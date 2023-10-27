@@ -117,7 +117,6 @@ export const Fornecedor = () => {
   const handleGetCepData = useCallback(
     async (cep: string) => {
       const data = await getCepData(cep);
-      console.log(data);
       handleSetFormData(data);
     },
     [handleSetFormData]
@@ -129,8 +128,6 @@ export const Fornecedor = () => {
   useEffect(() => {
     const isCepValid = createCepFormSchema.shape.cep.safeParse(cep).success;
     if (isCepValid) {
-      console.log("Cep valido");
-
       handleGetCepData(cep);
     }
   }, [handleGetCepData, cep]);
@@ -140,9 +137,7 @@ export const Fornecedor = () => {
       .then(() => {
         navigate(-1);
       })
-      .catch((erro) => {
-        console.log(erro);
-      });
+      .catch((erro) => {});
   }
 
   useEffect(() => {
@@ -177,11 +172,7 @@ export const Fornecedor = () => {
         setValue("rua", data.rua);
         setValue("numero", data.numero);
         setValue("complemento", data.complemento);
-        // Do something with the 'data' here
-      } catch (error) {
-        // Handle errors here
-        console.error("Error fetching data:", error);
-      }
+      } catch (error) {}
     };
 
     fetchData();

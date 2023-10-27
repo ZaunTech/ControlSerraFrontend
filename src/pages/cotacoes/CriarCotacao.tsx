@@ -39,62 +39,39 @@ export const CriarCotacao = () => {
   useEffect(() => {
     InsumosService.getAll()
       .then((response) => {
-        // Verifique se data é um array
-        console.log("Resposta do serviço:", response);
         if (response instanceof Error) {
-          console.error("Erro ao buscar categorias:", response);
-          // Trate o erro conforme necessário, você pode querer mostrar uma mensagem de erro para o usuário
           return;
         }
 
         if (response && Array.isArray(response.data)) {
           const InsumosMapeadas = response.data;
-          console.log(InsumosMapeadas);
           setopcaoInsumo(InsumosMapeadas);
         } else {
-          console.error(
-            "A resposta não é uma array válida de categorias:",
-            response
-          );
         }
       })
-      .catch((error) => {
-        console.error("Erro ao buscar categorias:", error);
-      });
+      .catch((error) => {});
   }, []);
 
   useEffect(() => {
     FornecedoresService.getAll()
       .then((response) => {
-        // Verifique se data é um array
-
         if (response instanceof Error) {
-          console.error("Erro ao buscar categorias:", response);
-          // Trate o erro conforme necessário, você pode querer mostrar uma mensagem de erro para o usuário
           return;
         }
 
         if (response && Array.isArray(response.data)) {
           const FornecedoresMapeadas = response.data;
-          console.log(FornecedoresMapeadas);
           setOpcoes(FornecedoresMapeadas);
         } else {
-          console.error(
-            "A resposta não é uma array válida de categorias:",
-            response
-          );
         }
       })
-      .catch((error) => {
-        console.error("Erro ao buscar categorias:", error);
-      });
+      .catch((error) => {});
   }, []);
 
   const {
     register,
     handleSubmit,
     setValue,
-    watch,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(shemaCotacao),
@@ -106,14 +83,12 @@ export const CriarCotacao = () => {
       .then(() => {
         navigate(-1);
       })
-      .catch(() => {
-        console.log("Deu Erro");
-      });
+      .catch(() => {});
   }
 
   return (
     <PaginaBase
-      titulo="Criar Cotação"
+      titulo="Nova Cotação"
       barraDeFerramentas={
         <FerramentasDeDetalhes
           mostrarBotaoApagar={false}

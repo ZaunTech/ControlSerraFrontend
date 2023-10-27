@@ -43,55 +43,33 @@ export const Cotacao = () => {
   useEffect(() => {
     InsumosService.getAll()
       .then((response) => {
-        // Verifique se data é um array
-        console.log("Resposta do serviço:", response);
         if (response instanceof Error) {
-          console.error("Erro ao buscar categorias:", response);
-          // Trate o erro conforme necessário, você pode querer mostrar uma mensagem de erro para o usuário
           return;
         }
 
         if (response && Array.isArray(response.data)) {
           const InsumosMapeadas = response.data;
-          console.log(InsumosMapeadas);
           setopcaoInsumo(InsumosMapeadas);
         } else {
-          console.error(
-            "A resposta não é uma array válida de categorias:",
-            response
-          );
         }
       })
-      .catch((error) => {
-        console.error("Erro ao buscar categorias:", error);
-      });
+      .catch((error) => {});
   }, []);
 
   useEffect(() => {
     FornecedoresService.getAll()
       .then((response) => {
-        // Verifique se data é um array
-
         if (response instanceof Error) {
-          console.error("Erro ao buscar categorias:", response);
-          // Trate o erro conforme necessário, você pode querer mostrar uma mensagem de erro para o usuário
           return;
         }
 
         if (response && Array.isArray(response.data)) {
           const FornecedoresMapeadas = response.data;
-          console.log(FornecedoresMapeadas);
           setOpcoes(FornecedoresMapeadas);
         } else {
-          console.error(
-            "A resposta não é uma array válida de categorias:",
-            response
-          );
         }
       })
-      .catch((error) => {
-        console.error("Erro ao buscar categorias:", error);
-      });
+      .catch((error) => {});
   }, []);
 
   const {
@@ -117,7 +95,6 @@ export const Cotacao = () => {
 
         const dateObject = new Date(data.data);
         if (!isNaN(dateObject.getTime())) {
-          // Convert the date to a string in the "YYYY-MM-DD" format
           const formattedDate = dateObject.toISOString().split("T")[0];
 
           setValue("idInsumo", data.idInsumo);
@@ -126,13 +103,8 @@ export const Cotacao = () => {
           setValue("dimensoes", data.dimensoes);
           setValue("valor", data.valor);
         } else {
-          console.error("Invalid date format:", data.data);
         }
-        // Do something with the 'data' here
-      } catch (error) {
-        // Handle errors here
-        console.error("Error fetching data:", error);
-      }
+      } catch (error) {}
     };
 
     fetchData();
@@ -144,9 +116,7 @@ export const Cotacao = () => {
       .then(() => {
         navigate(-1);
       })
-      .catch(() => {
-        console.log("Deu Erro");
-      });
+      .catch(() => {});
   }
 
   return (

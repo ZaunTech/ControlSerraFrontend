@@ -49,7 +49,6 @@ export const Clientes = () => {
           alert(result.message);
           return;
         }
-        console.log(result);
         setRows(result.data);
         setTotalCount(result.totalCount);
         setIsLoading(false);
@@ -60,7 +59,6 @@ export const Clientes = () => {
   const handleDelete = (id: number) => {
     if (confirm("Você realmente quer apagar?")) {
       ClientesService.deleteById(id).then((result) => {
-        console.log(result);
         if (result instanceof Error) {
           alert(result.message);
           return;
