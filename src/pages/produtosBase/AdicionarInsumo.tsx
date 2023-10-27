@@ -31,7 +31,7 @@ const createUserFormSchema = z.object({
   idProdutoBase: z.coerce.number(),
   quantidade: z.coerce.number(),
   idInsumo: z.coerce.number(),
-  dimensoes: z.string()
+  dimensoes: z.string(),
 });
 
 function CriarItemInsumoProdutoBase() {
@@ -76,16 +76,15 @@ function CriarItemInsumoProdutoBase() {
   }, []);
 
   const navigate = useNavigate();
-  const {id} = useParams();
+  const { id } = useParams();
 
-  useEffect(()=>{
+  useEffect(() => {
     setValue("idProdutoBase", Number(id));
-  })
+  });
 
-  
   function createUser(data: any) {
     console.log(data);
-    
+
     InsumosProdutoBaseService.create(data)
       .then((result) => {
         if (!(result instanceof Error)) {
@@ -106,17 +105,19 @@ function CriarItemInsumoProdutoBase() {
           mostrarBotaoApagar={false}
           onClickSalvar={handleSubmit(createUser)}
         />
-      }>
+      }
+    >
       <Box component={"form"} onSubmit={handleSubmit(createUser)}>
         <Box
           display={"flex"}
           margin={1}
           flexDirection={"column"}
           component={Paper}
-          variant="outlined">
+          variant="outlined"
+        >
           <Grid container direction="column" padding={2} spacing={3}>
             <Grid container item direction="row" spacing={4}>
-            <Grid item>
+              <Grid item>
                 <Typography>Selecione o Insumo</Typography>
                 <Autocomplete
                   disablePortal
@@ -127,7 +128,6 @@ function CriarItemInsumoProdutoBase() {
                   sx={{ width: 225 }}
                   renderInput={(params) => <TextField {...params} />}
                   onChange={(_, value) => {
-                   
                     setValue("idInsumo", value?.id);
                   }}
                 />
@@ -137,7 +137,11 @@ function CriarItemInsumoProdutoBase() {
               </Grid>
               <Grid item>
                 <Typography>Quantidade</Typography>
-                <TextField type="number" placeholder="Quantidade" {...register("quantidade")} />
+                <TextField
+                  type="number"
+                  placeholder="Quantidade"
+                  {...register("quantidade")}
+                />
                 {errors.quantidade && (
                   <span>{errors.quantidade.message?.toString()}</span>
                 )}
@@ -149,7 +153,6 @@ function CriarItemInsumoProdutoBase() {
                   <span>{errors.dimensoes.message?.toString()}</span>
                 )}
               </Grid>
-              
             </Grid>
           </Grid>
         </Box>

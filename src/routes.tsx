@@ -23,7 +23,7 @@ import {
   CriarProdutoBase,
   CriarItemInsumoProdutoBase,
   ItemListaInsumoProdutoBase,
-} from "./pages/produtos";
+} from "./pages/produtosBase/index.tsx";
 
 import Configuracoes from "./pages/Usuarios/Configuracoes.tsx";
 import Home from "./pages/home/Home.tsx";

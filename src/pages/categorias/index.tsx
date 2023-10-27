@@ -1,9 +1,3 @@
-import Categorias from "./Categorias";
-import Categoria from "./Categoria";
-import CriarCategoria from "./CriarCategoria";
-
-export {
-  Categorias,
-  Categoria,
-  CriarCategoria,
-};
+export * from "./Categorias";
+export * from "./Categoria";
+export * from "./CriarCategoria";
