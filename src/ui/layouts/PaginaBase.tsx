@@ -78,7 +78,10 @@ export const PaginaBase: React.FC<IPaginaBase> = ({
                   <Icon>notifications</Icon>
                 </IconButton>
                 <IconButton>
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                  <Avatar
+                    alt="Remy Sharp"
+                    src="https://images.unsplash.com/photo-1512314889357-e157c22f938d?auto=format&fit=crop&q=80&w=2071&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                  />
                 </IconButton>
               </Box>
             </Box>

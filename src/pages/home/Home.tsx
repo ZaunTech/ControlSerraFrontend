@@ -12,11 +12,12 @@ import {
   ClientesService,
   FornecedoresService,
   InsumosService,
+  ProdutosBaseService,
 } from "../../data/services/api";
 import { useEffect, useState } from "react";
-import { ProdutosService } from "../../data/services/api/modules/produtos";
 import { PedidosService } from "../../data/services/api/modules/pedidos";
 import { OrcamentosService } from "../../data/services/api/modules/orcamentos";
+import { CotacoesService } from "../../data/services/api/modules/cotacoes";
 
 export const Home = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -32,7 +33,10 @@ export const Home = () => {
   const [totalCountInsumos, setTotalCountInsumos] = useState<number | null>(
     null
   );
-  const [totalCountProdutos, setTotalCountProdutos] = useState<number | null>(
+  const [totalCountProdutosBase, setTotalCountProdutosBase] = useState<
+    number | null
+  >(null);
+  const [totalCountCotacoes, setTotalCountCotacoes] = useState<number | null>(
     null
   );
   const [totalCountCategorias, setTotalCountCategorias] = useState<
@@ -79,13 +83,21 @@ export const Home = () => {
       setCountsFound(countsFound + 1);
       setTotalCountInsumos(result);
     });
-    ProdutosService.getCount().then((result) => {
+    ProdutosBaseService.getCount().then((result) => {
       if (result instanceof Error) {
         //alert(result.message);
         return;
       }
       setCountsFound(countsFound + 1);
-      setTotalCountProdutos(result);
+      setTotalCountProdutosBase(result);
+    });
+    CotacoesService.getCount().then((result) => {
+      if (result instanceof Error) {
+        //alert(result.message);
+        return;
+      }
+      setCountsFound(countsFound + 1);
+      setTotalCountCotacoes(result);
     });
     CategoriasService.getCount().then((result) => {
       if (result instanceof Error) {
@@ -225,12 +237,12 @@ export const Home = () => {
                 </Card>
               </Grid>
             )}
-            {totalCountProdutos != null && !isLoading && (
+            {totalCountProdutosBase != null && !isLoading && (
               <Grid item xs={12} sm={12} md={6} lg={4} xl={3}>
                 <Card>
                   <CardContent>
                     <Typography variant="h5" align="center">
-                      Total de Produtos
+                      Total de Produtos Base
                     </Typography>
                     <Box
                       display={"flex"}
@@ -238,7 +250,28 @@ export const Home = () => {
                       justifyContent={"center"}
                       alignItems={"center"}
                     >
-                      <Typography variant="h1">{totalCountProdutos}</Typography>
+                      <Typography variant="h1">
+                        {totalCountProdutosBase}
+                      </Typography>
+                    </Box>
+                  </CardContent>
+                </Card>
+              </Grid>
+            )}
+            {totalCountCotacoes != null && !isLoading && (
+              <Grid item xs={12} sm={12} md={6} lg={4} xl={3}>
+                <Card>
+                  <CardContent>
+                    <Typography variant="h5" align="center">
+                      Total de cotações
+                    </Typography>
+                    <Box
+                      display={"flex"}
+                      padding={6}
+                      justifyContent={"center"}
+                      alignItems={"center"}
+                    >
+                      <Typography variant="h1">{totalCountCotacoes}</Typography>
                     </Box>
                   </CardContent>
                 </Card>
