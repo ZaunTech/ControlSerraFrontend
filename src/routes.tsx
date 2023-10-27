@@ -25,7 +25,7 @@ import {
   ItemListaInsumoProdutoBase,
 } from "./pages/produtos";
 
-import Configuracoes from "./pages/Configuracoes/Configuracoes.tsx";
+import Configuracoes from "./pages/Usuarios/Configuracoes.tsx";
 import Home from "./pages/home/Home.tsx";
 import Error from "./pages/error/Error.tsx";
 import { Login, RecuperarSenha } from "./pages/login";

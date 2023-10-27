@@ -92,20 +92,14 @@ function AddProdutoBase() {
   const [insumosProdutoBase,setInsumosProdutoBase] = useState<IInsumosProdutoBase[]>([]);
 
   function createUser(data: any) {
-   // setInsumosProdutoBase() = InsumosProdutoBaseService.getById
-
     ProdutosService.create(data)
       .then((result) => {
-        if (!(result instanceof Error)) {
-          
-
-         
-         
+        if (!(result instanceof Error)) {          
         }
       })
       .catch((error) => {
         console.error("Erro ao criar ProdutosBase:", error);
-        // Trate o erro conforme necessário, você pode querer mostrar uma mensagem de erro para o usuário
+       
       });
   }
 

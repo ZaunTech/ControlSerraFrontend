@@ -1,4 +1,4 @@
-import { Box, Grid, InputLabel, MenuItem, Paper, Select, SelectChangeEvent, TextField, Typography } from '@mui/material'
+import { Alert, Box, Grid, InputLabel, MenuItem, Paper, Select, SelectChangeEvent, Snackbar, TextField, Typography } from '@mui/material'
 import React from 'react'
 import { PaginaBase } from '../../ui/layouts'
 import { FerramentasDeDetalhes } from '../../ui/components'
@@ -17,14 +17,13 @@ const createUserFormSchema = z
   
   });
 
- 
-
 function CriarCategoria() {
   const [tipo, setTipo] = React.useState("MaoDeObra");
   const handleChange = (event: SelectChangeEvent) => {
     setTipo(event.target.value as string);
    
   };
+ 
   const {
     register,
     handleSubmit,
@@ -40,9 +39,12 @@ function CriarCategoria() {
     CategoriasService.create(data).then(()=>{
     navigate(-1);  
     }).catch((erro)=>{
-      console.log(erro);
+      
     });
   }
+
+
+  
   return (
     <PaginaBase
     titulo="Criar Categoria"
@@ -94,7 +96,7 @@ function CriarCategoria() {
             </Grid>
           </Grid>  
       </Box>
-      </Box>
+  </Box>
     </PaginaBase>
   )
 }

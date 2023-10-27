@@ -24,7 +24,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useForm } from "react-hook-form";
-import { useParams, useSubmit } from "react-router-dom";
+import { useNavigate, useParams, useSubmit } from "react-router-dom";
 import  getCepData  from "../../data/services/api/axios-config/actions/cep";
 import { ReplySharp } from "@mui/icons-material";
 import { ClientesService, ICliente } from "../../data/services/api";
@@ -87,7 +87,7 @@ function Cliente() {
 
   
   const handleChange = (event: SelectChangeEvent) => {
-    
+    setTipo(event.target.value as string);
     setValue("nome", "");
     setValue("nomeFantasia", "");
     setValue("rg", "");
@@ -113,7 +113,7 @@ function Cliente() {
   const [cliente, setCliente] = useState<ICliente | null>(null);
 
   const { id } = useParams();
-  const [tipo, setTipo] = React.useState<contaTipo>(contaTipo.Juridico);
+  const [tipo, setTipo] = React.useState("Juridica");
 
   useEffect(()=>{
 
@@ -129,7 +129,7 @@ function Cliente() {
         setValue("rg",data.rg == null ? undefined : data.rg);
         setValue("cpf",data.cpf == null ? undefined : data.cpf);
         setValue("nome",data.nome == null ? undefined : data.nome);
-        setTipo(data.contaTipo);
+        setTipo(data.contaTipo.toString());
         setValue("email",data.email)
         setValue("telefone",data.telefone)
         setValue("cep",data.cep)
@@ -161,7 +161,7 @@ function Cliente() {
   );
 
   const cep = watch("cep");
-
+  const navigate = useNavigate();
   useEffect(() => {
     const isCepValid = createCepFormSchema.shape.cep.safeParse(cep).success;
     if (isCepValid) {
@@ -173,10 +173,12 @@ function Cliente() {
 
   function createUser(data: any) {
 
+    
+    
 
-    console.log(data);
-
-    ClientesService.updateById(Number(id),data).catch((erro)=>{
+    ClientesService.updateById(Number(id),data).then(()=>{
+      navigate(-1);
+    }).catch((erro)=>{
       console.log(erro.data);
     });
   }
@@ -214,17 +216,17 @@ function Cliente() {
                 <Select
                   labelId="contaTipo"
                   id="contaTipo"
-                  value={tipo == contaTipo.Fisico ?  "Fisico" : "Juridico"}
+                  value={tipo.toString()}
                   {...register("contaTipo")}
                   onChange={handleChange}
                 >
-                  <MenuItem value={contaTipo.Fisico}>Fisico</MenuItem>
-                  <MenuItem value={contaTipo.Juridico}>Juridico</MenuItem>
+                  <MenuItem value={"Fisica"}>Fisico</MenuItem>
+                  <MenuItem value={"Juridica"}>Juridico</MenuItem>
                 </Select>
 
               {errors.contaTipo && <span>{errors.contaTipo.message?.toString()}</span>}
             </Grid>
-            {tipo === 1 && (
+            {tipo === "Juridica" && (
               <>
                 <Grid item>
                   <Typography>Razão Social</Typography>
@@ -246,7 +248,7 @@ function Cliente() {
                 </Grid>
               </>
             )}
-            {tipo ===  0 && (
+            {tipo ===  "Fisica" && (
               <>
                 <Grid item>
                   <Typography>Nome Completo</Typography>
