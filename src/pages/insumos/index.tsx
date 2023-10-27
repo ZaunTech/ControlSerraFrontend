@@ -1,5 +1,3 @@
-import Insumos from "./Insumos";
-import Insumo from "./Insumo";
-import CriarInsumo from "./CriarInsumo";
-
-export { Insumos, Insumo, CriarInsumo };
+export * from "./Insumos";
+export * from "./Insumo";
+export * from "./CriarInsumo";
