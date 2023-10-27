@@ -1,24 +1,38 @@
 import React from 'react'
 import { PaginaBase } from '../../ui/layouts'
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { useForm } from 'react-hook-form';
+import { FerramentasDeDetalhes } from '../../ui/components';
 
-function Usuario() {
+const shemaUsuario = z.object({
+  email: z.string().min(1,"Preencha o email"),
+  senha: z.string().min(6,"Digite pelo menos 6 caracteres"),
+});
 
+
+export const Usuario = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(shemaUsuario),
+  });
+
+function criarUsuario(data: any){
+    
+
+}
     
   return (
     <PaginaBase
-      titulo={`Lista de insumos do produto ${produtoName}`}
-      barraDeFerramentas={
-        <FerramentasDaListagem
-          mostrarInputBusca
-          textoDaBusca={busca}
-          onChangeBuscaTexto={(texto) =>
-            setSearchParams({ busca: texto, pagina: "1" }, { replace: true })
-          }
-          onClickBotaoNovo={() => navigate(`${location.pathname}/novo`)}
-          mostrarBotaoVoltar
-        />
-      }
-    >
+    titulo="Insumos"
+    barraDeFerramentas={<FerramentasDeDetalhes
+      mostrarBotaoApagar={false}
+      onClickSalvar={handleSubmit(criarUsuario)}
+      
+    />}>
         
     </PaginaBase>
   )

@@ -25,7 +25,7 @@ const createUserFormSchema = z.object({
 });
 
 export const Categoria = () => {
-  const [tipo, setTipo] = React.useState("MaoDeObra");
+  const [tipo, setTipo] = React.useState("Mão de Obra");
   const handleChange = (event: SelectChangeEvent) => {
     setTipo(event.target.value as string);
   };

@@ -28,6 +28,9 @@ import { Home } from "./pages/home/Home.tsx";
 import Error from "./pages/error/Error.tsx";
 import { Login, RecuperarSenha } from "./pages/login";
 import { Cotacoes, Cotacao, CriarCotacao } from "./pages/cotacoes";
+import Usuarios from "./pages/Usuarios/Usuarios.tsx";
+import { CriarUsuario } from "./pages/Usuarios/CriarUsuario.tsx";
+import Usuario from "./pages/Usuarios/Usuario.tsx";
 
 const router = createBrowserRouter([
   {
@@ -222,7 +225,22 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: "Configuracoes",
+        path: "Usuarios",
+        children: [
+          {
+            index: true,
+            element: <Usuarios />,
+          },
+          {
+            path: "Novo",
+            element: <CriarUsuario />,
+          },
+          {
+            path: ":id",
+            element: <Usuario />,
+          },
+          
+        ],
       },
     ],
   },
