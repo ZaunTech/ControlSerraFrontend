@@ -22,7 +22,7 @@ import {
 } from "@mui/material";
 import { Environment } from "../../data/environment";
 
-const ProdutosBase = () => {
+export const ProdutosBase = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { debounce } = useDebounce();
 
@@ -162,5 +162,3 @@ const ProdutosBase = () => {
     </PaginaBase>
   );
 };
-
-export default ProdutosBase;

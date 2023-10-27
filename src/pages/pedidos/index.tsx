@@ -1,3 +1,3 @@
-export * from "./Pedidos";
-export * from "./Pedido";
 export * from "./CriarPedido";
+export * from "./Pedido";
+export * from "./Pedidos";

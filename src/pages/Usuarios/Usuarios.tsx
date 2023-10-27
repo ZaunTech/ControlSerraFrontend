@@ -1,10 +1,7 @@
-import React from 'react'
+import React from "react";
 
 function Usuarios() {
-  return (
-   
-    
-  )
+  return <></>;
 }
 
-export default Usuarios
+export default Usuarios;

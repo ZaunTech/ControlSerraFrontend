@@ -1,15 +1,8 @@
 import React, { useCallback, useEffect } from "react";
-import { useState } from "react";
-import { useMemo } from "react";
 import { PaginaBase } from "../../ui/layouts";
+import { FerramentasDeDetalhes } from "../../ui/components";
 import {
-  FerramentasDaListagem,
-  FerramentasDeDetalhes,
-} from "../../ui/components";
-import {
-  Autocomplete,
   Box,
-  FormControl,
   Grid,
   InputLabel,
   MenuItem,
@@ -26,8 +19,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 import getCepData from "../../data/services/api/axios-config/actions/cep";
-import { ClientesService, FornecedoresService } from "../../data/services/api";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { ClientesService } from "../../data/services/api";
+import { useNavigate } from "react-router-dom";
 
 const createUserFormSchema = z
   .object({
@@ -84,7 +77,7 @@ const createCepFormSchema = z.object({
 });
 type createCepFormData = z.infer<typeof createCepFormSchema>;
 
-function CriarCliente() {
+export const CriarCliente = () => {
   const {
     register,
     handleSubmit,
@@ -94,11 +87,6 @@ function CriarCliente() {
   } = useForm({
     resolver: zodResolver(createUserFormSchema),
   });
-  const [output, setOutput] = useState("");
-  enum contaTipo {
-    Fisico,
-    Juridico,
-  }
 
   const [tipo, setTipo] = React.useState("Juridica");
   const handleChange = (event: SelectChangeEvent) => {
@@ -129,7 +117,6 @@ function CriarCliente() {
     },
     [setValue]
   );
-  const handleFormSubmit = async (data: createCepFormData) => {};
 
   const handleGetCepData = useCallback(
     async (cep: string) => {
@@ -155,11 +142,13 @@ function CriarCliente() {
   function createUser(data: any) {
     console.log(data);
 
-    ClientesService.create(data).then(()=>{
+    ClientesService.create(data)
+      .then(() => {
         navigate(-1);
-    }).catch((erro) => {
-      console.log(erro);
-    });
+      })
+      .catch((erro) => {
+        console.log(erro);
+      });
   }
 
   return (
@@ -172,14 +161,16 @@ function CriarCliente() {
           mostrarBotaoVoltar
           onClickSalvar={handleSubmit(createUser)}
         />
-      }>
+      }
+    >
       <Box component={"form"} onSubmit={handleSubmit(createUser)}>
         <Box
           display={"flex"}
           margin={1}
           flexDirection={"column"}
           component={Paper}
-          variant="outlined">
+          variant="outlined"
+        >
           <Grid container direction="column" padding={2} spacing={3}>
             <Grid container item direction="row" spacing={4}>
               <Grid item>
@@ -194,7 +185,8 @@ function CriarCliente() {
                   id="contaTipo"
                   value={tipo}
                   {...register("contaTipo")}
-                  onChange={handleChange}>
+                  onChange={handleChange}
+                >
                   <MenuItem value={"Fisica"}>Fisico</MenuItem>
                   <MenuItem value={"Juridica"}>Juridico</MenuItem>
                 </Select>
@@ -268,7 +260,8 @@ function CriarCliente() {
           margin={1}
           flexDirection={"column"}
           component={Paper}
-          variant="outlined">
+          variant="outlined"
+        >
           <Grid container direction="column" padding={2} spacing={3}>
             <Grid container item direction="row" spacing={4}>
               <Grid item>
@@ -288,7 +281,6 @@ function CriarCliente() {
                 <Typography>Telefone</Typography>
                 <TextField placeholder="Telefone" {...register("telefone")} />
               </Grid>
-              
             </Grid>
           </Grid>
         </Box>
@@ -297,7 +289,8 @@ function CriarCliente() {
           margin={1}
           flexDirection={"column"}
           component={Paper}
-          variant="outlined">
+          variant="outlined"
+        >
           <Grid container direction="column" padding={2} spacing={2}>
             <Grid container item direction="row" spacing={2}>
               <Grid item>
@@ -373,6 +366,4 @@ function CriarCliente() {
       </Box>
     </PaginaBase>
   );
-}
-
-export default CriarCliente;
+};

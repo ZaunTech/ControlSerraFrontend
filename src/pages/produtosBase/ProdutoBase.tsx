@@ -7,12 +7,7 @@ import {
   useLocation,
   useParams,
 } from "react-router-dom";
-import {
-  IProdutoBase,
-  InsumosService,
-  ProdutosBaseService,
-} from "../../data/services/api";
-import { useDebounce } from "../../data/hooks";
+import { InsumosService, ProdutosBaseService } from "../../data/services/api";
 import { useState } from "react";
 import {
   Paper,
@@ -35,9 +30,8 @@ import {
   InsumosProdutoBaseService,
 } from "../../data/services/api/modules/insumosProdutoBase";
 
-const ProdutoBase = () => {
+export const ProdutoBase = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { debounce } = useDebounce();
 
   const [rows, setRows] = useState<IInsumosProdutoBase[]>([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -226,5 +220,3 @@ const ProdutoBase = () => {
     </PaginaBase>
   );
 };
-
-export default ProdutoBase;

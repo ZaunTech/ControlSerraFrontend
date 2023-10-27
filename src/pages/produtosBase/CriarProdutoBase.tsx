@@ -1,46 +1,23 @@
-import React, { useEffect, useState } from "react";
 import { FerramentasDeDetalhes } from "../../ui/components";
 import { PaginaBase } from "../../ui/layouts";
-import {
-  Autocomplete,
-  Box,
-  Button,
-  Grid,
-  Paper,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Grid, Paper, TextField, Typography } from "@mui/material";
 import { z } from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useFieldArray, useForm } from "react-hook-form";
-import {
-  IInsumo,
-  InsumosService,
-  ProdutosBaseService,
-  TListInsumos,
-} from "../../data/services/api";
-import {
-  IInsumosProdutoBase,
-  InsumosProdutoBaseService,
-} from "../../data/services/api/modules/insumosProdutoBase";
+import { useForm } from "react-hook-form";
+import { ProdutosBaseService } from "../../data/services/api";
 import { useNavigate } from "react-router-dom";
-import { setTimeout } from "timers/promises";
 
 const createUserFormSchema = z.object({
   titulo: z.string(),
   observacoes: z.string(),
 });
 
-function CriarProdutoBase() {
+export const CriarProdutoBase = () => {
   const {
     register,
     handleSubmit,
-    setValue,
-    watch,
-    control,
-
     formState: { errors },
   } = useForm({
     resolver: zodResolver(createUserFormSchema),
@@ -106,6 +83,4 @@ function CriarProdutoBase() {
       </Box>
     </PaginaBase>
   );
-}
-
-export default CriarProdutoBase;
+};

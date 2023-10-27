@@ -22,7 +22,7 @@ import {
 } from "@mui/material";
 import { Environment } from "../../data/environment";
 
-function Clientes() {
+export const Clientes = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { debounce } = useDebounce();
 
@@ -106,9 +106,7 @@ function Clientes() {
                 <TableCell>
                   <Typography>
                     <IconButton
-                      onClick={() =>
-                        navigate(`${location.pathname}/${row.id}`)
-                      }
+                      onClick={() => navigate(`${location.pathname}/${row.id}`)}
                     >
                       <Icon>edit</Icon>
                     </IconButton>
@@ -122,7 +120,9 @@ function Clientes() {
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{row.nome || row.nomeFantasia || row.razaoSocial}</Typography>
+                  <Typography>
+                    {row.nome || row.nomeFantasia || row.razaoSocial}
+                  </Typography>
                 </TableCell>
                 <TableCell>
                   <Typography>{row.email}</Typography>
@@ -172,6 +172,4 @@ function Clientes() {
       </TableContainer>
     </PaginaBase>
   );
-}
-
-export default Clientes;
+};

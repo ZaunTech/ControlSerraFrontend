@@ -18,7 +18,7 @@ import { ProdutosService } from "../../data/services/api/modules/produtos";
 import { PedidosService } from "../../data/services/api/modules/pedidos";
 import { OrcamentosService } from "../../data/services/api/modules/orcamentos";
 
-function Home() {
+export const Home = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [totalCountClientes, setTotalCountClientes] = useState<number | null>(
     null
@@ -301,6 +301,4 @@ function Home() {
       </Box>
     </PaginaBase>
   );
-}
-
-export default Home;
+};

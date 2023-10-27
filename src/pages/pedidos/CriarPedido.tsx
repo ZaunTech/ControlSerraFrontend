@@ -1,9 +1,3 @@
-import React from 'react'
-
-function CriarPedido() {
-  return (
-    <div>CriarPedido</div>
-  )
-}
-
-export default CriarPedido
+export const CriarPedido = () => {
+  return <div>CriarPedido</div>;
+};

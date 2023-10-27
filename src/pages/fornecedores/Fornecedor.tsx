@@ -1,13 +1,23 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Box, Grid, InputLabel, MenuItem, Paper, Select, SelectChangeEvent, TextField, Typography } from '@mui/material';
-import React, { useCallback, useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import getCepData from '../../data/services/api/axios-config/actions/cep';
-import { FornecedoresService, IFornecedor } from '../../data/services/api';
-import { FerramentasDeDetalhes } from '../../ui/components';
-import { PaginaBase } from '../../ui/layouts';
-import { useNavigate, useParams } from 'react-router-dom';
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Box,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  SelectChangeEvent,
+  TextField,
+  Typography,
+} from "@mui/material";
+import React, { useCallback, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import getCepData from "../../data/services/api/axios-config/actions/cep";
+import { FornecedoresService, IFornecedor } from "../../data/services/api";
+import { FerramentasDeDetalhes } from "../../ui/components";
+import { PaginaBase } from "../../ui/layouts";
+import { useNavigate, useParams } from "react-router-dom";
 
 const createUserFormSchema = z
   .object({
@@ -62,9 +72,8 @@ const createCepFormSchema = z.object({
   numero: z.string(),
   complemento: z.string(),
 });
-type createCepFormData = z.infer<typeof createCepFormSchema>;
 
-function Fornecedor() {
+export const Fornecedor = () => {
   const {
     register,
     handleSubmit,
@@ -74,11 +83,6 @@ function Fornecedor() {
   } = useForm({
     resolver: zodResolver(createUserFormSchema),
   });
-  const [output, setOutput] = useState("");
-  enum contaTipo {
-    Fisico,
-    Juridico,
-  }
 
   const [tipo, setTipo] = React.useState("Juridica");
   const handleChange = (event: SelectChangeEvent) => {
@@ -109,7 +113,6 @@ function Fornecedor() {
     },
     [setValue]
   );
-  const handleFormSubmit = async (data: createCepFormData) => {};
 
   const handleGetCepData = useCallback(
     async (cep: string) => {
@@ -121,7 +124,7 @@ function Fornecedor() {
   );
 
   const cep = watch("cep");
-  const  navigate = useNavigate();
+  const navigate = useNavigate();
   const { id } = useParams();
   useEffect(() => {
     const isCepValid = createCepFormSchema.shape.cep.safeParse(cep).success;
@@ -133,51 +136,56 @@ function Fornecedor() {
   }, [handleGetCepData, cep]);
 
   function createUser(data: any) {
-    
-
-      FornecedoresService.updateById(Number(id),data).then(()=>{
+    FornecedoresService.updateById(Number(id), data)
+      .then(() => {
         navigate(-1);
-      }).catch((erro) => {
-      console.log(erro);
-    });
+      })
+      .catch((erro) => {
+        console.log(erro);
+      });
   }
 
-  useEffect(()=>{
-
+  useEffect(() => {
     const fetchData = async () => {
       try {
-        const data: IFornecedor | Error = await FornecedoresService.getById(Number(id));
-        if(data instanceof Error){
+        const data: IFornecedor | Error = await FornecedoresService.getById(
+          Number(id)
+        );
+        if (data instanceof Error) {
           return;
         }
-        setValue("razaoSocial",data.razaoSocial == null ? undefined : data.razaoSocial);
-        setValue("nomeFantasia",data.nomeFantasia == null ? undefined : data.nomeFantasia);
-        setValue("cnpj",data.cnpj == null ? undefined : data.cnpj);
-        setValue("rg",data.rg == null ? undefined : data.rg);
-        setValue("cpf",data.cpf == null ? undefined : data.cpf);
-        setValue("nome",data.nome == null ? undefined : data.nome);
+        setValue(
+          "razaoSocial",
+          data.razaoSocial == null ? undefined : data.razaoSocial
+        );
+        setValue(
+          "nomeFantasia",
+          data.nomeFantasia == null ? undefined : data.nomeFantasia
+        );
+        setValue("cnpj", data.cnpj == null ? undefined : data.cnpj);
+        setValue("rg", data.rg == null ? undefined : data.rg);
+        setValue("cpf", data.cpf == null ? undefined : data.cpf);
+        setValue("nome", data.nome == null ? undefined : data.nome);
         setTipo(data.contaTipo);
-        setValue("email",data.email)
-        setValue("telefone",data.telefone)
-        setValue("cep",data.cep)
-        setValue("pais",data.pais)
-        setValue("estado",data.estado)
-        setValue("cidade",data.cidade)
-        setValue("bairro",data.bairro)
-        setValue("rua",data.rua)
-        setValue("numero",data.numero)
-        setValue("complemento",data.complemento)
+        setValue("email", data.email);
+        setValue("telefone", data.telefone);
+        setValue("cep", data.cep);
+        setValue("pais", data.pais);
+        setValue("estado", data.estado);
+        setValue("cidade", data.cidade);
+        setValue("bairro", data.bairro);
+        setValue("rua", data.rua);
+        setValue("numero", data.numero);
+        setValue("complemento", data.complemento);
         // Do something with the 'data' here
       } catch (error) {
         // Handle errors here
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       }
     };
-  
+
     fetchData();
-
-  },[])
-
+  }, []);
 
   return (
     <PaginaBase
@@ -189,14 +197,16 @@ function Fornecedor() {
           mostrarBotaoVoltar
           onClickSalvar={handleSubmit(createUser)}
         />
-      }>
+      }
+    >
       <Box component={"form"} onSubmit={handleSubmit(createUser)}>
         <Box
           display={"flex"}
           margin={1}
           flexDirection={"column"}
           component={Paper}
-          variant="outlined">
+          variant="outlined"
+        >
           <Grid container direction="column" padding={2} spacing={3}>
             <Grid container item direction="row" spacing={4}>
               <Grid item>
@@ -211,7 +221,8 @@ function Fornecedor() {
                   id="contaTipo"
                   value={tipo}
                   {...register("contaTipo")}
-                  onChange={handleChange}>
+                  onChange={handleChange}
+                >
                   <MenuItem value={"Fisica"}>Fisico</MenuItem>
                   <MenuItem value={"Juridica"}>Juridico</MenuItem>
                 </Select>
@@ -285,7 +296,8 @@ function Fornecedor() {
           margin={1}
           flexDirection={"column"}
           component={Paper}
-          variant="outlined">
+          variant="outlined"
+        >
           <Grid container direction="column" padding={2} spacing={3}>
             <Grid container item direction="row" spacing={4}>
               <Grid item>
@@ -305,7 +317,6 @@ function Fornecedor() {
                 <Typography>Telefone</Typography>
                 <TextField placeholder="Telefone" {...register("telefone")} />
               </Grid>
-              
             </Grid>
           </Grid>
         </Box>
@@ -314,7 +325,8 @@ function Fornecedor() {
           margin={1}
           flexDirection={"column"}
           component={Paper}
-          variant="outlined">
+          variant="outlined"
+        >
           <Grid container direction="column" padding={2} spacing={2}>
             <Grid container item direction="row" spacing={2}>
               <Grid item>
@@ -390,6 +402,4 @@ function Fornecedor() {
       </Box>
     </PaginaBase>
   );
-}
-
-export default Fornecedor
+};

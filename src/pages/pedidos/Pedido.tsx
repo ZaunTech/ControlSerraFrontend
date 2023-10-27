@@ -1,9 +1,5 @@
-import React from 'react'
-
-function Pedido() {
+export const Pedido = () => {
   return (
     <div>Pedido</div>
   )
 }
-
-export default Pedido

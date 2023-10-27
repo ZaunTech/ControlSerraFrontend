@@ -1,30 +1,19 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FerramentasDeDetalhes } from "../../ui/components";
 import { PaginaBase } from "../../ui/layouts";
 import {
   Autocomplete,
   Box,
-  Button,
   Grid,
   Paper,
   TextField,
   Typography,
 } from "@mui/material";
 import { z } from "zod";
-
 import { zodResolver } from "@hookform/resolvers/zod";
-
-import { useFieldArray, useForm } from "react-hook-form";
-import {
-  IInsumo,
-  InsumosService,
-  ProdutosBaseService,
-  TListInsumos,
-} from "../../data/services/api";
-import {
-  IInsumosProdutoBase,
-  InsumosProdutoBaseService,
-} from "../../data/services/api/modules/insumosProdutoBase";
+import { useForm } from "react-hook-form";
+import { IInsumo, InsumosService } from "../../data/services/api";
+import { InsumosProdutoBaseService } from "../../data/services/api/modules/insumosProdutoBase";
 import { useNavigate, useParams } from "react-router-dom";
 
 const createUserFormSchema = z.object({
@@ -34,14 +23,11 @@ const createUserFormSchema = z.object({
   dimensoes: z.string(),
 });
 
-function CriarItemInsumoProdutoBase() {
+export const AdicionarInsumo = () => {
   const {
     register,
     handleSubmit,
     setValue,
-    watch,
-    control,
-
     formState: { errors },
   } = useForm({
     resolver: zodResolver(createUserFormSchema),
@@ -159,6 +145,4 @@ function CriarItemInsumoProdutoBase() {
       </Box>
     </PaginaBase>
   );
-}
-
-export default CriarItemInsumoProdutoBase;
+};

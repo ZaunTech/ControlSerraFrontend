@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FerramentasDeDetalhes } from "../../ui/components";
 import { PaginaBase } from "../../ui/layouts";
 import {
   Autocomplete,
   Box,
-  Button,
   Grid,
   Paper,
   TextField,
@@ -14,23 +13,10 @@ import { z } from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useFieldArray, useForm } from "react-hook-form";
-import {
-  IInsumo,
-  IProdutoBase,
-  InsumosService,
-  ProdutosBaseService,
-  TListInsumos,
-} from "../../data/services/api";
-import {
-  IInsumosProdutoBase,
-  
-  InsumosProdutoBaseService,
-} from "../../data/services/api/modules/insumosProdutoBase";
-import { useNavigate, useParams } from "react-router-dom";
-import { setTimeout } from "timers/promises";
+import { useForm } from "react-hook-form";
+import { IProdutoBase, ProdutosBaseService } from "../../data/services/api";
+import { useParams } from "react-router-dom";
 import { ProdutosService } from "../../data/services/api/modules/produtos";
-import { ListaInsumosService } from "../../data/services/api/modules/listaInsumos";
 
 const createUserFormSchema = z.object({
   titulo: z.string(),
@@ -39,22 +25,17 @@ const createUserFormSchema = z.object({
   observacoes: z.string(),
 });
 
-function AddProdutoBase() {
+export const AddProdutoBase = () => {
   const {
     register,
     handleSubmit,
     setValue,
-    watch,
-    control,
-
     formState: { errors },
   } = useForm({
     resolver: zodResolver(createUserFormSchema),
   });
 
-  
   const [opcaoiInsumos, setopcaoInsumo] = useState<IProdutoBase[]>([]);
-  const [opcaoSelecionada, setOpcao] = useState<IProdutoBase>();
 
   useEffect(() => {
     ProdutosBaseService.getAll()
@@ -83,23 +64,19 @@ function AddProdutoBase() {
       });
   }, []);
 
-  const {id} = useParams();
-  useEffect(()=>{
-
-    setValue("orcamentoId",id);
-  },[])
-  const navigate = useNavigate();
-  const [insumosProdutoBase,setInsumosProdutoBase] = useState<IInsumosProdutoBase[]>([]);
+  const { id } = useParams();
+  useEffect(() => {
+    setValue("orcamentoId", id);
+  }, []);
 
   function createUser(data: any) {
     ProdutosService.create(data)
       .then((result) => {
-        if (!(result instanceof Error)) {          
+        if (!(result instanceof Error)) {
         }
       })
       .catch((error) => {
         console.error("Erro ao criar ProdutosBase:", error);
-       
       });
   }
 
@@ -123,7 +100,7 @@ function AddProdutoBase() {
         >
           <Grid container direction="column" padding={2} spacing={3}>
             <Grid container item direction="row" spacing={4}>
-            <Grid item>
+              <Grid item>
                 <Typography>Selecione o Produto</Typography>
                 <Autocomplete
                   disablePortal
@@ -134,8 +111,7 @@ function AddProdutoBase() {
                   sx={{ width: 225 }}
                   renderInput={(params) => <TextField {...params} />}
                   onChange={(_, value) => {
-                    setOpcao(value === null ? undefined : value) ;
-                    setValue("titulo",value?.titulo);
+                    setValue("titulo", value?.titulo);
                   }}
                 />
                 {errors.idInsumo && (
@@ -169,6 +145,4 @@ function AddProdutoBase() {
       </Box>
     </PaginaBase>
   );
-}
-
-export default AddProdutoBase;
+};

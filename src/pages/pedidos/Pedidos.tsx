@@ -2,7 +2,7 @@ import { useMemo, useEffect } from "react";
 import { PaginaBase } from "../../ui/layouts";
 import { FerramentasDaListagem } from "../../ui/components";
 import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
-import { ClientesService, IInsumo, InsumosService } from "../../data/services/api";
+import { ClientesService } from "../../data/services/api";
 import { useDebounce } from "../../data/hooks";
 import { useState } from "react";
 import {
@@ -24,7 +24,7 @@ import { Environment } from "../../data/environment";
 import { IPedido, PedidosService } from "../../data/services/api/modules/pedidos";
 import { OrcamentosService } from "../../data/services/api/modules/orcamentos";
 
-const Pedidos = () => {
+export const Pedidos = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { debounce } = useDebounce();
 
@@ -219,5 +219,3 @@ const Pedidos = () => {
     </PaginaBase>
   );
 };
-
-export default Pedidos;

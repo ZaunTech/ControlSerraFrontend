@@ -1,40 +1,33 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "./App";
-
 import { Cliente, Clientes, CriarCliente } from "./pages/clientes/index.tsx";
-
 import { Insumo, Insumos, CriarInsumo } from "./pages/insumos/index.tsx";
-
-import { Orcamento, Orcamentos, CriarOrcamento } from "./pages/orcamentos";
-
+import {
+  Orcamento,
+  Orcamentos,
+  CriarOrcamento,
+  AddProdutoBase,
+  CriarProduto,
+  InsumosDeUmProdutoOrcamento,
+} from "./pages/orcamentos";
 import { Pedido, Pedidos, CriarPedido } from "./pages/pedidos";
-
 import { Categoria, Categorias, CriarCategoria } from "./pages/categorias";
-
 import {
   Fornecedor,
   Fornecedores,
   CriarFornecedor,
 } from "./pages/fornecedores";
-
 import {
   ProdutosBase,
   ProdutoBase,
   CriarProdutoBase,
-  CriarItemInsumoProdutoBase,
+  AdicionarInsumo,
   ItemListaInsumoProdutoBase,
 } from "./pages/produtosBase/index.tsx";
-
-import Configuracoes from "./pages/Usuarios/Configuracoes.tsx";
-import Home from "./pages/home/Home.tsx";
+import { Home } from "./pages/home/Home.tsx";
 import Error from "./pages/error/Error.tsx";
 import { Login, RecuperarSenha } from "./pages/login";
 import { Cotacoes, Cotacao, CriarCotacao } from "./pages/cotacoes";
-import AddProdutoBase from "./pages/orcamentos/AddProdutoBase.tsx";
-import CriarProduto from "./pages/orcamentos/CriarProduto.tsx";
-import InsumosDeUmProdutoOrcamento from "./pages/orcamentos/InsumosDeUmProdutoOrcamento.tsx";
-import CriarItemListaInsumoProduto from "./pages/orcamentos/CriarItemListaInsumoProduto.tsx";
-import ItemListaInsumoProduto from "./pages/orcamentos/ItemListaInsumoProduto.tsx";
 
 const router = createBrowserRouter([
   {
@@ -120,11 +113,11 @@ const router = createBrowserRouter([
               },
               {
                 path: "produtos/:id/Novo",
-                element: <CriarItemListaInsumoProduto />,
+                element: <AdicionarInsumo />,
               },
               {
                 path: "produtos/:id/:id",
-                element: <ItemListaInsumoProduto />,
+                element: <ItemListaInsumoProdutoBase />,
               },
             ],
           },
@@ -222,7 +215,7 @@ const router = createBrowserRouter([
               },
               {
                 path: "Novo",
-                element: <CriarItemInsumoProdutoBase />,
+                element: <AdicionarInsumo />,
               },
             ],
           },
@@ -230,7 +223,6 @@ const router = createBrowserRouter([
       },
       {
         path: "Configuracoes",
-        element: <Configuracoes />,
       },
     ],
   },

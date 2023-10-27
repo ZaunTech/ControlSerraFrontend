@@ -1,40 +1,31 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FerramentasDeDetalhes } from "../../ui/components";
 import { PaginaBase } from "../../ui/layouts";
 import {
   Autocomplete,
   Box,
-  Button,
   Grid,
   Paper,
   TextField,
   Typography,
 } from "@mui/material";
 import { z } from "zod";
-
 import { zodResolver } from "@hookform/resolvers/zod";
-
-import { useFieldArray, useForm } from "react-hook-form";
-import {
-  IInsumo,
-  InsumosService,
-  ProdutosBaseService,
-  TListInsumos,
-} from "../../data/services/api";
-import {
-  IInsumosProdutoBase,
-  InsumosProdutoBaseService,
-} from "../../data/services/api/modules/insumosProdutoBase";
+import { useForm } from "react-hook-form";
+import { IInsumo, InsumosService } from "../../data/services/api";
 import { useNavigate, useParams } from "react-router-dom";
-import { IListaInsumo, ListaInsumosService } from "../../data/services/api/modules/listaInsumos";
+import {
+  IListaInsumo,
+  ListaInsumosService,
+} from "../../data/services/api/modules/listaInsumos";
 
 const createUserFormSchema = z.object({
   quantidade: z.coerce.number(),
   idInsumo: z.coerce.number(),
-  dimensoes: z.string()
+  dimensoes: z.string(),
 });
 
-function ItemListaInsumoProdutoBase() {
+export const ItemListaInsumoProdutoBase = () => {
   const {
     register,
     handleSubmit,
@@ -76,33 +67,30 @@ function ItemListaInsumoProdutoBase() {
   }, []);
 
   const navigate = useNavigate();
-  const { id} = useParams();
+  const { id } = useParams();
 
-  useEffect(()=>{
-
+  useEffect(() => {
     const fetchData = async () => {
       try {
-        const data: IListaInsumo | Error = await ListaInsumosService.getById(Number(id));
-        if(data instanceof Error){
+        const data: IListaInsumo | Error = await ListaInsumosService.getById(
+          Number(id)
+        );
+        if (data instanceof Error) {
           return;
         }
-        setValue("idInsumo",data.idInsumo);
-        setValue("quantidade",data.quantidade);
-        setValue("dimensoes",data.dimensoes);
-        
+        setValue("idInsumo", data.idInsumo);
+        setValue("quantidade", data.quantidade);
+        setValue("dimensoes", data.dimensoes);
+
         // Do something with the 'data' here
-        
       } catch (error) {
         // Handle errors here
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       }
     };
-  
+
     fetchData();
-
-
-
-  },[])
+  }, []);
 
   function createUser(data: any) {
     console.log(data);
@@ -127,30 +115,34 @@ function ItemListaInsumoProdutoBase() {
           mostrarBotaoApagar={false}
           onClickSalvar={handleSubmit(createUser)}
         />
-      }>
+      }
+    >
       <Box component={"form"} onSubmit={handleSubmit(createUser)}>
         <Box
           display={"flex"}
           margin={1}
           flexDirection={"column"}
           component={Paper}
-          variant="outlined">
+          variant="outlined"
+        >
           <Grid container direction="column" padding={2} spacing={3}>
             <Grid container item direction="row" spacing={4}>
-            <Grid item>
+              <Grid item>
                 <Typography>Selecione o Insumo</Typography>
                 <Autocomplete
                   disablePortal
                   id="combo-box-demo"
                   {...register("idInsumo")}
-                  value={opcaoiInsumos.find((opcaoiInsumos) => opcaoiInsumos.id === watch("idInsumo")) || null}
+                  value={
+                    opcaoiInsumos.find(
+                      (opcaoiInsumos) => opcaoiInsumos.id === watch("idInsumo")
+                    ) || null
+                  }
                   options={opcaoiInsumos}
                   getOptionLabel={(opcaoiInsumos) => opcaoiInsumos.titulo ?? ""}
                   sx={{ width: 225 }}
-                  
                   renderInput={(params) => <TextField {...params} />}
                   onChange={(_, value) => {
-                   
                     setValue("idInsumo", value?.id);
                   }}
                 />
@@ -160,7 +152,11 @@ function ItemListaInsumoProdutoBase() {
               </Grid>
               <Grid item>
                 <Typography>Quantidade</Typography>
-                <TextField type="number" placeholder="Quantidade" {...register("quantidade")} />
+                <TextField
+                  type="number"
+                  placeholder="Quantidade"
+                  {...register("quantidade")}
+                />
                 {errors.quantidade && (
                   <span>{errors.quantidade.message?.toString()}</span>
                 )}
@@ -172,13 +168,10 @@ function ItemListaInsumoProdutoBase() {
                   <span>{errors.dimensoes.message?.toString()}</span>
                 )}
               </Grid>
-              
             </Grid>
           </Grid>
         </Box>
       </Box>
     </PaginaBase>
   );
-}
-
-export default ItemListaInsumoProdutoBase;
+};

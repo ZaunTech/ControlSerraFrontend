@@ -82,9 +82,8 @@ const createCepFormSchema = z.object({
   numero: z.string(),
   complemento: z.string(),
 });
-type createCepFormData = z.infer<typeof createCepFormSchema>;
 
-function CriarFornecedor() {
+export const CriarFornecedor = () => {
   const {
     register,
     handleSubmit,
@@ -94,11 +93,6 @@ function CriarFornecedor() {
   } = useForm({
     resolver: zodResolver(createUserFormSchema),
   });
-  const [output, setOutput] = useState("");
-  enum contaTipo {
-    Fisico,
-    Juridico,
-  }
 
   const [tipo, setTipo] = React.useState("Juridica");
   const handleChange = (event: SelectChangeEvent) => {
@@ -129,7 +123,6 @@ function CriarFornecedor() {
     },
     [setValue]
   );
-  const handleFormSubmit = async (data: createCepFormData) => {};
 
   const handleGetCepData = useCallback(
     async (cep: string) => {
@@ -374,5 +367,3 @@ function CriarFornecedor() {
     </PaginaBase>
   );
 }
-
-export default CriarFornecedor;

@@ -22,7 +22,7 @@ import {
 } from "@mui/material";
 import { Environment } from "../../data/environment";
 
-const Fornecedores = () => {
+export const Fornecedores = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { debounce } = useDebounce();
 
@@ -106,9 +106,7 @@ const Fornecedores = () => {
                 <TableCell>
                   <Typography>
                     <IconButton
-                      onClick={() =>
-                        navigate(`${location.pathname}/${row.id}`)
-                      }
+                      onClick={() => navigate(`${location.pathname}/${row.id}`)}
                     >
                       <Icon>edit</Icon>
                     </IconButton>
@@ -122,7 +120,9 @@ const Fornecedores = () => {
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{row.nome || row.nomeFantasia || row.razaoSocial}</Typography>
+                  <Typography>
+                    {row.nome || row.nomeFantasia || row.razaoSocial}
+                  </Typography>
                 </TableCell>
                 <TableCell>
                   <Typography>{row.email}</Typography>
@@ -172,6 +172,4 @@ const Fornecedores = () => {
       </TableContainer>
     </PaginaBase>
   );
-}
-
-export default Fornecedores;
+};

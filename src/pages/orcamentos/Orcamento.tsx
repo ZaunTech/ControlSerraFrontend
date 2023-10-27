@@ -7,11 +7,6 @@ import {
   useLocation,
   useParams,
 } from "react-router-dom";
-import {
-  IInsumo,
-  InsumosService,
-  ProdutosBaseService,
-} from "../../data/services/api";
 import { useDebounce } from "../../data/hooks";
 import { useState } from "react";
 import {
@@ -35,7 +30,6 @@ import {
   IProduto,
   ProdutosService,
 } from "../../data/services/api/modules/produtos";
-import { OrcamentosService } from "../../data/services/api/modules/orcamentos";
 
 const BotoesOrcamento: React.FC = () => {
   const navigate = useNavigate();
@@ -58,7 +52,7 @@ const BotoesOrcamento: React.FC = () => {
   );
 };
 
-const Orcamento = () => {
+export const Orcamento = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { debounce } = useDebounce();
 
@@ -213,5 +207,3 @@ const Orcamento = () => {
     </PaginaBase>
   );
 };
-
-export default Orcamento;

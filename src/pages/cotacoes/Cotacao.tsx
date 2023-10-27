@@ -1,21 +1,12 @@
-import React, { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import { useState } from "react";
-import { useMemo } from "react";
 import { PaginaBase } from "../../ui/layouts";
-import {
-  FerramentasDaListagem,
-  FerramentasDeDetalhes,
-} from "../../ui/components";
+import { FerramentasDeDetalhes } from "../../ui/components";
 import {
   Autocomplete,
   Box,
-  FormControl,
   Grid,
-  InputLabel,
-  MenuItem,
   Paper,
-  Select,
-  SelectChangeEvent,
   TextField,
   Typography,
 } from "@mui/material";
@@ -36,12 +27,8 @@ import {
 } from "../../data/services/api/modules/cotacoes";
 import { useNavigate, useParams } from "react-router-dom";
 
-
-
-function Cotacao() {
+export const Cotacao = () => {
   const [opcoes, setOpcoes] = useState<IFornecedor[]>([]);
-  const [fornecedor, setFornecedor] = useState<IFornecedor>();
-  const [insumo, setInsumo] = useState<IInsumo>();
 
   const [opcaoiInsumos, setopcaoInsumo] = useState<IInsumo[]>([]);
 
@@ -118,41 +105,42 @@ function Cotacao() {
   });
   const { id } = useParams();
 
-  useEffect(()=>{
-
+  useEffect(() => {
     const fetchData = async () => {
       try {
-        const data: ICotacao | Error = await CotacoesService.getById(Number(id));
-        if(data instanceof Error){
+        const data: ICotacao | Error = await CotacoesService.getById(
+          Number(id)
+        );
+        if (data instanceof Error) {
           return;
         }
-       
-        const dateObject = new Date(data.data);
-      if (!isNaN(dateObject.getTime())) {
-        // Convert the date to a string in the "YYYY-MM-DD" format
-        const formattedDate = dateObject.toISOString().split('T')[0];
 
-        setValue("idInsumo", data.idInsumo);
-        setValue("idFornecedor", data.idFornecedor);
-        setValue("data", formattedDate);
-        setValue("dimensoes", data.dimensoes);
-        setValue("valor", data.valor);
-      } else {
-        console.error('Invalid date format:', data.data);
-      }
+        const dateObject = new Date(data.data);
+        if (!isNaN(dateObject.getTime())) {
+          // Convert the date to a string in the "YYYY-MM-DD" format
+          const formattedDate = dateObject.toISOString().split("T")[0];
+
+          setValue("idInsumo", data.idInsumo);
+          setValue("idFornecedor", data.idFornecedor);
+          setValue("data", formattedDate);
+          setValue("dimensoes", data.dimensoes);
+          setValue("valor", data.valor);
+        } else {
+          console.error("Invalid date format:", data.data);
+        }
         // Do something with the 'data' here
       } catch (error) {
         // Handle errors here
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       }
     };
 
     fetchData();
-  },[])
+  }, []);
 
   const navigate = useNavigate();
   function createCotacao(data: any) {
-    CotacoesService.updateById(Number(id),data)
+    CotacoesService.updateById(Number(id), data)
       .then(() => {
         navigate(-1);
       })
@@ -171,14 +159,16 @@ function Cotacao() {
           mostrarBotaoVoltar
           onClickSalvar={handleSubmit(createCotacao)}
         />
-      }>
+      }
+    >
       <Box component={"form"} onSubmit={handleSubmit(createCotacao)}>
         <Box
           display={"flex"}
           margin={1}
           flexDirection={"column"}
           component={Paper}
-          variant="outlined">
+          variant="outlined"
+        >
           <Grid container direction="column" padding={2} spacing={3}>
             <Grid container item direction="row" spacing={4}>
               <Grid item>
@@ -193,14 +183,20 @@ function Cotacao() {
                   {...register("idFornecedor")}
                   id="combo-box-demo"
                   options={opcoes}
-                  value={opcoes.find((option) => option.id === watch("idFornecedor")) || null}
+                  value={
+                    opcoes.find(
+                      (option) => option.id === watch("idFornecedor")
+                    ) || null
+                  }
                   getOptionLabel={(option) =>
-                    option.nomeFantasia ?? option.nome ?? option.razaoSocial ?? ""
+                    option.nomeFantasia ??
+                    option.nome ??
+                    option.razaoSocial ??
+                    ""
                   }
                   sx={{ width: 225 }}
                   renderInput={(params) => <TextField {...params} />}
                   onChange={(_, value) => {
-                    setFornecedor(value ?? undefined);
                     setValue("idFornecedor", value?.id);
                   }}
                 />
@@ -240,7 +236,8 @@ function Cotacao() {
           margin={1}
           flexDirection={"column"}
           component={Paper}
-          variant="outlined">
+          variant="outlined"
+        >
           <Grid container direction="column" padding={2} spacing={3}>
             <Grid container item direction="row" spacing={4}>
               <Grid item>
@@ -256,11 +253,14 @@ function Cotacao() {
                   {...register("idInsumo")}
                   options={opcaoiInsumos}
                   getOptionLabel={(opcaoiInsumos) => opcaoiInsumos.titulo ?? ""}
-                  value={opcaoiInsumos.find((option) => option.id === watch("idInsumo")) || null}
+                  value={
+                    opcaoiInsumos.find(
+                      (option) => option.id === watch("idInsumo")
+                    ) || null
+                  }
                   sx={{ width: 225 }}
                   renderInput={(params) => <TextField {...params} />}
                   onChange={(_, value) => {
-                    setInsumo(value ?? undefined);
                     setValue("idInsumo", value?.id);
                   }}
                 />
@@ -282,6 +282,4 @@ function Cotacao() {
       </Box>
     </PaginaBase>
   );
-}
-
-export default Cotacao;
+};

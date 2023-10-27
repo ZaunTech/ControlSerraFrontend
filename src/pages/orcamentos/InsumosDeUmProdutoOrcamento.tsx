@@ -7,11 +7,6 @@ import {
   useLocation,
   useParams,
 } from "react-router-dom";
-import {
-  IInsumo,
-  InsumosService,
-  ProdutosBaseService,
-} from "../../data/services/api";
 import { useDebounce } from "../../data/hooks";
 import { useState } from "react";
 import {
@@ -31,16 +26,11 @@ import {
 } from "@mui/material";
 import { Environment } from "../../data/environment";
 import {
-  IProduto,
-  ProdutosService,
-} from "../../data/services/api/modules/produtos";
-import { OrcamentosService } from "../../data/services/api/modules/orcamentos";
-import {
   IListaInsumo,
   ListaInsumosService,
 } from "../../data/services/api/modules/listaInsumos";
 
-const InsumosDeUmProdutoOrcamento = () => {
+export const InsumosDeUmProdutoOrcamento = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { debounce } = useDebounce();
 
@@ -60,7 +50,7 @@ const InsumosDeUmProdutoOrcamento = () => {
   const pagina = useMemo(() => {
     return Number(searchParams.get("pagina") || "1");
   }, [searchParams]);
-  
+
   useEffect(() => {
     setIsLoading(true);
     debounce(() => {
@@ -211,5 +201,3 @@ const InsumosDeUmProdutoOrcamento = () => {
     </PaginaBase>
   );
 };
-
-export default InsumosDeUmProdutoOrcamento;

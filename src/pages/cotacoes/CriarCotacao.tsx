@@ -1,21 +1,12 @@
-import React, { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import { useState } from "react";
-import { useMemo } from "react";
 import { PaginaBase } from "../../ui/layouts";
-import {
-  FerramentasDaListagem,
-  FerramentasDeDetalhes,
-} from "../../ui/components";
+import { FerramentasDeDetalhes } from "../../ui/components";
 import {
   Autocomplete,
   Box,
-  FormControl,
   Grid,
-  InputLabel,
-  MenuItem,
   Paper,
-  Select,
-  SelectChangeEvent,
   TextField,
   Typography,
 } from "@mui/material";
@@ -30,15 +21,10 @@ import {
   IInsumo,
   InsumosService,
 } from "../../data/services/api";
-import {
-  CotacoesService,
-  ICotacao,
-} from "../../data/services/api/modules/cotacoes";
+import { CotacoesService } from "../../data/services/api/modules/cotacoes";
 import { useNavigate } from "react-router-dom";
-function CriarCotacao() {
+export const CriarCotacao = () => {
   const [opcoes, setOpcoes] = useState<IFornecedor[]>([]);
-  const [fornecedor, setFornecedor] = useState<IFornecedor>();
-  const [insumo, setInsumo] = useState<IInsumo>();
 
   const [opcaoiInsumos, setopcaoInsumo] = useState<IInsumo[]>([]);
 
@@ -135,14 +121,16 @@ function CriarCotacao() {
           mostrarBotaoVoltar
           onClickSalvar={handleSubmit(createCotacao)}
         />
-      }>
+      }
+    >
       <Box component={"form"} onSubmit={handleSubmit(createCotacao)}>
         <Box
           display={"flex"}
           margin={1}
           flexDirection={"column"}
           component={Paper}
-          variant="outlined">
+          variant="outlined"
+        >
           <Grid container direction="column" padding={2} spacing={3}>
             <Grid container item direction="row" spacing={4}>
               <Grid item>
@@ -158,12 +146,14 @@ function CriarCotacao() {
                   id="combo-box-demo"
                   options={opcoes}
                   getOptionLabel={(option) =>
-                    option.nomeFantasia ?? option.nome ?? option.razaoSocial ?? ""
+                    option.nomeFantasia ??
+                    option.nome ??
+                    option.razaoSocial ??
+                    ""
                   }
                   sx={{ width: 225 }}
                   renderInput={(params) => <TextField {...params} />}
                   onChange={(_, value) => {
-                    setFornecedor(value ?? undefined);
                     setValue("idFornecedor", value?.id);
                   }}
                 />
@@ -203,7 +193,8 @@ function CriarCotacao() {
           margin={1}
           flexDirection={"column"}
           component={Paper}
-          variant="outlined">
+          variant="outlined"
+        >
           <Grid container direction="column" padding={2} spacing={3}>
             <Grid container item direction="row" spacing={4}>
               <Grid item>
@@ -222,7 +213,6 @@ function CriarCotacao() {
                   sx={{ width: 225 }}
                   renderInput={(params) => <TextField {...params} />}
                   onChange={(_, value) => {
-                    setInsumo(value ?? undefined);
                     setValue("idInsumo", value?.id);
                   }}
                 />
@@ -244,6 +234,6 @@ function CriarCotacao() {
       </Box>
     </PaginaBase>
   );
-}
+};
 
 export default CriarCotacao;

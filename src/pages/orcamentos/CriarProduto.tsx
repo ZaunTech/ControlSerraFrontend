@@ -1,64 +1,40 @@
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { FerramentasDeDetalhes } from "../../ui/components";
 import { PaginaBase } from "../../ui/layouts";
-import {
-  Autocomplete,
-  Box,
-  Button,
-  Grid,
-  Paper,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Grid, Paper, TextField, Typography } from "@mui/material";
 import { z } from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useFieldArray, useForm } from "react-hook-form";
-import {
-  IInsumo,
-  InsumosService,
-  ProdutosBaseService,
-  TListInsumos,
-} from "../../data/services/api";
-import {
-  IInsumosProdutoBase,
-  InsumosProdutoBaseService,
-} from "../../data/services/api/modules/insumosProdutoBase";
+import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
-import { setTimeout } from "timers/promises";
-import { CreateProdutoDto, IProduto, ProdutosService } from "../../data/services/api/modules/produtos";
-import { IOrcamento, OrcamentosService } from "../../data/services/api/modules/orcamentos";
+import { ProdutosService } from "../../data/services/api/modules/produtos";
 
 const createUserFormSchema = z.object({
-  titulo: z.string().min(1,"Titulo não pode ser vazio"),
+  titulo: z.string().min(1, "Titulo não pode ser vazio"),
   observacoes: z.string(),
   orcamentoId: z.coerce.number(),
   quantidade: z.coerce.number().min(1),
 });
 
-function CriarProduto() {
+export const CriarProduto = () => {
   const {
     register,
     handleSubmit,
     setValue,
-    watch,
-    control,
-
     formState: { errors },
   } = useForm({
     resolver: zodResolver(createUserFormSchema),
   });
 
   const navigate = useNavigate();
-  const {id} = useParams();
-  useEffect(()=>{
-
-    setValue("orcamentoId",id);
-  },[]);
+  const { id } = useParams();
+  useEffect(() => {
+    setValue("orcamentoId", id);
+  }, []);
 
   function createUser(data: any) {
-        console.log(data);
+    console.log(data);
     ProdutosService.create(data)
       .then((result) => {
         if (!(result instanceof Error)) {
@@ -100,7 +76,8 @@ function CriarProduto() {
               </Grid>
               <Grid item>
                 <Typography>Quantidade</Typography>
-                <TextField type="number"
+                <TextField
+                  type="number"
                   placeholder="Quantidade"
                   {...register("quantidade")}
                 />
@@ -125,6 +102,4 @@ function CriarProduto() {
       </Box>
     </PaginaBase>
   );
-}
-
-export default CriarProduto;
+};

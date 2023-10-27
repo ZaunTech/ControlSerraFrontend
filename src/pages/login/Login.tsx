@@ -25,7 +25,7 @@ const createUserFormSchema = z.object({
   senha: z.string().min(1, "Preencha a senha"),
 });
 
-export function Login() {
+export const Login = () => {
   const {
     register,
     handleSubmit,
@@ -208,4 +208,4 @@ export function Login() {
       </Box>
     </Box>
   );
-}
+};

@@ -2,12 +2,7 @@ import { useMemo, useEffect } from "react";
 import { PaginaBase } from "../../ui/layouts";
 import { FerramentasDaListagem } from "../../ui/components";
 import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
-import {
-  ClientesService,
-  IInsumo,
-  InsumosService,
-} from "../../data/services/api";
-import { useDebounce } from "../../data/hooks";
+import { ClientesService } from "../../data/services/api";
 import { useState } from "react";
 import {
   Paper,
@@ -30,9 +25,8 @@ import {
   OrcamentosService,
 } from "../../data/services/api/modules/orcamentos";
 
-const Orcamentos = () => {
+export const Orcamentos = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { debounce } = useDebounce();
 
   const [rows, setRows] = useState<IOrcamento[]>([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -205,5 +199,3 @@ const Orcamentos = () => {
     </PaginaBase>
   );
 };
-
-export default Orcamentos;

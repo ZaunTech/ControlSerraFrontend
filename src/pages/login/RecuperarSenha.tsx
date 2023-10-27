@@ -2,17 +2,7 @@ import { useState } from "react";
 
 import Typography from "@mui/material/Typography";
 
-import {
-  Icon,
-  Box,
-  Link,
-  IconButton,
-  Button,
-  TextField,
-  OutlinedInput,
-  Checkbox,
-  FormControlLabel,
-} from "@mui/material";
+import { Icon, Box, Button, OutlinedInput } from "@mui/material";
 
 import { z } from "zod";
 
@@ -31,7 +21,7 @@ const createUserFormSchema = z
     message: "Os emails precisam ser iguais",
   });
 
-export function RecuperarSenha() {
+export const RecuperarSenha = () => {
   function createUser(data: any) {
     console.log(data);
   }
@@ -43,7 +33,7 @@ export function RecuperarSenha() {
   } = useForm({
     resolver: zodResolver(createUserFormSchema),
   });
-  const [output, setOutput] = useState("");
+
   return (
     <Box id="Main" flexDirection={"row"} display={"flex"}>
       <Box
@@ -145,4 +135,4 @@ export function RecuperarSenha() {
       </Box>
     </Box>
   );
-}
+};

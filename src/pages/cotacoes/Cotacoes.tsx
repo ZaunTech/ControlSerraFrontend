@@ -45,9 +45,6 @@ interface IPesquisa {
 const Pesquisas: React.FC<IPesquisa> = ({ setFiltro, setFiltroId }) => {
   const [opcoesFornecedor, setOpcoesFornecedor] = useState<IFornecedor[]>([]);
   const [opcoesInsumos, setOpcoesInsumos] = useState<IInsumo[]>([]);
-  const [fornecedorSelecionado, setFornecedorSelecionado] =
-    useState<IFornecedor>();
-  const [insumoSelecionado, setInsumoSelecionado] = useState<IInsumo>();
 
   useEffect(() => {
     FornecedoresService.getAll()
@@ -140,7 +137,6 @@ const Pesquisas: React.FC<IPesquisa> = ({ setFiltro, setFiltroId }) => {
           renderInput={(params) => <TextField {...params} />}
           onChange={(_, value) => {
             if (value !== null) {
-              setFornecedorSelecionado(value);
               setIdFiltro(value.id);
             }
           }}
@@ -159,7 +155,6 @@ const Pesquisas: React.FC<IPesquisa> = ({ setFiltro, setFiltroId }) => {
           renderInput={(params) => <TextField {...params} />}
           onChange={(_, value) => {
             if (value !== null) {
-              setInsumoSelecionado(value);
               setIdFiltro(value.id);
             }
           }}
@@ -171,9 +166,8 @@ const Pesquisas: React.FC<IPesquisa> = ({ setFiltro, setFiltroId }) => {
   );
 };
 
-const Cotacoes = () => {
+export const Cotacoes = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { debounce } = useDebounce();
 
   const [rows, setRows] = useState<ICotacao[]>([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -380,5 +374,3 @@ const Cotacoes = () => {
     </PaginaBase>
   );
 };
-
-export default Cotacoes;

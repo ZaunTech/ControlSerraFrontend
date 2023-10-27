@@ -1,3 +1,3 @@
-export * from "./Fornecedores";
-export * from "./Fornecedor";
 export * from "./CriarFornecedor";
+export * from "./Fornecedor";
+export * from "./Fornecedores";

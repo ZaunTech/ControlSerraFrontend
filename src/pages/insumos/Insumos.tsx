@@ -22,7 +22,7 @@ import {
 } from "@mui/material";
 import { Environment } from "../../data/environment";
 
-const Insumos = () => {
+export const Insumos = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { debounce } = useDebounce();
 
@@ -171,5 +171,3 @@ const Insumos = () => {
     </PaginaBase>
   );
 }
-
-export default Insumos;
