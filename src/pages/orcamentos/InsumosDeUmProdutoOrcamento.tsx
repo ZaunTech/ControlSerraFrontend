@@ -60,7 +60,7 @@ const InsumosDeUmProdutoOrcamento = () => {
   const pagina = useMemo(() => {
     return Number(searchParams.get("pagina") || "1");
   }, [searchParams]);
-
+  
   useEffect(() => {
     setIsLoading(true);
     debounce(() => {
@@ -79,7 +79,7 @@ const InsumosDeUmProdutoOrcamento = () => {
 
   const handleDelete = (id: number) => {
     if (confirm("Você realmente quer apagar?")) {
-      ProdutosService.deleteById(id).then((result) => {
+      ListaInsumosService.deleteById(id).then((result) => {
         if (result instanceof Error) {
           alert(result.message);
           return;

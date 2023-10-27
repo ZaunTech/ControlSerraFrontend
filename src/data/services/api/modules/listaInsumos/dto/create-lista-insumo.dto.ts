@@ -8,7 +8,7 @@ export interface CreateListaInsumosDto {
     idProduto: number;
     idInsumo: number;
     idCotacao?: number;
-    dimensoes: string;
+    dimensoes?: string;
     produto: IProduto;
     insumo: IInsumo;
     cotacao?: ICotacao;

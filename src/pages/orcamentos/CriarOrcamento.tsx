@@ -25,6 +25,7 @@ import {
 } from "../../data/services/api/modules/produtos";
 import { ClientesService, ICliente, IProdutoBase, ProdutosBaseService } from "../../data/services/api";
 import { OrcamentosService } from "../../data/services/api/modules/orcamentos";
+import { useNavigate } from "react-router-dom";
 
 const createUserFormSchema = z.object({
   idCliente: z.coerce.number(),
@@ -84,10 +85,12 @@ useEffect(() => {
     setTipo(event.target.value as string);
    
   };
+
+  const navigate = useNavigate();
   function createOrcamento (data : any)
   {
      OrcamentosService.create(data).then(()=>{
-      console.log("Sucesso");
+      navigate(-1);
      }).catch(()=>{
 
      })

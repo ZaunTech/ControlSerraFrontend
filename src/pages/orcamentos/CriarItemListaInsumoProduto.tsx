@@ -26,12 +26,14 @@ import {
   InsumosProdutoBaseService,
 } from "../../data/services/api/modules/insumosProdutoBase";
 import { useNavigate, useParams } from "react-router-dom";
+import { ListaInsumosService } from "../../data/services/api/modules/listaInsumos";
 
 const createUserFormSchema = z.object({
-  idProdutoBase: z.coerce.number(),
+  idProduto: z.coerce.number(),
   quantidade: z.coerce.number(),
   idInsumo: z.coerce.number(),
   dimensoes: z.string()
+
 });
 
 function CriarItemInsumoProdutoBase() {
@@ -79,14 +81,14 @@ function CriarItemInsumoProdutoBase() {
   const {id} = useParams();
 
   useEffect(()=>{
-    setValue("idProdutoBase", Number(id));
+    setValue("idProduto", Number(id));
   })
 
   
   function createUser(data: any) {
     console.log(data);
     
-    InsumosProdutoBaseService.create(data)
+    ListaInsumosService.create(data)
       .then((result) => {
         if (!(result instanceof Error)) {
           navigate(-1);
@@ -100,7 +102,7 @@ function CriarItemInsumoProdutoBase() {
 
   return (
     <PaginaBase
-      titulo="Adicionar Insumos"
+      titulo="Adicionar Insumos Produto"
       barraDeFerramentas={
         <FerramentasDeDetalhes
           mostrarBotaoApagar={false}
@@ -144,11 +146,12 @@ function CriarItemInsumoProdutoBase() {
               </Grid>
               <Grid item>
                 <Typography>Dimensões</Typography>
-                <TextField placeholder="Dimensões" {...register("dimensoes")} />
+                <TextField  placeholder="dimensoes" {...register("dimensoes")} />
                 {errors.dimensoes && (
                   <span>{errors.dimensoes.message?.toString()}</span>
                 )}
               </Grid>
+             
               
             </Grid>
           </Grid>

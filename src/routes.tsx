@@ -33,6 +33,8 @@ import { Cotacoes, Cotacao, CriarCotacao } from "./pages/cotacoes";
 import AddProdutoBase from "./pages/orcamentos/AddProdutoBase.tsx";
 import CriarProduto from "./pages/orcamentos/CriarProduto.tsx";
 import InsumosDeUmProdutoOrcamento from "./pages/orcamentos/InsumosDeUmProdutoOrcamento.tsx";
+import CriarItemListaInsumoProduto from "./pages/orcamentos/CriarItemListaInsumoProduto.tsx";
+import ItemListaInsumoProduto from "./pages/orcamentos/ItemListaInsumoProduto.tsx";
 
 const router = createBrowserRouter([
   {
@@ -115,6 +117,14 @@ const router = createBrowserRouter([
               {
                 path: "produtos/:id",
                 element: <InsumosDeUmProdutoOrcamento />,
+              },
+              {
+                path: "produtos/:id/Novo",
+                element: <CriarItemListaInsumoProduto />,
+              },
+              {
+                path: "produtos/:id/:id",
+                element: <ItemListaInsumoProduto />,
               },
             ],
           },

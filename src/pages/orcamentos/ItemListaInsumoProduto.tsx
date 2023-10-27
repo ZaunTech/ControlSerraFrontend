@@ -26,6 +26,7 @@ import {
   InsumosProdutoBaseService,
 } from "../../data/services/api/modules/insumosProdutoBase";
 import { useNavigate, useParams } from "react-router-dom";
+import { IListaInsumo, ListaInsumosService } from "../../data/services/api/modules/listaInsumos";
 
 const createUserFormSchema = z.object({
   quantidade: z.coerce.number(),
@@ -81,7 +82,7 @@ function ItemListaInsumoProdutoBase() {
 
     const fetchData = async () => {
       try {
-        const data: IInsumosProdutoBase | Error = await InsumosProdutoBaseService.getById(Number(id));
+        const data: IListaInsumo | Error = await ListaInsumosService.getById(Number(id));
         if(data instanceof Error){
           return;
         }
@@ -105,8 +106,9 @@ function ItemListaInsumoProdutoBase() {
 
   function createUser(data: any) {
     console.log(data);
-    InsumosProdutoBaseService.updateById(Number(id),data)
+    ListaInsumosService.updateById(Number(id), data)
       .then((result) => {
+        console.log(result);
         if (!(result instanceof Error)) {
           navigate(-1);
         }
@@ -145,6 +147,7 @@ function ItemListaInsumoProdutoBase() {
                   options={opcaoiInsumos}
                   getOptionLabel={(opcaoiInsumos) => opcaoiInsumos.titulo ?? ""}
                   sx={{ width: 225 }}
+                  
                   renderInput={(params) => <TextField {...params} />}
                   onChange={(_, value) => {
                    
