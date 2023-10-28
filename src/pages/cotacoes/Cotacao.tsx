@@ -36,7 +36,7 @@ export const Cotacao = () => {
     idFornecedor: z.number(),
     idInsumo: z.number(),
     valor: z.coerce.number(),
-    dimensoes: z.string(),
+    unidade: z.string(),
     data: z.coerce.date(),
   });
 
@@ -100,7 +100,7 @@ export const Cotacao = () => {
           setValue("idInsumo", data.idInsumo);
           setValue("idFornecedor", data.idFornecedor);
           setValue("data", formattedDate);
-          setValue("dimensoes", data.dimensoes);
+          setValue("unidade", data.unidade);
           setValue("valor", data.valor);
         } else {
         }
@@ -240,10 +240,10 @@ export const Cotacao = () => {
               </Grid>
 
               <Grid item>
-                <Typography>Dimensões</Typography>
-                <TextField placeholder="Dimensões" {...register("dimensoes")} />
-                {errors.dimensoes && (
-                  <span>{errors.dimensoes.message?.toString()}</span>
+                <Typography>Unidade de Medida</Typography>
+                <TextField placeholder="Unidade de Medida" {...register("unidade")} />
+                {errors.unidade && (
+                  <span>{errors.unidade.message?.toString()}</span>
                 )}
               </Grid>
             </Grid>

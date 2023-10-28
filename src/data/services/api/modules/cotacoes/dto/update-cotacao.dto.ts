@@ -2,6 +2,6 @@ export interface UpdateCotacaoDto {
     data?: Date;
     valor?: number;
     idFornecedor?: number;
-    dimensoes?:string;
+    unidade?:string;
     idInsumo?: number;
 }

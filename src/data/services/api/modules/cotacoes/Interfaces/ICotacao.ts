@@ -4,7 +4,7 @@ export interface ICotacao {
   id: number;
   data: Date;
   valor: number;
-  dimensoes: string;
+  unidade: string;
   idFornecedor: number;
   fornecedor: IFornecedor;
   idInsumo: number;

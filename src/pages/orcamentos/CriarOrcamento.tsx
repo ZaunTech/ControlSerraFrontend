@@ -23,8 +23,6 @@ import { useNavigate } from "react-router-dom";
 const createUserFormSchema = z.object({
   idCliente: z.coerce.number(),
   observacoes: z.string(),
-  dataOrcamento: z.coerce.date(),
-  validade: z.coerce.date(),
   status: z.string(),
   prazoEstimadoProducao: z.coerce.number(),
 });
@@ -122,16 +120,15 @@ export const CriarOrcamento = () => {
                 )}
               </Grid>
               <Grid item>
-                <InputLabel id="tipo">Status</InputLabel>
+                <InputLabel id="status">Status</InputLabel>
                 <Select
-                  labelId="tipo"
-                  id="tipo"
+                  labelId="status"
+                  id="status"
                   value={tipo}
                   {...register("status")}
                   onChange={handleChange}
                 >
-                  <MenuItem value={"Pendente"}>Pendente</MenuItem>
-                  <MenuItem value={"Iniciado"}>Iniciado</MenuItem>
+                  <MenuItem value={"Pendente"}>Pendente</MenuItem>             
                   <MenuItem value={"Em Processo"}>Em Processo</MenuItem>
                   <MenuItem value={"Concluido"}>Concluido</MenuItem>
                 </Select>
@@ -140,34 +137,7 @@ export const CriarOrcamento = () => {
                   <span>{errors.contaTipo.message?.toString()}</span>
                 )}
               </Grid>
-              <Grid item>
-                <Typography>Data Orçamento</Typography>
-                <TextField
-                  type="date"
-                  placeholder="data"
-                  {...register("dataOrcamento")}
-                  onChange={(e) => {
-                    setValue("dataOrcamento", e.target.value);
-                  }}
-                />
-                {errors.dataOrcamento && (
-                  <span>{errors.dataOrcamento.message?.toString()}</span>
-                )}
-              </Grid>
-              <Grid item>
-                <Typography>Data de Validade</Typography>
-                <TextField
-                  type="date"
-                  placeholder="data"
-                  {...register("validade")}
-                  onChange={(e) => {
-                    setValue("validade", e.target.value);
-                  }}
-                />
-                {errors.validade && (
-                  <span>{errors.validade.message?.toString()}</span>
-                )}
-              </Grid>
+              
               <Grid item>
                 <Typography>Observações</Typography>
                 <TextField
@@ -180,7 +150,7 @@ export const CriarOrcamento = () => {
                 )}
               </Grid>
               <Grid item>
-                <Typography>Prazo Estimado em Dias</Typography>
+                <Typography>Prazo Estimado de produção (Dias) </Typography>
                 <TextField
                   type="number"
                   placeholder="Prazo Estimado em Dias"
