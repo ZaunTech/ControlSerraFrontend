@@ -109,12 +109,13 @@ const router = createBrowserRouter([
                 index: true,
                 element: <EditarOrcamento />,
               },
+              { path: "AddProdutoBase", element: <AddProdutoBase /> },
+              { path: "CriarProduto", element: <CriarProduto /> },
               {
                 path: "produtos",
                 element: <ProdutosOrcamento />,
               },
-              { path: "AddProdutoBase", element: <AddProdutoBase /> },
-              { path: "CriarProduto", element: <CriarProduto /> },
+           
               {
                 path: "produtos/:id",
                 element: <InsumosDeUmProdutoOrcamento />,

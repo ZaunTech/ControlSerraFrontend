@@ -1,15 +1,6 @@
-import React, { useCallback, useEffect } from "react";
-import { useState } from "react";
-import { useMemo } from "react";
-import { PaginaBase } from "../../ui/layouts";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  FerramentasDaListagem,
-  FerramentasDeDetalhes,
-} from "../../ui/components";
-import {
-  Autocomplete,
   Box,
-  FormControl,
   Grid,
   InputLabel,
   MenuItem,
@@ -19,37 +10,60 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { z } from "zod";
-
-import { zodResolver } from "@hookform/resolvers/zod";
-
+import React, { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate, useParams } from "react-router-dom";
+import { z } from "zod";
 import getCepData from "../../data/services/api/axios-config/actions/cep";
-import { ClientesService, ICliente } from "../../data/services/api";
+import { ClientesService, FornecedoresService, IFornecedor } from "../../data/services/api";
+import { FerramentasDeDetalhes } from "../../ui/components";
+import { PaginaBase } from "../../ui/layouts";
+import { useNavigate, useParams } from "react-router-dom";
 
-const createUserFormSchema = z.object({
-  razaoSocial: z.string(),
-  nomeFantasia: z.string(),
-  nome: z.string(),
-  rg: z.string(),
-  cpf: z.string(),
-  cnpj: z.string(),
-  contaTipo: z.string(),
-  email: z.string().min(1, "Faltou o nome").email("isso não é email"),
-  telefone: z.string(),
-  cep: z.string().min(8),
-  pais: z.string(),
-  estado: z.string(),
-  cidade: z.string(),
-  bairro: z.string(),
-  rua: z.string(),
-  numero: z.string(),
-  complemento: z.string(),
-});
+const createUserFormSchema = z
+  .object({
+    razaoSocial: z.string().optional(),
+    nomeFantasia: z.string().optional(),
+    cnpj: z.string().optional(),
+    rg: z.string().optional(),
+    cpf: z.string().optional(),
+    nome: z.string().optional(),
+    contaTipo: z.string(),
+    email: z.string().min(1, "Faltou o nome").email("isso não é email"),
+    telefone: z.string(),
+    cep: z.string().min(8),
+    pais: z.string(),
+    estado: z.string(),
+    cidade: z.string(),
+    bairro: z.string(),
+    rua: z.string(),
+    numero: z.string(),
+    complemento: z.string(),
+  })
+  .refine(
+    (data) => {
+      if (data.contaTipo === "Juridica") {
+        return data.cnpj !== "" && data.nomeFantasia !== "";
+      }
+      return true;
+    },
+    {
+      message: "Campos obrigatórios para tipo de conta jurídica",
+    }
+  )
+  .refine(
+    (data) => {
+      if (data.contaTipo === "Fisica") {
+        return data.nome !== "" && data.rg !== "" && data.cpf !== "";
+      }
+      return true;
+    },
+    {
+      message: "Campos obrigatórios para tipo de conta Fisica",
+    }
+  );
 
 const createCepFormSchema = z.object({
-  cep: z.string().min(8),
+  cep: z.coerce.number().min(8),
   pais: z.string(),
   estado: z.string(),
   cidade: z.string(),
@@ -58,7 +72,6 @@ const createCepFormSchema = z.object({
   numero: z.string(),
   complemento: z.string(),
 });
-type createCepFormData = z.infer<typeof createCepFormSchema>;
 
 export const Cliente = () => {
   const {
@@ -70,20 +83,16 @@ export const Cliente = () => {
   } = useForm({
     resolver: zodResolver(createUserFormSchema),
   });
-  const [output, setOutput] = useState("");
-  enum contaTipo {
-    Fisico,
-    Juridico,
-  }
 
+  const [tipo, setTipo] = React.useState("Juridica");
   const handleChange = (event: SelectChangeEvent) => {
     setTipo(event.target.value as string);
-    setValue("nome", "");
-    setValue("nomeFantasia", "");
-    setValue("rg", "");
-    setValue("cpf", "");
-    setValue("cnpj", "");
-    setValue("razaoSocial", "");
+    setValue("nome", undefined);
+    setValue("nomeFantasia", undefined);
+    setValue("rg", undefined);
+    setValue("cpf", undefined);
+    setValue("cnpj", undefined);
+    setValue("razaoSocial", undefined);
   };
 
   const handleSetFormData = useCallback(
@@ -91,8 +100,7 @@ export const Cliente = () => {
       setValue("pais", "Brasil");
       setValue("estado", viacepResponse.uf);
       setValue("cidade", viacepResponse.localidade);
-      setValue(
-        "endereco",
+      setValue( "endereco",
         viacepResponse.logradouro +
           " - " +
           viacepResponse.bairro +
@@ -105,13 +113,36 @@ export const Cliente = () => {
     [setValue]
   );
 
+  const handleGetCepData = useCallback(
+    async (cep: string) => {
+      const data = await getCepData(cep);
+      handleSetFormData(data);
+    },
+    [handleSetFormData]
+  );
+
+  const cep = watch("cep");
+  const navigate = useNavigate();
   const { id } = useParams();
-  const [tipo, setTipo] = React.useState("Juridica");
+  useEffect(() => {
+    const isCepValid = createCepFormSchema.shape.cep.safeParse(cep).success;
+    if (isCepValid) {
+      handleGetCepData(cep);
+    }
+  }, [handleGetCepData, cep]);
+
+  function createUser(data: any) {
+    ClientesService.updateById(Number(id), data)
+      .then(() => {
+        navigate(-1);
+      })
+      .catch((erro) => {});
+  }
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data: ICliente | Error = await ClientesService.getById(
+        const data: IFornecedor | Error = await FornecedoresService.getById(
           Number(id)
         );
         if (data instanceof Error) {
@@ -129,7 +160,7 @@ export const Cliente = () => {
         setValue("rg", data.rg == null ? undefined : data.rg);
         setValue("cpf", data.cpf == null ? undefined : data.cpf);
         setValue("nome", data.nome == null ? undefined : data.nome);
-        setTipo(data.contaTipo.toString());
+        setTipo(data.contaTipo);
         setValue("email", data.email);
         setValue("telefone", data.telefone);
         setValue("cep", data.cep);
@@ -145,31 +176,6 @@ export const Cliente = () => {
 
     fetchData();
   }, []);
-
-  const handleGetCepData = useCallback(
-    async (cep: string) => {
-      const data = await getCepData(cep);
-      handleSetFormData(data);
-    },
-    [handleSetFormData]
-  );
-
-  const cep = watch("cep");
-  const navigate = useNavigate();
-  useEffect(() => {
-    const isCepValid = createCepFormSchema.shape.cep.safeParse(cep).success;
-    if (isCepValid) {
-      handleGetCepData(cep);
-    }
-  }, [handleGetCepData, cep]);
-
-  function createUser(data: any) {
-    ClientesService.updateById(Number(id), data)
-      .then(() => {
-        navigate(-1);
-      })
-      .catch((erro) => {});
-  }
 
   return (
     <PaginaBase
@@ -203,7 +209,7 @@ export const Cliente = () => {
                 <Select
                   labelId="contaTipo"
                   id="contaTipo"
-                  value={tipo.toString()}
+                  value={tipo}
                   {...register("contaTipo")}
                   onChange={handleChange}
                 >
@@ -223,6 +229,9 @@ export const Cliente = () => {
                       placeholder="Razão Social"
                       {...register("razaoSocial")}
                     />
+                    {errors.razaoSocial && (
+                      <span>{errors.razaoSocial.message?.toString()}</span>
+                    )}
                   </Grid>
                   <Grid item>
                     <Typography>Nome Fantasia</Typography>
@@ -230,10 +239,16 @@ export const Cliente = () => {
                       placeholder="Nome Fantasia"
                       {...register("nomeFantasia")}
                     />
+                    {errors.nomeFantasia && (
+                      <span>{errors.nomeFantasia.message?.toString()}</span>
+                    )}
                   </Grid>
                   <Grid item>
                     <Typography>CNPJ</Typography>
                     <TextField placeholder="CNPJ" {...register("cnpj")} />
+                    {errors.cnpj && (
+                      <span>{errors.cnpj.message?.toString()}</span>
+                    )}
                   </Grid>
                 </>
               )}
@@ -245,14 +260,21 @@ export const Cliente = () => {
                       placeholder="Nome Completo"
                       {...register("nome")}
                     />
+                    {errors.nome && (
+                      <span>{errors.nome.message?.toString()}</span>
+                    )}
                   </Grid>
                   <Grid item>
                     <Typography>RG</Typography>
                     <TextField placeholder="RG" {...register("rg")} />
                   </Grid>
+                  {errors.rg && <span>{errors.rg.message?.toString()}</span>}
                   <Grid item>
                     <Typography>CPF</Typography>
                     <TextField placeholder="CPF" {...register("cpf")} />
+                    {errors.cpf && (
+                      <span>{errors.cpf.message?.toString()}</span>
+                    )}
                   </Grid>
                 </>
               )}
@@ -273,10 +295,9 @@ export const Cliente = () => {
               </Grid>
             </Grid>
             <Grid container item direction="row" spacing={4}>
-              <Grid item xs={4}>
+              <Grid item>
                 <Typography>Email</Typography>
                 <TextField
-                  fullWidth
                   placeholder="Email"
                   type="email"
                   {...register("email")}
@@ -285,10 +306,6 @@ export const Cliente = () => {
               <Grid item>
                 <Typography>Telefone</Typography>
                 <TextField placeholder="Telefone" {...register("telefone")} />
-              </Grid>
-              <Grid item>
-                <Typography>Celular</Typography>
-                <TextField placeholder="Celular" {...register("celular")} />
               </Grid>
             </Grid>
           </Grid>
@@ -312,7 +329,14 @@ export const Cliente = () => {
                 <TextField placeholder="CEP" {...register("cep")} />
                 {errors.cep && <span>{errors.cep.message?.toString()}</span>}
               </Grid>
-
+              <Grid item xs={5}>
+                <Typography>Endereço</Typography>
+                <TextField
+                  placeholder="Endereço"
+                  fullWidth
+                  {...register("endereco")}
+                />
+              </Grid>
               <Grid item>
                 <Typography>Rua</Typography>
                 <TextField placeholder="Rua" {...register("rua")} />
@@ -369,4 +393,3 @@ export const Cliente = () => {
     </PaginaBase>
   );
 };
-export default Cliente;

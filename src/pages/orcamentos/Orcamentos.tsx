@@ -132,8 +132,9 @@ export const Orcamentos = () => {
                 <Actions
                   id={row.id}
                   showListButton
+                  handleDelete={handleDelete}
                   handleShowList={() => {
-                    navigate(`${location.pathname}/produtos`);
+                    navigate(`${location.pathname}/${row.id}/produtos`);
                   }}
                 />
                 <TableCell>

@@ -69,6 +69,7 @@ export const EditarOrcamento = () => {
     register,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(createUserFormSchema),
@@ -83,6 +84,7 @@ export const EditarOrcamento = () => {
   function createOrcamento(data: any) {
     OrcamentosService.updateById(Number(id),data)
       .then(() => {
+        console.log(data)
         navigate(-1);
       })
       .catch(() => {});
@@ -90,7 +92,7 @@ export const EditarOrcamento = () => {
 
   return (
     <PaginaBase
-      titulo="Editar Orcamento"
+      titulo="Editar Orcamento111"
       barraDeFerramentas={
         <FerramentasDeDetalhes
           mostrarBotaoApagar={false}
@@ -122,7 +124,10 @@ export const EditarOrcamento = () => {
                   {...register("idCliente")}
                   id="combo-box-demo"
                   options={opcoes}
-
+                  value={opcoes.find(
+                    (option) => option.id === watch("idCliente")
+                  ) || null
+                }
                   getOptionLabel={(option) =>
                     option.nomeFantasia ??
                     option.nome ??
@@ -150,7 +155,7 @@ export const EditarOrcamento = () => {
                   onChange={handleChange}
                 >
                   <MenuItem value={"Pendente"}>Pendente</MenuItem>             
-                  <MenuItem value={"Em Processo"}>Em Processo</MenuItem>
+                  <MenuItem value={"Em_Processo"}>Em Processo</MenuItem>
                   <MenuItem value={"Concluido"}>Concluido</MenuItem>
                 </Select>
 

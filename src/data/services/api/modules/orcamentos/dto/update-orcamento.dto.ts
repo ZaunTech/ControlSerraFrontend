@@ -7,7 +7,7 @@ export interface UpdateOrcamentoDto {
     totalMaoObra?: number;
     totalMateriais?: number;
     valorPago?: number;
-    status: status;
+    status?: status;
     prazoEstimadoProducao: number;
     observacoes?: string;
     idCliente: number;
