@@ -113,20 +113,32 @@ const router = createBrowserRouter([
               { path: "CriarProduto", element: <CriarProduto /> },
               {
                 path: "produtos",
-                element: <ProdutosOrcamento />,
-              },
-           
-              {
-                path: "produtos/:id",
-                element: <InsumosDeUmProdutoOrcamento />,
-              },
-              {
-                path: "produtos/:id/Novo",
-                element: <AdicionarInsumo />,
-              },
-              {
-                path: "produtos/:id/:id",
-                element: <ItemListaInsumoProdutoBase />,
+                children: [
+                  {
+                    index: true,
+                    element: <ProdutosOrcamento />,
+                  },
+                  {
+                    path: "CriarProduto",
+                    element: <CriarProduto />,
+                  },
+                  {
+                    path: "AddProdutoBase",
+                    element: <AddProdutoBase />,
+                  },
+                  {
+                    path: ":id",
+                    element: <InsumosDeUmProdutoOrcamento />,
+                  },
+                  {
+                    path: ":id/Novo",
+                    element: <AdicionarInsumo />,
+                  },
+                  {
+                    path: ":id/:id",
+                    element: <ItemListaInsumoProdutoBase />,
+                  },
+                ],
               },
             ],
           },
