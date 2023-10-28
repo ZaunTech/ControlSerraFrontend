@@ -4,5 +4,6 @@ export * from "./CriarOrcamento";
 export * from "./CriarProduto";
 export * from "./InsumosDeUmProdutoOrcamento";
 export * from "./ItemListaInsumoProduto";
-export * from "./Orcamento";
+export * from "./ProdutosOrcamento";
 export * from "./Orcamentos";
+export * from "./EditarOrcamento";

@@ -3,12 +3,13 @@ import App from "./App";
 import { Cliente, Clientes, CriarCliente } from "./pages/clientes/index.tsx";
 import { Insumo, Insumos, CriarInsumo } from "./pages/insumos/index.tsx";
 import {
-  Orcamento,
+  ProdutosOrcamento,
   Orcamentos,
   CriarOrcamento,
   AddProdutoBase,
   CriarProduto,
   InsumosDeUmProdutoOrcamento,
+  EditarOrcamento,
 } from "./pages/orcamentos";
 import { Pedido, Pedidos, CriarPedido } from "./pages/pedidos";
 import { Categoria, Categorias, CriarCategoria } from "./pages/categorias";
@@ -106,7 +107,11 @@ const router = createBrowserRouter([
             children: [
               {
                 index: true,
-                element: <Orcamento />,
+                element: <EditarOrcamento />,
+              },
+              {
+                path: "produtos",
+                element: <ProdutosOrcamento />,
               },
               { path: "AddProdutoBase", element: <AddProdutoBase /> },
               { path: "CriarProduto", element: <CriarProduto /> },
@@ -239,7 +244,6 @@ const router = createBrowserRouter([
             path: ":id",
             element: <Usuario />,
           },
-          
         ],
       },
     ],

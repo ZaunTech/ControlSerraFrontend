@@ -52,7 +52,7 @@ const BotoesOrcamento: React.FC = () => {
   );
 };
 
-export const Orcamento = () => {
+export const ProdutosOrcamento = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { debounce } = useDebounce();
 
