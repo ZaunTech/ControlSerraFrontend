@@ -144,9 +144,13 @@ export const Pedidos = () => {
           <TableHead>
             <TableRow>
               <TableCell style={{ fontWeight: "bold" }}>Ações</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Id</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Codigo</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Cliente</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Status</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Valor Pago</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>
+                Porcentagem Pago
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -182,6 +186,17 @@ export const Pedidos = () => {
                 </TableCell>
                 <TableCell>
                   <Typography>{row.status}</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography>{row.pagamento}</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography>
+                    {(row.pagamento /
+                      (row.orcamento?.totalMaoObra +
+                        row.orcamento?.totalMateriais)) *
+                      100}
+                  </Typography>
                 </TableCell>
               </TableRow>
             ))}

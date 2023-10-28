@@ -120,7 +120,7 @@ export const Orcamentos = () => {
           <TableHead>
             <TableRow>
               <TableCell style={{ fontWeight: "bold" }}>Ações</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Id</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Codigo</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Cliente</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Status</TableCell>
             </TableRow>

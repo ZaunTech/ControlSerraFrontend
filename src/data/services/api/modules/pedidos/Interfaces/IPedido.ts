@@ -4,6 +4,7 @@ export interface IPedido {
   id: number;
   tipo: string;
   titulo: string;
+  pagamento: number;
   descricao?: string;
   idOrcamento: number;
   orcamento: IOrcamento;
