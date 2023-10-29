@@ -5,12 +5,15 @@ import {
   Icon,
   Button,
   Divider,
-  Skeleton,
   Typography,
 } from "@mui/material";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+type TTipo = "novo" | "editar" | "detalhes";
+
 interface IFerramentasDeDetalhes {
+  tipo: TTipo;
   textoBotaoNovo?: string;
 
   mostrarBotaoSalvar?: boolean;
@@ -18,12 +21,16 @@ interface IFerramentasDeDetalhes {
   mostrarBotaoApagar?: boolean;
   mostrarBotaoNovo?: boolean;
   mostrarBotaoVoltar?: boolean;
+  mostrarBotaoEditar?: boolean;
+  mostrarBotaoCancelar?: boolean;
 
   onClickSalvar?: () => {};
   onClickSalvarEFechar?: () => {};
   onClickApagar?: () => {};
   onClickNovo?: () => {};
   onClickVoltar?: () => {};
+  onClickEditar?: () => {};
+  onClickCancelar?: () => {};
 
   skeletonSalvar?: boolean;
   skeletonSalvarEFechar?: boolean;
@@ -32,33 +39,109 @@ interface IFerramentasDeDetalhes {
   skeletonVoltar?: boolean;
 }
 
-export const FerramentasDeDetalhes: React.FC<IFerramentasDeDetalhes> = ({
-  textoBotaoNovo = "Novo",
-
-  mostrarBotaoSalvar = true,
-  mostrarBotaoSalvarEFechar = false,
-  mostrarBotaoApagar = true,
-  mostrarBotaoNovo = true,
-  mostrarBotaoVoltar = true,
-
-  onClickSalvar,
-  onClickSalvarEFechar,
-  onClickApagar,
-  onClickNovo,
-  onClickVoltar,
-
-  skeletonSalvar,
-  skeletonSalvarEFechar,
-  skeletonApagar,
-  skeletonNovo,
-  skeletonVoltar,
-}) => {
+export const FerramentasDeDetalhes: React.FC<IFerramentasDeDetalhes> = (
+  props
+) => {
   const theme = useTheme();
   const navigate = useNavigate();
 
   const voltar = () => {
     navigate(-1);
   };
+
+  const {
+    onClickApagar,
+    onClickCancelar,
+    onClickEditar,
+    onClickNovo,
+    onClickSalvar,
+    onClickSalvarEFechar,
+    onClickVoltar,
+    textoBotaoNovo,
+  } = props;
+
+  const [tipo, setTipo] = useState<TTipo>("detalhes");
+  const [mostrarBotaoSalvar, setMostrarBotaoSalvar] = useState<boolean>(false);
+  const [mostrarBotaoSalvarEFechar, setMostrarBotaoSalvarEFechar] =
+    useState<boolean>(false);
+  const [mostrarBotaoApagar, setMostrarBotaoApagar] = useState<boolean>(false);
+  const [mostrarBotaoNovo, setMostrarBotaoNovo] = useState<boolean>(false);
+  const [mostrarBotaoVoltar, setMostrarBotaoVoltar] = useState<boolean>(true);
+  const [mostrarBotaoEditar, setMostrarBotaoEditar] = useState<boolean>(true);
+  const [mostrarBotaoCancelar, setMostrarBotaoCancelar] =
+    useState<boolean>(false);
+
+  useEffect(() => {
+    setMostrarBotaoSalvar(
+      tipo === "novo"
+        ? true
+        : tipo === "editar"
+        ? true
+        : tipo === "detalhes"
+        ? false
+        : false
+    );
+    setMostrarBotaoSalvarEFechar(
+      tipo === "novo"
+        ? true
+        : tipo === "editar"
+        ? true
+        : tipo === "detalhes"
+        ? false
+        : false
+    );
+    setMostrarBotaoApagar(
+      tipo === "novo"
+        ? false
+        : tipo === "editar"
+        ? false
+        : tipo === "detalhes"
+        ? true
+        : false
+    );
+    setMostrarBotaoNovo(
+      tipo === "novo"
+        ? false
+        : tipo === "editar"
+        ? false
+        : tipo === "detalhes"
+        ? false
+        : false
+    );
+    setMostrarBotaoVoltar(
+      tipo === "novo"
+        ? true
+        : tipo === "editar"
+        ? true
+        : tipo === "detalhes"
+        ? true
+        : false
+    );
+    setMostrarBotaoEditar(
+      tipo === "novo"
+        ? false
+        : tipo === "editar"
+        ? false
+        : tipo === "detalhes"
+        ? true
+        : false
+    );
+    setMostrarBotaoCancelar(
+      tipo === "novo"
+        ? true
+        : tipo === "editar"
+        ? true
+        : tipo === "detalhes"
+        ? false
+        : false
+    );
+  }, [tipo]);
+
+  useEffect(() => {
+    console.log(props.tipo);
+    setTipo(props.tipo);
+  }, []);
+
   return (
     <Box
       component={Paper}
@@ -69,8 +152,7 @@ export const FerramentasDeDetalhes: React.FC<IFerramentasDeDetalhes> = ({
       gap={1}
       alignItems={"center"}
     >
-      {skeletonSalvar && <Skeleton width={110} height={60} />}
-      {mostrarBotaoSalvar && !skeletonSalvar && (
+      {mostrarBotaoSalvar && (
         <Button
           color="primary"
           variant="contained"
@@ -89,8 +171,7 @@ export const FerramentasDeDetalhes: React.FC<IFerramentasDeDetalhes> = ({
         </Button>
       )}
 
-      {skeletonSalvarEFechar && <Skeleton width={180} height={60} />}
-      {mostrarBotaoSalvarEFechar && !skeletonSalvarEFechar && (
+      {mostrarBotaoSalvarEFechar && (
         <Button
           color="primary"
           variant="outlined"
@@ -109,8 +190,7 @@ export const FerramentasDeDetalhes: React.FC<IFerramentasDeDetalhes> = ({
         </Button>
       )}
 
-      {skeletonApagar && <Skeleton width={110} height={60} />}
-      {mostrarBotaoApagar && !skeletonApagar && (
+      {mostrarBotaoApagar && (
         <Button
           color="primary"
           variant="outlined"
@@ -129,8 +209,7 @@ export const FerramentasDeDetalhes: React.FC<IFerramentasDeDetalhes> = ({
         </Button>
       )}
 
-      {skeletonNovo && <Skeleton width={110} height={60} />}
-      {mostrarBotaoNovo && skeletonNovo && (
+      {mostrarBotaoNovo && (
         <Button
           color="primary"
           variant="outlined"
@@ -148,9 +227,54 @@ export const FerramentasDeDetalhes: React.FC<IFerramentasDeDetalhes> = ({
           </Typography>
         </Button>
       )}
+      {mostrarBotaoEditar && (
+        <Button
+          color="primary"
+          variant="outlined"
+          disableElevation
+          startIcon={<Icon>edit</Icon>}
+          onClick={() => {
+            if (onClickEditar) {
+              onClickEditar();
+            }
+            setTipo("editar");
+          }}
+        >
+          <Typography
+            variant="button"
+            whiteSpace={"nowrap"}
+            textOverflow={"ellipsis"}
+            overflow={"hidden"}
+          >
+            Editar
+          </Typography>
+        </Button>
+      )}
+      {mostrarBotaoCancelar && (
+        <Button
+          color="primary"
+          variant="outlined"
+          disableElevation
+          startIcon={<Icon>block</Icon>}
+          onClick={() => {
+            if (onClickCancelar) {
+              onClickCancelar();
+            }
+            setTipo("detalhes");
+          }}
+        >
+          <Typography
+            variant="button"
+            whiteSpace={"nowrap"}
+            textOverflow={"ellipsis"}
+            overflow={"hidden"}
+          >
+            Cancelar
+          </Typography>
+        </Button>
+      )}
 
-      {skeletonVoltar && <Skeleton width={110} height={60} />}
-      {mostrarBotaoVoltar && !skeletonVoltar && (
+      {mostrarBotaoVoltar && (
         <>
           <Divider variant="middle" orientation="vertical" />
           <Button

@@ -40,14 +40,30 @@ const BotoesOrcamento: React.FC = () => {
       <Button
         variant="contained"
         onClick={() => navigate(`${location.pathname}/CriarProduto`)}
+        size="medium"
       >
-        Novo Produto
+        <Typography
+          whiteSpace={"nowrap"}
+          textOverflow={"ellipsis"}
+          overflow={"hidden"}
+          variant="inherit"
+        >
+          Novo Produto
+        </Typography>
       </Button>
       <Button
         variant="contained"
         onClick={() => navigate(`${location.pathname}/AddProdutoBase`)}
+        size="medium"
       >
-        Add Produto Base
+        <Typography
+          whiteSpace={"nowrap"}
+          textOverflow={"ellipsis"}
+          overflow={"hidden"}
+          variant="inherit"
+        >
+          Add Produto Base
+        </Typography>
       </Button>
     </>
   );
