@@ -9,6 +9,11 @@ interface IActions {
   handleEdit?: () => void;
   showListButton?: boolean;
   handleShowList?: (id: number) => void;
+  showSelectButton?: boolean;
+  handleSelectButton?: () => void;
+  showPersoButton?: boolean;
+  persoButtonIcon?: string;
+  handlePersoButton?: () => void;
 }
 
 export const Actions: React.FC<IActions> = ({
@@ -19,11 +24,25 @@ export const Actions: React.FC<IActions> = ({
   handleEdit,
   showListButton = false,
   handleShowList,
+  showSelectButton = false,
+  handleSelectButton,
+  showPersoButton = false,
+  persoButtonIcon,
+  handlePersoButton,
 }) => {
   const navigate = useNavigate();
 
   return (
     <TableCell>
+      {showPersoButton && (
+        <IconButton
+          onClick={() => {
+            if (handlePersoButton) handlePersoButton();
+          }}
+        >
+          <Icon>{persoButtonIcon}</Icon>
+        </IconButton>
+      )}
       {showListButton && (
         <IconButton
           onClick={() => {
@@ -51,6 +70,24 @@ export const Actions: React.FC<IActions> = ({
           }}
         >
           <Icon>delete</Icon>
+        </IconButton>
+      )}
+      {showSelectButton && (
+        <IconButton
+          onClick={() => {
+            if (handleSelectButton) handleSelectButton();
+          }}
+        >
+          <Icon>check_box</Icon>
+        </IconButton>
+      )}
+      {showSelectButton && (
+        <IconButton
+          onClick={() => {
+            if (handleSelectButton) handleSelectButton();
+          }}
+        >
+          <Icon>check_box</Icon>
         </IconButton>
       )}
     </TableCell>

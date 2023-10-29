@@ -35,6 +35,7 @@ import {
   InsumosService,
 } from "../../data/services/api";
 import { CotacoesService } from "../../data/services/api/modules/cotacoes";
+import { Actions } from "../../ui/components/ferramentasDeListagem/Actions";
 
 export const InsumosDeUmProdutoOrcamento = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -199,20 +200,11 @@ export const InsumosDeUmProdutoOrcamento = () => {
             {rows.map((row) => (
               <TableRow key={row.id}>
                 <TableCell>
-                  <Typography>
-                    <IconButton
-                      onClick={() => navigate(`${location.pathname}/${row.id}`)}
-                    >
-                      <Icon>edit</Icon>
-                    </IconButton>
-                    <IconButton
-                      onClick={() => {
-                        handleDelete(row.id);
-                      }}
-                    >
-                      <Icon>delete</Icon>
-                    </IconButton>
-                  </Typography>
+                  <Actions
+                    id={row.id}
+                    showPersoButton
+                    persoButtonIcon="attach_money"
+                  />
                 </TableCell>
                 <TableCell>
                   <Typography>{row.insumo?.titulo}</Typography>
