@@ -160,7 +160,7 @@ export const ProdutosOrcamento = () => {
                   showListButton
                   handleDelete={handleDelete}
                   handleShowList={() => {
-                    navigate(`${location.pathname}/${row.id}`);
+                    navigate(`${location.pathname}/${row.id}/insumos`);
                   }}
                 />
                 

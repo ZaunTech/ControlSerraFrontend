@@ -34,6 +34,7 @@ import { Cotacoes, Cotacao, CriarCotacao } from "./pages/cotacoes";
 import Usuarios from "./pages/Usuarios/Usuarios.tsx";
 import { CriarUsuario } from "./pages/Usuarios/CriarUsuario.tsx";
 import Usuario from "./pages/Usuarios/Usuario.tsx";
+import { EditarProduto } from "./pages/orcamentos/EditarProduto.tsx";
 
 const router = createBrowserRouter([
   {
@@ -130,15 +131,29 @@ const router = createBrowserRouter([
                   },
                   {
                     path: ":id",
-                    element: <InsumosDeUmProdutoOrcamento />,
-                  },
-                  {
-                    path: ":id/Novo",
-                    element: <CriarItemInsumoProdutoBase/>,
-                  },
-                  {
-                    path: ":id/:id",
-                    element: <ItemListaInsumoProduto />,
+                    children: [
+                      {
+                        index: true,
+                        element: <EditarProduto />,
+                      },
+                      {
+                        path: "insumos",
+                        children: [
+                          {
+                            index: true,
+                            element: <InsumosDeUmProdutoOrcamento />,
+                          },
+                          {
+                            path: "Novo",
+                            element: <CriarItemInsumoProdutoBase />,
+                          },
+                          {
+                            path: ":id",
+                            element: <ItemListaInsumoProduto />,
+                          },
+                        ],
+                      },
+                    ],
                   },
                 ],
               },

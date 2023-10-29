@@ -182,9 +182,7 @@ export const Cliente = () => {
       titulo="Editar Cliente"
       barraDeFerramentas={
         <FerramentasDeDetalhes
-          mostrarBotaoApagar={false}
-          mostrarBotaoSalvar
-          mostrarBotaoVoltar
+          tipo="novo"
           onClickSalvar={handleSubmit(createUser)}
         />
       }

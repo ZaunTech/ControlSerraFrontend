@@ -9,9 +9,13 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { PaginaBase } from "../../ui/layouts";
-import { FerramentasDeDetalhes } from "../../ui/components";
+import {
+  FerramentasDeDetalhes,
+  IFerramentasDeDetalhes,
+  TTipo,
+} from "../../ui/components";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -38,6 +42,7 @@ export const CriarCategoria = () => {
     resolver: zodResolver(createUserFormSchema),
   });
   const navigate = useNavigate();
+
   function createUser(data: any) {
     CategoriasService.create(data)
       .then(() => {
@@ -45,27 +50,37 @@ export const CriarCategoria = () => {
       })
       .catch((erro) => {});
   }
+  const [pageState, setPageState] = useState<TTipo>("novo");
+  const [isEditable, setIsEditable] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (pageState === "detalhes") {
+      setIsEditable(false);
+      return;
+    }
+    if (pageState === "editar" || pageState === "novo") {
+      setIsEditable(true);
+      return;
+    }
+  }, [pageState]);
 
   return (
     <PaginaBase
       titulo="Nova Categoria"
       barraDeFerramentas={
         <FerramentasDeDetalhes
-          mostrarBotaoApagar={false}
-          mostrarBotaoSalvar
-          mostrarBotaoVoltar
+          tipo="novo"
+          setPaiState={setPageState}
           onClickSalvar={handleSubmit(createUser)}
         />
-      }
-    >
+      }>
       <Box component={"form"} onSubmit={handleSubmit(createUser)}>
         <Box
           display={"flex"}
           margin={1}
           flexDirection={"column"}
           component={Paper}
-          variant="outlined"
-        >
+          variant="outlined">
           <Grid container direction="column" padding={2} spacing={3}>
             <Grid container item direction="column" spacing={4}>
               <Grid item>
@@ -79,8 +94,7 @@ export const CriarCategoria = () => {
                   id="tipo"
                   value={tipo}
                   {...register("tipo")}
-                  onChange={handleChange}
-                >
+                  onChange={handleChange}>
                   <MenuItem value={"Mão de Obra"}>Mão de Obra</MenuItem>
                   <MenuItem value={"Insumo"}>Insumo</MenuItem>
                 </Select>

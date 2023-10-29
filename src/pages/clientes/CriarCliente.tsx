@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { PaginaBase } from "../../ui/layouts";
-import { FerramentasDeDetalhes } from "../../ui/components";
+import { FerramentasDeDetalhes, TTipo } from "../../ui/components";
 import {
   Box,
   Grid,
@@ -143,14 +143,28 @@ export const CriarCliente = () => {
       .catch((erro) => {});
   }
 
+  const [pageState, setPageState] = useState<TTipo>("novo");
+  const [isEditable, setIsEditable] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (pageState === "detalhes") {
+      setIsEditable(false);
+      return;
+    }
+    if (pageState === "editar" || pageState === "novo") {
+      setIsEditable(true);
+      return;
+    }
+  }, [pageState]);
+
   return (
     <PaginaBase
       titulo="Novo Cliente"
       barraDeFerramentas={
         <FerramentasDeDetalhes
-          mostrarBotaoApagar={false}
-          mostrarBotaoSalvar
-          mostrarBotaoVoltar
+         
+        tipo="detalhes"
+        setPaiState={setPageState}
           onClickSalvar={handleSubmit(createUser)}
         />
       }
@@ -179,8 +193,8 @@ export const CriarCliente = () => {
                   {...register("contaTipo")}
                   onChange={handleChange}
                 >
-                  <MenuItem value={"Fisica"}>Fisico</MenuItem>
-                  <MenuItem value={"Juridica"}>Juridico</MenuItem>
+                  <MenuItem value={"Fisica"} disabled={!isEditable}>Fisico</MenuItem>
+                  <MenuItem value={"Juridica"} disabled={!isEditable} >Juridico</MenuItem>
                 </Select>
 
                 {errors.contaTipo && (
@@ -192,7 +206,7 @@ export const CriarCliente = () => {
                   <Grid item>
                     <Typography>Razão Social</Typography>
                     <TextField
-                      placeholder="Razão Social"
+                      placeholder="Razão Social" disabled={!isEditable}
                       {...register("razaoSocial")}
                     />
                     {errors.razaoSocial && (
@@ -202,7 +216,7 @@ export const CriarCliente = () => {
                   <Grid item>
                     <Typography>Nome Fantasia</Typography>
                     <TextField
-                      placeholder="Nome Fantasia"
+                      placeholder="Nome Fantasia" disabled={!isEditable}
                       {...register("nomeFantasia")}
                     />
                     {errors.nomeFantasia && (
@@ -211,7 +225,7 @@ export const CriarCliente = () => {
                   </Grid>
                   <Grid item>
                     <Typography>CNPJ</Typography>
-                    <TextField placeholder="CNPJ" {...register("cnpj")} />
+                    <TextField placeholder="CNPJ"  disabled={!isEditable} {...register("cnpj")} />
                     {errors.cnpj && (
                       <span>{errors.cnpj.message?.toString()}</span>
                     )}
@@ -223,7 +237,7 @@ export const CriarCliente = () => {
                   <Grid item>
                     <Typography>Nome Completo</Typography>
                     <TextField
-                      placeholder="Nome Completo"
+                      placeholder="Nome Completo" disabled={!isEditable}
                       {...register("nome")}
                     />
                     {errors.nome && (
@@ -232,12 +246,12 @@ export const CriarCliente = () => {
                   </Grid>
                   <Grid item>
                     <Typography>RG</Typography>
-                    <TextField placeholder="RG" {...register("rg")} />
+                    <TextField placeholder="RG"  disabled={!isEditable} {...register("rg")} />
                   </Grid>
                   {errors.rg && <span>{errors.rg.message?.toString()}</span>}
                   <Grid item>
                     <Typography>CPF</Typography>
-                    <TextField placeholder="CPF" {...register("cpf")} />
+                    <TextField placeholder="CPF" disabled={!isEditable} {...register("cpf")} />
                     {errors.cpf && (
                       <span>{errors.cpf.message?.toString()}</span>
                     )}
@@ -265,13 +279,13 @@ export const CriarCliente = () => {
                 <Typography>Email</Typography>
                 <TextField
                   placeholder="Email"
-                  type="email"
+                  type="email" disabled={!isEditable}
                   {...register("email")}
                 />
               </Grid>
               <Grid item>
                 <Typography>Telefone</Typography>
-                <TextField placeholder="Telefone" {...register("telefone")} />
+                <TextField placeholder="Telefone"  disabled={!isEditable}{...register("telefone")} />
               </Grid>
             </Grid>
           </Grid>
@@ -292,7 +306,7 @@ export const CriarCliente = () => {
             <Grid container item direction="row" spacing={3}>
               <Grid item>
                 <Typography>CEP</Typography>
-                <TextField placeholder="CEP" {...register("cep")} />
+                <TextField placeholder="CEP" disabled={!isEditable} {...register("cep")} />
                 {errors.cep && <span>{errors.cep.message?.toString()}</span>}
               </Grid>
               <Grid item xs={5}>
@@ -300,17 +314,18 @@ export const CriarCliente = () => {
                 <TextField
                   placeholder="Endereço"
                   fullWidth
+                  disabled={!isEditable}
                   {...register("endereco")}
                 />
               </Grid>
               <Grid item>
                 <Typography>Rua</Typography>
-                <TextField placeholder="Rua" {...register("rua")} />
+                <TextField placeholder="Rua" disabled={!isEditable} {...register("rua")} />
               </Grid>
 
               <Grid item>
                 <Typography>Bairro</Typography>
-                <TextField placeholder="Bairro" {...register("bairro")} />
+                <TextField placeholder="Bairro" disabled={!isEditable} {...register("bairro")} />
               </Grid>
             </Grid>
             <Grid container item direction="row" spacing={2}>
@@ -318,7 +333,7 @@ export const CriarCliente = () => {
                 <Typography>Cidade</Typography>
                 <TextField
                   placeholder="Cidade"
-                  fullWidth
+                  fullWidth disabled={!isEditable}
                   {...register("cidade")}
                 />
               </Grid>
@@ -326,7 +341,7 @@ export const CriarCliente = () => {
                 <Typography>Estado</Typography>
                 <TextField
                   placeholder="Estado"
-                  fullWidth
+                  fullWidth disabled={!isEditable}
                   {...register("estado")}
                 />
               </Grid>
@@ -334,21 +349,21 @@ export const CriarCliente = () => {
                 <Typography>Numero</Typography>
                 <TextField
                   placeholder="Numero"
-                  fullWidth
+                  fullWidth disabled={!isEditable}
                   {...register("numero")}
                 />
               </Grid>
               <Grid item xs={3}>
                 <Typography>Pais</Typography>
-                <TextField placeholder="Pais" fullWidth {...register("pais")} />
+                <TextField placeholder="Pais" fullWidth disabled={!isEditable} {...register("pais")} />
               </Grid>
             </Grid>
-            <Grid container item direction="row" spacing={2}>
+            <Grid container item direction="row"  spacing={2}>
               <Grid item xs={9}>
                 <Typography>Complemento</Typography>
                 <TextField
                   placeholder="Complemento"
-                  fullWidth
+                  fullWidth disabled={!isEditable}
                   {...register("complemento")}
                 />
               </Grid>

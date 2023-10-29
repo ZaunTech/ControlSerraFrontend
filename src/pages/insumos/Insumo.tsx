@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { PaginaBase } from "../../ui/layouts";
-import { FerramentasDeDetalhes } from "../../ui/components";
+import { FerramentasDeDetalhes, TTipo } from "../../ui/components";
 import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -83,13 +83,27 @@ export const Insumo = () => {
 
     fetchData();
   }, []);
+  const [pageState, setPageState] = useState<TTipo>("novo");
+  const [isEditable, setIsEditable] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (pageState === "detalhes") {
+      setIsEditable(false);
+      return;
+    }
+    if (pageState === "editar" || pageState === "novo") {
+      setIsEditable(true);
+      return;
+    }
+  }, [pageState]);
 
   return (
     <PaginaBase
       titulo="Insumos"
       barraDeFerramentas={
         <FerramentasDeDetalhes
-          mostrarBotaoApagar={false}
+          tipo="detalhes"
+          setPaiState={setPageState}
           onClickSalvar={handleSubmit(createUser)}
         />
       }
@@ -106,7 +120,7 @@ export const Insumo = () => {
             <Grid container item direction="column" spacing={4}>
               <Grid item>
                 <Typography>Titulo</Typography>
-                <TextField placeholder="Titulo" {...register("titulo")} />
+                <TextField placeholder="Titulo" disabled={!isEditable} {...register("titulo")} />
                 {errors.titulo && (
                   <span>{errors.titulo.message?.toString()}</span>
                 )}
@@ -115,6 +129,7 @@ export const Insumo = () => {
               <Grid item>
                 <Typography>Categoria</Typography>
                 <Autocomplete
+                disabled={!isEditable}
                   disablePortal
                   id="combo-box-demo"
                   options={opcoes}
@@ -139,7 +154,7 @@ export const Insumo = () => {
               </Grid>
               <Grid item>
                 <Typography>Descrição</Typography>
-                <TextField placeholder="Descrição" {...register("descricao")} />
+                <TextField placeholder="Descrição" disabled={!isEditable} {...register("descricao")} />
                 {errors.descricao && (
                   <span>{errors.descricao.message?.toString()}</span>
                 )}
@@ -147,7 +162,7 @@ export const Insumo = () => {
               <Grid item>
                 <Typography>Unidade de Medida</Typography>
                 <TextField
-                  placeholder="Unidade de Medida"
+                  placeholder="Unidade de Medida" disabled={!isEditable}
                   {...register("unidadeMedida")}
                 />
                 {errors.unidadeMedida && (

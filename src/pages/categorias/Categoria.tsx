@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { PaginaBase } from "../../ui/layouts";
-import { FerramentasDeDetalhes } from "../../ui/components";
+import { FerramentasDeDetalhes, TTipo } from "../../ui/components";
 import {
   Box,
   Grid,
@@ -40,12 +40,31 @@ export const Categoria = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   function createUser(data: any) {
+    setIsEditable(false);
+   
     CategoriasService.updateById(Number(id), data)
       .then(() => {
-        navigate(-1);
+
+        setPageState("detalhes");
+        setTipoState("detalhes");
+        
       })
       .catch((erro) => {});
   }
+  const [pageState, setPageState] = useState<TTipo>("detalhes");
+  const [isEditable, setIsEditable] = useState<boolean>(false);
+  const [tipoState,setTipoState] = useState<TTipo>("detalhes");
+
+  useEffect(() => {
+    if (pageState === "detalhes") {
+      setIsEditable(false);
+      return;
+    }
+    if (pageState === "editar" || pageState === "novo") {
+      setIsEditable(true);
+      return;
+    }
+  }, [pageState,tipoState]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -68,13 +87,16 @@ export const Categoria = () => {
 
   return (
     <PaginaBase
-      titulo="Criar Categoria"
+      titulo="Editar Categoria"
       barraDeFerramentas={
         <FerramentasDeDetalhes
-          mostrarBotaoApagar={false}
-          mostrarBotaoSalvar
-          mostrarBotaoVoltar
-          onClickSalvar={handleSubmit(createUser)}
+          tipo={tipoState}
+          setPaiState={setPageState}
+          onClickSalvar={
+        
+            handleSubmit(createUser)
+        
+          }
         />
       }
     >
@@ -90,7 +112,7 @@ export const Categoria = () => {
             <Grid container item direction="column" spacing={4}>
               <Grid item>
                 <Typography>Titulo</Typography>
-                <TextField placeholder="Titulo" {...register("titulo")} />
+                <TextField placeholder="Titulo"  disabled={!isEditable}   {...register("titulo")} />
                 {errors.titulo && (
                   <span>{errors.titulo.message?.toString()}</span>
                 )}
@@ -100,12 +122,13 @@ export const Categoria = () => {
                 <Select
                   labelId="tipo"
                   id="tipo"
+                  
                   value={tipo}
                   {...register("tipo")}
                   onChange={handleChange}
                 >
-                  <MenuItem value={"Mão de Obra"}>Mão de Obra</MenuItem>
-                  <MenuItem value={"Insumo"}>Insumo</MenuItem>
+                  <MenuItem value={"Mão de Obra"} disabled={!isEditable}  >Mão de Obra</MenuItem>
+                  <MenuItem value={"Insumo"} disabled={!isEditable} >Insumo</MenuItem>
                 </Select>
 
                 {errors.contaTipo && (
@@ -114,7 +137,7 @@ export const Categoria = () => {
               </Grid>
               <Grid item>
                 <Typography>Descricao</Typography>
-                <TextField placeholder="Descrição" {...register("descricao")} />
+                <TextField placeholder="Descrição"  disabled={!isEditable}     {...register("descricao")} />
               </Grid>
             </Grid>
           </Grid>

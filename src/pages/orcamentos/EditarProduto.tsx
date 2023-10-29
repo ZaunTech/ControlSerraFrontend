@@ -13,7 +13,6 @@ import { ProdutosService } from "../../data/services/api/modules/produtos";
 const createUserFormSchema = z.object({
   titulo: z.string().min(1, "Titulo não pode ser vazio"),
   observacoes: z.string(),
- 
   quantidade: z.coerce.number().min(1),
 });
 
@@ -30,20 +29,18 @@ export const EditarProduto = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  useEffect(()=>{
-    ProdutosService.getById(Number(id)).then((result)=>{
-        if(result instanceof Error)
-        {
-            return 
-        }
-
-        setValue("titulo", result.titulo);
-        setValue("observacoes",result.observacoes);
-        setValue("quantidade",result.quantidade);
-    })
-
-  },[])
- 
+  useEffect(() => {
+    ProdutosService.getById(Number(id)).then((result) => {
+    
+      if (result instanceof Error) {
+        return Error;
+      }
+  
+      setValue("titulo", result.titulo);
+      setValue("observacoes", result.observacoes);
+      setValue("quantidade", result.quantidade);
+    });
+  }, []);
 
   function createUser(data: any) {
     ProdutosService.updateById(Number(id),data)
@@ -63,16 +60,14 @@ export const EditarProduto = () => {
           mostrarBotaoApagar={false}
           onClickSalvar={handleSubmit(createUser)}
         />
-      }
-    >
+      }>
       <Box component={"form"} onSubmit={handleSubmit(createUser)}>
         <Box
           display={"flex"}
           margin={1}
           flexDirection={"column"}
           component={Paper}
-          variant="outlined"
-        >
+          variant="outlined">
           <Grid container direction="column" padding={2} spacing={3}>
             <Grid container item direction="row" spacing={4}>
               <Grid item>

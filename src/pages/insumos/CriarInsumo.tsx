@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FerramentasDeDetalhes } from "../../ui/components";
+import { FerramentasDeDetalhes, TTipo } from "../../ui/components";
 import { PaginaBase } from "../../ui/layouts";
 import {
   Autocomplete,
@@ -58,12 +58,27 @@ export const CriarInsumo = () => {
       .catch((error) => {});
   }, []);
 
+  const [pageState, setPageState] = useState<TTipo>("novo");
+  const [isEditable, setIsEditable] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (pageState === "detalhes") {
+      setIsEditable(false);
+      return;
+    }
+    if (pageState === "editar" || pageState === "novo") {
+      setIsEditable(true);
+      return;
+    }
+  }, [pageState]);
+
   return (
     <PaginaBase
       titulo="Novo Insumo"
       barraDeFerramentas={
         <FerramentasDeDetalhes
-          mostrarBotaoApagar={false}
+         tipo="novo"
+         setPaiState={setPageState}
           onClickSalvar={handleSubmit(createUser)}
         />
       }
@@ -80,7 +95,7 @@ export const CriarInsumo = () => {
             <Grid container item direction="column" spacing={4}>
               <Grid item>
                 <Typography>Titulo</Typography>
-                <TextField placeholder="Titulo" {...register("titulo")} />
+                <TextField placeholder="Titulo"  disabled={!isEditable} {...register("titulo")} />
               </Grid>
               <Grid item>
                 <Typography>Categoria</Typography>
@@ -90,6 +105,7 @@ export const CriarInsumo = () => {
                   options={opcoes}
                   getOptionLabel={(option) => option.titulo}
                   sx={{ width: 225 }}
+                  disabled={!isEditable}
                   renderInput={(params) => <TextField {...params} />}
                   onChange={(_, value) => {
                     if (value !== null) {
@@ -101,12 +117,12 @@ export const CriarInsumo = () => {
               </Grid>
               <Grid item>
                 <Typography>Descrição</Typography>
-                <TextField placeholder="Descrição" {...register("descricao")} />
+                <TextField placeholder="Descrição" disabled={!isEditable} {...register("descricao")} />
               </Grid>
               <Grid item>
                 <Typography>Unidade de Medida</Typography>
                 <TextField
-                  placeholder="Unidade de Medida"
+                  placeholder="Unidade de Medida" disabled={!isEditable}
                   {...register("unidadeMedida")}
                 />
               </Grid>

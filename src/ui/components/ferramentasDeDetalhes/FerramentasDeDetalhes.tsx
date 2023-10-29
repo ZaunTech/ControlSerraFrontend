@@ -7,12 +7,12 @@ import {
   Divider,
   Typography,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { Ref, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export type TTipo = "novo" | "editar" | "detalhes";
 
-interface IFerramentasDeDetalhes {
+export interface IFerramentasDeDetalhes {
   tipo: TTipo;
   textoBotaoNovo?: string;
 
@@ -39,6 +39,7 @@ interface IFerramentasDeDetalhes {
   skeletonVoltar?: boolean;
 
   setPaiState?: (tipo: TTipo) => void;
+  atualizaTipo?: (tipo: TTipo) => void;
 }
 
 export const FerramentasDeDetalhes: React.FC<IFerramentasDeDetalhes> = (
@@ -85,7 +86,7 @@ export const FerramentasDeDetalhes: React.FC<IFerramentasDeDetalhes> = (
     );
     setMostrarBotaoSalvarEFechar(
       tipo === "novo"
-        ? true
+        ? false
         : tipo === "editar"
         ? true
         : tipo === "detalhes"
@@ -130,7 +131,7 @@ export const FerramentasDeDetalhes: React.FC<IFerramentasDeDetalhes> = (
     );
     setMostrarBotaoCancelar(
       tipo === "novo"
-        ? true
+        ? false
         : tipo === "editar"
         ? true
         : tipo === "detalhes"
@@ -144,6 +145,10 @@ export const FerramentasDeDetalhes: React.FC<IFerramentasDeDetalhes> = (
     setTipo(props.tipo);
   }, []);
 
+  const changeTipo = (tipo: TTipo) => {
+    setTipo(tipo);
+  };
+
   const setPaiState = () => {
     if (props.setPaiState) props.setPaiState(tipo);
   };
@@ -156,22 +161,19 @@ export const FerramentasDeDetalhes: React.FC<IFerramentasDeDetalhes> = (
       paddingX={2}
       display={"flex"}
       gap={1}
-      alignItems={"center"}
-    >
+      alignItems={"center"}>
       {mostrarBotaoSalvar && (
         <Button
           color="primary"
           variant="contained"
           disableElevation
           startIcon={<Icon>save</Icon>}
-          onClick={onClickSalvar}
-        >
+          onClick={onClickSalvar}>
           <Typography
             variant="button"
             whiteSpace={"nowrap"}
             textOverflow={"ellipsis"}
-            overflow={"hidden"}
-          >
+            overflow={"hidden"}>
             Salvar
           </Typography>
         </Button>
@@ -183,14 +185,12 @@ export const FerramentasDeDetalhes: React.FC<IFerramentasDeDetalhes> = (
           variant="outlined"
           disableElevation
           startIcon={<Icon>save</Icon>}
-          onClick={onClickSalvarEFechar}
-        >
+          onClick={onClickSalvarEFechar}>
           <Typography
             variant="button"
             whiteSpace={"nowrap"}
             textOverflow={"ellipsis"}
-            overflow={"hidden"}
-          >
+            overflow={"hidden"}>
             Salvar e fechar
           </Typography>
         </Button>
@@ -202,14 +202,12 @@ export const FerramentasDeDetalhes: React.FC<IFerramentasDeDetalhes> = (
           variant="outlined"
           disableElevation
           startIcon={<Icon>delete</Icon>}
-          onClick={onClickApagar}
-        >
+          onClick={onClickApagar}>
           <Typography
             variant="button"
             whiteSpace={"nowrap"}
             textOverflow={"ellipsis"}
-            overflow={"hidden"}
-          >
+            overflow={"hidden"}>
             Apagar
           </Typography>
         </Button>
@@ -221,14 +219,12 @@ export const FerramentasDeDetalhes: React.FC<IFerramentasDeDetalhes> = (
           variant="outlined"
           disableElevation
           startIcon={<Icon>add</Icon>}
-          onClick={onClickNovo}
-        >
+          onClick={onClickNovo}>
           <Typography
             variant="button"
             whiteSpace={"nowrap"}
             textOverflow={"ellipsis"}
-            overflow={"hidden"}
-          >
+            overflow={"hidden"}>
             {textoBotaoNovo}
           </Typography>
         </Button>
@@ -244,14 +240,12 @@ export const FerramentasDeDetalhes: React.FC<IFerramentasDeDetalhes> = (
               onClickEditar();
             }
             setTipo("editar");
-          }}
-        >
+          }}>
           <Typography
             variant="button"
             whiteSpace={"nowrap"}
             textOverflow={"ellipsis"}
-            overflow={"hidden"}
-          >
+            overflow={"hidden"}>
             Editar
           </Typography>
         </Button>
@@ -267,14 +261,12 @@ export const FerramentasDeDetalhes: React.FC<IFerramentasDeDetalhes> = (
               onClickCancelar();
             }
             setTipo("detalhes");
-          }}
-        >
+          }}>
           <Typography
             variant="button"
             whiteSpace={"nowrap"}
             textOverflow={"ellipsis"}
-            overflow={"hidden"}
-          >
+            overflow={"hidden"}>
             Cancelar
           </Typography>
         </Button>
@@ -288,14 +280,12 @@ export const FerramentasDeDetalhes: React.FC<IFerramentasDeDetalhes> = (
             variant="outlined"
             disableElevation
             startIcon={<Icon>arrow_back</Icon>}
-            onClick={onClickVoltar || voltar}
-          >
+            onClick={onClickVoltar || voltar}>
             <Typography
               variant="button"
               whiteSpace={"nowrap"}
               textOverflow={"ellipsis"}
-              overflow={"hidden"}
-            >
+              overflow={"hidden"}>
               Voltar
             </Typography>
           </Button>
