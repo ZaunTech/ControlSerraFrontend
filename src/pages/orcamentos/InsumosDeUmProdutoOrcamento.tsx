@@ -29,6 +29,12 @@ import {
   IListaInsumo,
   ListaInsumosService,
 } from "../../data/services/api/modules/listaInsumos";
+import {
+  CategoriasService,
+  FornecedoresService,
+  InsumosService,
+} from "../../data/services/api";
+import { CotacoesService } from "../../data/services/api/modules/cotacoes";
 
 export const InsumosDeUmProdutoOrcamento = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -51,19 +57,94 @@ export const InsumosDeUmProdutoOrcamento = () => {
     return Number(searchParams.get("pagina") || "1");
   }, [searchParams]);
 
+  const setDados = async () => {
+    try {
+      setIsLoading(true);
+
+      const result = await ListaInsumosService.getListaByIdProduto(Number(id));
+
+      if (result instanceof Error) {
+        alert(result.message);
+        return;
+      }
+
+      const listaInsumosData = await Promise.all(
+        result.data.map(async (listaInsumos: IListaInsumo) => {
+          const fetchInsumos = async () => {
+            const result2 = await InsumosService.getById(listaInsumos.idInsumo);
+
+            if (result2 instanceof Error) {
+              alert(result2.message);
+              return null;
+            }
+            listaInsumos.insumo = result2;
+
+            if (!listaInsumos.insumo.idCategoria) return;
+
+            const result3 = await CategoriasService.getById(
+              listaInsumos.insumo.idCategoria
+            );
+
+            if (result3 instanceof Error) {
+              alert(result3.message);
+              return null;
+            }
+
+            listaInsumos.insumo.categoria = result3;
+
+            return listaInsumos;
+          };
+
+          const dataInsumos = await fetchInsumos();
+          if (dataInsumos) {
+            listaInsumos = dataInsumos;
+          }
+
+          const fetchCotacoes = async () => {
+            if (!listaInsumos.idCotacao) return;
+
+            const result20 = await CotacoesService.getById(
+              listaInsumos.idCotacao
+            );
+
+            if (result20 instanceof Error) {
+              alert(result20.message);
+              return null;
+            }
+            listaInsumos.cotacao = result20;
+
+            const result30 = await FornecedoresService.getById(
+              listaInsumos.cotacao?.idFornecedor
+            );
+
+            if (result30 instanceof Error) {
+              alert(result30.message);
+              return null;
+            }
+
+            listaInsumos.cotacao.fornecedor = result30;
+
+            return listaInsumos;
+          };
+          const dataCotacoes = await fetchCotacoes();
+          if (dataCotacoes) {
+            listaInsumos = dataCotacoes;
+          }
+          return listaInsumos;
+        })
+      );
+      setRows(listaInsumosData);
+      setTotalCount(result.totalCount);
+    } catch (error) {
+      alert("Error fetching data.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     setIsLoading(true);
-    debounce(() => {
-      ListaInsumosService.getListaByIdProduto(Number(id)).then((result) => {
-        if (result instanceof Error) {
-          alert(result.message);
-          return;
-        }
-        setRows(result.data);
-        setTotalCount(result.totalCount);
-        setIsLoading(false);
-      });
-    });
+    setDados();
   }, [busca, pagina]);
 
   const handleDelete = (id: number) => {

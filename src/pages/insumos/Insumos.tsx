@@ -2,7 +2,11 @@ import { useMemo, useEffect } from "react";
 import { PaginaBase } from "../../ui/layouts";
 import { FerramentasDaListagem } from "../../ui/components";
 import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
-import { IInsumo, InsumosService } from "../../data/services/api";
+import {
+  CategoriasService,
+  IInsumo,
+  InsumosService,
+} from "../../data/services/api";
 import { useDebounce } from "../../data/hooks";
 import { useState } from "react";
 import {
@@ -41,19 +45,49 @@ export const Insumos = () => {
     return Number(searchParams.get("pagina") || "1");
   }, [searchParams]);
 
+  const setDados = async () => {
+    try {
+      setIsLoading(true);
+
+      const result = await InsumosService.getAll(pagina, busca);
+
+      if (result instanceof Error) {
+        alert(result.message);
+        return;
+      }
+
+      const insumosData = await Promise.all(
+        result.data.map(async (insumo: IInsumo) => {
+          try {
+            if (!insumo.idCategoria) {
+              return;
+            }
+            const result2 = await CategoriasService.getById(insumo.idCategoria);
+
+            if (result2 instanceof Error) {
+              alert(result2.message);
+              return null;
+            }
+
+            insumo.categoria = result2;
+            return insumo;
+          } catch (error) {
+            return null;
+          }
+        })
+      );
+      setRows(insumosData);
+      setTotalCount(result.totalCount);
+    } catch (error) {
+      alert("Error fetching data.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     setIsLoading(true);
-    debounce(() => {
-      InsumosService.getAll(pagina, busca).then((result) => {
-        if (result instanceof Error) {
-          alert(result.message);
-          return;
-        }
-        setRows(result.data);
-        setTotalCount(result.totalCount);
-        setIsLoading(false);
-      });
-    });
+    setDados();
   }, [busca, pagina]);
 
   const handleDelete = (id: number) => {
@@ -94,7 +128,9 @@ export const Insumos = () => {
               <TableCell style={{ fontWeight: "bold" }}>Ações</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Titulo</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Categoria</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Unidade de Medida</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>
+                Unidade de Medida
+              </TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Descrição</TableCell>
             </TableRow>
           </TableHead>
@@ -104,9 +140,7 @@ export const Insumos = () => {
                 <TableCell>
                   <Typography>
                     <IconButton
-                      onClick={() =>
-                        navigate(`${location.pathname}/${row.id}`)
-                      }
+                      onClick={() => navigate(`${location.pathname}/${row.id}`)}
                     >
                       <Icon>edit</Icon>
                     </IconButton>
@@ -170,4 +204,4 @@ export const Insumos = () => {
       </TableContainer>
     </PaginaBase>
   );
-}
+};
