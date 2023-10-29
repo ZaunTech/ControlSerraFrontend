@@ -4,7 +4,7 @@ export interface IProduto {
   id: number;
   tipo: string;
   titulo: string;
-  descricao?: string;
+  observacoes?: string;
   quantidade: number;
   valorUnitario: number;
   idOrcamento: string;
