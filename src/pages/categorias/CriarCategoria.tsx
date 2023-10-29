@@ -69,9 +69,10 @@ export const CriarCategoria = () => {
       titulo="Nova Categoria"
       barraDeFerramentas={
         <FerramentasDeDetalhes
-          tipo="novo"
+          tipo="detalhes"
           setPaiState={setPageState}
           onClickSalvar={handleSubmit(createUser)}
+          
         />
       }>
       <Box component={"form"} onSubmit={handleSubmit(createUser)}>

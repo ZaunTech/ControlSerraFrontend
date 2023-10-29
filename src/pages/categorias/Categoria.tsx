@@ -15,7 +15,7 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CategoriasService, ICategoria } from "../../data/services/api";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { z } from "zod";
 
 const createUserFormSchema = z.object({
@@ -38,22 +38,18 @@ export const Categoria = () => {
     resolver: zodResolver(createUserFormSchema),
   });
   const { id } = useParams();
-  const navigate = useNavigate();
+
   function createUser(data: any) {
     setIsEditable(false);
-   
+
     CategoriasService.updateById(Number(id), data)
       .then(() => {
-
         setPageState("detalhes");
-        setTipoState("detalhes");
-        
       })
       .catch((erro) => {});
   }
   const [pageState, setPageState] = useState<TTipo>("detalhes");
   const [isEditable, setIsEditable] = useState<boolean>(false);
-  const [tipoState,setTipoState] = useState<TTipo>("detalhes");
 
   useEffect(() => {
     if (pageState === "detalhes") {
@@ -64,7 +60,7 @@ export const Categoria = () => {
       setIsEditable(true);
       return;
     }
-  }, [pageState,tipoState]);
+  }, [pageState]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -78,8 +74,7 @@ export const Categoria = () => {
         setValue("titulo", data.titulo);
         setValue("descricao", data.descricao);
         setTipo(data.tipo);
-      } catch (error) {
-      }
+      } catch (error) {}
     };
 
     fetchData();
@@ -90,29 +85,28 @@ export const Categoria = () => {
       titulo="Editar Categoria"
       barraDeFerramentas={
         <FerramentasDeDetalhes
-          tipo={tipoState}
+          tipo="detalhes"
+          pageState={pageState}
           setPaiState={setPageState}
-          onClickSalvar={
-        
-            handleSubmit(createUser)
-        
-          }
+          onClickSalvar={handleSubmit(createUser)}
         />
-      }
-    >
+      }>
       <Box component={"form"} onSubmit={handleSubmit(createUser)}>
         <Box
           display={"flex"}
           margin={1}
           flexDirection={"column"}
           component={Paper}
-          variant="outlined"
-        >
+          variant="outlined">
           <Grid container direction="column" padding={2} spacing={3}>
             <Grid container item direction="column" spacing={4}>
               <Grid item>
                 <Typography>Titulo</Typography>
-                <TextField placeholder="Titulo"  disabled={!isEditable}   {...register("titulo")} />
+                <TextField
+                  placeholder="Titulo"
+                  disabled={!isEditable}
+                  {...register("titulo")}
+                />
                 {errors.titulo && (
                   <span>{errors.titulo.message?.toString()}</span>
                 )}
@@ -122,13 +116,15 @@ export const Categoria = () => {
                 <Select
                   labelId="tipo"
                   id="tipo"
-                  
                   value={tipo}
                   {...register("tipo")}
-                  onChange={handleChange}
-                >
-                  <MenuItem value={"Mão de Obra"} disabled={!isEditable}  >Mão de Obra</MenuItem>
-                  <MenuItem value={"Insumo"} disabled={!isEditable} >Insumo</MenuItem>
+                  onChange={handleChange}>
+                  <MenuItem value={"Mão de Obra"} disabled={!isEditable}>
+                    Mão de Obra
+                  </MenuItem>
+                  <MenuItem value={"Insumo"} disabled={!isEditable}>
+                    Insumo
+                  </MenuItem>
                 </Select>
 
                 {errors.contaTipo && (
@@ -137,7 +133,11 @@ export const Categoria = () => {
               </Grid>
               <Grid item>
                 <Typography>Descricao</Typography>
-                <TextField placeholder="Descrição"  disabled={!isEditable}     {...register("descricao")} />
+                <TextField
+                  placeholder="Descrição"
+                  disabled={!isEditable}
+                  {...register("descricao")}
+                />
               </Grid>
             </Grid>
           </Grid>

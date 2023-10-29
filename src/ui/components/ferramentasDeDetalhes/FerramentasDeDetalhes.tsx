@@ -7,7 +7,7 @@ import {
   Divider,
   Typography,
 } from "@mui/material";
-import { Ref, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export type TTipo = "novo" | "editar" | "detalhes";
@@ -40,6 +40,8 @@ export interface IFerramentasDeDetalhes {
 
   setPaiState?: (tipo: TTipo) => void;
   atualizaTipo?: (tipo: TTipo) => void;
+
+  pageState?: TTipo;
 }
 
 export const FerramentasDeDetalhes: React.FC<IFerramentasDeDetalhes> = (
@@ -61,6 +63,7 @@ export const FerramentasDeDetalhes: React.FC<IFerramentasDeDetalhes> = (
     onClickSalvarEFechar,
     onClickVoltar,
     textoBotaoNovo,
+    pageState,
   } = props;
 
   const [tipo, setTipo] = useState<TTipo>("detalhes");
@@ -145,9 +148,9 @@ export const FerramentasDeDetalhes: React.FC<IFerramentasDeDetalhes> = (
     setTipo(props.tipo);
   }, []);
 
-  const changeTipo = (tipo: TTipo) => {
-    setTipo(tipo);
-  };
+  useEffect(() => {
+    if (pageState) setTipo(pageState);
+  }, [pageState]);
 
   const setPaiState = () => {
     if (props.setPaiState) props.setPaiState(tipo);
