@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { PaginaBase } from "../../ui/layouts";
-import { FerramentasDeDetalhes } from "../../ui/components";
+import { FerramentasDeDetalhes, TTipo } from "../../ui/components";
 import {
   Autocomplete,
   Box,
@@ -29,6 +29,19 @@ const createUserFormSchema = z.object({
 
 export const EditarOrcamento = () => {
   const [opcoes, setOpcoes] = useState<ICliente[]>([]);
+  const [pageState, setPageState] = useState<TTipo>("detalhes");
+  const [isEditable, setIsEditable] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (pageState === "detalhes") {
+      setIsEditable(false);
+      return;
+    }
+    if (pageState === "editar" || pageState === "novo") {
+      setIsEditable(true);
+      return;
+    }
+  }, [pageState]);
 
   useEffect(() => {
     ClientesService.getAll()
@@ -90,10 +103,8 @@ export const EditarOrcamento = () => {
       barraDeFerramentas={
         <FerramentasDeDetalhes
           tipo="detalhes"
-          mostrarBotaoApagar={false}
-          mostrarBotaoSalvar
-          mostrarBotaoVoltar
           onClickSalvar={handleSubmit(createOrcamento)}
+          setPaiState={setPageState}
         />
       }
     >
@@ -148,6 +159,7 @@ export const EditarOrcamento = () => {
                   value={tipo}
                   {...register("status")}
                   onChange={handleChange}
+                  disabled={!isEditable}
                 >
                   <MenuItem value={"Pendente"}>Pendente</MenuItem>
                   <MenuItem value={"Em_Processo"}>Em Processo</MenuItem>

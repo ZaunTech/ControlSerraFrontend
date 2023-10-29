@@ -10,7 +10,7 @@ import {
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-type TTipo = "novo" | "editar" | "detalhes";
+export type TTipo = "novo" | "editar" | "detalhes";
 
 interface IFerramentasDeDetalhes {
   tipo: TTipo;
@@ -37,6 +37,8 @@ interface IFerramentasDeDetalhes {
   skeletonApagar?: boolean;
   skeletonNovo?: boolean;
   skeletonVoltar?: boolean;
+
+  setPaiState?: (tipo: TTipo) => void;
 }
 
 export const FerramentasDeDetalhes: React.FC<IFerramentasDeDetalhes> = (
@@ -135,12 +137,16 @@ export const FerramentasDeDetalhes: React.FC<IFerramentasDeDetalhes> = (
         ? false
         : false
     );
+    setPaiState();
   }, [tipo]);
 
   useEffect(() => {
-    console.log(props.tipo);
     setTipo(props.tipo);
   }, []);
+
+  const setPaiState = () => {
+    if (props.setPaiState) props.setPaiState(tipo);
+  };
 
   return (
     <Box
