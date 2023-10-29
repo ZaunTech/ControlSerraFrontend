@@ -46,24 +46,18 @@ export const EditarOrcamento = () => {
       .catch((error) => {});
   }, []);
 
-  useEffect(()=>{
-
-    OrcamentosService.getById(Number(id)).then((result)=>{
-
-      if(result instanceof Error){
-        return
+  useEffect(() => {
+    OrcamentosService.getById(Number(id)).then((result) => {
+      if (result instanceof Error) {
+        return;
       }
 
       setValue("idCliente", result.idCliente);
-      setValue("observacoes",result.observacoes);
+      setValue("observacoes", result.observacoes);
       setTipo(result.status.toString());
-      setValue("prazoEstimadoProducao",result.prazoEstimadoProducao);
-     
-    })
-
- 
-
-  },[])
+      setValue("prazoEstimadoProducao", result.prazoEstimadoProducao);
+    });
+  }, []);
 
   const {
     register,
@@ -79,12 +73,12 @@ export const EditarOrcamento = () => {
     setTipo(event.target.value as string);
   };
 
-  const {id} = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
   function createOrcamento(data: any) {
-    OrcamentosService.updateById(Number(id),data)
+    OrcamentosService.updateById(Number(id), data)
       .then(() => {
-        console.log(data)
+        console.log(data);
         navigate(-1);
       })
       .catch(() => {});
@@ -92,9 +86,10 @@ export const EditarOrcamento = () => {
 
   return (
     <PaginaBase
-      titulo="Editar Orcamento111"
+      titulo="Orcamento id:1"
       barraDeFerramentas={
         <FerramentasDeDetalhes
+          tipo="detalhes"
           mostrarBotaoApagar={false}
           mostrarBotaoSalvar
           mostrarBotaoVoltar
@@ -124,10 +119,10 @@ export const EditarOrcamento = () => {
                   {...register("idCliente")}
                   id="combo-box-demo"
                   options={opcoes}
-                  value={opcoes.find(
-                    (option) => option.id === watch("idCliente")
-                  ) || null
-                }
+                  value={
+                    opcoes.find((option) => option.id === watch("idCliente")) ||
+                    null
+                  }
                   getOptionLabel={(option) =>
                     option.nomeFantasia ??
                     option.nome ??
@@ -154,7 +149,7 @@ export const EditarOrcamento = () => {
                   {...register("status")}
                   onChange={handleChange}
                 >
-                  <MenuItem value={"Pendente"}>Pendente</MenuItem>             
+                  <MenuItem value={"Pendente"}>Pendente</MenuItem>
                   <MenuItem value={"Em_Processo"}>Em Processo</MenuItem>
                   <MenuItem value={"Concluido"}>Concluido</MenuItem>
                 </Select>
@@ -163,7 +158,7 @@ export const EditarOrcamento = () => {
                   <span>{errors.contaTipo.message?.toString()}</span>
                 )}
               </Grid>
-              
+
               <Grid item>
                 <Typography>Observações</Typography>
                 <TextField
