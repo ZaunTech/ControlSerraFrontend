@@ -1,5 +1,11 @@
-import { CreateProdutoDto, IProduto, TListProdutos, UpdateProdutoDto } from ".";
-import { Api } from "../..";
+import {
+  AddProdutoBaseDto,
+  CreateProdutoDto,
+  IProduto,
+  TListProdutos,
+  UpdateProdutoDto,
+} from ".";
+import { Api, IProdutoBase } from "../..";
 import { Environment } from "../../../../environment";
 
 const rota = "produtos";
@@ -23,7 +29,7 @@ const getAll = async (
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-      Environment.ERRO_AO_ACESSAR_DADOS
+        Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -38,7 +44,7 @@ const getById = async (id: number): Promise<IProduto | Error> => {
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-      Environment.ERRO_AO_ACESSAR_DADOS
+        Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -55,10 +61,28 @@ const create = async (
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-      Environment.ERRO_AO_ACESSAR_DADOS
+        Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
+const addProdutoBase = async (
+  addProdutoBase: AddProdutoBaseDto
+): Promise<IProduto | Error> => {
+  try {
+    const urlRelativa = `/${rota}/addProdutoBase`;
+    const response = await Api.post<IProduto>(urlRelativa, addProdutoBase);
+    if (response) {
+      return response.data;
+    }
+    return new Error(Environment.ERRO_AO_LISTAR_DADOS);
+  } catch (error) {
+    return new Error(
+      (error as { message: string }).message ||
+        Environment.ERRO_AO_ACESSAR_DADOS
+    );
+  }
+};
+
 const updateById = async (
   id: number,
   updateProdutoDto: UpdateProdutoDto
@@ -73,7 +97,7 @@ const updateById = async (
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-      Environment.ERRO_AO_ACESSAR_DADOS
+        Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -88,7 +112,7 @@ const deleteById = async (id: number): Promise<IProduto | Error> => {
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-      Environment.ERRO_AO_ACESSAR_DADOS
+        Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -104,7 +128,7 @@ const getCount = async (): Promise<number | Error> => {
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-      Environment.ERRO_AO_ACESSAR_DADOS
+        Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -115,5 +139,6 @@ export const ProdutosService = {
   create,
   updateById,
   deleteById,
+  addProdutoBase,
   getCount,
 };

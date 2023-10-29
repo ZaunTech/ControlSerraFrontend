@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FerramentasDeDetalhes } from "../../ui/components";
+import { FerramentasDeDetalhes, TTipo } from "../../ui/components";
 import { PaginaBase } from "../../ui/layouts";
 import {
   Autocomplete,
@@ -52,41 +52,55 @@ export const CriarItemInsumoProdutoBase = () => {
 
   const navigate = useNavigate();
   const { id } = useParams();
-  
 
   useEffect(() => {
     setValue("idProduto", Number(id));
   });
 
   function createUser(data: any) {
+    console.log(data);
     ListaInsumosService.create(data)
       .then((result) => {
         if (!(result instanceof Error)) {
-          console.log("ID:", id);
           navigate(-1);
         }
+        console.log(result);
       })
       .catch((error) => {});
   }
+
+  const [pageState, setPageState] = useState<TTipo>("novo");
+  const [isEditable, setIsEditable] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (pageState === "detalhes") {
+      setIsEditable(false);
+      return;
+    }
+    if (pageState === "editar" || pageState === "novo") {
+      setIsEditable(true);
+      return;
+    }
+  }, [pageState]);
 
   return (
     <PaginaBase
       titulo="Adicionar Insumos Produto"
       barraDeFerramentas={
         <FerramentasDeDetalhes
-          mostrarBotaoApagar={false}
+          tipo="novo"
+          pageState={pageState}
+          setPaiState={setPageState}
           onClickSalvar={handleSubmit(createUser)}
         />
-      }
-    >
+      }>
       <Box component={"form"} onSubmit={handleSubmit(createUser)}>
         <Box
           display={"flex"}
           margin={1}
           flexDirection={"column"}
           component={Paper}
-          variant="outlined"
-        >
+          variant="outlined">
           <Grid container direction="column" padding={2} spacing={3}>
             <Grid container item direction="row" spacing={4}>
               <Grid item>

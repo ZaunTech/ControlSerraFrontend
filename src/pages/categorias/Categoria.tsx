@@ -15,7 +15,7 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CategoriasService, ICategoria } from "../../data/services/api";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { z } from "zod";
 
 const createUserFormSchema = z.object({
@@ -38,13 +38,22 @@ export const Categoria = () => {
     resolver: zodResolver(createUserFormSchema),
   });
   const { id } = useParams();
-
+  const navigate = useNavigate();
   function createUser(data: any) {
     setIsEditable(false);
 
     CategoriasService.updateById(Number(id), data)
       .then(() => {
         setPageState("detalhes");
+      })
+      .catch((erro) => {});
+  }
+  function createUserFechar(data: any) {
+    setIsEditable(false);
+
+    CategoriasService.updateById(Number(id), data)
+      .then(() => {
+        navigate(-1);
       })
       .catch((erro) => {});
   }
@@ -89,6 +98,7 @@ export const Categoria = () => {
           pageState={pageState}
           setPaiState={setPageState}
           onClickSalvar={handleSubmit(createUser)}
+          onClickSalvarEFechar={handleSubmit(createUserFechar)}
         />
       }>
       <Box component={"form"} onSubmit={handleSubmit(createUser)}>

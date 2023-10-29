@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { FerramentasDeDetalhes } from "../../ui/components";
+import { useEffect, useState } from "react";
+import { FerramentasDeDetalhes, TTipo } from "../../ui/components";
 import { PaginaBase } from "../../ui/layouts";
 import { Box, Grid, Paper, TextField, Typography } from "@mui/material";
 import { z } from "zod";
@@ -37,18 +37,35 @@ export const CriarProduto = () => {
     ProdutosService.create(data)
       .then((result) => {
         if (!(result instanceof Error)) {
-          navigate(`/orcamentos/${id}`);
+          navigate(-1);
         }
       })
       .catch((error) => {});
   }
+
+  const [pageState, setPageState] = useState<TTipo>("novo");
+  const [isEditable, setIsEditable] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (pageState === "detalhes") {
+      setIsEditable(false);
+      return;
+    }
+    if (pageState === "editar" || pageState === "novo") {
+      setIsEditable(true);
+      return;
+    }
+  }, [pageState]);
 
   return (
     <PaginaBase
       titulo="Novo Produto"
       barraDeFerramentas={
         <FerramentasDeDetalhes
-          mostrarBotaoApagar={false}
+          tipo="novo"
+          pageState={pageState}
+          setPaiState={setPageState}
+         
           onClickSalvar={handleSubmit(createUser)}
         />
       }
@@ -65,7 +82,7 @@ export const CriarProduto = () => {
             <Grid container item direction="row" spacing={4}>
               <Grid item>
                 <Typography>Titulo</Typography>
-                <TextField placeholder="Titulo" {...register("titulo")} />
+                <TextField placeholder="Titulo" disabled={!isEditable} {...register("titulo")} />
                 {errors.titulo && (
                   <span>{errors.titulo.message?.toString()}</span>
                 )}
@@ -73,7 +90,7 @@ export const CriarProduto = () => {
               <Grid item>
                 <Typography>Quantidade</Typography>
                 <TextField
-                  type="number"
+                  type="number" disabled={!isEditable}
                   placeholder="Quantidade"
                   {...register("quantidade")}
                 />
@@ -85,7 +102,7 @@ export const CriarProduto = () => {
               <Grid item>
                 <Typography>Observações</Typography>
                 <TextField
-                  placeholder="Observações"
+                  placeholder="Observações" disabled={!isEditable}
                   {...register("observacoes")}
                 />
                 {errors.observacao && (

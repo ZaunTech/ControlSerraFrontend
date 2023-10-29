@@ -60,17 +60,21 @@ export const EditarOrcamento = () => {
   }, []);
 
   useEffect(() => {
-    OrcamentosService.getById(Number(id)).then((result) => {
-      if (result instanceof Error) {
-        return;
-      }
-
-      setValue("idCliente", result.idCliente);
-      setValue("observacoes", result.observacoes);
-      setTipo(result.status.toString());
-      setValue("prazoEstimadoProducao", result.prazoEstimadoProducao);
-    });
+    setarOrcamento();
   }, []);
+
+  const setarOrcamento =  ()=>{ 
+     OrcamentosService.getById(Number(id)).then((result) => {
+    if (result instanceof Error) {
+      return;
+    }
+
+    setValue("idCliente", result.idCliente);
+    setValue("observacoes", result.observacoes);
+    setTipo(result.status.toString());
+    setValue("prazoEstimadoProducao", result.prazoEstimadoProducao);
+  });
+}
 
   const {
     register,
@@ -91,6 +95,14 @@ export const EditarOrcamento = () => {
   function createOrcamento(data: any) {
     OrcamentosService.updateById(Number(id), data)
       .then(() => {
+        setIsEditable(false);
+        setPageState("detalhes")
+      })
+      .catch(() => {});
+  }
+  function createOrcamentoFechar(data: any) {
+    OrcamentosService.updateById(Number(id), data)
+      .then(() => {
         console.log(data);
         navigate(-1);
       })
@@ -99,13 +111,16 @@ export const EditarOrcamento = () => {
 
   return (
     <PaginaBase
-      titulo="Orcamento id:1"
+      titulo="Editar Orcamento"
       barraDeFerramentas={
         <FerramentasDeDetalhes
           tipo="detalhes"
+          pageState={pageState}
           onClickSalvar={handleSubmit(createOrcamento)}
           setPaiState={setPageState}
-        />
+          onClickSalvarEFechar={handleSubmit(createOrcamentoFechar)} 
+          onClickCancelar={handleSubmit(setarOrcamento)}/>
+          
       }
     >
       <Box component={"form"} onSubmit={handleSubmit(createOrcamento)}>
@@ -129,6 +144,7 @@ export const EditarOrcamento = () => {
                   disablePortal
                   {...register("idCliente")}
                   id="combo-box-demo"
+                  disabled={!isEditable}
                   options={opcoes}
                   value={
                     opcoes.find((option) => option.id === watch("idCliente")) ||
@@ -174,7 +190,7 @@ export const EditarOrcamento = () => {
               <Grid item>
                 <Typography>Observações</Typography>
                 <TextField
-                  type="text"
+                  type="text" disabled={!isEditable}
                   placeholder="Observações"
                   {...register("observacoes")}
                 />
@@ -185,7 +201,7 @@ export const EditarOrcamento = () => {
               <Grid item>
                 <Typography>Prazo Estimado de produção (Dias) </Typography>
                 <TextField
-                  type="number"
+                  type="number" disabled={!isEditable}
                   placeholder="Prazo Estimado em Dias"
                   {...register("prazoEstimadoProducao")}
                 />

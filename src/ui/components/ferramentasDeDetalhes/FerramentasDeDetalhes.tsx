@@ -66,7 +66,7 @@ export const FerramentasDeDetalhes: React.FC<IFerramentasDeDetalhes> = (
     pageState,
   } = props;
 
-  const [tipo, setTipo] = useState<TTipo>("detalhes");
+  const [tipo, setTipo] = useState<TTipo>();
   const [mostrarBotaoSalvar, setMostrarBotaoSalvar] = useState<boolean>(false);
   const [mostrarBotaoSalvarEFechar, setMostrarBotaoSalvarEFechar] =
     useState<boolean>(false);

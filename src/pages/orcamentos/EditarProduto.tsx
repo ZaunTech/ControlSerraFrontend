@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { FerramentasDeDetalhes } from "../../ui/components";
+import { useEffect, useState } from "react";
+import { FerramentasDeDetalhes, TTipo } from "../../ui/components";
 import { PaginaBase } from "../../ui/layouts";
 import { Box, Grid, Paper, TextField, Typography } from "@mui/material";
 import { z } from "zod";
@@ -29,9 +29,9 @@ export const EditarProduto = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  useEffect(() => {
+  const setarProduto = () => {
+
     ProdutosService.getById(Number(id)).then((result) => {
-    
       if (result instanceof Error) {
         return Error;
       }
@@ -40,9 +40,23 @@ export const EditarProduto = () => {
       setValue("observacoes", result.observacoes);
       setValue("quantidade", result.quantidade);
     });
+  }
+
+  useEffect(() => {
+    setarProduto();
   }, []);
 
-  function createUser(data: any) {
+  function createProduto(data: any) {
+    ProdutosService.updateById(Number(id),data)
+      .then((result) => {
+        if (!(result instanceof Error)) {
+          setIsEditable(false);
+          setPageState("detalhes");
+        }
+      })
+      .catch((error) => {});
+  }
+  function createProdutoFechar(data: any) {
     ProdutosService.updateById(Number(id),data)
       .then((result) => {
         if (!(result instanceof Error)) {
@@ -51,17 +65,33 @@ export const EditarProduto = () => {
       })
       .catch((error) => {});
   }
+  const [pageState, setPageState] = useState<TTipo>("detalhes");
+  const [isEditable, setIsEditable] = useState<boolean>(false);
+  useEffect(() => {
+    if (pageState === "detalhes") {
+      setIsEditable(false);
+      return;
+    }
+    if (pageState === "editar" || pageState === "novo") {
+      setIsEditable(true);
+      return;
+    }
+  }, [pageState]);
 
   return (
     <PaginaBase
       titulo="Editar Produto"
       barraDeFerramentas={
         <FerramentasDeDetalhes
-          mostrarBotaoApagar={false}
-          onClickSalvar={handleSubmit(createUser)}
+          tipo="detalhes"
+          pageState={pageState}
+          setPaiState={setPageState}
+          onClickSalvarEFechar={handleSubmit(createProdutoFechar)}
+          onClickCancelar={handleSubmit(setarProduto)}
+          onClickSalvar={handleSubmit(createProduto)}
         />
       }>
-      <Box component={"form"} onSubmit={handleSubmit(createUser)}>
+      <Box component={"form"} onSubmit={handleSubmit(createProduto)}>
         <Box
           display={"flex"}
           margin={1}
@@ -72,7 +102,7 @@ export const EditarProduto = () => {
             <Grid container item direction="row" spacing={4}>
               <Grid item>
                 <Typography>Titulo</Typography>
-                <TextField placeholder="Titulo" {...register("titulo")} />
+                <TextField placeholder="Titulo" disabled={!isEditable} {...register("titulo")} />
                 {errors.titulo && (
                   <span>{errors.titulo.message?.toString()}</span>
                 )}
@@ -80,7 +110,7 @@ export const EditarProduto = () => {
               <Grid item>
                 <Typography>Quantidade</Typography>
                 <TextField
-                  type="number"
+                  type="number" disabled={!isEditable}
                   placeholder="Quantidade"
                   {...register("quantidade")}
                 />
@@ -92,7 +122,7 @@ export const EditarProduto = () => {
               <Grid item>
                 <Typography>Observações</Typography>
                 <TextField
-                  placeholder="Observações"
+                  placeholder="Observações" disabled={!isEditable}
                   {...register("observacoes")}
                 />
                 {errors.observacao && (

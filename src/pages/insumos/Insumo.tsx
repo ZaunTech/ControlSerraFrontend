@@ -42,7 +42,14 @@ export const Insumo = () => {
   });
 
   const navigate = useNavigate();
-  function createUser(data: any) {
+  function createInsumo(data: any) {
+    InsumosService.updateById(Number(id), data)
+      .then(() => {
+        navigate(-1);
+      })
+      .catch((error) => {});
+  }
+  function createInsumoFechar(data: any) {
     InsumosService.updateById(Number(id), data)
       .then(() => {
         navigate(-1);
@@ -67,20 +74,19 @@ export const Insumo = () => {
       .catch((error) => {});
   }, []);
 
+  const fetchData = async () => {
+    try {
+      const data: IInsumo | Error = await InsumosService.getById(Number(id));
+      if (data instanceof Error) {
+        return;
+      }
+      setValue("titulo", data.titulo);
+      setValue("descricao", data.descricao);
+      setValue("unidadeMedida", data.unidadeMedida);
+      setValue("idCategoria", data.idCategoria);
+    } catch (error) {}
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data: IInsumo | Error = await InsumosService.getById(Number(id));
-        if (data instanceof Error) {
-          return;
-        }
-        setValue("titulo", data.titulo);
-        setValue("descricao", data.descricao);
-        setValue("unidadeMedida", data.unidadeMedida);
-        setValue("idCategoria", data.idCategoria);
-      } catch (error) {}
-    };
-
     fetchData();
   }, []);
   const [pageState, setPageState] = useState<TTipo>("novo");
@@ -104,11 +110,13 @@ export const Insumo = () => {
         <FerramentasDeDetalhes
           tipo="detalhes"
           setPaiState={setPageState}
-          onClickSalvar={handleSubmit(createUser)}
+          onClickSalvarEFechar={handleSubmit(createInsumoFechar)}
+          onClickSalvar={handleSubmit(createInsumo)}
+          onClickCancelar={fetchData}
         />
       }
     >
-      <Box component={"form"} onSubmit={handleSubmit(createUser)}>
+      <Box component={"form"} onSubmit={handleSubmit(createInsumo)}>
         <Box
           display={"flex"}
           margin={1}

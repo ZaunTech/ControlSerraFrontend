@@ -78,6 +78,7 @@ export const CriarInsumo = () => {
       barraDeFerramentas={
         <FerramentasDeDetalhes
          tipo="novo"
+         pageState={pageState}
          setPaiState={setPageState}
           onClickSalvar={handleSubmit(createUser)}
         />

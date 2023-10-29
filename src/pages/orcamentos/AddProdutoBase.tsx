@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FerramentasDeDetalhes } from "../../ui/components";
+import { FerramentasDeDetalhes, TTipo } from "../../ui/components";
 import { PaginaBase } from "../../ui/layouts";
 import {
   Autocomplete,
@@ -67,12 +67,31 @@ export const AddProdutoBase = () => {
       .catch((error) => {});
   }
 
+
+  const [pageState, setPageState] = useState<TTipo>("novo");
+  const [isEditable, setIsEditable] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (pageState === "detalhes") {
+      setIsEditable(false);
+      return;
+    }
+    if (pageState === "editar" || pageState === "novo") {
+      setIsEditable(true);
+      return;
+    }
+  }, [pageState]);
+
+
+
   return (
     <PaginaBase
       titulo="Adicionar Produto Base ao Orçamento"
       barraDeFerramentas={
         <FerramentasDeDetalhes
-          mostrarBotaoApagar={false}
+          pageState={pageState}
+          setPaiState={setPageState}
+          tipo="novo"          
           onClickSalvar={handleSubmit(createUser)}
         />
       }

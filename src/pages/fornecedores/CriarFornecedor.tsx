@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { PaginaBase } from "../../ui/layouts";
-import { FerramentasDeDetalhes } from "../../ui/components";
+import { FerramentasDeDetalhes, TTipo } from "../../ui/components";
 import {
   Box,
   Grid,
@@ -39,8 +39,8 @@ const createUserFormSchema = z
     cidade: z.string(),
     bairro: z.string(),
     rua: z.string(),
-    numero: z.string(),
-    complemento: z.string(),
+    numero: z.string().optional(),
+    complemento: z.string().optional(),
   })
   .refine(
     (data) => {
@@ -135,7 +135,9 @@ export const CriarFornecedor = () => {
   }, [handleGetCepData, cep]);
 
   const navigate = useNavigate();
-  function createUser(data: any) {
+ 
+
+  function createFornecedor(data: any) {
     FornecedoresService.create(data)
       .then(() => {
         navigate(-1);
@@ -143,19 +145,35 @@ export const CriarFornecedor = () => {
       .catch((erro) => {});
   }
 
+  const [pageState, setPageState] = useState<TTipo>("novo");
+  const [isEditable, setIsEditable] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (pageState === "detalhes") {
+      setIsEditable(false);
+      return;
+    }
+    if (pageState === "editar" || pageState === "novo") {
+      setIsEditable(true);
+      return;
+    }
+  }, [pageState]);
+
   return (
     <PaginaBase
       titulo="Novo Fornecedor"
       barraDeFerramentas={
         <FerramentasDeDetalhes
-          mostrarBotaoApagar={false}
-          mostrarBotaoSalvar
-          mostrarBotaoVoltar
-          onClickSalvar={handleSubmit(createUser)}
+        tipo="detalhes"
+        pageState={pageState}
+        
+        setPaiState={setPageState}
+          onClickSalvar={handleSubmit(createFornecedor)}
+        
         />
       }
     >
-      <Box component={"form"} onSubmit={handleSubmit(createUser)}>
+      <Box component={"form"} onSubmit={handleSubmit(createFornecedor)}>
         <Box
           display={"flex"}
           margin={1}
@@ -179,8 +197,8 @@ export const CriarFornecedor = () => {
                   {...register("contaTipo")}
                   onChange={handleChange}
                 >
-                  <MenuItem value={"Fisica"}>Fisico</MenuItem>
-                  <MenuItem value={"Juridica"}>Juridico</MenuItem>
+                  <MenuItem value={"Fisica"} disabled={!isEditable}>Fisico</MenuItem>
+                  <MenuItem value={"Juridica"} disabled={!isEditable}>Juridico</MenuItem>
                 </Select>
 
                 {errors.contaTipo && (
@@ -192,7 +210,7 @@ export const CriarFornecedor = () => {
                   <Grid item>
                     <Typography>Razão Social</Typography>
                     <TextField
-                      placeholder="Razão Social"
+                      placeholder="Razão Social" disabled={!isEditable}
                       {...register("razaoSocial")}
                     />
                     {errors.razaoSocial && (
@@ -202,7 +220,7 @@ export const CriarFornecedor = () => {
                   <Grid item>
                     <Typography>Nome Fantasia</Typography>
                     <TextField
-                      placeholder="Nome Fantasia"
+                      placeholder="Nome Fantasia" disabled={!isEditable}
                       {...register("nomeFantasia")}
                     />
                     {errors.nomeFantasia && (
@@ -211,7 +229,7 @@ export const CriarFornecedor = () => {
                   </Grid>
                   <Grid item>
                     <Typography>CNPJ</Typography>
-                    <TextField placeholder="CNPJ" {...register("cnpj")} />
+                    <TextField placeholder="CNPJ" disabled={!isEditable} {...register("cnpj")} />
                     {errors.cnpj && (
                       <span>{errors.cnpj.message?.toString()}</span>
                     )}
@@ -223,7 +241,7 @@ export const CriarFornecedor = () => {
                   <Grid item>
                     <Typography>Nome Completo</Typography>
                     <TextField
-                      placeholder="Nome Completo"
+                      placeholder="Nome Completo" disabled={!isEditable}
                       {...register("nome")}
                     />
                     {errors.nome && (
@@ -232,12 +250,12 @@ export const CriarFornecedor = () => {
                   </Grid>
                   <Grid item>
                     <Typography>RG</Typography>
-                    <TextField placeholder="RG" {...register("rg")} />
+                    <TextField placeholder="RG" disabled={!isEditable} {...register("rg")} />
                   </Grid>
                   {errors.rg && <span>{errors.rg.message?.toString()}</span>}
                   <Grid item>
                     <Typography>CPF</Typography>
-                    <TextField placeholder="CPF" {...register("cpf")} />
+                    <TextField placeholder="CPF"  disabled={!isEditable} {...register("cpf")} />
                     {errors.cpf && (
                       <span>{errors.cpf.message?.toString()}</span>
                     )}
@@ -265,13 +283,13 @@ export const CriarFornecedor = () => {
                 <Typography>Email</Typography>
                 <TextField
                   placeholder="Email"
-                  type="email"
+                  type="email" disabled={!isEditable}
                   {...register("email")}
                 />
               </Grid>
               <Grid item>
                 <Typography>Telefone</Typography>
-                <TextField placeholder="Telefone" {...register("telefone")} />
+                <TextField placeholder="Telefone" disabled={!isEditable} {...register("telefone")} />
               </Grid>
             </Grid>
           </Grid>
@@ -292,25 +310,25 @@ export const CriarFornecedor = () => {
             <Grid container item direction="row" spacing={3}>
               <Grid item>
                 <Typography>CEP</Typography>
-                <TextField placeholder="CEP" {...register("cep")} />
+                <TextField placeholder="CEP" disabled={!isEditable} {...register("cep")} />
                 {errors.cep && <span>{errors.cep.message?.toString()}</span>}
               </Grid>
               <Grid item xs={5}>
                 <Typography>Endereço</Typography>
                 <TextField
                   placeholder="Endereço"
-                  fullWidth
+                  fullWidth disabled={!isEditable}
                   {...register("endereco")}
                 />
               </Grid>
               <Grid item>
                 <Typography>Rua</Typography>
-                <TextField placeholder="Rua" {...register("rua")} />
+                <TextField placeholder="Rua" disabled={!isEditable} {...register("rua")} />
               </Grid>
 
               <Grid item>
                 <Typography>Bairro</Typography>
-                <TextField placeholder="Bairro" {...register("bairro")} />
+                <TextField placeholder="Bairro" disabled={!isEditable} {...register("bairro")} />
               </Grid>
             </Grid>
             <Grid container item direction="row" spacing={2}>
@@ -318,7 +336,7 @@ export const CriarFornecedor = () => {
                 <Typography>Cidade</Typography>
                 <TextField
                   placeholder="Cidade"
-                  fullWidth
+                  fullWidth disabled={!isEditable}
                   {...register("cidade")}
                 />
               </Grid>
@@ -326,7 +344,7 @@ export const CriarFornecedor = () => {
                 <Typography>Estado</Typography>
                 <TextField
                   placeholder="Estado"
-                  fullWidth
+                  fullWidth disabled={!isEditable}
                   {...register("estado")}
                 />
               </Grid>
@@ -334,7 +352,7 @@ export const CriarFornecedor = () => {
                 <Typography>Numero</Typography>
                 <TextField
                   placeholder="Numero"
-                  fullWidth
+                  fullWidth disabled={!isEditable}
                   {...register("numero")}
                 />
               </Grid>
@@ -348,7 +366,7 @@ export const CriarFornecedor = () => {
                 <Typography>Complemento</Typography>
                 <TextField
                   placeholder="Complemento"
-                  fullWidth
+                  fullWidth disabled={!isEditable}
                   {...register("complemento")}
                 />
               </Grid>

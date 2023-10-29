@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { PaginaBase } from "../../ui/layouts";
-import { FerramentasDeDetalhes } from "../../ui/components";
+import { FerramentasDeDetalhes, TTipo } from "../../ui/components";
 import {
   Autocomplete,
   Box,
@@ -26,6 +26,10 @@ const createUserFormSchema = z.object({
   status: z.string(),
   prazoEstimadoProducao: z.coerce.number(),
 });
+
+
+
+
 
 export const CriarOrcamento = () => {
   const [opcoes, setOpcoes] = useState<ICliente[]>([]);
@@ -61,6 +65,7 @@ export const CriarOrcamento = () => {
 
   const navigate = useNavigate();
   function createOrcamento(data: any) {
+    console.log(data)
     OrcamentosService.create(data)
       .then(() => {
         navigate(-1);
@@ -68,14 +73,29 @@ export const CriarOrcamento = () => {
       .catch(() => {});
   }
 
+  const [pageState, setPageState] = useState<TTipo>("novo");
+  const [isEditable, setIsEditable] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (pageState === "detalhes") {
+      setIsEditable(false);
+      return;
+    }
+    if (pageState === "editar" || pageState === "novo") {
+      setIsEditable(true);
+      return;
+    }
+  }, [pageState]);
+
+
   return (
     <PaginaBase
       titulo="Novo Orcamento"
       barraDeFerramentas={
         <FerramentasDeDetalhes
-          mostrarBotaoApagar={false}
-          mostrarBotaoSalvar
-          mostrarBotaoVoltar
+          tipo="detalhes"
+          pageState={pageState}
+          setPaiState={setPageState}
           onClickSalvar={handleSubmit(createOrcamento)}
         />
       }
@@ -101,6 +121,7 @@ export const CriarOrcamento = () => {
                   disablePortal
                   {...register("idCliente")}
                   id="combo-box-demo"
+                 
                   options={opcoes}
                   getOptionLabel={(option) =>
                     option.nomeFantasia ??
@@ -108,6 +129,7 @@ export const CriarOrcamento = () => {
                     option.razaoSocial ??
                     ""
                   }
+                  disabled={!isEditable}
                   sx={{ width: 225 }}
                   renderInput={(params) => <TextField {...params} />}
                   onChange={(_, value) => {
@@ -128,9 +150,9 @@ export const CriarOrcamento = () => {
                   {...register("status")}
                   onChange={handleChange}
                 >
-                  <MenuItem value={"Pendente"}>Pendente</MenuItem>             
-                  <MenuItem value={"Em Processo"}>Em Processo</MenuItem>
-                  <MenuItem value={"Concluido"}>Concluido</MenuItem>
+                  <MenuItem value={"Pendente"} disabled={!isEditable}>Pendente</MenuItem>             
+                  <MenuItem value={"Em Processo"} disabled={!isEditable}>Em Processo</MenuItem>
+                  <MenuItem value={"Concluido"} disabled={!isEditable}>Concluido</MenuItem>
                 </Select>
 
                 {errors.contaTipo && (
@@ -142,7 +164,7 @@ export const CriarOrcamento = () => {
                 <Typography>Observações</Typography>
                 <TextField
                   type="text"
-                  placeholder="Observações"
+                  placeholder="Observações" disabled={!isEditable}
                   {...register("observacoes")}
                 />
                 {errors.dataVec && (
@@ -152,7 +174,7 @@ export const CriarOrcamento = () => {
               <Grid item>
                 <Typography>Prazo Estimado de produção (Dias) </Typography>
                 <TextField
-                  type="number"
+                  type="number" disabled={!isEditable}
                   placeholder="Prazo Estimado em Dias"
                   {...register("prazoEstimadoProducao")}
                 />

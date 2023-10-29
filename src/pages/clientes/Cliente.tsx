@@ -10,12 +10,12 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import getCepData from "../../data/services/api/axios-config/actions/cep";
-import { ClientesService, FornecedoresService, IFornecedor } from "../../data/services/api";
-import { FerramentasDeDetalhes } from "../../ui/components";
+import { ClientesService, FornecedoresService, ICliente, IFornecedor } from "../../data/services/api";
+import { FerramentasDeDetalhes, TTipo } from "../../ui/components";
 import { PaginaBase } from "../../ui/layouts";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -84,7 +84,7 @@ export const Cliente = () => {
     resolver: zodResolver(createUserFormSchema),
   });
 
-  const [tipo, setTipo] = React.useState("Juridica");
+  const [contaTipo, setTipo] = React.useState("Juridica");
   const handleChange = (event: SelectChangeEvent) => {
     setTipo(event.target.value as string);
     setValue("nome", undefined);
@@ -131,63 +131,93 @@ export const Cliente = () => {
     }
   }, [handleGetCepData, cep]);
 
-  function createUser(data: any) {
+  function createCliente(data: any) {
     ClientesService.updateById(Number(id), data)
       .then(() => {
+        setIsEditable(false);
+        setPageState("detalhes");
+      })
+      .catch((erro) => {});
+  }
+  function createClienteFechar(data: any) {
+    ClientesService.updateById(Number(id), data)
+      .then(() => {
+        setIsEditable(false);
         navigate(-1);
       })
       .catch((erro) => {});
   }
+  const fetchData = async () => {
+    try {
+      const data: ICliente | Error = await ClientesService.getById(
+        Number(id)
+      );
+      console.log(data)
+      if (data instanceof Error) {
+        return;
+      }
+      setValue(
+        "razaoSocial",
+        data.razaoSocial == null ? undefined : data.razaoSocial
+      );
+      setValue(
+        "nomeFantasia",
+        data.nomeFantasia == null ? undefined : data.nomeFantasia
+      );
+      setValue("cnpj", data.cnpj == null ? undefined : data.cnpj);
+      setValue("rg", data.rg == null ? undefined : data.rg);
+      setValue("cpf", data.cpf == null ? undefined : data.cpf);
+      setValue("nome", data.nome == null ? undefined : data.nome);
+      setTipo(data.contaTipo.toString());
+      setValue("email", data.email);
+      setValue("telefone", data.telefone);
+      setValue("cep", data.cep);
+      setValue("pais", data.pais);
+      setValue("estado", data.estado);
+      setValue("cidade", data.cidade);
+      setValue("bairro", data.bairro);
+      setValue("rua", data.rua);
+      setValue("numero", data.numero);
+      setValue("complemento", data.complemento);
+    } catch (error) {}
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data: IFornecedor | Error = await FornecedoresService.getById(
-          Number(id)
-        );
-        if (data instanceof Error) {
-          return;
-        }
-        setValue(
-          "razaoSocial",
-          data.razaoSocial == null ? undefined : data.razaoSocial
-        );
-        setValue(
-          "nomeFantasia",
-          data.nomeFantasia == null ? undefined : data.nomeFantasia
-        );
-        setValue("cnpj", data.cnpj == null ? undefined : data.cnpj);
-        setValue("rg", data.rg == null ? undefined : data.rg);
-        setValue("cpf", data.cpf == null ? undefined : data.cpf);
-        setValue("nome", data.nome == null ? undefined : data.nome);
-        setTipo(data.contaTipo);
-        setValue("email", data.email);
-        setValue("telefone", data.telefone);
-        setValue("cep", data.cep);
-        setValue("pais", data.pais);
-        setValue("estado", data.estado);
-        setValue("cidade", data.cidade);
-        setValue("bairro", data.bairro);
-        setValue("rua", data.rua);
-        setValue("numero", data.numero);
-        setValue("complemento", data.complemento);
-      } catch (error) {}
-    };
+    
 
     fetchData();
   }, []);
+
+
+  const [pageState, setPageState] = useState<TTipo>("detalhes");
+  const [isEditable, setIsEditable] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (pageState === "detalhes") {
+      setIsEditable(false);
+      return;
+    }
+    if (pageState === "editar" || pageState === "novo") {
+      setIsEditable(true);
+      return;
+    }
+  }, [pageState]);
 
   return (
     <PaginaBase
       titulo="Editar Cliente"
       barraDeFerramentas={
         <FerramentasDeDetalhes
-          tipo="novo"
-          onClickSalvar={handleSubmit(createUser)}
+        tipo="detalhes"
+        pageState={pageState}
+        setPaiState={setPageState}
+          onClickSalvar={handleSubmit(createCliente)}
+          onClickCancelar={fetchData}
+          onClickSalvarEFechar={handleSubmit(createClienteFechar)}
         />
       }
     >
-      <Box component={"form"} onSubmit={handleSubmit(createUser)}>
+      <Box component={"form"} onSubmit={handleSubmit(createCliente)}>
         <Box
           display={"flex"}
           margin={1}
@@ -207,24 +237,24 @@ export const Cliente = () => {
                 <Select
                   labelId="contaTipo"
                   id="contaTipo"
-                  value={tipo}
+                  value={contaTipo}
                   {...register("contaTipo")}
                   onChange={handleChange}
                 >
-                  <MenuItem value={"Fisica"}>Fisico</MenuItem>
-                  <MenuItem value={"Juridica"}>Juridico</MenuItem>
+                  <MenuItem value={"Fisica"} disabled={!isEditable}>Fisico</MenuItem>
+                  <MenuItem value={"Juridica"} disabled={!isEditable}>Juridico</MenuItem>
                 </Select>
 
                 {errors.contaTipo && (
                   <span>{errors.contaTipo.message?.toString()}</span>
                 )}
               </Grid>
-              {tipo === "Juridica" && (
+              {contaTipo === "Juridica" && (
                 <>
                   <Grid item>
                     <Typography>Razão Social</Typography>
                     <TextField
-                      placeholder="Razão Social"
+                      placeholder="Razão Social" disabled={!isEditable}
                       {...register("razaoSocial")}
                     />
                     {errors.razaoSocial && (
@@ -234,7 +264,7 @@ export const Cliente = () => {
                   <Grid item>
                     <Typography>Nome Fantasia</Typography>
                     <TextField
-                      placeholder="Nome Fantasia"
+                      placeholder="Nome Fantasia" disabled={!isEditable}
                       {...register("nomeFantasia")}
                     />
                     {errors.nomeFantasia && (
@@ -243,19 +273,19 @@ export const Cliente = () => {
                   </Grid>
                   <Grid item>
                     <Typography>CNPJ</Typography>
-                    <TextField placeholder="CNPJ" {...register("cnpj")} />
+                    <TextField placeholder="CNPJ"  disabled={!isEditable} {...register("cnpj")} />
                     {errors.cnpj && (
                       <span>{errors.cnpj.message?.toString()}</span>
                     )}
                   </Grid>
                 </>
               )}
-              {tipo === "Fisica" && (
+              {contaTipo === "Fisica" && (
                 <>
                   <Grid item>
                     <Typography>Nome Completo</Typography>
                     <TextField
-                      placeholder="Nome Completo"
+                      placeholder="Nome Completo" disabled={!isEditable}
                       {...register("nome")}
                     />
                     {errors.nome && (
@@ -264,12 +294,12 @@ export const Cliente = () => {
                   </Grid>
                   <Grid item>
                     <Typography>RG</Typography>
-                    <TextField placeholder="RG" {...register("rg")} />
+                    <TextField placeholder="RG" disabled={!isEditable} {...register("rg")} />
                   </Grid>
                   {errors.rg && <span>{errors.rg.message?.toString()}</span>}
                   <Grid item>
                     <Typography>CPF</Typography>
-                    <TextField placeholder="CPF" {...register("cpf")} />
+                    <TextField placeholder="CPF" disabled={!isEditable} {...register("cpf")} />
                     {errors.cpf && (
                       <span>{errors.cpf.message?.toString()}</span>
                     )}
@@ -297,13 +327,13 @@ export const Cliente = () => {
                 <Typography>Email</Typography>
                 <TextField
                   placeholder="Email"
-                  type="email"
+                  type="email" disabled={!isEditable}
                   {...register("email")}
                 />
               </Grid>
               <Grid item>
                 <Typography>Telefone</Typography>
-                <TextField placeholder="Telefone" {...register("telefone")} />
+                <TextField placeholder="Telefone" disabled={!isEditable} {...register("telefone")} />
               </Grid>
             </Grid>
           </Grid>
@@ -324,25 +354,25 @@ export const Cliente = () => {
             <Grid container item direction="row" spacing={3}>
               <Grid item>
                 <Typography>CEP</Typography>
-                <TextField placeholder="CEP" {...register("cep")} />
+                <TextField placeholder="CEP" disabled={!isEditable} {...register("cep")} />
                 {errors.cep && <span>{errors.cep.message?.toString()}</span>}
               </Grid>
               <Grid item xs={5}>
                 <Typography>Endereço</Typography>
                 <TextField
                   placeholder="Endereço"
-                  fullWidth
+                  fullWidth disabled={!isEditable}
                   {...register("endereco")}
                 />
               </Grid>
               <Grid item>
                 <Typography>Rua</Typography>
-                <TextField placeholder="Rua" {...register("rua")} />
+                <TextField placeholder="Rua" disabled={!isEditable} {...register("rua")} />
               </Grid>
 
               <Grid item>
                 <Typography>Bairro</Typography>
-                <TextField placeholder="Bairro" {...register("bairro")} />
+                <TextField placeholder="Bairro" disabled={!isEditable} {...register("bairro")} />
               </Grid>
             </Grid>
             <Grid container item direction="row" spacing={2}>
@@ -350,7 +380,7 @@ export const Cliente = () => {
                 <Typography>Cidade</Typography>
                 <TextField
                   placeholder="Cidade"
-                  fullWidth
+                  fullWidth disabled={!isEditable}
                   {...register("cidade")}
                 />
               </Grid>
@@ -358,7 +388,7 @@ export const Cliente = () => {
                 <Typography>Estado</Typography>
                 <TextField
                   placeholder="Estado"
-                  fullWidth
+                  fullWidth disabled={!isEditable}
                   {...register("estado")}
                 />
               </Grid>
@@ -366,13 +396,13 @@ export const Cliente = () => {
                 <Typography>Numero</Typography>
                 <TextField
                   placeholder="Numero"
-                  fullWidth
+                  fullWidth disabled={!isEditable}
                   {...register("numero")}
                 />
               </Grid>
               <Grid item xs={3}>
                 <Typography>Pais</Typography>
-                <TextField placeholder="Pais" fullWidth {...register("pais")} />
+                <TextField placeholder="Pais" fullWidth  disabled={!isEditable}{...register("pais")} />
               </Grid>
             </Grid>
             <Grid container item direction="row" spacing={2}>
@@ -380,7 +410,7 @@ export const Cliente = () => {
                 <Typography>Complemento</Typography>
                 <TextField
                   placeholder="Complemento"
-                  fullWidth
+                  fullWidth disabled={!isEditable}
                   {...register("complemento")}
                 />
               </Grid>
@@ -388,6 +418,7 @@ export const Cliente = () => {
           </Grid>
         </Box>
       </Box>
+  
     </PaginaBase>
   );
 };

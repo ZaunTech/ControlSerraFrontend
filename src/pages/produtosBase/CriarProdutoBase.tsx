@@ -1,4 +1,4 @@
-import { FerramentasDeDetalhes } from "../../ui/components";
+import { FerramentasDeDetalhes, TTipo } from "../../ui/components";
 import { PaginaBase } from "../../ui/layouts";
 import { Box, Grid, Paper, TextField, Typography } from "@mui/material";
 import { z } from "zod";
@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { ProdutosBaseService } from "../../data/services/api";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const createUserFormSchema = z.object({
   titulo: z.string(),
@@ -35,12 +36,29 @@ export const CriarProdutoBase = () => {
       .catch((error) => {});
   }
 
+  const [pageState, setPageState] = useState<TTipo>("novo");
+  const [isEditable, setIsEditable] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (pageState === "detalhes") {
+      setIsEditable(false);
+      return;
+    }
+    if (pageState === "editar" || pageState === "novo") {
+      setIsEditable(true);
+      return;
+    }
+  }, [pageState]);
+
   return (
     <PaginaBase
       titulo="Novo Produto Base"
       barraDeFerramentas={
         <FerramentasDeDetalhes
-          mostrarBotaoApagar={false}
+          tipo="novo"
+          pageState={pageState}
+        
+          setPaiState={setPageState}
           onClickSalvar={handleSubmit(createUser)}
         />
       }

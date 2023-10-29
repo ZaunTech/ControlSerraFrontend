@@ -39,8 +39,8 @@ const createUserFormSchema = z
     cidade: z.string(),
     bairro: z.string(),
     rua: z.string(),
-    numero: z.string(),
-    complemento: z.string(),
+    numero: z.string().optional(),
+    complemento: z.string().optional(),
   })
   .refine(
     (data) => {
@@ -163,8 +163,9 @@ export const CriarCliente = () => {
       barraDeFerramentas={
         <FerramentasDeDetalhes
          
-        tipo="detalhes"
-        setPaiState={setPageState}
+          tipo="novo"
+          
+          setPaiState={setPageState}
           onClickSalvar={handleSubmit(createUser)}
         />
       }
