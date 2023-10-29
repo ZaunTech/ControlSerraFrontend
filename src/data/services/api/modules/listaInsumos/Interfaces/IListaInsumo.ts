@@ -8,7 +8,7 @@ export interface IListaInsumo {
     idProduto: number;
     idInsumo: number;
     idCotacao?: number;
-    dimensoes: string;
+    unidade: string;
     produto: IProduto;
     insumo: IInsumo;
     cotacao?: ICotacao;

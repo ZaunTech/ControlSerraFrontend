@@ -30,6 +30,7 @@ import {
   IProduto,
   ProdutosService,
 } from "../../data/services/api/modules/produtos";
+import { Actions } from "../../ui/components/ferramentasDeListagem/Actions";
 
 const BotoesOrcamento: React.FC = () => {
   const navigate = useNavigate();
@@ -137,24 +138,16 @@ export const ProdutosOrcamento = () => {
           <TableBody>
             {rows.map((row) => (
               <TableRow key={row.id}>
-                <TableCell>
-                  <Typography>
-                    <IconButton
-                      onClick={() =>
-                        navigate(`${location.pathname}/produtos/${row.id}`)
-                      }
-                    >
-                      <Icon>edit</Icon>
-                    </IconButton>
-                    <IconButton
-                      onClick={() => {
-                        handleDelete(row.id);
-                      }}
-                    >
-                      <Icon>delete</Icon>
-                    </IconButton>
-                  </Typography>
-                </TableCell>
+               
+                <Actions
+                  id={row.id}
+                  showListButton
+                  handleDelete={handleDelete}
+                  handleShowList={() => {
+                    navigate(`${location.pathname}/${row.id}`);
+                  }}
+                />
+                
                 <TableCell>
                   <Typography>{row.titulo}</Typography>
                 </TableCell>

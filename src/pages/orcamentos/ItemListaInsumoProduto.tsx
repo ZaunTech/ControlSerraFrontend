@@ -22,10 +22,10 @@ import {
 const createUserFormSchema = z.object({
   quantidade: z.coerce.number(),
   idInsumo: z.coerce.number(),
-  dimensoes: z.string(),
+  unidade: z.string(),
 });
 
-export const ItemListaInsumoProdutoBase = () => {
+export const ItemListaInsumoProduto = () => {
   const {
     register,
     handleSubmit,
@@ -69,7 +69,7 @@ export const ItemListaInsumoProdutoBase = () => {
         }
         setValue("idInsumo", data.idInsumo);
         setValue("quantidade", data.quantidade);
-        setValue("dimensoes", data.dimensoes);
+        setValue("unidade", data.unidade);
       } catch (error) {}
     };
 
@@ -88,7 +88,7 @@ export const ItemListaInsumoProdutoBase = () => {
 
   return (
     <PaginaBase
-      titulo="Editar Insumos"
+      titulo="Editar Insumos prod"
       barraDeFerramentas={
         <FerramentasDeDetalhes
           mostrarBotaoApagar={false}
@@ -141,10 +141,10 @@ export const ItemListaInsumoProdutoBase = () => {
                 )}
               </Grid>
               <Grid item>
-                <Typography>Dimensões</Typography>
-                <TextField placeholder="Dimensões" {...register("dimensoes")} />
-                {errors.dimensoes && (
-                  <span>{errors.dimensoes.message?.toString()}</span>
+                <Typography>unidade</Typography>
+                <TextField placeholder="unidade" {...register("unidade")} />
+                {errors.unidade && (
+                  <span>{errors.unidade.message?.toString()}</span>
                 )}
               </Grid>
             </Grid>

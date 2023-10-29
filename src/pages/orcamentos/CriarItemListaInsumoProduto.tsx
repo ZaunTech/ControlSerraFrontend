@@ -20,7 +20,7 @@ const createUserFormSchema = z.object({
   idProduto: z.coerce.number(),
   quantidade: z.coerce.number(),
   idInsumo: z.coerce.number(),
-  dimensoes: z.string(),
+  unidade: z.string(),
 });
 
 export const CriarItemInsumoProdutoBase = () => {
@@ -52,6 +52,7 @@ export const CriarItemInsumoProdutoBase = () => {
 
   const navigate = useNavigate();
   const { id } = useParams();
+  
 
   useEffect(() => {
     setValue("idProduto", Number(id));
@@ -61,6 +62,7 @@ export const CriarItemInsumoProdutoBase = () => {
     ListaInsumosService.create(data)
       .then((result) => {
         if (!(result instanceof Error)) {
+          console.log("ID:", id);
           navigate(-1);
         }
       })
@@ -117,8 +119,8 @@ export const CriarItemInsumoProdutoBase = () => {
                 )}
               </Grid>
               <Grid item>
-                <Typography>Dimensões</Typography>
-                <TextField placeholder="dimensoes" {...register("dimensoes")} />
+                <Typography>Unidade de Mediada</Typography>
+                <TextField placeholder="unidade" {...register("unidade")} />
                 {errors.dimensoes && (
                   <span>{errors.dimensoes.message?.toString()}</span>
                 )}
