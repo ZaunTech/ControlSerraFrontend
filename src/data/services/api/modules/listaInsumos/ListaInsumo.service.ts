@@ -147,10 +147,20 @@ const getCount = async (): Promise<number | Error> => {
 
 const setCotacao = async (
   idListaInsumo: number, idCotacao: number
-): Promise<IListaInsumo | Error> => {
+): Promise<{
+  data: {
+    idItemListaInsumo: number,
+    idCotacao: number
+  }
+} | Error> => {
   try {
     const urlRelativa = `/${rota}/${idListaInsumo}/cotar`;
-    const response = await Api.post<IListaInsumo>(
+    const response = await Api.post<{
+      data: {
+        idItemListaInsumo: number,
+        idCotacao: number
+      }
+    }>(
       urlRelativa,
       idCotacao
     );

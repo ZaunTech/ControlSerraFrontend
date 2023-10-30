@@ -279,7 +279,7 @@ export const CotacoesDeUmInsumo = () => {
                 <TableRow key={row.id}>
                   <Actions id={row.id} showPersoButton persoButtonIcon="check" handlePersoButton={() => {
                     if (idItemListaInsumos)
-                      ListaInsumosService.setCotacao(Number(idItemListaInsumos), row.id)
+                      ListaInsumosService.setCotacao(Number(idItemListaInsumos), row.id).then((res) => { if (res instanceof Error) { return } navigate(-1) })
                   }} showDeleteButton={false} showEditButton={false} />
                   <TableCell>
                     <Typography>
