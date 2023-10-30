@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { PaginaBase } from '../../ui/layouts'
-import { FerramentasDeDetalhes } from '../../ui/components'
+import { FerramentasDeDetalhes, TTipo } from '../../ui/components'
 import { useNavigate } from 'react-router-dom'
 import { Box, Grid, InputLabel, MenuItem, Paper, Select, SelectChangeEvent, TextField, Typography } from '@mui/material'
 import { z } from 'zod'
@@ -32,16 +32,30 @@ export const CriarUsuario = () => {
       };
     
     function criarUsuario(data: any){
-        
-      console.log(data);
+      
+      
+      
     }
-   
+    const [pageState, setPageState] = useState<TTipo>("novo");
+    const [isEditable, setIsEditable] = useState<boolean>(false);
+  
+    useEffect(() => {
+      if (pageState === "detalhes") {
+        setIsEditable(false);
+        return;
+      }
+      if (pageState === "editar" || pageState === "novo") {
+        setIsEditable(true);
+        return;
+      }
+    }, [pageState]);
   return (
-
     <PaginaBase
       titulo="Criar Usuario"
       barraDeFerramentas={<FerramentasDeDetalhes
-        mostrarBotaoApagar={false}
+        tipo="detalhes"
+        pageState={pageState}
+        setPaiState={setPageState}
         onClickSalvar={handleSubmit(criarUsuario)}
       />}>
 

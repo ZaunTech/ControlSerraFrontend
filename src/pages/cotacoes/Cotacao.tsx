@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import { PaginaBase } from "../../ui/layouts";
-import { FerramentasDeDetalhes } from "../../ui/components";
+import { FerramentasDeDetalhes, TTipo } from "../../ui/components";
 import {
   Autocomplete,
   Box,
@@ -83,29 +83,31 @@ export const Cotacao = () => {
   });
   const { id } = useParams();
 
+  const fetchData = async () => {
+    try {
+      const data: ICotacao | Error = await CotacoesService.getById(
+        Number(id)
+      );
+      if (data instanceof Error) {
+        return;
+      }
+
+      const dateObject = new Date(data.data);
+      if (!isNaN(dateObject.getTime())) {
+        const formattedDate = dateObject.toISOString().split("T")[0];
+
+        setValue("idInsumo", data.idInsumo);
+        setValue("idFornecedor", data.idFornecedor);
+        setValue("data", formattedDate);
+        setValue("unidade", data.unidade);
+        setValue("valor", data.valor);
+      } else {
+      }
+    } catch (error) {}
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data: ICotacao | Error = await CotacoesService.getById(
-          Number(id)
-        );
-        if (data instanceof Error) {
-          return;
-        }
-
-        const dateObject = new Date(data.data);
-        if (!isNaN(dateObject.getTime())) {
-          const formattedDate = dateObject.toISOString().split("T")[0];
-
-          setValue("idInsumo", data.idInsumo);
-          setValue("idFornecedor", data.idFornecedor);
-          setValue("data", formattedDate);
-          setValue("unidade", data.unidade);
-          setValue("valor", data.valor);
-        } else {
-        }
-      } catch (error) {}
-    };
+    
+    
 
     fetchData();
   }, []);
@@ -114,19 +116,44 @@ export const Cotacao = () => {
   function createCotacao(data: any) {
     CotacoesService.updateById(Number(id), data)
       .then(() => {
+        setIsEditable(false);
+        setPageState("detalhes");
+      })
+      .catch(() => {});
+  }
+  function createCotacaoFechar(data: any) {
+    CotacoesService.updateById(Number(id), data)
+      .then(() => {
         navigate(-1);
       })
       .catch(() => {});
   }
+  const [pageState, setPageState] = useState<TTipo>("detalhes");
+  const [isEditable, setIsEditable] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (pageState === "detalhes") {
+      setIsEditable(false);
+      return;
+    }
+    if (pageState === "editar" || pageState === "novo") {
+      setIsEditable(true);
+      return;
+    }
+  }, [pageState]);
+
+  
 
   return (
     <PaginaBase
       titulo="Editar Cotação"
       barraDeFerramentas={
         <FerramentasDeDetalhes
-          mostrarBotaoApagar={false}
-          mostrarBotaoSalvar
-          mostrarBotaoVoltar
+        tipo="detalhes"
+        pageState={pageState}
+        setPaiState={setPageState}
+        onClickCancelar={fetchData}
+        onClickSalvarEFechar={handleSubmit(createCotacaoFechar)}
           onClickSalvar={handleSubmit(createCotacao)}
         />
       }
@@ -152,6 +179,7 @@ export const Cotacao = () => {
                   disablePortal
                   {...register("idFornecedor")}
                   id="combo-box-demo"
+                  disabled={!isEditable}
                   options={opcoes}
                   value={
                     opcoes.find(
@@ -180,6 +208,7 @@ export const Cotacao = () => {
                 <TextField
                   type="number"
                   placeholder="Valor do Insumo"
+                  disabled={!isEditable}
                   {...register("valor")}
                 />
                 {errors.valor && (
@@ -191,6 +220,7 @@ export const Cotacao = () => {
                 <TextField
                   type="date"
                   placeholder="data"
+                  disabled={!isEditable}
                   {...register("data")}
                   onChange={(e) => {
                     setValue("data", e.target.value);
@@ -220,6 +250,7 @@ export const Cotacao = () => {
                 <Autocomplete
                   disablePortal
                   id="combo-box-demo"
+                  disabled={!isEditable}
                   {...register("idInsumo")}
                   options={opcaoiInsumos}
                   getOptionLabel={(opcaoiInsumos) => opcaoiInsumos.titulo ?? ""}
@@ -241,7 +272,7 @@ export const Cotacao = () => {
 
               <Grid item>
                 <Typography>Unidade de Medida</Typography>
-                <TextField placeholder="Unidade de Medida" {...register("unidade")} />
+                <TextField placeholder="Unidade de Medida" disabled={!isEditable} {...register("unidade")} />
                 {errors.unidade && (
                   <span>{errors.unidade.message?.toString()}</span>
                 )}

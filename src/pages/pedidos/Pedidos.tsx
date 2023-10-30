@@ -95,17 +95,7 @@ export const Pedidos = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    debounce(() => {
-      PedidosService.getAll(pagina, busca).then((result) => {
-        if (result instanceof Error) {
-          alert(result.message);
-          return;
-        }
-        setRows(result.data);
-        setTotalCount(result.totalCount);
-        setIsLoading(false);
-      });
-    });
+    setDados();
   }, [busca, pagina]);
 
   const handleDelete = (id: number) => {
@@ -133,13 +123,11 @@ export const Pedidos = () => {
           }
           onClickBotaoNovo={() => navigate(`${location.pathname}/novo`)}
         />
-      }
-    >
+      }>
       <TableContainer
         component={Paper}
         variant="outlined"
-        sx={{ m: 1, width: "auto" }}
-      >
+        sx={{ m: 1, width: "auto" }}>
         <Table>
           <TableHead>
             <TableRow>
@@ -161,15 +149,13 @@ export const Pedidos = () => {
                     <IconButton
                       onClick={() =>
                         navigate(`${location.pathname}/${row.id}/editar`)
-                      }
-                    >
+                      }>
                       <Icon>edit</Icon>
                     </IconButton>
                     <IconButton
                       onClick={() => {
                         handleDelete(row.id);
-                      }}
-                    >
+                      }}>
                       <Icon>delete</Icon>
                     </IconButton>
                   </Typography>
@@ -181,7 +167,8 @@ export const Pedidos = () => {
                   <Typography>
                     {row.orcamento.cliente.nome ||
                       row.orcamento.cliente.nomeFantasia ||
-                      row.orcamento.cliente.razaoSocial}
+                      row.orcamento.cliente.razaoSocial ||
+                      ""}
                   </Typography>
                 </TableCell>
                 <TableCell>

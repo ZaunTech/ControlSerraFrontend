@@ -63,18 +63,7 @@ export const EditarOrcamento = () => {
     setarOrcamento();
   }, []);
 
-  const setarOrcamento =  ()=>{ 
-     OrcamentosService.getById(Number(id)).then((result) => {
-    if (result instanceof Error) {
-      return;
-    }
-
-    setValue("idCliente", result.idCliente);
-    setValue("observacoes", result.observacoes);
-    setTipo(result.status.toString());
-    setValue("prazoEstimadoProducao", result.prazoEstimadoProducao);
-  });
-}
+ 
 
   const {
     register,
@@ -89,6 +78,23 @@ export const EditarOrcamento = () => {
   const handleChange = (event: SelectChangeEvent) => {
     setTipo(event.target.value as string);
   };
+  
+  const setarOrcamento = async ()=>{ 
+    try{
+   await OrcamentosService.getById(Number(id)).then((result) => {
+   if (result instanceof Error) {
+     return;
+   }
+
+   setValue("idCliente", result.idCliente);
+   setValue("observacoes", result.observacoes);
+   setTipo(result.status.toString());
+   setValue("status",result.status.toString())
+   setValue("prazoEstimadoProducao", result.prazoEstimadoProducao);
+ });
+}
+catch(error){}
+}
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -182,8 +188,8 @@ export const EditarOrcamento = () => {
                   <MenuItem value={"Concluido"}>Concluido</MenuItem>
                 </Select>
 
-                {errors.contaTipo && (
-                  <span>{errors.contaTipo.message?.toString()}</span>
+                {errors.status && (
+                  <span>{errors.status.message?.toString()}</span>
                 )}
               </Grid>
 
@@ -194,8 +200,8 @@ export const EditarOrcamento = () => {
                   placeholder="Observações"
                   {...register("observacoes")}
                 />
-                {errors.dataVec && (
-                  <span>{errors.dataVec.message?.toString()}</span>
+                {errors.observacoes && (
+                  <span>{errors.observacoes.message?.toString()}</span>
                 )}
               </Grid>
               <Grid item>

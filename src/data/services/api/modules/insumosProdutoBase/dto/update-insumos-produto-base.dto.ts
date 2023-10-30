@@ -1,5 +1,5 @@
 export interface UpdateInsumosProdutoBaseDto {
   quantidade?: number;
-  dimensoes?: string;
+  unidade?: string;
   idInsumo?: number;
 }

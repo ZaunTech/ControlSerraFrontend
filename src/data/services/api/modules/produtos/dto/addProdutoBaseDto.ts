@@ -1,6 +1,6 @@
 export interface AddProdutoBaseDto {
-    orcamentoId: number;
-    produtoBaseId: number;
-    quantidade?: number;
-    observacoes?: string;
-  }  
+  orcamentoId: number;
+  id: number;
+  quantidade?: number;
+  observacoes?: string;
+}

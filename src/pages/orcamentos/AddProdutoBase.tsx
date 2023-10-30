@@ -23,6 +23,7 @@ const createUserFormSchema = z.object({
   quantidade: z.coerce.number(),
   orcamentoId: z.coerce.number(),
   observacoes: z.string(),
+  id: z.coerce.number(),
 });
 
 export const AddProdutoBase = () => {
@@ -59,7 +60,8 @@ export const AddProdutoBase = () => {
   }, []);
 
   function createUser(data: any) {
-    ProdutosService.create(data)
+    console.log(data);
+    ProdutosService.addProdutoBase(data)
       .then((result) => {
         if (!(result instanceof Error)) {
         }
@@ -118,6 +120,7 @@ export const AddProdutoBase = () => {
                   renderInput={(params) => <TextField {...params} />}
                   onChange={(_, value) => {
                     setValue("titulo", value?.titulo);
+                    setValue("id",value?.id);
                   }}
                 />
                 {errors.idInsumo && (

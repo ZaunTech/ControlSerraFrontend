@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FerramentasDeDetalhes } from "../../ui/components";
+import { FerramentasDeDetalhes, TTipo } from "../../ui/components";
 import { PaginaBase } from "../../ui/layouts";
 import {
   Autocomplete,
@@ -58,25 +58,37 @@ export const ItemListaInsumoProduto = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
+  const fetchData = async () => {
+    try {
+      const data: IListaInsumo | Error = await ListaInsumosService.getById(
+        Number(id)
+      );
+      if (data instanceof Error) {
+        return;
+      }
+      setValue("idInsumo", data.idInsumo);
+      setValue("quantidade", data.quantidade);
+      setValue("unidade", data.unidade);
+    } catch (error) {}
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data: IListaInsumo | Error = await ListaInsumosService.getById(
-          Number(id)
-        );
-        if (data instanceof Error) {
-          return;
-        }
-        setValue("idInsumo", data.idInsumo);
-        setValue("quantidade", data.quantidade);
-        setValue("unidade", data.unidade);
-      } catch (error) {}
-    };
+    
 
     fetchData();
   }, []);
 
-  function createUser(data: any) {
+  function createInsumoProd(data: any) {
+    ListaInsumosService.updateById(Number(id), data)
+      .then((result) => {
+        if (!(result instanceof Error)) {
+          setIsEditable(false);
+          setPageState("detalhes");
+        }
+      })
+      .catch((error) => {});
+  }
+  function createInsumoProdFechar(data: any) {
     ListaInsumosService.updateById(Number(id), data)
       .then((result) => {
         if (!(result instanceof Error)) {
@@ -86,17 +98,35 @@ export const ItemListaInsumoProduto = () => {
       .catch((error) => {});
   }
 
+  const [pageState, setPageState] = useState<TTipo>("detalhes");
+  const [isEditable, setIsEditable] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (pageState === "detalhes") {
+      setIsEditable(false);
+      return;
+    }
+    if (pageState === "editar" || pageState === "novo") {
+      setIsEditable(true);
+      return;
+    }
+  }, [pageState]);
+
   return (
     <PaginaBase
       titulo="Editar Insumos prod"
       barraDeFerramentas={
         <FerramentasDeDetalhes
-          mostrarBotaoApagar={false}
-          onClickSalvar={handleSubmit(createUser)}
+          tipo="detalhes"
+          setPaiState={setPageState}
+          pageState={pageState}
+          onClickSalvarEFechar={handleSubmit(createInsumoProdFechar)}
+          onClickCancelar={fetchData}
+          onClickSalvar={handleSubmit(createInsumoProd)}
         />
       }
     >
-      <Box component={"form"} onSubmit={handleSubmit(createUser)}>
+      <Box component={"form"} onSubmit={handleSubmit(createInsumoProd)}>
         <Box
           display={"flex"}
           margin={1}
@@ -111,6 +141,7 @@ export const ItemListaInsumoProduto = () => {
                 <Autocomplete
                   disablePortal
                   id="combo-box-demo"
+                  disabled={!isEditable}
                   {...register("idInsumo")}
                   value={
                     opcaoiInsumos.find(
@@ -131,7 +162,7 @@ export const ItemListaInsumoProduto = () => {
               </Grid>
               <Grid item>
                 <Typography>Quantidade</Typography>
-                <TextField
+                <TextField disabled={!isEditable}
                   type="number"
                   placeholder="Quantidade"
                   {...register("quantidade")}
@@ -142,7 +173,7 @@ export const ItemListaInsumoProduto = () => {
               </Grid>
               <Grid item>
                 <Typography>unidade</Typography>
-                <TextField placeholder="unidade" {...register("unidade")} />
+                <TextField placeholder="unidade" disabled={!isEditable} {...register("unidade")} />
                 {errors.unidade && (
                   <span>{errors.unidade.message?.toString()}</span>
                 )}

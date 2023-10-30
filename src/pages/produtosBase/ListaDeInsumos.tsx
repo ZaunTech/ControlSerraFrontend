@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FerramentasDeDetalhes } from "../../ui/components";
+import { FerramentasDeDetalhes, TTipo } from "../../ui/components";
 import { PaginaBase } from "../../ui/layouts";
 import {
   Autocomplete,
@@ -22,7 +22,7 @@ import { useNavigate, useParams } from "react-router-dom";
 const createUserFormSchema = z.object({
   quantidade: z.coerce.number(),
   idInsumo: z.coerce.number(),
-  dimensoes: z.string(),
+  unidade: z.string(),
 });
 
 export const ItemListaInsumoProdutoBase = () => {
@@ -56,24 +56,35 @@ export const ItemListaInsumoProdutoBase = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data: IInsumosProdutoBase | Error =
-          await InsumosProdutoBaseService.getById(Number(id));
-        if (data instanceof Error) {
-          return;
-        }
-        setValue("idInsumo", data.idInsumo);
-        setValue("quantidade", data.quantidade);
-        setValue("dimensoes", data.dimensoes);
-      } catch (error) {}
-    };
+  const fetchData = async () => {
+    try {
+      const data: IInsumosProdutoBase | Error =
+        await InsumosProdutoBaseService.getById(Number(id));
+      if (data instanceof Error) {
+        return;
+      }
+      setValue("idInsumo", data.idInsumo);
+      setValue("quantidade", data.quantidade);
+      setValue("unidade", data.unidade);
+    } catch (error) {}
+  };
 
+  useEffect(() => {
+    
     fetchData();
   }, []);
 
-  function createUser(data: any) {
+  function createInsumo(data: any) {
+    InsumosProdutoBaseService.updateById(Number(id), data)
+      .then((result) => {
+        if (!(result instanceof Error)) {
+          setIsEditable(false)
+          setPageState("detalhes");
+        }
+      })
+      .catch((error) => {});
+  }
+  function createInsumoFechar(data: any) {
     InsumosProdutoBaseService.updateById(Number(id), data)
       .then((result) => {
         if (!(result instanceof Error)) {
@@ -82,18 +93,36 @@ export const ItemListaInsumoProdutoBase = () => {
       })
       .catch((error) => {});
   }
+  const [pageState, setPageState] = useState<TTipo>("detalhes");
+  const [isEditable, setIsEditable] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (pageState === "detalhes") {
+      setIsEditable(false);
+      return;
+    }
+    if (pageState === "editar" || pageState === "novo") {
+      setIsEditable(true);
+      return;
+    }
+  }, [pageState]);
 
   return (
     <PaginaBase
       titulo="Editar Insumos"
       barraDeFerramentas={
         <FerramentasDeDetalhes
-          mostrarBotaoApagar={false}
-          onClickSalvar={handleSubmit(createUser)}
+
+          tipo="detalhes"
+          pageState={pageState}
+          onClickCancelar={handleSubmit(fetchData)}
+          setPaiState={setPageState}
+          onClickSalvarEFechar={handleSubmit(createInsumoFechar)}
+          onClickSalvar={handleSubmit(createInsumo)}
         />
       }
     >
-      <Box component={"form"} onSubmit={handleSubmit(createUser)}>
+      <Box component={"form"} onSubmit={handleSubmit(createInsumo)}>
         <Box
           display={"flex"}
           margin={1}
@@ -108,6 +137,7 @@ export const ItemListaInsumoProdutoBase = () => {
                 <Autocomplete
                   disablePortal
                   id="combo-box-demo"
+                  disabled={!isEditable}
                   {...register("idInsumo")}
                   value={
                     opcaoiInsumos.find(
@@ -129,7 +159,7 @@ export const ItemListaInsumoProdutoBase = () => {
               <Grid item>
                 <Typography>Quantidade</Typography>
                 <TextField
-                  type="number"
+                  type="number"disabled={!isEditable}
                   placeholder="Quantidade"
                   {...register("quantidade")}
                 />
@@ -139,7 +169,7 @@ export const ItemListaInsumoProdutoBase = () => {
               </Grid>
               <Grid item>
                 <Typography>Dimensões</Typography>
-                <TextField placeholder="Dimensões" {...register("dimensoes")} />
+                <TextField placeholder="Dimensões" disabled={!isEditable} {...register("unidade")} />
                 {errors.dimensoes && (
                   <span>{errors.dimensoes.message?.toString()}</span>
                 )}

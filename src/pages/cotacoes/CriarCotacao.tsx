@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import { PaginaBase } from "../../ui/layouts";
-import { FerramentasDeDetalhes } from "../../ui/components";
+import { FerramentasDeDetalhes, TTipo } from "../../ui/components";
 import {
   Autocomplete,
   Box,
@@ -85,15 +85,40 @@ export const CriarCotacao = () => {
       })
       .catch(() => {});
   }
+  const [pageState, setPageState] = useState<TTipo>("novo");
+  const [isEditable, setIsEditable] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (pageState === "detalhes") {
+      setIsEditable(false);
+      return;
+    }
+    if (pageState === "editar" || pageState === "novo") {
+      setIsEditable(true);
+      return;
+    }
+  }, [pageState]);
+  const getCurrentDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  // Preencher o valor inicial ao montar o componente
+  useEffect(() => {
+    setValue('data', getCurrentDate());
+  }, []);
 
   return (
     <PaginaBase
       titulo="Nova Cotação"
       barraDeFerramentas={
         <FerramentasDeDetalhes
-          mostrarBotaoApagar={false}
-          mostrarBotaoSalvar
-          mostrarBotaoVoltar
+        tipo="novo"
+        pageState={pageState}
+        setPaiState={setPageState}
           onClickSalvar={handleSubmit(createCotacao)}
         />
       }

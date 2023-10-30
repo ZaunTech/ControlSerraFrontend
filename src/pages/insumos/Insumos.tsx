@@ -55,6 +55,7 @@ export const Insumos = () => {
         alert(result.message);
         return;
       }
+      
 
       const insumosData = await Promise.all(
         result.data.map(async (insumo: IInsumo) => {
@@ -63,7 +64,7 @@ export const Insumos = () => {
               return;
             }
             const result2 = await CategoriasService.getById(insumo.idCategoria);
-
+            
             if (result2 instanceof Error) {
               alert(result2.message);
               return null;
@@ -157,7 +158,7 @@ export const Insumos = () => {
                   <Typography>{row.titulo}</Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{row.categoria?.titulo}</Typography>
+                  <Typography>{row.categoria?.titulo }</Typography>
                 </TableCell>
                 <TableCell>
                   <Typography>{row.unidadeMedida}</Typography>
