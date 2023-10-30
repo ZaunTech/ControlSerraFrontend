@@ -204,6 +204,7 @@ export const InsumosDeUmProdutoOrcamento = () => {
                     id={row.id}
                     showPersoButton
                     persoButtonIcon="attach_money"
+                    handlePersoButton={() => { navigate(`${location.pathname}/${row.id}/cotar`) }}
                   />
                 </TableCell>
                 <TableCell>

@@ -7,3 +7,4 @@ export * from "./ItemListaInsumoProduto";
 export * from "./ProdutosOrcamento";
 export * from "./Orcamentos";
 export * from "./EditarOrcamento";
+export * from './CotacoesDeUmInsumo'

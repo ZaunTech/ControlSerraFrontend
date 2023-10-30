@@ -12,6 +12,7 @@ import {
   EditarOrcamento,
   CriarItemInsumoProdutoBase,
   ItemListaInsumoProduto,
+  CotacoesDeUmInsumo,
 } from "./pages/orcamentos";
 import { Pedido, Pedidos, CriarPedido } from "./pages/pedidos";
 import { Categoria, Categorias, CriarCategoria } from "./pages/categorias";
@@ -148,8 +149,17 @@ const router = createBrowserRouter([
                             element: <CriarItemInsumoProdutoBase />,
                           },
                           {
-                            path: ":id",
-                            element: <ItemListaInsumoProduto />,
+                            path: ":idItemListaInsumos",
+                            children: [
+                              {
+                                index: true,
+                                element: <ItemListaInsumoProduto />,
+                              },
+                              {
+                                path: 'cotar',
+                                element: <CotacoesDeUmInsumo />
+                              },
+                            ]
                           },
                         ],
                       },

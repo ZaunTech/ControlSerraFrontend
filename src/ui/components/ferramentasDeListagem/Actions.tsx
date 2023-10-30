@@ -1,4 +1,4 @@
-import { Icon, IconButton, TableCell, Typography } from "@mui/material";
+import { Button, Icon, IconButton, TableCell, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 interface IActions {
@@ -12,6 +12,7 @@ interface IActions {
   showSelectButton?: boolean;
   handleSelectButton?: () => void;
   showPersoButton?: boolean;
+  persoButtonText?: string;
   persoButtonIcon?: string;
   handlePersoButton?: () => void;
 }
@@ -29,18 +30,26 @@ export const Actions: React.FC<IActions> = ({
   showPersoButton = false,
   persoButtonIcon,
   handlePersoButton,
+  persoButtonText
 }) => {
   const navigate = useNavigate();
 
   return (
     <TableCell>
       {showPersoButton && (
-        <IconButton
+        persoButtonText ? (
+          <Button startIcon={<Icon>{persoButtonIcon}</Icon>} variant="text" onClick={() => {
+            if (handlePersoButton) handlePersoButton();
+          }}>
+            <Typography>{persoButtonText}</Typography>
+          </Button>
+        ) : <IconButton
           onClick={() => {
             if (handlePersoButton) handlePersoButton();
           }}
         >
           <Icon>{persoButtonIcon}</Icon>
+          <Typography>{persoButtonText}</Typography>
         </IconButton>
       )}
       {showListButton && (
