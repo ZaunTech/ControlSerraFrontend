@@ -90,12 +90,12 @@ export const CriarCliente = () => {
   const [tipo, setTipo] = React.useState("Juridica");
   const handleChange = (event: SelectChangeEvent) => {
     setTipo(event.target.value as string);
-    setValue("nome", undefined);
-    setValue("nomeFantasia", undefined);
-    setValue("rg", undefined);
-    setValue("cpf", undefined);
-    setValue("cnpj", undefined);
-    setValue("razaoSocial", undefined);
+    setValue("nome", null);
+    setValue("nomeFantasia", null);
+    setValue("rg", null);
+    setValue("cpf", null);
+    setValue("cnpj", null);
+    setValue("razaoSocial", null);
   };
 
   const handleSetFormData = useCallback(
