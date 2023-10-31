@@ -1,7 +1,12 @@
 import { useMemo, useEffect } from "react";
 import { PaginaBase } from "../../ui/layouts";
 import { FerramentasDaListagem } from "../../ui/components";
-import { useNavigate, useSearchParams, useLocation, useParams } from "react-router-dom";
+import {
+  useNavigate,
+  useSearchParams,
+  useLocation,
+  useParams,
+} from "react-router-dom";
 import {
   FornecedoresService,
   IFornecedor,
@@ -61,7 +66,7 @@ const Pesquisas: React.FC<IPesquisa> = ({ setFiltro, setFiltroId }) => {
         } else {
         }
       })
-      .catch((error) => { });
+      .catch((error) => {});
   }, []);
 
   useEffect(() => {
@@ -77,7 +82,7 @@ const Pesquisas: React.FC<IPesquisa> = ({ setFiltro, setFiltroId }) => {
         } else {
         }
       })
-      .catch((error) => { });
+      .catch((error) => {});
   }, []);
 
   const [tipo, setTipo] = React.useState<string>("Todos");
@@ -101,7 +106,6 @@ const Pesquisas: React.FC<IPesquisa> = ({ setFiltro, setFiltroId }) => {
       <Select value={tipo} onChange={handleChange} size="small">
         <MenuItem value={"Todos"}>Todos</MenuItem>
         <MenuItem value={"Fornecedor"}>Fornecedor</MenuItem>
-        <MenuItem value={"Insumo"}>Insumo</MenuItem>
       </Select>
 
       {tipo === "Fornecedor" ? (
@@ -256,13 +260,11 @@ export const CotacoesDeUmInsumo = () => {
             <Pesquisas setFiltro={setFiltro} setFiltroId={setFiltroId} />
           }
         />
-      }
-    >
+      }>
       <TableContainer
         component={Paper}
         variant="outlined"
-        sx={{ m: 1, width: "auto" }}
-      >
+        sx={{ m: 1, width: "auto" }}>
         <Table>
           <TableHead>
             <TableRow>
@@ -277,10 +279,26 @@ export const CotacoesDeUmInsumo = () => {
             {rows.map((row) => {
               return (
                 <TableRow key={row.id}>
-                  <Actions id={row.id} showPersoButton persoButtonIcon="check" handlePersoButton={() => {
-                    if (idItemListaInsumos)
-                      ListaInsumosService.setCotacao(Number(idItemListaInsumos), row.id).then((res) => { if (res instanceof Error) { return } navigate(-1) })
-                  }} showDeleteButton={false} showEditButton={false} />
+                  <Actions
+                    id={row.id}
+                    showPersoButton
+                    persoButtonText="Selecionar"
+                    persoButtonIcon="check"
+                    handlePersoButton={() => {
+                      if (idItemListaInsumos)
+                        ListaInsumosService.setCotacao({
+                          idItemListaInsumo: Number(idItemListaInsumos),
+                          idCotacao: row.id,
+                        }).then((res) => {
+                          if (res instanceof Error) {
+                            return;
+                          }
+                          navigate(-1);
+                        });
+                    }}
+                    showDeleteButton={false}
+                    showEditButton={false}
+                  />
                   <TableCell>
                     <Typography>
                       {row.fornecedor?.nomeFantasia ||

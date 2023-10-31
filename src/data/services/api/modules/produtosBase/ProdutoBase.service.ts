@@ -74,7 +74,7 @@ const updateById = async (
 ): Promise<IProdutoBase | Error> => {
   try {
     const urlRelativa = `/${rota}/${id}`;
-    const response = await Api.put(urlRelativa, updateProdutoBaseDto);
+    const response = await Api.patch(urlRelativa, updateProdutoBaseDto);
     if (response.statusText === "OK") {
       return response.data;
     }

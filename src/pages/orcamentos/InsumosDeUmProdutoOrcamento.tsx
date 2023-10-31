@@ -199,14 +199,15 @@ export const InsumosDeUmProdutoOrcamento = () => {
           <TableBody>
             {rows.map((row) => (
               <TableRow key={row.id}>
-                <TableCell>
+                
                   <Actions
                     id={row.id}
                     showPersoButton
                     persoButtonIcon="attach_money"
+                    
                     handlePersoButton={() => { navigate(`${location.pathname}/${row.id}/cotar`) }}
                   />
-                </TableCell>
+                
                 <TableCell>
                   <Typography>{row.insumo?.titulo}</Typography>
                 </TableCell>

@@ -6,6 +6,7 @@ export interface UpdateListaInsumosDto {
     idProduto: number;
     idInsumo: number;
     idCotacao?: number;
+    valorUnitario?: number;
     unidade?: string; 
   
     

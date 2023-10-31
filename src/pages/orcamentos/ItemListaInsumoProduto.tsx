@@ -60,6 +60,7 @@ export const ItemListaInsumoProduto = () => {
 
   const fetchData = async () => {
     try {
+      console.log(id);
       const data: IListaInsumo | Error = await ListaInsumosService.getById(
         Number(id)
       );

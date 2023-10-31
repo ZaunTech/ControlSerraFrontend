@@ -36,6 +36,7 @@ import Usuarios from "./pages/Usuarios/Usuarios.tsx";
 import { CriarUsuario } from "./pages/Usuarios/CriarUsuario.tsx";
 import Usuario from "./pages/Usuarios/Usuario.tsx";
 import { EditarProduto } from "./pages/orcamentos/EditarProduto.tsx";
+import { EditarProdutoBase } from "./pages/produtosBase/EditarProdutoBase.tsx";
 
 const router = createBrowserRouter([
   {
@@ -255,6 +256,10 @@ const router = createBrowserRouter([
             children: [
               {
                 index: true,
+                element: <EditarProdutoBase />,
+              },
+              {
+                path: "listaInsumos",
                 element: <ProdutoBase />,
               },
               {

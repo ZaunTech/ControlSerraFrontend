@@ -64,7 +64,7 @@ export const Insumos = () => {
               return;
             }
             const result2 = await CategoriasService.getById(insumo.idCategoria);
-            
+
             if (result2 instanceof Error) {
               alert(result2.message);
               return null;

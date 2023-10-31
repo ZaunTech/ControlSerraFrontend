@@ -28,7 +28,7 @@ const getAll = async (
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-      Environment.ERRO_AO_ACESSAR_DADOS
+        Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -43,7 +43,7 @@ const getById = async (id: number): Promise<IListaInsumo | Error> => {
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-      Environment.ERRO_AO_ACESSAR_DADOS
+        Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -68,7 +68,7 @@ const getListaByIdProduto = async (
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-      Environment.ERRO_AO_ACESSAR_DADOS
+        Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -89,7 +89,7 @@ const create = async (
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-      Environment.ERRO_AO_ACESSAR_DADOS
+        Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -108,7 +108,7 @@ const updateById = async (
     console.error(error);
     return new Error(
       (error as { message: string }).message ||
-      Environment.ERRO_AO_ACESSAR_DADOS
+        Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -123,7 +123,7 @@ const deleteById = async (id: number): Promise<IListaInsumo | Error> => {
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-      Environment.ERRO_AO_ACESSAR_DADOS
+        Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -140,30 +140,30 @@ const getCount = async (): Promise<number | Error> => {
     console.error(error);
     return new Error(
       (error as { message: string }).message ||
-      Environment.ERRO_AO_ACESSAR_DADOS
+        Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
 
+interface IDataSetCotacacao {
+  idCotacao: number;
+}
+
+interface IParamsSetCotacao {
+  idItemListaInsumo: number;
+  idCotacao: number;
+}
+
 const setCotacao = async (
-  idListaInsumo: number, idCotacao: number
-): Promise<{
-  data: {
-    idItemListaInsumo: number,
-    idCotacao: number
-  }
-} | Error> => {
+  paramsSetCotaco: IParamsSetCotacao
+): Promise<IParamsSetCotacao | Error> => {
   try {
-    const urlRelativa = `/${rota}/${idListaInsumo}/cotar`;
-    const response = await Api.post<{
-      data: {
-        idItemListaInsumo: number,
-        idCotacao: number
-      }
-    }>(
-      urlRelativa,
-      idCotacao
-    );
+
+
+    const urlRelativa = `/${rota}/${paramsSetCotaco.idItemListaInsumo}/cotar`;
+    const response = await Api.post<IParamsSetCotacao>(urlRelativa, {
+      idCotacao: paramsSetCotaco.idCotacao,
+    });
     if (response) {
       return response.data;
     }
@@ -171,7 +171,7 @@ const setCotacao = async (
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-      Environment.ERRO_AO_ACESSAR_DADOS
+        Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
