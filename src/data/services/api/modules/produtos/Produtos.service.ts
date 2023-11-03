@@ -5,7 +5,7 @@ import {
   TListProdutos,
   UpdateProdutoDto,
 } from ".";
-import { Api } from "../..";
+import { Api, IProdutoBase } from "../..";
 import { Environment } from "../../../../environment";
 
 const rota = "produtos";

@@ -1,5 +1,5 @@
 
-
+import React from 'react'
 import { FerramentasDaListagem } from '../../ui/components';
 import { PaginaBase } from '../../ui/layouts';
 import { useNavigate } from 'react-router-dom';

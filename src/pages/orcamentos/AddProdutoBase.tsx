@@ -51,7 +51,7 @@ export const AddProdutoBase = () => {
         } else {
         }
       })
-      .catch((error) => {console.log(error)});
+      .catch((error) => {});
   }, []);
 
   const { id } = useParams();
@@ -66,7 +66,7 @@ export const AddProdutoBase = () => {
         if (!(result instanceof Error)) {
         }
       })
-      .catch((error) => {console.log(error)});
+      .catch((error) => {});
   }
 
 
@@ -117,7 +117,6 @@ export const AddProdutoBase = () => {
                   options={opcaoiInsumos}
                   getOptionLabel={(opcaoiInsumos) => opcaoiInsumos.titulo ?? ""}
                   sx={{ width: 225 }}
-                  disabled={!isEditable}
                   renderInput={(params) => <TextField {...params} />}
                   onChange={(_, value) => {
                     setValue("titulo", value?.titulo);
@@ -132,7 +131,7 @@ export const AddProdutoBase = () => {
               <Grid item>
                 <Typography>Observações</Typography>
                 <TextField
-                  placeholder="Observações"  disabled={!isEditable}
+                  placeholder="Observações"
                   {...register("observacoes")}
                 />
                 {errors.observacao && (
@@ -142,7 +141,7 @@ export const AddProdutoBase = () => {
               <Grid item>
                 <Typography>Quantidade</Typography>
                 <TextField
-                  placeholder="Quantidade"  disabled={!isEditable}
+                  placeholder="Quantidade"
                   {...register("quantidade")}
                 />
                 {errors.quantidade && (

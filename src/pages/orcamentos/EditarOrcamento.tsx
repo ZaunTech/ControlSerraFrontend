@@ -56,7 +56,7 @@ export const EditarOrcamento = () => {
         } else {
         }
       })
-      .catch((error) => {console.log(error)});
+      .catch((error) => {});
   }, []);
 
   useEffect(() => {

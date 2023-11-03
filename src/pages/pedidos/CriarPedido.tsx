@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { z } from "zod";
 import React from "react";
-import {  PedidosService } from "../../data/services/api/modules/pedidos";
+import { IPedido, PedidosService } from "../../data/services/api/modules/pedidos";
 import { useNavigate } from "react-router-dom";
 import { IOrcamento, OrcamentosService } from "../../data/services/api/modules/orcamentos";
 
@@ -74,7 +74,7 @@ export const CriarPedido = () => {
         } else {
         }
       })
-      .catch((error) => {console.log(error)});
+      .catch((error) => {});
   }, []);
 
   return (

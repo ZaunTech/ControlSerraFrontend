@@ -8,7 +8,7 @@ import {
   IInsumo,
   InsumosService,
 } from "../../data/services/api";
-
+import { useDebounce } from "../../data/hooks";
 import { useState } from "react";
 import {
   Paper,
@@ -22,6 +22,8 @@ import {
   TableFooter,
   LinearProgress,
   Pagination,
+  IconButton,
+  Icon,
   Autocomplete,
   TextField,
   Select,
@@ -34,7 +36,6 @@ import {
   ICotacao,
 } from "../../data/services/api/modules/cotacoes";
 import React from "react";
-import { Actions } from "../../ui/components/ferramentasDeListagem/Actions";
 
 interface IPesquisa {
   setFiltro: (text: string) => void;
@@ -58,9 +59,7 @@ const Pesquisas: React.FC<IPesquisa> = ({ setFiltro, setFiltroId }) => {
         } else {
         }
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => {});
   }, []);
 
   useEffect(() => {
@@ -76,9 +75,7 @@ const Pesquisas: React.FC<IPesquisa> = ({ setFiltro, setFiltroId }) => {
         } else {
         }
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => {});
   }, []);
 
   const [tipo, setTipo] = React.useState<string>("Todos");
@@ -214,11 +211,8 @@ export const Cotacoes = () => {
           }
         })
       );
-
-       // @ts-ignore
-        setRows(cotacoesData);
-        setTotalCount(result.totalCount);
-      
+      setRows(cotacoesData);
+      setTotalCount(result.totalCount);
     } catch (error) {
       alert("Error fetching data.");
     } finally {
@@ -259,11 +253,13 @@ export const Cotacoes = () => {
             <Pesquisas setFiltro={setFiltro} setFiltroId={setFiltroId} />
           }
         />
-      }>
+      }
+    >
       <TableContainer
         component={Paper}
         variant="outlined"
-        sx={{ m: 1, width: "auto" }}>
+        sx={{ m: 1, width: "auto" }}
+      >
         <Table>
           <TableHead>
             <TableRow>
@@ -278,7 +274,24 @@ export const Cotacoes = () => {
             {rows.map((row) => {
               return (
                 <TableRow key={row.id}>
-                  <Actions id={row.id} handleDelete={handleDelete} />
+                  <TableCell>
+                    <Typography>
+                      <IconButton
+                        onClick={() =>
+                          navigate(`${location.pathname}/${row.id}`)
+                        }
+                      >
+                        <Icon>edit</Icon>
+                      </IconButton>
+                      <IconButton
+                        onClick={() => {
+                          handleDelete(row.id);
+                        }}
+                      >
+                        <Icon>delete</Icon>
+                      </IconButton>
+                    </Typography>
+                  </TableCell>
                   <TableCell>
                     <Typography>
                       {row.fornecedor?.nomeFantasia ||

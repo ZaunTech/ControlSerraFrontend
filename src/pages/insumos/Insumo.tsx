@@ -22,7 +22,7 @@ import {
 
 const createUserFormSchema = z.object({
   titulo: z.string().min(1, "Preencha o Titulo"),
-  idCategoria: z.coerce.number(),
+  idCategoria: z.coerce.number().optional(),
   descricao: z.string(),
   unidadeMedida: z.string(),
 });
@@ -47,14 +47,14 @@ export const Insumo = () => {
       .then(() => {
         navigate(-1);
       })
-      .catch((error) => {  console.log(error);} );
+      .catch((error) => {});
   }
   function createInsumoFechar(data: any) {
     InsumosService.updateById(Number(id), data)
       .then(() => {
         navigate(-1);
       })
-      .catch((error) => {console.log(error);});
+      .catch((error) => {});
   }
   const [opcoes, setOpcoes] = useState<ICategoria[]>([]);
 
@@ -71,7 +71,7 @@ export const Insumo = () => {
         } else {
         }
       })
-      .catch((error) => { console.log(error);});
+      .catch((error) => {});
   }, []);
 
   const fetchData = async () => {

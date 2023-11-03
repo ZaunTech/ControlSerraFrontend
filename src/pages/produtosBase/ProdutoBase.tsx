@@ -94,7 +94,6 @@ export const ProdutoBase = () => {
           }
         })
       );
-      // @ts-ignore
       setRows(insumosData);
       setTotalCount(result.totalCount);
     } catch (error) {
@@ -177,7 +176,7 @@ export const ProdutoBase = () => {
                   <Typography>{row.quantidade}</Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{row.unidade}</Typography>
+                  <Typography>{row.dimensoes}</Typography>
                 </TableCell>
               </TableRow>
             ))}

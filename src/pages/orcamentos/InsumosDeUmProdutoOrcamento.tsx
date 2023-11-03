@@ -7,7 +7,7 @@ import {
   useLocation,
   useParams,
 } from "react-router-dom";
-
+import { useDebounce } from "../../data/hooks";
 import { useState } from "react";
 import {
   Paper,
@@ -21,6 +21,8 @@ import {
   TableFooter,
   LinearProgress,
   Pagination,
+  IconButton,
+  Icon,
 } from "@mui/material";
 import { Environment } from "../../data/environment";
 import {
@@ -37,6 +39,7 @@ import { Actions } from "../../ui/components/ferramentasDeListagem/Actions";
 
 export const InsumosDeUmProdutoOrcamento = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const { debounce } = useDebounce();
 
   const [rows, setRows] = useState<IListaInsumo[]>([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -171,11 +174,13 @@ export const InsumosDeUmProdutoOrcamento = () => {
           onClickBotaoNovo={() => navigate(`${location.pathname}/novo`)}
           mostrarBotaoVoltar
         />
-      }>
+      }
+    >
       <TableContainer
         component={Paper}
         variant="outlined"
-        sx={{ m: 1, width: "auto" }}>
+        sx={{ m: 1, width: "auto" }}
+      >
         <Table>
           <TableHead>
             <TableRow>
@@ -194,16 +199,15 @@ export const InsumosDeUmProdutoOrcamento = () => {
           <TableBody>
             {rows.map((row) => (
               <TableRow key={row.id}>
-                <Actions
-                  id={row.id}
-                  showPersoButton
-                  persoButtonIcon="attach_money"
-                  handleDelete={handleDelete}
-                  handlePersoButton={() => {
-                    navigate(`${location.pathname}/${row.id}/cotar`);
-                  }}
-                />
-
+                
+                  <Actions
+                    id={row.id}
+                    showPersoButton
+                    persoButtonIcon="attach_money"
+                    
+                    handlePersoButton={() => { navigate(`${location.pathname}/${row.id}/cotar`) }}
+                  />
+                
                 <TableCell>
                   <Typography>{row.insumo?.titulo}</Typography>
                 </TableCell>

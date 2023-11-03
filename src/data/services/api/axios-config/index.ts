@@ -5,7 +5,6 @@ import { Environment } from "../../../environment";
 const Api = axios.create({
   baseURL: Environment.URL_BASE,
   headers: {
-    // @ts-ignore
     Authorization: `Bearer ${JSON.parse(localStorage.getItem('APP_ACCESS_TOKEN')) || ""}`
   }
 });

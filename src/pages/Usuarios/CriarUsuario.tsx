@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { PaginaBase } from '../../ui/layouts'
 import { FerramentasDeDetalhes, TTipo } from '../../ui/components'
-
+import { useNavigate } from 'react-router-dom'
 import { Box, Grid, InputLabel, MenuItem, Paper, Select, SelectChangeEvent, TextField, Typography } from '@mui/material'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { UsuarioServices } from '../../data/services/api/modules/usuario'
 
 
 const shemaUsuario = z.object({
@@ -34,9 +33,7 @@ export const CriarUsuario = () => {
     
     function criarUsuario(data: any){
       
-      UsuarioServices.create(data).catch((error)=>{
-        console.log(error);
-      })
+      
       
     }
     const [pageState, setPageState] = useState<TTipo>("novo");
@@ -78,7 +75,6 @@ export const CriarUsuario = () => {
                   <Select
                     labelId="contaTipo"
                     id="contaTipo"
-                    disabled={!isEditable}
                     value={tipo.toString()}
                     {...register("contaTipo")}
                     onChange={handleChange}
@@ -92,23 +88,23 @@ export const CriarUsuario = () => {
               </Grid>
               <Grid item>
                 <Typography>Nome</Typography>
-                <TextField  disabled={!isEditable}  {...register("nome")}   />
+                <TextField   {...register("nome")}   />
               </Grid>
               <Grid item>
                 <Typography>Email</Typography>
-                <TextField type='email'  disabled={!isEditable} {...register("email")}   />
+                <TextField type='email'  {...register("email")}   />
               </Grid>
               <Grid item>
                 <Typography>Senha</Typography>
-                <TextField type='password' disabled={!isEditable} {...register("senha")} />
+                <TextField type='password' {...register("senha")} />
               </Grid>
               <Grid item>
                 <Typography>CPF</Typography>
-                <TextField   disabled={!isEditable} {...register("cpf")}   />
+                <TextField   {...register("cpf")}   />
               </Grid>
               <Grid item>
                 <Typography>Telefone</Typography>
-                <TextField   disabled={!isEditable} {...register("telefone")}   />
+                <TextField   {...register("telefone")}   />
               </Grid>
             </Grid>
         </Grid>      

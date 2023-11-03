@@ -40,7 +40,7 @@ export const CriarProduto = () => {
           navigate(-1);
         }
       })
-      .catch((error) => {console.log(error)});
+      .catch((error) => {});
   }
 
   const [pageState, setPageState] = useState<TTipo>("novo");

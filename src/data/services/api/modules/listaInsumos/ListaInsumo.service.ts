@@ -145,7 +145,9 @@ const getCount = async (): Promise<number | Error> => {
   }
 };
 
-
+interface IDataSetCotacacao {
+  idCotacao: number;
+}
 
 interface IParamsSetCotacao {
   idItemListaInsumo: number;

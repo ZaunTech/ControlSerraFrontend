@@ -49,7 +49,7 @@ export const CriarCotacao = () => {
         } else {
         }
       })
-      .catch((error) => {console.log(error);});
+      .catch((error) => {});
   }, []);
 
   useEffect(() => {
@@ -65,7 +65,7 @@ export const CriarCotacao = () => {
         } else {
         }
       })
-      .catch((error) => {console.log(error);});
+      .catch((error) => {});
   }, []);
 
   const {
@@ -142,7 +142,6 @@ export const CriarCotacao = () => {
                 <Typography>Selecione o Fonernecedor</Typography>
                 <Autocomplete
                   disablePortal
-                  disabled={!isEditable}
                   {...register("idFornecedor")}
                   id="combo-box-demo"
                   options={opcoes}
@@ -168,7 +167,6 @@ export const CriarCotacao = () => {
                 <TextField
                   type="number"
                   placeholder="Valor do Insumo"
-                  disabled={!isEditable}
                   {...register("valor")}
                 />
                 {errors.valor && (
@@ -180,7 +178,6 @@ export const CriarCotacao = () => {
                 <TextField
                   type="date"
                   placeholder="data"
-                  disabled={!isEditable}
                   {...register("data")}
                   onChange={(e) => {
                     setValue("data", e.target.value);
@@ -210,7 +207,6 @@ export const CriarCotacao = () => {
                 <Autocomplete
                   disablePortal
                   id="combo-box-demo"
-                  disabled={!isEditable}
                   {...register("idInsumo")}
                   options={opcaoiInsumos}
                   getOptionLabel={(opcaoiInsumos) => opcaoiInsumos.titulo ?? ""}
@@ -227,7 +223,7 @@ export const CriarCotacao = () => {
 
               <Grid item>
                 <Typography>Unidade de Medida</Typography>
-                <TextField placeholder="Unidade de Medida"  disabled={!isEditable} {...register("unidade")} />
+                <TextField placeholder="Unidade de Medida" {...register("unidade")} />
                 {errors.unidade && (
                   <span>{errors.unidade.message?.toString()}</span>
                 )}

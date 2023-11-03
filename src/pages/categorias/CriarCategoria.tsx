@@ -9,11 +9,11 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useEffect,  useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { PaginaBase } from "../../ui/layouts";
 import {
   FerramentasDeDetalhes,
-  
+  IFerramentasDeDetalhes,
   TTipo,
 } from "../../ui/components";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -48,9 +48,7 @@ export const CriarCategoria = () => {
       .then(() => {
         navigate(-1);
       })
-      .catch((erro) => {
-        console.log(erro);
-      });
+      .catch((erro) => {});
   }
   const [pageState, setPageState] = useState<TTipo>("novo");
   const [isEditable, setIsEditable] = useState<boolean>(false);
@@ -89,15 +87,15 @@ export const CriarCategoria = () => {
             <Grid container item direction="column" spacing={4}>
               <Grid item>
                 <Typography>Titulo</Typography>
-                <TextField placeholder="Titulo" disabled={!isEditable} {...register("titulo")} />
+                <TextField placeholder="Titulo" {...register("titulo")} />
               </Grid>
               <Grid item xs={6}>
                 <InputLabel id="tipo">Tipo</InputLabel>
                 <Select
                   labelId="tipo"
-                  id="tipo" disabled={!isEditable}
+                  id="tipo"
                   value={tipo}
-                  {...register("tipo")} 
+                  {...register("tipo")}
                   onChange={handleChange}>
                   <MenuItem value={"Mão de Obra"}>Mão de Obra</MenuItem>
                   <MenuItem value={"Insumo"}>Insumo</MenuItem>
@@ -109,7 +107,7 @@ export const CriarCategoria = () => {
               </Grid>
               <Grid item>
                 <Typography>Descricao</Typography>
-                <TextField placeholder="Descrição"  disabled={!isEditable} {...register("descricao")} />
+                <TextField placeholder="Descrição" {...register("descricao")} />
               </Grid>
             </Grid>
           </Grid>

@@ -23,7 +23,7 @@ import { useNavigate } from "react-router-dom";
 
 const createUserFormSchema = z.object({
   titulo: z.string().min(1, "Preencha o Titulo"),
-  idCategoria: z.coerce.number(),
+  idCategoria: z.coerce.number().optional(),
   descricao: z.string(),
   unidadeMedida: z.string(),
 });
@@ -38,7 +38,7 @@ export const CriarInsumo = () => {
       .then(() => {
         navigate(-1);
       })
-      .catch((erro) => {console.log(erro)});
+      .catch((erro) => {});
   }
   const [opcoes, setOpcoes] = useState<ICategoria[]>([]);
 
@@ -55,7 +55,7 @@ export const CriarInsumo = () => {
         } else {
         }
       })
-      .catch((error) => {console.log(error)});
+      .catch((error) => {});
   }, []);
 
   const [pageState, setPageState] = useState<TTipo>("novo");

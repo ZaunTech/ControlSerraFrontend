@@ -140,14 +140,14 @@ export const Fornecedor = () => {
         setIsEditable(false);
         setPageState("detalhes")
       })
-      .catch((erro) => {console.log(erro);});
+      .catch((erro) => {});
   }
   function updateFornecedoresFechar(data: any) {
     FornecedoresService.updateById(Number(id), data)
       .then(() => {
         navigate(-1);
       })
-      .catch((erro) => {console.log(erro);});
+      .catch((erro) => {});
   }
 
   const fetchData = async () => {
