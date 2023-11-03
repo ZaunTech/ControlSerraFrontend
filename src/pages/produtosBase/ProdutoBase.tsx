@@ -176,7 +176,7 @@ export const ProdutoBase = () => {
                   <Typography>{row.quantidade}</Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{row.dimensoes}</Typography>
+                  <Typography>{row.unidade}</Typography>
                 </TableCell>
               </TableRow>
             ))}

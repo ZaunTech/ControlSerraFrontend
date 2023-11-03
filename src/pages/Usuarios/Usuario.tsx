@@ -30,8 +30,7 @@ function criarUsuario(data: any){
     titulo="Insumos"
     barraDeFerramentas={<FerramentasDeDetalhes
       mostrarBotaoApagar={false}
-      onClickSalvar={handleSubmit(criarUsuario)}
-      
+      onClickSalvar={handleSubmit(criarUsuario)} tipo={'novo'}      
     />}>
 
       
