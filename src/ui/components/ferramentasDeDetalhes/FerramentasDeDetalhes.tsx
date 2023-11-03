@@ -10,6 +10,7 @@ import {
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+
 export type TTipo = "novo" | "editar" | "detalhes";
 
 export interface IFerramentasDeDetalhes {
@@ -153,7 +154,7 @@ export const FerramentasDeDetalhes: React.FC<IFerramentasDeDetalhes> = (
   }, [pageState]);
 
   const setPaiState = () => {
-    if (props.setPaiState) props.setPaiState(tipo);
+    if (props.setPaiState) props.setPaiState(tipo ? tipo : "novo");
   };
 
   return (
