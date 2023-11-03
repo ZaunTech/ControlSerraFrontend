@@ -46,7 +46,9 @@ export const Categoria = () => {
       .then(() => {
         setPageState("detalhes");
       })
-      .catch((erro) => {});
+      .catch((erro) => {
+        console.log(erro);
+      });
   }
   function createUserFechar(data: any) {
     setIsEditable(false);
@@ -55,7 +57,9 @@ export const Categoria = () => {
       .then(() => {
         navigate(-1);
       })
-      .catch((erro) => {});
+      .catch((erro) => {
+        console.log(erro);
+      });
   }
   const [pageState, setPageState] = useState<TTipo>("detalhes");
   const [isEditable, setIsEditable] = useState<boolean>(false);

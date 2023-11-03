@@ -47,7 +47,7 @@ export const AdicionarInsumo = () => {
         } else {
         }
       })
-      .catch((error) => {});
+      .catch((error) => {console.log(error)});
   }, []);
 
   const navigate = useNavigate();
@@ -64,7 +64,7 @@ export const AdicionarInsumo = () => {
           navigate(-1);
         }
       })
-      .catch((error) => {});
+      .catch((error) => {console.log(error)});
   }
   const [pageState, setPageState] = useState<TTipo>("novo");
   const [isEditable, setIsEditable] = useState<boolean>(false);
@@ -109,6 +109,7 @@ export const AdicionarInsumo = () => {
                   disablePortal
                   id="combo-box-demo"
                   {...register("idInsumo")}
+                  disabled={!isEditable}
                   options={opcaoiInsumos}
                   getOptionLabel={(opcaoiInsumos) => opcaoiInsumos.titulo ?? ""}
                   sx={{ width: 225 }}
@@ -124,7 +125,7 @@ export const AdicionarInsumo = () => {
               <Grid item>
                 <Typography>Quantidade</Typography>
                 <TextField
-                  type="number"
+                  type="number" disabled={!isEditable}
                   placeholder="Quantidade"
                   {...register("quantidade")}
                 />
@@ -134,7 +135,7 @@ export const AdicionarInsumo = () => {
               </Grid>
               <Grid item>
                 <Typography>unidade</Typography>
-                <TextField placeholder="unidade" {...register("unidade")} />
+                <TextField placeholder="unidade" disabled={!isEditable} {...register("unidade")} />
                 {errors.dimensoes && (
                   <span>{errors.dimensoes.message?.toString()}</span>
                 )}

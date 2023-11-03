@@ -3,7 +3,7 @@ import { PaginaBase } from "../../ui/layouts";
 import { FerramentasDaListagem } from "../../ui/components";
 import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import { ClientesService } from "../../data/services/api";
-import { useDebounce } from "../../data/hooks";
+
 import { useState } from "react";
 import {
   Paper,
@@ -29,7 +29,7 @@ import { OrcamentosService } from "../../data/services/api/modules/orcamentos";
 
 export const Pedidos = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { debounce } = useDebounce();
+  
 
   const [rows, setRows] = useState<IPedido[]>([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -84,6 +84,7 @@ export const Pedidos = () => {
           }
         })
       );
+      // @ts-ignore
       setRows(pedidosData);
       setTotalCount(result.totalCount);
     } catch (error) {
@@ -179,10 +180,8 @@ export const Pedidos = () => {
                 </TableCell>
                 <TableCell>
                   <Typography>
-                    {(row.pagamento /
-                      (row.orcamento?.totalMaoObra +
-                        row.orcamento?.totalMateriais)) *
-                      100}
+                    
+                    {(row.pagamento ) }
                   </Typography>
                 </TableCell>
               </TableRow>

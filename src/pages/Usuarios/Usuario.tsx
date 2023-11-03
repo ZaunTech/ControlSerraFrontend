@@ -1,4 +1,4 @@
-import React from 'react'
+
 import { PaginaBase } from '../../ui/layouts'
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -13,16 +13,15 @@ const shemaUsuario = z.object({
 
 export const Usuario = () => {
   const {
-    register,
+    
     handleSubmit,
-    formState: { errors },
+    formState: { },
   } = useForm({
     resolver: zodResolver(shemaUsuario),
   });
 
 function criarUsuario(data: any){
-    
-
+    console.log(data)
 }
     
   return (
@@ -30,8 +29,7 @@ function criarUsuario(data: any){
     titulo="Insumos"
     barraDeFerramentas={<FerramentasDeDetalhes
       mostrarBotaoApagar={false}
-      onClickSalvar={handleSubmit(criarUsuario)}
-      
+      onClickSalvar={handleSubmit(criarUsuario)} tipo={'novo'}      
     />}>
 
       

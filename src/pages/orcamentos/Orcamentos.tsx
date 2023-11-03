@@ -16,8 +16,7 @@ import {
   TableFooter,
   LinearProgress,
   Pagination,
-  IconButton,
-  Icon,
+
 } from "@mui/material";
 import { Environment } from "../../data/environment";
 import {
@@ -71,6 +70,7 @@ export const Orcamentos = () => {
           }
         })
       );
+      // @ts-ignore
       setRows(orcamentosData);
       setTotalCount(result.totalCount);
     } catch (error) {

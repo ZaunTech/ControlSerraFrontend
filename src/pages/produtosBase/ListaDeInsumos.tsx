@@ -50,7 +50,7 @@ export const ItemListaInsumoProdutoBase = () => {
         } else {
         }
       })
-      .catch((error) => {});
+      .catch((error) => {console.log(error)});
   }, []);
 
   const navigate = useNavigate();
@@ -82,7 +82,7 @@ export const ItemListaInsumoProdutoBase = () => {
           setPageState("detalhes");
         }
       })
-      .catch((error) => {});
+      .catch((error) => {console.log(error)});
   }
   function createInsumoFechar(data: any) {
     InsumosProdutoBaseService.updateById(Number(id), data)
@@ -91,7 +91,7 @@ export const ItemListaInsumoProdutoBase = () => {
           navigate(-1);
         }
       })
-      .catch((error) => {});
+      .catch((error) => { console.log(error)});
   }
   const [pageState, setPageState] = useState<TTipo>("detalhes");
   const [isEditable, setIsEditable] = useState<boolean>(false);

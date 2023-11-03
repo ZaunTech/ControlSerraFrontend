@@ -17,10 +17,10 @@ import {
   TableFooter,
   LinearProgress,
   Pagination,
-  IconButton,
-  Icon,
+  
 } from "@mui/material";
 import { Environment } from "../../data/environment";
+import { Actions } from "../../ui/components/ferramentasDeListagem/Actions";
 
 export const Fornecedores = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -101,22 +101,12 @@ export const Fornecedores = () => {
           <TableBody>
             {rows.map((row) => (
               <TableRow key={row.id}>
-                <TableCell>
-                  <Typography>
-                    <IconButton
-                      onClick={() => navigate(`${location.pathname}/${row.id}`)}
-                    >
-                      <Icon>edit</Icon>
-                    </IconButton>
-                    <IconButton
-                      onClick={() => {
-                        handleDelete(row.id);
-                      }}
-                    >
-                      <Icon>delete</Icon>
-                    </IconButton>
-                  </Typography>
-                </TableCell>
+                <Actions
+                  id={row.id}
+                  
+                  handleDelete={handleDelete}
+                  
+                />
                 <TableCell>
                   <Typography>
                     {row.nome || row.nomeFantasia || row.razaoSocial}

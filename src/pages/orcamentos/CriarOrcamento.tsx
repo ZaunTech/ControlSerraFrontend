@@ -47,7 +47,7 @@ export const CriarOrcamento = () => {
         } else {
         }
       })
-      .catch((error) => {});
+      .catch((error) => {console.log(error)});
   }, []);
 
   const {

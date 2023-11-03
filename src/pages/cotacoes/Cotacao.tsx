@@ -53,7 +53,7 @@ export const Cotacao = () => {
         } else {
         }
       })
-      .catch((error) => {});
+      .catch((error) => { console.log(error)});
   }, []);
 
   useEffect(() => {
@@ -69,7 +69,7 @@ export const Cotacao = () => {
         } else {
         }
       })
-      .catch((error) => {});
+      .catch((error) => { console.log(error)});
   }, []);
 
   const {

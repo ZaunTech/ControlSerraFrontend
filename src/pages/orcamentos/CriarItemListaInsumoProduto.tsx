@@ -47,7 +47,7 @@ export const CriarItemInsumoProdutoBase = () => {
         } else {
         }
       })
-      .catch((error) => {});
+      .catch((error) => {console.log(error)});
   }, []);
 
   const navigate = useNavigate();
@@ -66,7 +66,7 @@ export const CriarItemInsumoProdutoBase = () => {
         }
         console.log(result);
       })
-      .catch((error) => {});
+      .catch((error) => {console.log(error)});
   }
 
   const [pageState, setPageState] = useState<TTipo>("novo");
@@ -110,6 +110,7 @@ export const CriarItemInsumoProdutoBase = () => {
                   id="combo-box-demo"
                   {...register("idInsumo")}
                   options={opcaoiInsumos}
+                  disabled={!isEditable}
                   getOptionLabel={(opcaoiInsumos) => opcaoiInsumos.titulo ?? ""}
                   sx={{ width: 225 }}
                   renderInput={(params) => <TextField {...params} />}
@@ -125,7 +126,7 @@ export const CriarItemInsumoProdutoBase = () => {
                 <Typography>Quantidade</Typography>
                 <TextField
                   type="number"
-                  placeholder="Quantidade"
+                  placeholder="Quantidade"  disabled={!isEditable}
                   {...register("quantidade")}
                 />
                 {errors.quantidade && (
@@ -134,7 +135,7 @@ export const CriarItemInsumoProdutoBase = () => {
               </Grid>
               <Grid item>
                 <Typography>Unidade de Mediada</Typography>
-                <TextField placeholder="unidade" {...register("unidade")} />
+                <TextField placeholder="unidade"  disabled={!isEditable} {...register("unidade")} />
                 {errors.dimensoes && (
                   <span>{errors.dimensoes.message?.toString()}</span>
                 )}

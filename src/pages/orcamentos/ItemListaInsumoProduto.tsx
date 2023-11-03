@@ -31,7 +31,7 @@ export const ItemListaInsumoProduto = () => {
     handleSubmit,
     setValue,
     watch,
-    control,
+    
 
     formState: { errors },
   } = useForm({
@@ -52,7 +52,7 @@ export const ItemListaInsumoProduto = () => {
         } else {
         }
       })
-      .catch((error) => {});
+      .catch((error) => {console.log(error);});
   }, []);
 
   const navigate = useNavigate();
@@ -87,7 +87,7 @@ export const ItemListaInsumoProduto = () => {
           setPageState("detalhes");
         }
       })
-      .catch((error) => {});
+      .catch((error) => { console.log(error);});
   }
   function createInsumoProdFechar(data: any) {
     ListaInsumosService.updateById(Number(id), data)
@@ -96,7 +96,7 @@ export const ItemListaInsumoProduto = () => {
           navigate(-1);
         }
       })
-      .catch((error) => {});
+      .catch((error) => { console.log(error); });
   }
 
   const [pageState, setPageState] = useState<TTipo>("detalhes");

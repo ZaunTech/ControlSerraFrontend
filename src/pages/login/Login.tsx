@@ -45,6 +45,7 @@ export const Login = () => {
     login(email, password)
       .then((result) => {
         setIsLoading(false);
+        // @ts-ignore
         if (result instanceof Error) {
           return result.message;
         }

@@ -13,7 +13,7 @@ import {
   IInsumo,
   InsumosService,
 } from "../../data/services/api";
-import { useDebounce } from "../../data/hooks";
+
 import { useState } from "react";
 import {
   Paper,
@@ -27,8 +27,7 @@ import {
   TableFooter,
   LinearProgress,
   Pagination,
-  IconButton,
-  Icon,
+
   Autocomplete,
   TextField,
   Select,
@@ -66,7 +65,7 @@ const Pesquisas: React.FC<IPesquisa> = ({ setFiltro, setFiltroId }) => {
         } else {
         }
       })
-      .catch((error) => {});
+      .catch((error) => {console.log(error)});
   }, []);
 
   useEffect(() => {
@@ -82,7 +81,7 @@ const Pesquisas: React.FC<IPesquisa> = ({ setFiltro, setFiltroId }) => {
         } else {
         }
       })
-      .catch((error) => {});
+      .catch((error) => {console.log(error)});
   }, []);
 
   const [tipo, setTipo] = React.useState<string>("Todos");
@@ -218,6 +217,7 @@ export const CotacoesDeUmInsumo = () => {
           }
         })
       );
+      // @ts-ignore
       setRows(cotacoesData);
       setTotalCount(result.totalCount);
     } catch (error) {
@@ -296,6 +296,7 @@ export const CotacoesDeUmInsumo = () => {
                           navigate(-1);
                         });
                     }}
+                    handleDelete={handleDelete}
                     showDeleteButton={false}
                     showEditButton={false}
                   />

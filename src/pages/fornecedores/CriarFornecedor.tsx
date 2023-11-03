@@ -142,7 +142,7 @@ export const CriarFornecedor = () => {
       .then(() => {
         navigate(-1);
       })
-      .catch((erro) => {});
+      .catch((erro) => {console.log(erro);});
   }
 
   const [pageState, setPageState] = useState<TTipo>("novo");

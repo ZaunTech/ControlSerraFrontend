@@ -14,7 +14,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import getCepData from "../../data/services/api/axios-config/actions/cep";
-import { ClientesService, FornecedoresService, ICliente, IFornecedor } from "../../data/services/api";
+import { ClientesService,  ICliente } from "../../data/services/api";
 import { FerramentasDeDetalhes, TTipo } from "../../ui/components";
 import { PaginaBase } from "../../ui/layouts";
 import { useNavigate, useParams } from "react-router-dom";
@@ -137,7 +137,7 @@ export const Cliente = () => {
         setIsEditable(false);
         setPageState("detalhes");
       })
-      .catch((erro) => {});
+      .catch((erro) => { console.log(erro);});
   }
   function createClienteFechar(data: any) {
     ClientesService.updateById(Number(id), data)
@@ -145,7 +145,7 @@ export const Cliente = () => {
         setIsEditable(false);
         navigate(-1);
       })
-      .catch((erro) => {});
+      .catch((erro) => { console.log(erro);});
   }
   const fetchData = async () => {
     try {

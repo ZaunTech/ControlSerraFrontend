@@ -9,7 +9,7 @@ import { useForm } from "react-hook-form";
 import { IProdutoBase, ProdutosBaseService } from "../../data/services/api";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { IInsumosProdutoBase } from "../../data/services/api/modules/insumosProdutoBase";
+
 
 const createUserFormSchema = z.object({
   titulo: z.string(),
@@ -52,7 +52,7 @@ export const EditarProdutoBase = () => {
           setPageState("detalhes")
         }
       })
-      .catch((error) => {});
+      .catch((error) => {console.log(error)});
   }
   function createProdutoFechar(data: any) {
     ProdutosBaseService.updateById(Number(id),data)
@@ -61,7 +61,7 @@ export const EditarProdutoBase = () => {
           navigate(-1);
         }
       })
-      .catch((error) => {});
+      .catch((error) => {console.log(error)});
   }
 
   const [pageState, setPageState] = useState<TTipo>("detalhes");

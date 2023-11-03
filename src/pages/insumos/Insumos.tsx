@@ -7,7 +7,7 @@ import {
   IInsumo,
   InsumosService,
 } from "../../data/services/api";
-import { useDebounce } from "../../data/hooks";
+
 import { useState } from "react";
 import {
   Paper,
@@ -21,14 +21,14 @@ import {
   TableFooter,
   LinearProgress,
   Pagination,
-  IconButton,
-  Icon,
+
 } from "@mui/material";
 import { Environment } from "../../data/environment";
+import { Actions } from "../../ui/components/ferramentasDeListagem/Actions";
 
 export const Insumos = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { debounce } = useDebounce();
+  
 
   const [rows, setRows] = useState<IInsumo[]>([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -63,6 +63,7 @@ export const Insumos = () => {
             if (!insumo.idCategoria) {
               return;
             }
+            
             const result2 = await CategoriasService.getById(insumo.idCategoria);
 
             if (result2 instanceof Error) {
@@ -77,6 +78,7 @@ export const Insumos = () => {
           }
         })
       );
+      // @ts-ignore
       setRows(insumosData);
       setTotalCount(result.totalCount);
     } catch (error) {
@@ -138,27 +140,17 @@ export const Insumos = () => {
           <TableBody>
             {rows.map((row) => (
               <TableRow key={row.id}>
-                <TableCell>
-                  <Typography>
-                    <IconButton
-                      onClick={() => navigate(`${location.pathname}/${row.id}`)}
-                    >
-                      <Icon>edit</Icon>
-                    </IconButton>
-                    <IconButton
-                      onClick={() => {
-                        handleDelete(row.id);
-                      }}
-                    >
-                      <Icon>delete</Icon>
-                    </IconButton>
-                  </Typography>
-                </TableCell>
+                <Actions
+                  id={row.id}
+                  
+                  handleDelete={handleDelete}
+                  
+                />
                 <TableCell>
                   <Typography>{row.titulo}</Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{row.categoria?.titulo }</Typography>
+                  <Typography>{row.categoria == null ? "" : row.categoria.titulo }</Typography>
                 </TableCell>
                 <TableCell>
                   <Typography>{row.unidadeMedida}</Typography>

@@ -33,7 +33,7 @@ export const CriarProdutoBase = () => {
           navigate(`/produtos/${result.id}`);
         }
       })
-      .catch((error) => {});
+      .catch((error) => {console.log(error)});
   }
 
   const [pageState, setPageState] = useState<TTipo>("novo");
@@ -75,7 +75,7 @@ export const CriarProdutoBase = () => {
             <Grid container item direction="row" spacing={4}>
               <Grid item>
                 <Typography>Titulo</Typography>
-                <TextField placeholder="Titulo" {...register("titulo")} />
+                <TextField placeholder="Titulo" disabled={!isEditable}{...register("titulo")} />
                 {errors.titulo && (
                   <span>{errors.titulo.message?.toString()}</span>
                 )}
@@ -84,7 +84,7 @@ export const CriarProdutoBase = () => {
               <Grid item>
                 <Typography>Observações</Typography>
                 <TextField
-                  placeholder="Observações"
+                  placeholder="Observações" disabled={!isEditable}
                   {...register("observacoes")}
                 />
                 {errors.observacao && (

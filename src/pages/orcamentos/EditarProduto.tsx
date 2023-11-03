@@ -54,7 +54,7 @@ export const EditarProduto = () => {
           setPageState("detalhes");
         }
       })
-      .catch((error) => {});
+      .catch((error) => {console.log(error)});
   }
   function createProdutoFechar(data: any) {
     ProdutosService.updateById(Number(id),data)
@@ -63,7 +63,7 @@ export const EditarProduto = () => {
           navigate(-1);
         }
       })
-      .catch((error) => {});
+      .catch((error) => {console.log(error)});
   }
   const [pageState, setPageState] = useState<TTipo>("detalhes");
   const [isEditable, setIsEditable] = useState<boolean>(false);
