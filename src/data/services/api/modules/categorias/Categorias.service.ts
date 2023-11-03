@@ -12,13 +12,16 @@ const getAll = async (
   filter = ""
 ): Promise<TListCategorias | Error> => {
   try {
-    const urlRelativa = `/${rota}?_page=${page}&perPage=${Environment.LIMITE_DE_LINHAS}&titulo_like=${filter}`;
-    const { data, headers } = await Api.get(urlRelativa);
+    
+    const urlRelativa = `/${rota}?page=${page}&perPage=${Environment.LIMITE_DE_LINHAS}&titulo_like=${filter}`;
+    const response = await Api.get(urlRelativa);
+    const { data, headers } =  response;
+    console.log(response);
     if (data) {
       return {
         data,
         totalCount: Number(
-          headers["x-total-count"] || Environment.LIMITE_DE_LINHAS
+          headers['x-total-count'] || Environment.LIMITE_DE_LINHAS
         ),
       };
     }
@@ -26,7 +29,7 @@ const getAll = async (
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-      Environment.ERRO_AO_ACESSAR_DADOS
+        Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -42,7 +45,7 @@ const getById = async (id: number): Promise<ICategoria | Error> => {
     console.error(error);
     return new Error(
       (error as { message: string }).message ||
-      Environment.ERRO_AO_ACESSAR_DADOS
+        Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -63,7 +66,7 @@ const create = async (
     console.error(error);
     return new Error(
       (error as { message: string }).message ||
-      Environment.ERRO_AO_ACESSAR_DADOS
+        Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -82,7 +85,7 @@ const updateById = async (
     console.error(error);
     return new Error(
       (error as { message: string }).message ||
-      Environment.ERRO_AO_ACESSAR_DADOS
+        Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -98,7 +101,7 @@ const deleteById = async (id: number): Promise<ICategoria | Error> => {
     console.error(error);
     return new Error(
       (error as { message: string }).message ||
-      Environment.ERRO_AO_ACESSAR_DADOS
+        Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -115,7 +118,7 @@ const getCount = async (): Promise<number | Error> => {
     console.error(error);
     return new Error(
       (error as { message: string }).message ||
-      Environment.ERRO_AO_ACESSAR_DADOS
+        Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
