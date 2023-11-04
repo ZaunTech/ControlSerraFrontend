@@ -7,7 +7,7 @@ const rota = "cotacoes";
 
 const getAll = async (page = 1, filter = ""): Promise<TListCotacao | Error> => {
   try {
-    const urlRelativa = `/${rota}?_page=${page}&_limit=${Environment.LIMITE_DE_LINHAS}&nome_like=${filter}`;
+    const urlRelativa = `/${rota}?page=${page}&perPage=${Environment.LIMITE_DE_LINHAS}&nome_like=${filter}`;
     const { data, headers } = await Api.get(urlRelativa);
     if (data) {
       return {
