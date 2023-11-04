@@ -15,7 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useForm } from "react-hook-form";
 import { IProdutoBase, ProdutosBaseService } from "../../data/services/api";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { ProdutosService } from "../../data/services/api/modules/produtos";
 
 const createUserFormSchema = z.object({
@@ -58,12 +58,14 @@ export const AddProdutoBase = () => {
   useEffect(() => {
     setValue("orcamentoId", id);
   }, []);
+  const navigate = useNavigate();
 
   function createUser(data: any) {
     console.log(data);
     ProdutosService.addProdutoBase(data)
       .then((result) => {
         if (!(result instanceof Error)) {
+          navigate(-1);
         }
       })
       .catch((error) => {});

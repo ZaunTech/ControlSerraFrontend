@@ -13,8 +13,9 @@ const getAll = async (
   page = 1,
   filter = ""
 ): Promise<TListListaInsumos | Error> => {
+  console.log("numero 1")
   try {
-    const urlRelativa = `/${rota}?_page=${page}&_limit=${Environment.LIMITE_DE_LINHAS}&titulo_like=${filter}`;
+    const urlRelativa = `/${rota}?page=${page}&perPage=${Environment.LIMITE_DE_LINHAS}&titulo_like=${filter}`;
     const { data, headers } = await Api.get(urlRelativa);
     if (data) {
       return {
@@ -53,8 +54,9 @@ const getListaByIdProduto = async (
   page = 1,
   filter = ""
 ): Promise<TListListaInsumos | Error> => {
+  console.log("numero 2")
   try {
-    const urlRelativa = `/${rota}/produtos/${id}?_page=${page}&_limit=${Environment.LIMITE_DE_LINHAS}&titulo_like=${filter}`;
+    const urlRelativa = `/${rota}/produtos/${id}?page=${page}&perPage=${Environment.LIMITE_DE_LINHAS}&titulo_like=${filter}`;
     const { data, headers } = await Api.get(urlRelativa);
     if (data) {
       return {
