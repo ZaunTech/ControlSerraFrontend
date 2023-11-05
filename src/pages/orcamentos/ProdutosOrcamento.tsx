@@ -144,6 +144,7 @@ export const ProdutosOrcamento = () => {
             <TableRow>
               <TableCell style={{ fontWeight: "bold" }}>Ações</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Titulo</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Descrição</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Quantidade</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>
                 Valor Unitario
@@ -154,7 +155,6 @@ export const ProdutosOrcamento = () => {
           <TableBody>
             {rows.map((row) => (
               <TableRow key={row.id}>
-               
                 <Actions
                   id={row.id}
                   showListButton
@@ -163,9 +163,12 @@ export const ProdutosOrcamento = () => {
                     navigate(`${location.pathname}/${row.id}/insumos`);
                   }}
                 />
-                
+
                 <TableCell>
                   <Typography>{row.titulo}</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography>{row.observacoes}</Typography>
                 </TableCell>
                 <TableCell>
                   <Typography>{row.quantidade}</Typography>

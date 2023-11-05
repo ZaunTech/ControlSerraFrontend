@@ -128,24 +128,6 @@ const Pesquisas: React.FC<IPesquisa> = ({ setFiltro, setFiltroId }) => {
       ) : (
         ""
       )}
-      {tipo === "Insumo" ? (
-        <Autocomplete
-          disablePortal
-          id="combo-box-demo"
-          options={opcoesInsumos}
-          getOptionLabel={(option) => option.titulo ?? ""}
-          sx={{ width: 225 }}
-          size="small"
-          renderInput={(params) => <TextField {...params} />}
-          onChange={(_, value) => {
-            if (value !== null) {
-              setIdFiltro(value.id);
-            }
-          }}
-        />
-      ) : (
-        ""
-      )}
     </>
   );
 };
@@ -260,11 +242,13 @@ export const CotacoesDeUmInsumo = () => {
             <Pesquisas setFiltro={setFiltro} setFiltroId={setFiltroId} />
           }
         />
-      }>
+      }
+    >
       <TableContainer
         component={Paper}
         variant="outlined"
-        sx={{ m: 1, width: "auto" }}>
+        sx={{ m: 1, width: "auto" }}
+      >
         <Table>
           <TableHead>
             <TableRow>

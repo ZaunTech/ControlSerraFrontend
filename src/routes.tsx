@@ -32,11 +32,9 @@ import { Home } from "./pages/home/Home.tsx";
 import Error from "./pages/error/Error.tsx";
 import { Login, RecuperarSenha } from "./pages/login";
 import { Cotacoes, Cotacao, CriarCotacao } from "./pages/cotacoes";
-import Usuarios from "./pages/Usuarios/Usuarios.tsx";
-import { CriarUsuario } from "./pages/Usuarios/CriarUsuario.tsx";
-import Usuario from "./pages/Usuarios/Usuario.tsx";
 import { EditarProduto } from "./pages/orcamentos/EditarProduto.tsx";
 import { EditarProdutoBase } from "./pages/produtosBase/EditarProdutoBase.tsx";
+import { CriarUsuario, Usuario, Usuarios } from "./pages/Usuarios";
 
 const router = createBrowserRouter([
   {

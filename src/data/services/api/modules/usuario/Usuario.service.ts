@@ -5,7 +5,7 @@ import { TListUsuarios } from "./Interfaces/TListUsuario";
 import { CreateUsuarioDto } from "./dto/create-usuario.dto";
 import { UpdateUsuarioDto } from "./dto/update-usuario.dto";
 
-const rota = "categorias";
+const rota = "usuarios";
 
 const getAll = async (
   page = 1,
@@ -120,7 +120,7 @@ const getCount = async (): Promise<number | Error> => {
   }
 };
 
-export const CategoriasService = {
+export const UsuariosService = {
   getAll,
   getById,
   create,

@@ -25,6 +25,17 @@ import {
   OrcamentosService,
 } from "../../data/services/api/modules/orcamentos";
 import { Actions } from "../../ui/components/ferramentasDeListagem/Actions";
+import { format, parseISO } from "date-fns";
+
+const opcoesDeFormatacao = {
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+  hour: "2-digit",
+  minute: "2-digit",
+  second: "2-digit",
+  timeZoneName: "short",
+};
 
 export const Orcamentos = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -122,6 +133,7 @@ export const Orcamentos = () => {
             <TableRow>
               <TableCell style={{ fontWeight: "bold" }}>Ações</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Codigo</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Data Solicitado</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Cliente</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Status</TableCell>
             </TableRow>
@@ -139,6 +151,14 @@ export const Orcamentos = () => {
                 />
                 <TableCell>
                   <Typography>{row.id}</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography>
+                    {format(
+                      parseISO(String(row.dataOrcamento)),
+                      "dd/MM/yyyy HH:mm"
+                    )}
+                  </Typography>
                 </TableCell>
                 <TableCell>
                   <Typography>

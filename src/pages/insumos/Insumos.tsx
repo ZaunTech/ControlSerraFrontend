@@ -56,19 +56,18 @@ export const Insumos = () => {
         alert(result.message);
         return;
       }
-      
 
       const insumosData = await Promise.all(
         result.data.map(async (insumo: IInsumo) => {
           try {
             if (!insumo.idCategoria) {
-              return;
+              return insumo;
             }
             const result2 = await CategoriasService.getById(insumo.idCategoria);
 
             if (result2 instanceof Error) {
               alert(result2.message);
-              return null;
+              return insumo;
             }
 
             insumo.categoria = result2;
@@ -78,8 +77,8 @@ export const Insumos = () => {
           }
         })
       );
-      setRows(insumosData);
       setTotalCount(result.totalCount);
+      setRows(insumosData);
     } catch (error) {
       alert("Error fetching data.");
     } finally {
@@ -104,6 +103,10 @@ export const Insumos = () => {
       });
     }
   };
+
+  useEffect(() => {
+    console.log(rows);
+  }, [rows]);
 
   return (
     <PaginaBase
@@ -139,9 +142,8 @@ export const Insumos = () => {
           <TableBody>
             {rows.map((row) => (
               <TableRow key={row.id}>
-                 <Actions
+                <Actions
                   id={row.id}
-                 
                   handleDelete={handleDelete}
                   handleShowList={() => {
                     navigate(`${location.pathname}/${row.id}`);
@@ -151,7 +153,7 @@ export const Insumos = () => {
                   <Typography>{row.titulo}</Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{row.categoria?.titulo }</Typography>
+                  <Typography>{row.categoria?.titulo}</Typography>
                 </TableCell>
                 <TableCell>
                   <Typography>{row.unidadeMedida}</Typography>
