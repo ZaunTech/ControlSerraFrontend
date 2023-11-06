@@ -37,6 +37,7 @@ import {
 } from "../../data/services/api/modules/cotacoes";
 import React from "react";
 import { Actions } from "../../ui/components/ferramentasDeListagem/Actions";
+import { format, parseISO } from "date-fns";
 
 interface IPesquisa {
   setFiltro: (text: string) => void;
@@ -60,7 +61,7 @@ const Pesquisas: React.FC<IPesquisa> = ({ setFiltro, setFiltroId }) => {
         } else {
         }
       })
-      .catch((error) => {});
+      .catch((error) => { });
   }, []);
 
   useEffect(() => {
@@ -76,7 +77,7 @@ const Pesquisas: React.FC<IPesquisa> = ({ setFiltro, setFiltroId }) => {
         } else {
         }
       })
-      .catch((error) => {});
+      .catch((error) => { });
   }, []);
 
   const [tipo, setTipo] = React.useState<string>("Todos");
@@ -276,13 +277,13 @@ export const Cotacoes = () => {
               return (
                 <TableRow key={row.id}>
                   <Actions
-                  id={row.id}
-                 
-                  handleDelete={handleDelete}
-                  handleShowList={() => {
-                    navigate(`${location.pathname}/${row.id}`);
-                  }}
-                />
+                    id={row.id}
+
+                    handleDelete={handleDelete}
+                    handleShowList={() => {
+                      navigate(`${location.pathname}/${row.id}`);
+                    }}
+                  />
                   <TableCell>
                     <Typography>
                       {row.fornecedor?.nomeFantasia ||
@@ -294,10 +295,17 @@ export const Cotacoes = () => {
                     <Typography>{row.insumo?.titulo || "Vazop"}</Typography>
                   </TableCell>
                   <TableCell>
-                    <Typography>{row.valor}</Typography>
+                    <Typography>{row.valor.toLocaleString('pt-BR', {
+                      style: 'currency',
+                      currency: 'BRL',
+                      minimumFractionDigits: 2,
+                    })}</Typography>
                   </TableCell>
                   <TableCell>
-                    <Typography>{row.data.toString()}</Typography>
+                    <Typography>                    {format(
+                      parseISO(String(row.data)),
+                      "dd/MM/yyyy HH:mm"
+                    )}</Typography>
                   </TableCell>
                 </TableRow>
               );

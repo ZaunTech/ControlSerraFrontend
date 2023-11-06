@@ -18,6 +18,7 @@ import { useEffect, useState } from "react";
 import { PedidosService } from "../../data/services/api/modules/pedidos";
 import { OrcamentosService } from "../../data/services/api/modules/orcamentos";
 import { CotacoesService } from "../../data/services/api/modules/cotacoes";
+import { UsuariosService } from "../../data/services/api/modules/usuario";
 
 export const Home = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -43,6 +44,9 @@ export const Home = () => {
     number | null
   >(null);
   const [totalCountFornecedores, setTotalCountFornecedores] = useState<
+    number | null
+  >(null);
+  const [totalCountUsuarios, setTotalCountUsuarios] = useState<
     number | null
   >(null);
 
@@ -114,6 +118,14 @@ export const Home = () => {
       }
       setCountsFound(countsFound + 1);
       setTotalCountFornecedores(result);
+    });
+    UsuariosService.getCount().then((result) => {
+      if (result instanceof Error) {
+        //alert(result.message);
+        return;
+      }
+      setCountsFound(countsFound + 1);
+      setTotalCountUsuarios(result);
     });
     setCounted(true);
     setIsLoading(false);
@@ -313,6 +325,27 @@ export const Home = () => {
                     >
                       <Typography variant="h1">
                         {totalCountFornecedores}
+                      </Typography>
+                    </Box>
+                  </CardContent>
+                </Card>
+              </Grid>
+            )}
+            {totalCountUsuarios != null && !isLoading && (
+              <Grid item xs={12} sm={12} md={6} lg={4} xl={3}>
+                <Card>
+                  <CardContent>
+                    <Typography variant="h5" align="center">
+                      Total de Usuarios
+                    </Typography>
+                    <Box
+                      display={"flex"}
+                      padding={6}
+                      justifyContent={"center"}
+                      alignItems={"center"}
+                    >
+                      <Typography variant="h1">
+                        {totalCountUsuarios}
                       </Typography>
                     </Box>
                   </CardContent>

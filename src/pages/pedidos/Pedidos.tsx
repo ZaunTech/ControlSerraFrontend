@@ -77,7 +77,7 @@ export const Pedidos = () => {
                 return;
               }
               pedido.orcamento.cliente = result3;
-            } catch (error) {}
+            } catch (error) { }
             return pedido;
           } catch (error) {
             return null;
@@ -175,14 +175,18 @@ export const Pedidos = () => {
                   <Typography>{row.status}</Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{row.pagamento}</Typography>
+                  <Typography>{row.pagamento.toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL',
+                    minimumFractionDigits: 2,
+                  })}</Typography>
                 </TableCell>
                 <TableCell>
                   <Typography>
-                    {(row.pagamento /
+                    {((row.pagamento /
                       (row.orcamento?.totalMaoObra +
                         row.orcamento?.totalMateriais)) *
-                      100}
+                      100).toFixed(2) + "%"}
                   </Typography>
                 </TableCell>
               </TableRow>
