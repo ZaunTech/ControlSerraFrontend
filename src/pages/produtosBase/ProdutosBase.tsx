@@ -45,7 +45,7 @@ export const ProdutosBase = () => {
   useEffect(() => {
     setIsLoading(true);
     debounce(() => {
-      ProdutosBaseService.getAll(pagina, busca).then((result) => {
+      ProdutosBaseService.getAll({ page: pagina, filter: busca }).then((result) => {
         if (result instanceof Error) {
           alert(result.message);
           return;

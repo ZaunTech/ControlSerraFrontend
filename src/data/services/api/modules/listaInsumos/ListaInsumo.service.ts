@@ -4,18 +4,19 @@ import {
   UpdateListaInsumosDto,
   IListaInsumo,
 } from ".";
-import { Api } from "../..";
+import { Api, IGetAll } from "../..";
 import { Environment } from "../../../../environment";
 
 const rota = "lista-insumos";
 
 const getAll = async (
-  page = 1,
-  filter = ""
+  { page = 1,
+    filter = "",
+    perPage = Environment.LIMITE_DE_LINHAS }: Partial<IGetAll> = {}
 ): Promise<TListListaInsumos | Error> => {
   console.log("numero 1")
   try {
-    const urlRelativa = `/${rota}?page=${page}&perPage=${Environment.LIMITE_DE_LINHAS}&titulo_like=${filter}`;
+    const urlRelativa = `/${rota}?page=${page}&perPage=${perPage == 0 ? '' : perPage}&titulo_like=${filter}`;
     const { data, headers } = await Api.get(urlRelativa);
     if (data) {
       return {

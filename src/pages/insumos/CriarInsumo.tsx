@@ -38,12 +38,12 @@ export const CriarInsumo = () => {
       .then(() => {
         navigate(-1);
       })
-      .catch((erro) => {});
+      .catch((erro) => { });
   }
   const [opcoes, setOpcoes] = useState<ICategoria[]>([]);
 
   useEffect(() => {
-    CategoriasService.getAll()
+    CategoriasService.getAll({ perPage: 0 })
       .then((response) => {
         if (response instanceof Error) {
           return;
@@ -55,7 +55,7 @@ export const CriarInsumo = () => {
         } else {
         }
       })
-      .catch((error) => {});
+      .catch((error) => { });
   }, []);
 
   const [pageState, setPageState] = useState<TTipo>("novo");
@@ -77,9 +77,9 @@ export const CriarInsumo = () => {
       titulo="Novo Insumo"
       barraDeFerramentas={
         <FerramentasDeDetalhes
-         tipo="novo"
-         pageState={pageState}
-         setPaiState={setPageState}
+          tipo="novo"
+          pageState={pageState}
+          setPaiState={setPageState}
           onClickSalvar={handleSubmit(createUser)}
         />
       }
@@ -96,7 +96,7 @@ export const CriarInsumo = () => {
             <Grid container item direction="column" spacing={4}>
               <Grid item>
                 <Typography>Titulo</Typography>
-                <TextField placeholder="Titulo"  disabled={!isEditable} {...register("titulo")} />
+                <TextField placeholder="Titulo" disabled={!isEditable} {...register("titulo")} />
               </Grid>
               <Grid item>
                 <Typography>Categoria</Typography>

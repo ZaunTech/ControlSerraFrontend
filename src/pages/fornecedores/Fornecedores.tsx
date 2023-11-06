@@ -45,7 +45,7 @@ export const Fornecedores = () => {
   useEffect(() => {
     setIsLoading(true);
     debounce(() => {
-      FornecedoresService.getAll(pagina, busca).then((result) => {
+      FornecedoresService.getAll({ page: pagina, filter: busca }).then((result) => {
         if (result instanceof Error) {
           alert(result.message);
           return;

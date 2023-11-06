@@ -49,7 +49,7 @@ export const Usuarios = () => {
   useEffect(() => {
     setIsLoading(true);
     debounce(() => {
-      UsuariosService.getAll(pagina, busca).then((result) => {
+      UsuariosService.getAll({ page: pagina, filter: busca }).then((result) => {
         if (result instanceof Error) {
           alert(result.message);
           return;

@@ -1,12 +1,15 @@
 import { CreatePedidoDto, IPedido, TListPedidos, UpdatePedidoDto } from ".";
-import { Api } from "../..";
+import { Api, IGetAll } from "../..";
 import { Environment } from "../../../../environment";
 
 const rota = "pedidos";
 
-const getAll = async (page = 1, filter = ""): Promise<TListPedidos | Error> => {
+const getAll = async (
+  { page = 1,
+    filter = "",
+    perPage = Environment.LIMITE_DE_LINHAS }: Partial<IGetAll> = {}): Promise<TListPedidos | Error> => {
   try {
-    const urlRelativa = `/${rota}?_page=${page}&_limit=${Environment.LIMITE_DE_LINHAS}&titulo_like=${filter}`;
+    const urlRelativa = `/${rota}?_page=${page}&_limit=${perPage == 0 ? '' : perPage}&titulo_like=${filter}`;
     const { data, headers } = await Api.get(urlRelativa);
     if (data) {
       return {

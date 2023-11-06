@@ -1,4 +1,4 @@
-import { Api } from "../..";
+import { Api, IGetAll } from "../..";
 import { Environment } from "../../../../environment";
 import { IInsumo } from "./Interfaces/IInsumo";
 import { TListInsumos } from "./Interfaces/TListInsumo";
@@ -7,9 +7,12 @@ import { UpdateInsumoDto } from "./dto/update-insumo.dto";
 
 const rota = "insumos";
 
-const getAll = async (page = 1, filter = ""): Promise<TListInsumos | Error> => {
+const getAll = async (
+  { page = 1,
+    filter = "",
+    perPage = Environment.LIMITE_DE_LINHAS }: Partial<IGetAll> = {}): Promise<TListInsumos | Error> => {
   try {
-    const urlRelativa = `/${rota}?page=${page}&perPage=${Environment.LIMITE_DE_LINHAS}&titulo_like=${filter}`;
+    const urlRelativa = `/${rota}?page=${page}&perPage=${perPage == 0 ? '' : perPage}&titulo_like=${filter}`;
     const { data, headers } = await Api.get(urlRelativa);
     if (data) {
       return {

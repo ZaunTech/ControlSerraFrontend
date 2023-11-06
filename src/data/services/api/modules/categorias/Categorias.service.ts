@@ -1,4 +1,4 @@
-import { Api } from "../..";
+import { Api, IGetAll } from "../..";
 import { Environment } from "../../../../environment";
 import { ICategoria } from "./Interfaces/ICategoria";
 import { TListCategorias } from "./Interfaces/TListCategoria";
@@ -8,14 +8,14 @@ import { UpdateCategoriaDto } from "./dto/update-categoria.dto";
 const rota = "categorias";
 
 const getAll = async (
-  page = 1,
-  filter = ""
+  { page = 1,
+    filter = "",
+    perPage = Environment.LIMITE_DE_LINHAS }: Partial<IGetAll> = {}
 ): Promise<TListCategorias | Error> => {
   try {
-    
-    const urlRelativa = `/${rota}?page=${page}&perPage=${Environment.LIMITE_DE_LINHAS}&titulo_like=${filter}`;
+    const urlRelativa = `/${rota}?page=${page}&perPage=${perPage == 0 ? '' : perPage}&titulo_like=${filter}`;
     const response = await Api.get(urlRelativa);
-    const { data, headers } =  response;
+    const { data, headers } = response;
     console.log(response);
     if (data) {
       return {
@@ -29,7 +29,7 @@ const getAll = async (
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -45,7 +45,7 @@ const getById = async (id: number): Promise<ICategoria | Error> => {
     console.error(error);
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -66,7 +66,7 @@ const create = async (
     console.error(error);
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -85,7 +85,7 @@ const updateById = async (
     console.error(error);
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -101,7 +101,7 @@ const deleteById = async (id: number): Promise<ICategoria | Error> => {
     console.error(error);
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -118,7 +118,7 @@ const getCount = async (): Promise<number | Error> => {
     console.error(error);
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };

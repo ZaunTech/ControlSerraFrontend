@@ -1,13 +1,16 @@
-import { Api } from "../..";
+import { Api, IGetAll } from "../..";
 import { Environment } from "../../../../environment";
 import { ICotacao } from "./Interfaces/ICotacao";
 import { TListCotacao } from "./Interfaces/TListCotacao";
 
 const rota = "cotacoes";
 
-const getAll = async (page = 1, filter = ""): Promise<TListCotacao | Error> => {
+const getAll = async (
+  { page = 1,
+    filter = "",
+    perPage = Environment.LIMITE_DE_LINHAS }: Partial<IGetAll> = {}): Promise<TListCotacao | Error> => {
   try {
-    const urlRelativa = `/${rota}?page=${page}&perPage=${Environment.LIMITE_DE_LINHAS}&nome_like=${filter}`;
+    const urlRelativa = `/${rota}?page=${page}&perPage=${perPage ?? Environment.LIMITE_DE_LINHAS}&nome_like=${filter}`;
     const { data, headers } = await Api.get(urlRelativa);
     if (data) {
       return {
@@ -21,7 +24,7 @@ const getAll = async (page = 1, filter = ""): Promise<TListCotacao | Error> => {
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -46,7 +49,7 @@ const getByFornecdor = async (
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -71,7 +74,7 @@ const getByInsumo = async (
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -87,7 +90,7 @@ const getById = async (id: number): Promise<ICotacao | Error> => {
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -105,7 +108,7 @@ const create = async (
     console.error(error);
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -123,7 +126,7 @@ const updateById = async (
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -139,7 +142,7 @@ const deleteById = async (id: number): Promise<ICotacao | Error> => {
     console.error(error);
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -156,7 +159,7 @@ const getCount = async (): Promise<number | Error> => {
     console.error(error);
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };

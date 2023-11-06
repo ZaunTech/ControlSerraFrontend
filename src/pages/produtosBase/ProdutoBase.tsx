@@ -68,7 +68,7 @@ export const ProdutoBase = () => {
     try {
       setIsLoading(true);
 
-      const result = await InsumosProdutoBaseService.getAll(pagina, busca);
+      const result = await InsumosProdutoBaseService.getAll({ page: pagina, filter: busca });
 
       if (result instanceof Error) {
         alert(result.message);

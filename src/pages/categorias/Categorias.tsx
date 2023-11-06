@@ -45,7 +45,7 @@ export const Categorias = () => {
   useEffect(() => {
     setIsLoading(true);
     debounce(() => {
-      CategoriasService.getAll(pagina, busca).then((result) => {
+      CategoriasService.getAll({ page: pagina, filter: busca }).then((result) => {
         if (result instanceof Error) {
           alert(result.message);
           return;
@@ -102,7 +102,7 @@ export const Categorias = () => {
               <TableRow key={row.id}>
                 <Actions
                   id={row.id}
-                 
+
                   handleDelete={handleDelete}
                   handleShowList={() => {
                     navigate(`${location.pathname}/${row.id}`);

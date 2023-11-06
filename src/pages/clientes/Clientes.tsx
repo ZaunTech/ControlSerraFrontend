@@ -45,7 +45,7 @@ export const Clientes = () => {
   useEffect(() => {
     setIsLoading(true);
     debounce(() => {
-      ClientesService.getAll(pagina, busca).then((result) => {
+      ClientesService.getAll({ page: pagina, filter: busca }).then((result) => {
         if (result instanceof Error) {
           alert(result.message);
           return;

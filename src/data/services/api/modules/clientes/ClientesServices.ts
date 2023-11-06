@@ -1,13 +1,16 @@
-import { Api } from "../..";
+import { Api, IGetAll } from "../..";
 import { Environment } from "../../../../environment";
 import { ICliente } from "./Interfaces/ICliente";
 import { TListCliente } from "./Interfaces/TListCliente";
 
 const rota = "clientes";
 
-const getAll = async (page = 1, filter = ""): Promise<TListCliente | Error> => {
+const getAll = async (
+  { page = 1,
+    filter = "",
+    perPage = Environment.LIMITE_DE_LINHAS }: Partial<IGetAll> = {}): Promise<TListCliente | Error> => {
   try {
-    const urlRelativa = `/${rota}?page=${page}&perPage=${Environment.LIMITE_DE_LINHAS}&nome_like=${filter}`;
+    const urlRelativa = `/${rota}?page=${page}&perPage=${perPage == 0 ? '' : perPage}&nome_like=${filter}`;
     const { data, headers } = await Api.get(urlRelativa);
     if (data) {
       return {
@@ -21,7 +24,7 @@ const getAll = async (page = 1, filter = ""): Promise<TListCliente | Error> => {
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -36,7 +39,7 @@ const getById = async (id: number): Promise<ICliente | Error> => {
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -53,7 +56,7 @@ const create = async (
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -71,7 +74,7 @@ const updateById = async (
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -86,7 +89,7 @@ const deleteById = async (id: number): Promise<ICliente | Error> => {
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -102,7 +105,7 @@ const getCount = async (): Promise<number | Error> => {
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };

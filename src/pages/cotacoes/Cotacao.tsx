@@ -53,7 +53,7 @@ export const Cotacao = () => {
         } else {
         }
       })
-      .catch((error) => {});
+      .catch((error) => { });
   }, []);
 
   useEffect(() => {
@@ -69,7 +69,7 @@ export const Cotacao = () => {
         } else {
         }
       })
-      .catch((error) => {});
+      .catch((error) => { });
   }, []);
 
   const {
@@ -103,11 +103,11 @@ export const Cotacao = () => {
         setValue("valor", data.valor);
       } else {
       }
-    } catch (error) {}
+    } catch (error) { }
   };
   useEffect(() => {
-    
-    
+
+
 
     fetchData();
   }, []);
@@ -119,14 +119,14 @@ export const Cotacao = () => {
         setIsEditable(false);
         setPageState("detalhes");
       })
-      .catch(() => {});
+      .catch(() => { });
   }
   function createCotacaoFechar(data: any) {
     CotacoesService.updateById(Number(id), data)
       .then(() => {
         navigate(-1);
       })
-      .catch(() => {});
+      .catch(() => { });
   }
   const [pageState, setPageState] = useState<TTipo>("detalhes");
   const [isEditable, setIsEditable] = useState<boolean>(false);
@@ -142,18 +142,18 @@ export const Cotacao = () => {
     }
   }, [pageState]);
 
-  
+
 
   return (
     <PaginaBase
       titulo="Editar Cotação"
       barraDeFerramentas={
         <FerramentasDeDetalhes
-        tipo="detalhes"
-        pageState={pageState}
-        setPaiState={setPageState}
-        onClickCancelar={fetchData}
-        onClickSalvarEFechar={handleSubmit(createCotacaoFechar)}
+          tipo="detalhes"
+          pageState={pageState}
+          setPaiState={setPageState}
+          onClickCancelar={fetchData}
+          onClickSalvarEFechar={handleSubmit(createCotacaoFechar)}
           onClickSalvar={handleSubmit(createCotacao)}
         />
       }

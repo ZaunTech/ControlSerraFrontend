@@ -1,4 +1,4 @@
-import { Api } from "../..";
+import { Api, IGetAll } from "../..";
 import { Environment } from "../../../../environment";
 import { IFornecedor } from "./Interfaces/IFornecedor";
 import { TListFornecedor } from "./Interfaces/TListFornecedor";
@@ -8,11 +8,12 @@ import { UpdateFornecedorDto } from "./dto/update-fornecedor.dto";
 const rota = "fornecedores";
 
 const getAll = async (
-  page = 1,
-  filter = ""
+  { page = 1,
+    filter = "",
+    perPage = Environment.LIMITE_DE_LINHAS }: Partial<IGetAll> = {}
 ): Promise<TListFornecedor | Error> => {
   try {
-    const urlRelativa = `/${rota}?page=${page}&perPage=${Environment.LIMITE_DE_LINHAS}&nome_like=${filter}`;
+    const urlRelativa = `/${rota}?page=${page}&perPage=${perPage == 0 ? '' : perPage}&nome_like=${filter}`;
     const { data, headers } = await Api.get(urlRelativa);
     if (data) {
       return {

@@ -4,17 +4,18 @@ import {
   TListInsumosProdutoBase,
   UpdateInsumosProdutoBaseDto,
 } from ".";
-import { Api } from "../..";
+import { Api, IGetAll } from "../..";
 import { Environment } from "../../../../environment";
 
 const rota = "insumos-produtos-base";
 
 const getAll = async (
-  page = 1,
-  filter = ""
+  { page = 1,
+    filter = "",
+    perPage = Environment.LIMITE_DE_LINHAS }: Partial<IGetAll> = {}
 ): Promise<TListInsumosProdutoBase | Error> => {
   try {
-    const urlRelativa = `/${rota}?page=${page}&perPage=${Environment.LIMITE_DE_LINHAS}&titulo_like=${filter}`;
+    const urlRelativa = `/${rota}?page=${page}&perPage=${perPage == 0 ? '' : perPage}&titulo_like=${filter}`;
     const { data, headers } = await Api.get(urlRelativa);
     if (data) {
       return {

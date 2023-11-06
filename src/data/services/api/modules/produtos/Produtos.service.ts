@@ -5,17 +5,18 @@ import {
   TListProdutos,
   UpdateProdutoDto,
 } from ".";
-import { Api, IProdutoBase } from "../..";
+import { Api, IGetAll, IProdutoBase } from "../..";
 import { Environment } from "../../../../environment";
 
 const rota = "produtos";
 
 const getAll = async (
-  page = 1,
-  filter = ""
+  { page = 1,
+    filter = "",
+    perPage = Environment.LIMITE_DE_LINHAS }: Partial<IGetAll> = {}
 ): Promise<TListProdutos | Error> => {
   try {
-    const urlRelativa = `/${rota}?page=${page}&perPage=${Environment.LIMITE_DE_LINHAS}&titulo_like=${filter}`;
+    const urlRelativa = `/${rota}?page=${page}&perPage=${perPage == 0 ? '' : perPage}&titulo_like=${filter}`;
     const { data, headers } = await Api.get(urlRelativa);
     if (data) {
       return {  

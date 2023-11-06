@@ -50,7 +50,7 @@ export const Pedidos = () => {
     try {
       setIsLoading(true);
 
-      const result = await PedidosService.getAll(pagina, busca);
+      const result = await PedidosService.getAll({ page: pagina, filter: busca });
 
       if (result instanceof Error) {
         alert(result.message);
