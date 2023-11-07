@@ -8,9 +8,12 @@ const rota = "cotacoes";
 const getAll = async (
   { page = 1,
     filter = "",
-    perPage = Environment.LIMITE_DE_LINHAS }: Partial<IGetAll> = {}): Promise<TListCotacao | Error> => {
+    perPage = Environment.LIMITE_DE_LINHAS }: Partial<IGetAll> = {},
+      idInsumo?: number,
+      idFornecedor?:number,
+    ): Promise<TListCotacao | Error> => {
   try {
-    const urlRelativa = `/${rota}?page=${page}&perPage=${perPage ?? Environment.LIMITE_DE_LINHAS}&nome_like=${filter}`;
+    const urlRelativa = `/${rota}?page=${page}&perPage=${perPage == 0 ? '' : perPage}&nome_like=${filter}&fornecedor=${idFornecedor}&insumo=${idInsumo}`;
     const { data, headers } = await Api.get(urlRelativa);
     if (data) {
       return {

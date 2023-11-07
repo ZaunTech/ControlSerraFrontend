@@ -44,7 +44,7 @@ export const EditarOrcamento = () => {
   }, [pageState]);
 
   useEffect(() => {
-    ClientesService.getAll()
+    ClientesService.getAll({perPage:0})
       .then((response) => {
         if (response instanceof Error) {
           return;

@@ -49,7 +49,7 @@ const Pesquisas: React.FC<IPesquisa> = ({ setFiltro, setFiltroId }) => {
   const [opcoesInsumos, setOpcoesInsumos] = useState<IInsumo[]>([]);
 
   useEffect(() => {
-    FornecedoresService.getAll()
+    FornecedoresService.getAll({perPage:0})
       .then((response) => {
         if (response instanceof Error) {
           return;
@@ -65,7 +65,7 @@ const Pesquisas: React.FC<IPesquisa> = ({ setFiltro, setFiltroId }) => {
   }, []);
 
   useEffect(() => {
-    InsumosService.getAll()
+    InsumosService.getAll({perPage:0})
       .then((response) => {
         if (response instanceof Error) {
           return;
@@ -177,7 +177,7 @@ export const Cotacoes = () => {
       } else if (filtro === "Fornecedor" && filtroId != undefined) {
         result = await CotacoesService.getByFornecdor(filtroId, pagina, busca);
       } else {
-        result = await CotacoesService.getAll(pagina, busca);
+        result = await CotacoesService.getAll({page:pagina, filter: busca});
       }
 
       if (result instanceof Error) {

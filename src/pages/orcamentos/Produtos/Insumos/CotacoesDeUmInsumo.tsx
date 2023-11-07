@@ -159,12 +159,10 @@ export const CotacoesDeUmInsumo = () => {
       setIsLoading(true);
       let result;
 
-      if (filtro === "Insumo" && filtroId != undefined) {
-        result = await CotacoesService.getByInsumo(filtroId, pagina, busca);
-      } else if (filtro === "Fornecedor" && filtroId != undefined) {
-        result = await CotacoesService.getByFornecdor(filtroId, pagina, busca);
+     if (filtro === "Fornecedor" && filtroId != undefined) {
+      result = await CotacoesService.getAll({page:pagina, filter:busca}, Number(idItemListaInsumos), filtroId );
       } else {
-        result = await CotacoesService.getAll(pagina, busca);
+        result = await CotacoesService.getAll({page:pagina, filter:busca}, Number(idItemListaInsumos) );
       }
 
       if (result instanceof Error) {

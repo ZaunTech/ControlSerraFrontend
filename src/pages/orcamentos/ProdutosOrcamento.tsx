@@ -93,7 +93,7 @@ export const ProdutosOrcamento = () => {
   useEffect(() => {
     setIsLoading(true);
     debounce(() => {
-      ProdutosService.getAll({page:pagina,filter: busca}).then((result) => {
+      ProdutosService.getAll({page:pagina,filter: busca},Number(id)).then((result) => {
         if (result instanceof Error) {
           alert(result.message);
           return;
