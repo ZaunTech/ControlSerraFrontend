@@ -1,5 +1,6 @@
 export * from "./AdicionarInsumo";
 export * from "./CriarProdutoBase";
 export * from "./ListaDeInsumos";
-export * from "./ProdutoBase";
+export * from "./ListaDeInsumos";
 export * from "./ProdutosBase";
+export * from "./ProdutoBase";

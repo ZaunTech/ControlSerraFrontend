@@ -1,6 +1,6 @@
 import { useMemo, useEffect } from "react";
-import { PaginaBase } from "../../ui/layouts";
-import { FerramentasDaListagem } from "../../ui/components";
+import { PaginaBase } from "../../../../ui/layouts";
+import { FerramentasDaListagem } from "../../../../ui/components";
 import {
   useNavigate,
   useSearchParams,
@@ -12,8 +12,8 @@ import {
   IFornecedor,
   IInsumo,
   InsumosService,
-} from "../../data/services/api";
-import { useDebounce } from "../../data/hooks";
+} from "../../../../data/services/api";
+import { useDebounce } from "../../../../data/hooks";
 import { useState } from "react";
 import {
   Paper,
@@ -35,14 +35,14 @@ import {
   MenuItem,
   SelectChangeEvent,
 } from "@mui/material";
-import { Environment } from "../../data/environment";
+import { Environment } from "../../../../data/environment";
 import {
   CotacoesService,
   ICotacao,
-} from "../../data/services/api/modules/cotacoes";
+} from "../../../../data/services/api/modules/cotacoes";
 import React from "react";
-import { Actions } from "../../ui/components/ferramentasDeListagem/Actions";
-import { ListaInsumosService } from "../../data/services/api/modules/listaInsumos";
+import { Actions } from "../../../../ui/components/ferramentasDeListagem/Actions";
+import { ListaInsumosService } from "../../../../data/services/api/modules/listaInsumos";
 
 interface IPesquisa {
   setFiltro: (text: string) => void;
@@ -66,7 +66,7 @@ const Pesquisas: React.FC<IPesquisa> = ({ setFiltro, setFiltroId }) => {
         } else {
         }
       })
-      .catch((error) => {});
+      .catch((error) => { });
   }, []);
 
   useEffect(() => {
@@ -82,7 +82,7 @@ const Pesquisas: React.FC<IPesquisa> = ({ setFiltro, setFiltroId }) => {
         } else {
         }
       })
-      .catch((error) => {});
+      .catch((error) => { });
   }, []);
 
   const [tipo, setTipo] = React.useState<string>("Todos");

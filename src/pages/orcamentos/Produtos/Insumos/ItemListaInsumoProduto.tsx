@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { FerramentasDeDetalhes, TTipo } from "../../ui/components";
-import { PaginaBase } from "../../ui/layouts";
+import { FerramentasDeDetalhes, TTipo } from "../../../../ui/components";
+import { PaginaBase } from "../../../../ui/layouts";
 import {
   Autocomplete,
   Box,
@@ -12,22 +12,27 @@ import {
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { IInsumo, InsumosService } from "../../data/services/api";
+import { IInsumo, InsumosService } from "../../../../data/services/api";
 import { useNavigate, useParams } from "react-router-dom";
-import { ListaInsumosService } from "../../data/services/api/modules/listaInsumos";
+import {
+  IListaInsumo,
+  ListaInsumosService,
+} from "../../../../data/services/api/modules/listaInsumos";
 
 const createUserFormSchema = z.object({
-  idProduto: z.coerce.number(),
   quantidade: z.coerce.number(),
   idInsumo: z.coerce.number(),
   unidade: z.string(),
 });
 
-export const CriarItemInsumoProdutoBase = () => {
+export const ItemListaInsumoProduto = () => {
   const {
     register,
     handleSubmit,
     setValue,
+    watch,
+    control,
+
     formState: { errors },
   } = useForm({
     resolver: zodResolver(createUserFormSchema),
@@ -53,23 +58,48 @@ export const CriarItemInsumoProdutoBase = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  useEffect(() => {
-    setValue("idProduto", Number(id));
-  });
+  const fetchData = async () => {
+    try {
+      console.log(id);
+      const data: IListaInsumo | Error = await ListaInsumosService.getById(
+        Number(id)
+      );
+      if (data instanceof Error) {
+        return;
+      }
+      setValue("idInsumo", data.idInsumo);
+      setValue("quantidade", data.quantidade);
+      setValue("unidade", data.unidade);
+    } catch (error) {}
+  };
 
-  function createUser(data: any) {
-    console.log(data);
-    ListaInsumosService.create(data)
+  useEffect(() => {
+    
+
+    fetchData();
+  }, []);
+
+  function createInsumoProd(data: any) {
+    ListaInsumosService.updateById(Number(id), data)
+      .then((result) => {
+        if (!(result instanceof Error)) {
+          setIsEditable(false);
+          setPageState("detalhes");
+        }
+      })
+      .catch((error) => {});
+  }
+  function createInsumoProdFechar(data: any) {
+    ListaInsumosService.updateById(Number(id), data)
       .then((result) => {
         if (!(result instanceof Error)) {
           navigate(-1);
         }
-        console.log(result);
       })
       .catch((error) => {});
   }
 
-  const [pageState, setPageState] = useState<TTipo>("novo");
+  const [pageState, setPageState] = useState<TTipo>("detalhes");
   const [isEditable, setIsEditable] = useState<boolean>(false);
 
   useEffect(() => {
@@ -85,22 +115,26 @@ export const CriarItemInsumoProdutoBase = () => {
 
   return (
     <PaginaBase
-      titulo="Adicionar Insumos Produto"
+      titulo="Editar Insumos prod"
       barraDeFerramentas={
         <FerramentasDeDetalhes
-          tipo="novo"
-          pageState={pageState}
+          tipo="detalhes"
           setPaiState={setPageState}
-          onClickSalvar={handleSubmit(createUser)}
+          pageState={pageState}
+          onClickSalvarEFechar={handleSubmit(createInsumoProdFechar)}
+          onClickCancelar={fetchData}
+          onClickSalvar={handleSubmit(createInsumoProd)}
         />
-      }>
-      <Box component={"form"} onSubmit={handleSubmit(createUser)}>
+      }
+    >
+      <Box component={"form"} onSubmit={handleSubmit(createInsumoProd)}>
         <Box
           display={"flex"}
           margin={1}
           flexDirection={"column"}
           component={Paper}
-          variant="outlined">
+          variant="outlined"
+        >
           <Grid container direction="column" padding={2} spacing={3}>
             <Grid container item direction="row" spacing={4}>
               <Grid item>
@@ -108,7 +142,13 @@ export const CriarItemInsumoProdutoBase = () => {
                 <Autocomplete
                   disablePortal
                   id="combo-box-demo"
+                  disabled={!isEditable}
                   {...register("idInsumo")}
+                  value={
+                    opcaoiInsumos.find(
+                      (opcaoiInsumos) => opcaoiInsumos.id === watch("idInsumo")
+                    ) || null
+                  }
                   options={opcaoiInsumos}
                   getOptionLabel={(opcaoiInsumos) => opcaoiInsumos.titulo ?? ""}
                   sx={{ width: 225 }}
@@ -123,7 +163,7 @@ export const CriarItemInsumoProdutoBase = () => {
               </Grid>
               <Grid item>
                 <Typography>Quantidade</Typography>
-                <TextField
+                <TextField disabled={!isEditable}
                   type="number"
                   placeholder="Quantidade"
                   {...register("quantidade")}
@@ -133,10 +173,10 @@ export const CriarItemInsumoProdutoBase = () => {
                 )}
               </Grid>
               <Grid item>
-                <Typography>Unidade de Mediada</Typography>
-                <TextField placeholder="unidade" {...register("unidade")} />
-                {errors.dimensoes && (
-                  <span>{errors.dimensoes.message?.toString()}</span>
+                <Typography>unidade</Typography>
+                <TextField placeholder="unidade" disabled={!isEditable} {...register("unidade")} />
+                {errors.unidade && (
+                  <span>{errors.unidade.message?.toString()}</span>
                 )}
               </Grid>
             </Grid>

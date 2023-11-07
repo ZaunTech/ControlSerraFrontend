@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { FerramentasDeDetalhes, TTipo } from "../../ui/components";
-import { PaginaBase } from "../../ui/layouts";
+import { FerramentasDeDetalhes, TTipo } from "../../../ui/components";
+import { PaginaBase } from "../../../ui/layouts";
 import { Box, Grid, Paper, TextField, Typography } from "@mui/material";
 import { z } from "zod";
 
@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
-import { ProdutosService } from "../../data/services/api/modules/produtos";
+import { ProdutosService } from "../../../data/services/api/modules/produtos";
 
 const createUserFormSchema = z.object({
   titulo: z.string().min(1, "Titulo não pode ser vazio"),

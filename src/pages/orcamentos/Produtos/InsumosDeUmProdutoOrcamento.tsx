@@ -1,13 +1,13 @@
 import { useMemo, useEffect } from "react";
-import { PaginaBase } from "../../ui/layouts";
-import { FerramentasDaListagem } from "../../ui/components";
+import { PaginaBase } from "../../../ui/layouts";
+import { FerramentasDaListagem } from "../../../ui/components";
 import {
   useNavigate,
   useSearchParams,
   useLocation,
   useParams,
 } from "react-router-dom";
-import { useDebounce } from "../../data/hooks";
+import { useDebounce } from "../../../data/hooks";
 import { useState } from "react";
 import {
   Paper,
@@ -24,18 +24,18 @@ import {
   IconButton,
   Icon,
 } from "@mui/material";
-import { Environment } from "../../data/environment";
+import { Environment } from "../../../data/environment";
 import {
   IListaInsumo,
   ListaInsumosService,
-} from "../../data/services/api/modules/listaInsumos";
+} from "../../../data/services/api/modules/listaInsumos";
 import {
   CategoriasService,
   FornecedoresService,
   InsumosService,
-} from "../../data/services/api";
-import { CotacoesService } from "../../data/services/api/modules/cotacoes";
-import { Actions } from "../../ui/components/ferramentasDeListagem/Actions";
+} from "../../../data/services/api";
+import { CotacoesService } from "../../../data/services/api/modules/cotacoes";
+import { Actions } from "../../../ui/components/ferramentasDeListagem/Actions";
 
 export const InsumosDeUmProdutoOrcamento = () => {
   const [searchParams, setSearchParams] = useSearchParams();

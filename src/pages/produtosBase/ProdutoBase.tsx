@@ -1,220 +1,130 @@
-import { useMemo, useEffect } from "react";
+import { FerramentasDeDetalhes, TTipo } from "../../ui/components";
 import { PaginaBase } from "../../ui/layouts";
-import { FerramentasDaListagem } from "../../ui/components";
-import {
-  useNavigate,
-  useSearchParams,
-  useLocation,
-  useParams,
-} from "react-router-dom";
-import { InsumosService, ProdutosBaseService } from "../../data/services/api";
-import { useState } from "react";
-import {
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Typography,
-  TableFooter,
-  LinearProgress,
-  Pagination,
-  IconButton,
-  Icon,
-} from "@mui/material";
-import { Environment } from "../../data/environment";
-import {
-  IInsumosProdutoBase,
-  InsumosProdutoBaseService,
-} from "../../data/services/api/modules/insumosProdutoBase";
+import { Box, Grid, Paper, TextField, Typography } from "@mui/material";
+import { z } from "zod";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { useForm } from "react-hook-form";
+import { IProdutoBase, ProdutosBaseService } from "../../data/services/api";
+import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { IInsumosProdutoBase } from "../../data/services/api/modules/insumosProdutoBase";
+
+const createUserFormSchema = z.object({
+  titulo: z.string(),
+  observacoes: z.string(),
+});
 
 export const ProdutoBase = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  const [rows, setRows] = useState<IInsumosProdutoBase[]>([]);
-  const [totalCount, setTotalCount] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(createUserFormSchema),
+  });
 
   const navigate = useNavigate();
-  const location = useLocation();
-  const { id } = useParams();
-
-  const busca = useMemo(() => {
-    return searchParams.get("busca") || "";
-  }, [searchParams]);
-
-  const pagina = useMemo(() => {
-    return Number(searchParams.get("pagina") || "1");
-  }, [searchParams]);
-
-  const [produtoName, setProdutoName] = useState<string>("");
-
-  useEffect(() => {
-    if (id === null || id === undefined) {
-      return;
-    }
-    ProdutosBaseService.getById(Number(id)).then((result) => {
-      if (result instanceof Error) {
-        alert(result.message);
+  const {id} = useParams();
+  const fetchData = async () => {
+    try {
+      const data: IProdutoBase | Error = await ProdutosBaseService.getById(Number(id));
+      if (data instanceof Error) {
         return;
       }
-      setProdutoName(result.titulo);
-    });
+      setValue("titulo", data.titulo);
+      setValue("observacoes", data.observacoes);
+     
+    } catch (error) {}
+  };
+  useEffect(() => {
+    fetchData();
   }, []);
 
-  const setDados = async () => {
-    try {
-      setIsLoading(true);
 
-      const result = await InsumosProdutoBaseService.getAll({ page: pagina, filter: busca });
+  function createProduto(data: any) {
+    ProdutosBaseService.updateById(Number(id),data)
+      .then((result) => {
+        if (!(result instanceof Error)) {
+          setIsEditable(false)
+          setPageState("detalhes")
+        }
+      })
+      .catch((error) => {});
+  }
+  function createProdutoFechar(data: any) {
+    ProdutosBaseService.updateById(Number(id),data)
+      .then((result) => {
+        if (!(result instanceof Error)) {
+          navigate(-1);
+        }
+      })
+      .catch((error) => {});
+  }
 
-      if (result instanceof Error) {
-        alert(result.message);
-        return;
-      }
-
-      const insumosData = await Promise.all(
-        result.data.map(async (insumoProdutoBase: IInsumosProdutoBase) => {
-          try {
-            const result2 = await InsumosService.getById(
-              insumoProdutoBase.idInsumo
-            );
-
-            if (result2 instanceof Error) {
-              alert(result2.message);
-              return null;
-            }
-
-            insumoProdutoBase.insumo = result2;
-            return insumoProdutoBase;
-          } catch (error) {
-            return null;
-          }
-        })
-      );
-      setRows(insumosData);
-      setTotalCount(result.totalCount);
-    } catch (error) {
-      alert("Error fetching data.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const [pageState, setPageState] = useState<TTipo>("detalhes");
+  const [isEditable, setIsEditable] = useState<boolean>(false);
 
   useEffect(() => {
-    setIsLoading(true);
-    setDados();
-  }, [busca, pagina]);
-
-  const handleDelete = (id: number) => {
-    if (confirm("Você realmente quer apagar?")) {
-      InsumosProdutoBaseService.deleteById(id).then((result) => {
-        if (result instanceof Error) {
-          alert(result.message);
-          return;
-        }
-        setRows((oldRows) => [...oldRows.filter((oldRow) => oldRow.id !== id)]);
-        alert("Registro apagado com sucesso");
-      });
+    if (pageState === "detalhes") {
+      setIsEditable(false);
+      return;
     }
-  };
+    if (pageState === "editar" || pageState === "novo") {
+      setIsEditable(true);
+      return;
+    }
+  }, [pageState]);
 
   return (
     <PaginaBase
-      titulo={`Lista de insumos do produto ${produtoName}`}
+      titulo="Editar Produto Base"
       barraDeFerramentas={
-        <FerramentasDaListagem
-          mostrarInputBusca
-          textoDaBusca={busca}
-          onChangeBuscaTexto={(texto) =>
-            setSearchParams({ busca: texto, pagina: "1" }, { replace: true })
-          }
-          onClickBotaoNovo={() => navigate(`${location.pathname}/novo`)}
-          mostrarBotaoVoltar
+        <FerramentasDeDetalhes
+          tipo="detalhes"
+          pageState={pageState}
+          onClickCancelar={fetchData}
+          setPaiState={setPageState}
+          onClickSalvarEFechar={handleSubmit(createProdutoFechar)}
+          onClickSalvar={handleSubmit(createProduto)}
         />
       }
     >
-      <TableContainer
-        component={Paper}
-        variant="outlined"
-        sx={{ m: 1, width: "auto" }}
-      >
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell style={{ fontWeight: "bold" }}>Ações</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Titulo</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Quantidade</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Dimensões</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => (
-              <TableRow key={row.id}>
-                <TableCell>
-                  <Typography>
-                    <IconButton
-                      onClick={() => navigate(`${location.pathname}/${row.id}`)}
-                    >
-                      <Icon>edit</Icon>
-                    </IconButton>
-                    <IconButton
-                      onClick={() => {
-                        handleDelete(row.id);
-                      }}
-                    >
-                      <Icon>delete</Icon>
-                    </IconButton>
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography>{row.insumo?.titulo}</Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography>{row.quantidade}</Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography>{row.unidade}</Typography>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-          {totalCount === 0 && !isLoading && (
-            <caption>{Environment.LISTAGEM_VAZIA}</caption>
-          )}
-          <TableFooter>
-            {isLoading && (
-              <TableRow>
-                <TableCell colSpan={5}>
-                  <LinearProgress variant="indeterminate" />
-                </TableCell>
-              </TableRow>
-            )}
-            {!isLoading &&
-              totalCount > 0 &&
-              totalCount > Environment.LIMITE_DE_LINHAS && (
-                <TableRow>
-                  <TableCell colSpan={5}>
-                    <Pagination
-                      page={pagina}
-                      count={Math.ceil(
-                        totalCount / Environment.LIMITE_DE_LINHAS
-                      )}
-                      onChange={(_, newPage) => {
-                        setSearchParams(
-                          { busca, pagina: newPage.toString() },
-                          { replace: true }
-                        );
-                      }}
-                    />
-                  </TableCell>
-                </TableRow>
-              )}
-          </TableFooter>
-        </Table>
-      </TableContainer>
+      <Box component={"form"} onSubmit={handleSubmit(createProduto)}>
+        <Box
+          display={"flex"}
+          margin={1}
+          flexDirection={"column"}
+          component={Paper}
+          variant="outlined"
+        >
+          <Grid container direction="column" padding={2} spacing={3}>
+            <Grid container item direction="row" spacing={4}>
+              <Grid item>
+                <Typography>Titulo</Typography>
+                <TextField placeholder="Titulo" {...register("titulo")}   disabled={!isEditable} />
+                {errors.titulo && (
+                  <span>{errors.titulo.message?.toString()}</span>
+                )}
+              </Grid>
+
+              <Grid item>
+                <Typography>Observações</Typography>
+                <TextField
+                  placeholder="Observações"
+                  disabled={!isEditable}
+                  {...register("observacoes")}
+                />
+                {errors.observacao && (
+                  <span>{errors.observacao.message?.toString()}</span>
+                )}
+              </Grid>
+            </Grid>
+          </Grid>
+        </Box>
+      </Box>
     </PaginaBase>
   );
 };

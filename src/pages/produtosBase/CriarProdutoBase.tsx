@@ -30,7 +30,7 @@ export const CriarProdutoBase = () => {
     ProdutosBaseService.create(data)
       .then((result) => {
         if (!(result instanceof Error)) {
-          navigate(`/produtos/${result.id}`);
+          navigate(`/produtos`);
         }
       })
       .catch((error) => {});

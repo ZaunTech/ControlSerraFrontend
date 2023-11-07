@@ -23,18 +23,17 @@ import {
 } from "./pages/fornecedores";
 import {
   ProdutosBase,
-  ProdutoBase,
+  ItemListaInsumoProdutoBase,
   CriarProdutoBase,
   AdicionarInsumo,
-  ItemListaInsumoProdutoBase,
+  ProdutoBase,
 } from "./pages/produtosBase/index.tsx";
 import { Home } from "./pages/home/Home.tsx";
 import Error from "./pages/error/Error.tsx";
 import { Login, RecuperarSenha } from "./pages/login";
 import { Cotacoes, Cotacao, CriarCotacao } from "./pages/cotacoes";
-import { EditarProduto } from "./pages/orcamentos/EditarProduto.tsx";
-import { EditarProdutoBase } from "./pages/produtosBase/EditarProdutoBase.tsx";
 import { CriarUsuario, Usuario, Usuarios } from "./pages/Usuarios";
+import { ProdutoOrcamento } from "./pages/orcamentos/Produtos/ProdutoOrcamento.tsx";
 
 const router = createBrowserRouter([
   {
@@ -134,7 +133,7 @@ const router = createBrowserRouter([
                     children: [
                       {
                         index: true,
-                        element: <EditarProduto />,
+                        element: <ProdutoOrcamento />,
                       },
                       {
                         path: "insumos",
@@ -254,11 +253,11 @@ const router = createBrowserRouter([
             children: [
               {
                 index: true,
-                element: <EditarProdutoBase />,
+                element: <ProdutoBase />,
               },
               {
                 path: "listaInsumos",
-                element: <ProdutoBase />,
+                element: <ItemListaInsumoProdutoBase />,
               },
               {
                 path: ":id",
