@@ -51,13 +51,15 @@ const getById = async (id: number): Promise<IListaInsumo | Error> => {
 };
 
 const getListaByIdProduto = async (
-  id: number,
-  page = 1,
-  filter = ""
+  { page = 1,
+    filter = "",
+    perPage = Environment.LIMITE_DE_LINHAS }: Partial<IGetAll> = {},
+    id:number
+  
 ): Promise<TListListaInsumos | Error> => {
-  console.log("numero 2")
+  
   try {
-    const urlRelativa = `/${rota}/produtos/${id}?page=${page}&perPage=${Environment.LIMITE_DE_LINHAS}&titulo_like=${filter}`;
+    const urlRelativa = `/${rota}/produtos/${id}?page=${page}&perPage=${perPage == 0 ? '' : perPage}&titulo_like=${filter}`;
     const { data, headers } = await Api.get(urlRelativa);
     if (data) {
       return {

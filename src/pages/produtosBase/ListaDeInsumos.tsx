@@ -64,11 +64,12 @@ export const ItemListaInsumoProdutoBase = () => {
     });
   }, []);
 
+ 
   const setDados = async () => {
     try {
       setIsLoading(true);
-
-      const result = await InsumosProdutoBaseService.getAll({ page: pagina, filter: busca });
+      
+      const result = await InsumosProdutoBaseService.getAll({page: pagina, filter: busca }, Number(id));
 
       if (result instanceof Error) {
         alert(result.message);

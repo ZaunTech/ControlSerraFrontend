@@ -62,7 +62,7 @@ export const InsumosDeUmProdutoOrcamento = () => {
     try {
       setIsLoading(true);
 
-      const result = await ListaInsumosService.getListaByIdProduto(Number(id));
+      const result = await ListaInsumosService.getListaByIdProduto({page: pagina, filter: busca }, Number(id));
 
       if (result instanceof Error) {
         alert(result.message);

@@ -58,7 +58,7 @@ export const Orcamentos = () => {
     try {
       setIsLoading(true);
 
-      const result = await OrcamentosService.getAll(pagina, busca);
+      const result = await OrcamentosService.getAll({page:pagina, filter:busca});
 
       if (result instanceof Error) {
         alert(result.message);

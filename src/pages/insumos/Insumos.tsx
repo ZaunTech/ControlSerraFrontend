@@ -50,7 +50,7 @@ export const Insumos = () => {
     try {
       setIsLoading(true);
 
-      const result = await InsumosService.getAll(pagina, busca);
+      const result = await InsumosService.getAll({page:pagina,filter: busca});
 
       if (result instanceof Error) {
         alert(result.message);

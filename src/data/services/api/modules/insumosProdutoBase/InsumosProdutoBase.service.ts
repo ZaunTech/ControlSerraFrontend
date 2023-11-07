@@ -12,10 +12,14 @@ const rota = "insumos-produtos-base";
 const getAll = async (
   { page = 1,
     filter = "",
-    perPage = Environment.LIMITE_DE_LINHAS }: Partial<IGetAll> = {}
+    perPage = Environment.LIMITE_DE_LINHAS }: Partial<IGetAll> = {},
+    id: number
+    
 ): Promise<TListInsumosProdutoBase | Error> => {
+  
   try {
-    const urlRelativa = `/${rota}?page=${page}&perPage=${perPage == 0 ? '' : perPage}&titulo_like=${filter}`;
+    console.log(id)
+    const urlRelativa = `/${rota}/${id}?page=${page}&perPage=${perPage == 0 ? '' : perPage}&titulo_like=${filter}`;
     const { data, headers } = await Api.get(urlRelativa);
     if (data) {
       return {
@@ -35,6 +39,7 @@ const getAll = async (
 };
 const getById = async (id: number): Promise<IInsumosProdutoBase | Error> => {
   try {
+    
     const urlRelativa = `/${rota}/${id}`;
     const response = await Api.get<IInsumosProdutoBase>(urlRelativa);
     if (response) {

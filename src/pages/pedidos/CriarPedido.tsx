@@ -26,10 +26,11 @@ export const CriarPedido = () => {
   function createPedido(data: any) {
     console.log(data)
     PedidosService.create(data)
-      .then(() => {
+      .then((result) => {
+        console.log(result);
         navigate(-1);
       })
-      .catch(() => {});
+      .catch((error) => { console.log(error)});
   }
 
   const {

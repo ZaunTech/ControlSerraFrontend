@@ -13,7 +13,7 @@ const getAll = async (
     perPage = Environment.LIMITE_DE_LINHAS }: Partial<IGetAll> = {}
 ): Promise<TListUsuarios | Error> => {
   try {
-    const urlRelativa = `/${rota}?_page=${page}&_limit=${perPage == 0 ? '' : perPage}&titulo_like=${filter}`;
+    const urlRelativa = `/${rota}?page=${page}&perPage=${perPage == 0 ? '' : perPage}&titulo_like=${filter}`;
     const { data, headers } = await Api.get(urlRelativa);
     if (data) {
       return {
