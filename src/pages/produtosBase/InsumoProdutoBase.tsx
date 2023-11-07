@@ -30,7 +30,7 @@ import {
   InsumosProdutoBaseService,
 } from "../../data/services/api/modules/insumosProdutoBase";
 
-export const ItemListaInsumoProdutoBase = () => {
+export const InsumoProdutoBase = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [rows, setRows] = useState<IInsumosProdutoBase[]>([]);

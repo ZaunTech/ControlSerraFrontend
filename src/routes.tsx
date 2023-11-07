@@ -13,6 +13,8 @@ import {
   CriarItemInsumoProdutoBase,
   ItemListaInsumoProduto,
   CotacoesDeUmInsumo,
+  NovaCotacaoOrcamento,
+  ProdutoOrcamento,
 } from "./pages/orcamentos";
 import { Pedido, Pedidos, CriarPedido } from "./pages/pedidos";
 import { Categoria, Categorias, CriarCategoria } from "./pages/categorias";
@@ -23,17 +25,17 @@ import {
 } from "./pages/fornecedores";
 import {
   ProdutosBase,
-  ItemListaInsumoProdutoBase,
+  InsumoProdutoBase,
   CriarProdutoBase,
   AdicionarInsumo,
   ProdutoBase,
+  ListaDeInsumosProdutoBase,
 } from "./pages/produtosBase/index.tsx";
 import { Home } from "./pages/home/Home.tsx";
 import Error from "./pages/error/Error.tsx";
 import { Login, RecuperarSenha } from "./pages/login";
 import { Cotacoes, Cotacao, CriarCotacao } from "./pages/cotacoes";
 import { CriarUsuario, Usuario, Usuarios } from "./pages/Usuarios";
-import { ProdutoOrcamento } from "./pages/orcamentos/Produtos/ProdutoOrcamento.tsx";
 
 const router = createBrowserRouter([
   {
@@ -155,7 +157,16 @@ const router = createBrowserRouter([
                               },
                               {
                                 path: 'cotar',
-                                element: <CotacoesDeUmInsumo />
+                                children: [
+                                  {
+                                    index: true,
+                                    element: <CotacoesDeUmInsumo />
+                                  },
+                                  {
+                                    path: 'novo',
+                                    element: <NovaCotacaoOrcamento />
+                                  }
+                                ]
                               },
                             ]
                           },
@@ -257,15 +268,17 @@ const router = createBrowserRouter([
               },
               {
                 path: "listaInsumos",
-                element: <ItemListaInsumoProdutoBase />,
-              },
-              {
-                path: ":id",
-                element: <ItemListaInsumoProdutoBase />,
-              },
-              {
-                path: "Novo",
-                element: <AdicionarInsumo />,
+                element: <ListaDeInsumosProdutoBase />,
+                children: [
+                  {
+                    path: ":id",
+                    element: <InsumoProdutoBase />,
+                  },
+                  {
+                    path: "Novo",
+                    element: <AdicionarInsumo />,
+                  },
+                ]
               },
             ],
           },
