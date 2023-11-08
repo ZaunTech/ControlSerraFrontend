@@ -22,7 +22,7 @@ import {
   InsumosService,
 } from "../../../../data/services/api";
 import { CotacoesService } from "../../../../data/services/api/modules/cotacoes";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 export const NovaCotacaoOrcamento = () => {
   const [opcoes, setOpcoes] = useState<IFornecedor[]>([]);
 
@@ -72,6 +72,7 @@ export const NovaCotacaoOrcamento = () => {
     register,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(shemaCotacao),
@@ -106,9 +107,14 @@ export const NovaCotacaoOrcamento = () => {
     return `${year}-${month}-${day}`;
   };
 
+  const{ idItemListaInsumos  } = useParams();
   // Preencher o valor inicial ao montar o componente
   useEffect(() => {
     setValue('data', getCurrentDate());
+    
+    setValue("idInsumo", Number(idItemListaInsumos));
+
+    
   }, []);
 
   return (
@@ -211,6 +217,12 @@ export const NovaCotacaoOrcamento = () => {
                   options={opcaoiInsumos}
                   getOptionLabel={(opcaoiInsumos) => opcaoiInsumos.titulo ?? ""}
                   sx={{ width: 225 }}
+                  value={
+                    opcaoiInsumos.find(
+                      (option) => option.id === watch("idInsumo")
+                    ) || null
+                  }
+                  disabled={true}
                   renderInput={(params) => <TextField {...params} />}
                   onChange={(_, value) => {
                     setValue("idInsumo", value?.id);

@@ -50,6 +50,7 @@ const getById = async (id: number): Promise<IUsuario | Error> => {
 const create = async (
   createUsuarioDto: CreateUsuarioDto
 ): Promise<IUsuario | Error> => {
+  console.log("entrou controler")
   try {
     const urlRelativa = `/${rota}`;
     const { data } = await Api.post<IUsuario>(

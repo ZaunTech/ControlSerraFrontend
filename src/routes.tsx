@@ -156,19 +156,19 @@ const router = createBrowserRouter([
                                 element: <ItemListaInsumoProduto />,
                               },
                               {
-                                path: 'cotar',
+                                path: "cotar",
                                 children: [
                                   {
                                     index: true,
-                                    element: <CotacoesDeUmInsumo />
+                                    element: <CotacoesDeUmInsumo />,
                                   },
                                   {
-                                    path: 'novo',
-                                    element: <NovaCotacaoOrcamento />
-                                  }
-                                ]
+                                    path: "novo",
+                                    element: <NovaCotacaoOrcamento />,
+                                  },
+                                ],
                               },
-                            ]
+                            ],
                           },
                         ],
                       },
@@ -268,17 +268,20 @@ const router = createBrowserRouter([
               },
               {
                 path: "listaInsumos",
-                element: <ListaDeInsumosProdutoBase />,
                 children: [
                   {
-                    path: ":id",
-                    element: <InsumoProdutoBase />,
+                    index: true,
+                    element: <ListaDeInsumosProdutoBase />,
                   },
                   {
                     path: "Novo",
                     element: <AdicionarInsumo />,
                   },
-                ]
+                  {
+                    path: ":id",
+                    element: <InsumoProdutoBase />,
+                  },
+                ],
               },
             ],
           },
