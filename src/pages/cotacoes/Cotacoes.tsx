@@ -49,7 +49,7 @@ const Pesquisas: React.FC<IPesquisa> = ({ setFiltro, setFiltroId }) => {
   const [opcoesInsumos, setOpcoesInsumos] = useState<IInsumo[]>([]);
 
   useEffect(() => {
-    FornecedoresService.getAll({perPage:0})
+    FornecedoresService.getAll({ perPage: 0 })
       .then((response) => {
         if (response instanceof Error) {
           return;
@@ -65,7 +65,7 @@ const Pesquisas: React.FC<IPesquisa> = ({ setFiltro, setFiltroId }) => {
   }, []);
 
   useEffect(() => {
-    InsumosService.getAll({perPage:0})
+    InsumosService.getAll({ perPage: 0 })
       .then((response) => {
         if (response instanceof Error) {
           return;
@@ -177,7 +177,7 @@ export const Cotacoes = () => {
       } else if (filtro === "Fornecedor" && filtroId != undefined) {
         result = await CotacoesService.getByFornecdor(filtroId, pagina, busca);
       } else {
-        result = await CotacoesService.getAll({page:pagina, filter: busca});
+        result = await CotacoesService.getAll({ page: pagina, filter: busca });
       }
 
       if (result instanceof Error) {
@@ -278,10 +278,14 @@ export const Cotacoes = () => {
                 <TableRow key={row.id}>
                   <Actions
                     id={row.id}
-
                     handleDelete={handleDelete}
                     handleShowList={() => {
                       navigate(`${location.pathname}/${row.id}`);
+                    }}
+                    showPersoButton
+                    persoButtonIcon="replay_icon"
+                    handlePersoButton={() => {
+                      navigate(`${location.pathname}/${row.id}/recotar`);
                     }}
                   />
                   <TableCell>

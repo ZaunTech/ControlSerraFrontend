@@ -34,7 +34,7 @@ import {
 import { Home } from "./pages/home/Home.tsx";
 import Error from "./pages/error/Error.tsx";
 import { Login, RecuperarSenha } from "./pages/login";
-import { Cotacoes, Cotacao, CriarCotacao } from "./pages/cotacoes";
+import { Cotacoes, Cotacao, CriarCotacao, Recotar } from "./pages/cotacoes";
 import { CriarUsuario, Usuario, Usuarios } from "./pages/Usuarios";
 
 const router = createBrowserRouter([
@@ -227,7 +227,16 @@ const router = createBrowserRouter([
           },
           {
             path: ":id",
-            element: <Cotacao />,
+            children: [
+              {
+                index: true,
+                element: <Cotacao />,
+              },
+              {
+                path: 'recotar',
+                element: <Recotar />
+              }
+            ]
           },
         ],
       },

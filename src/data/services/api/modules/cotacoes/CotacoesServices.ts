@@ -1,3 +1,4 @@
+import { CreateCotacaoDto } from ".";
 import { Api, IGetAll } from "../..";
 import { Environment } from "../../../../environment";
 import { ICotacao } from "./Interfaces/ICotacao";
@@ -9,9 +10,9 @@ const getAll = async (
   { page = 1,
     filter = "",
     perPage = Environment.LIMITE_DE_LINHAS }: Partial<IGetAll> = {},
-      idInsumo?: number,
-      idFornecedor?:number,
-    ): Promise<TListCotacao | Error> => {
+  idInsumo?: number,
+  idFornecedor?: number,
+): Promise<TListCotacao | Error> => {
   try {
     const urlRelativa = `/${rota}?page=${page}&perPage=${perPage == 0 ? '' : perPage}&nome_like=${filter}&fornecedor=${idFornecedor}&insumo=${idInsumo}`;
     const { data, headers } = await Api.get(urlRelativa);
@@ -167,6 +168,26 @@ const getCount = async (): Promise<number | Error> => {
   }
 };
 
+const recotar = async (
+  id: number,
+  dados: CreateCotacaoDto
+): Promise<ICotacao | Error> => {
+  try {
+    const urlRelativa = `/${rota}/recotar/${id}`;
+    const response = await Api.post<ICotacao>(urlRelativa, dados);
+    if (response) {
+      return response.data;
+    }
+    return new Error(Environment.ERRO_AO_LISTAR_DADOS);
+  } catch (error) {
+    console.error(error);
+    return new Error(
+      (error as { message: string }).message ||
+      Environment.ERRO_AO_ACESSAR_DADOS
+    );
+  }
+};
+
 export const CotacoesService = {
   getAll,
   getById,
@@ -176,4 +197,5 @@ export const CotacoesService = {
   getCount,
   getByInsumo,
   getByFornecdor,
+  recotar,
 };
