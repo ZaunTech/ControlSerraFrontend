@@ -322,8 +322,8 @@ export const ProdutosOrcamento = () => {
                   handleShowList={() => {
                     navigate(`${location.pathname}/${row.id}/insumos`);
                   }}
+                  toolTipListButton="Listar Insumos"
                 />
-
                 <TableCell>
                   <Typography>{row.titulo}</Typography>
                 </TableCell>

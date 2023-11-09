@@ -58,7 +58,7 @@ export const Orcamentos = () => {
     try {
       setIsLoading(true);
 
-      const result = await OrcamentosService.getAll({page:pagina, filter:busca});
+      const result = await OrcamentosService.getAll({ page: pagina, filter: busca });
 
       if (result instanceof Error) {
         alert(result.message);
@@ -148,6 +148,7 @@ export const Orcamentos = () => {
                   handleShowList={() => {
                     navigate(`${location.pathname}/${row.id}/produtos`);
                   }}
+                  toolTipListButton="Listar produtos"
                 />
                 <TableCell>
                   <Typography>{row.id}</Typography>

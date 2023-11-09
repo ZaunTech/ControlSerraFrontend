@@ -1,4 +1,4 @@
-import { Button, Icon, IconButton, TableCell, Typography } from "@mui/material";
+import { Button, Icon, IconButton, TableCell, Tooltip, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 interface IActions {
@@ -9,12 +9,14 @@ interface IActions {
   handleEdit?: () => void;
   showListButton?: boolean;
   handleShowList?: (id: number) => void;
+  toolTipListButton?: string;
   showSelectButton?: boolean;
   handleSelectButton?: () => void;
   showPersoButton?: boolean;
   persoButtonText?: string;
   persoButtonIcon?: string;
   handlePersoButton?: () => void;
+  persoButtonToolTipText?: string;
 }
 
 export const Actions: React.FC<IActions> = ({
@@ -25,41 +27,48 @@ export const Actions: React.FC<IActions> = ({
   handleEdit,
   showListButton = false,
   handleShowList,
+  toolTipListButton,
   showSelectButton = false,
   handleSelectButton,
   showPersoButton = false,
   persoButtonIcon,
   handlePersoButton,
-  persoButtonText
+  persoButtonText,
+  persoButtonToolTipText
 }) => {
   const navigate = useNavigate();
 
   return (
     <TableCell>
       {showPersoButton && (
-        persoButtonText ? (
-          <Button startIcon={<Icon>{persoButtonIcon}</Icon>} variant="text" onClick={() => {
-            if (handlePersoButton) handlePersoButton();
-          }}>
-            <Typography>{persoButtonText}</Typography>
-          </Button>
-        ) : <IconButton
-          onClick={() => {
-            if (handlePersoButton) handlePersoButton();
-          }}
-        >
-          <Icon>{persoButtonIcon}</Icon>
-          <Typography>{persoButtonText}</Typography>
-        </IconButton>
+        persoButtonText ?
+          (
+            <Button startIcon={<Icon>{persoButtonIcon}</Icon>} variant="text" onClick={() => {
+              if (handlePersoButton) handlePersoButton();
+            }}>
+              <Typography>{persoButtonText}</Typography>
+            </Button>
+          ) : <Tooltip title={persoButtonToolTipText}>
+            <IconButton
+              onClick={() => {
+                if (handlePersoButton) handlePersoButton();
+              }}
+            >
+              <Icon>{persoButtonIcon}</Icon>
+              <Typography>{persoButtonText}</Typography>
+            </IconButton>
+          </Tooltip>
       )}
       {showListButton && (
-        <IconButton
-          onClick={() => {
-            if (handleShowList) handleShowList(id);
-          }}
-        >
-          <Icon>list</Icon>
-        </IconButton>
+        <Tooltip title={toolTipListButton}>
+          <IconButton
+            onClick={() => {
+              if (handleShowList) handleShowList(id);
+            }}
+          >
+            <Icon>list</Icon>
+          </IconButton>
+        </Tooltip>
       )}
       {showEditButton && (
         <IconButton
