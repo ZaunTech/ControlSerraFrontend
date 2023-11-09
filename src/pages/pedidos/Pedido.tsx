@@ -94,9 +94,14 @@ export const Pedido = () => {
       if (data instanceof Error) {
         return;
       }
+      const dateObject = new Date(data.updatedAt);
+      if (!isNaN(dateObject.getTime())) {
+      const formattedDate = dateObject.toISOString().split("T")[0];
       setValue("idOrcamento", data.idOrcamento);
       setValue("pagamento", data.pagamento);
       setTipo(data.status.toString());
+      setValue("updatedAt",formattedDate)
+      }
     } catch (error) {}
   };
 
@@ -192,6 +197,19 @@ export const Pedido = () => {
                     {errors.prazoEstimadoProducao.message?.toString()}
                   </span>
                 )}
+              </Grid>
+              <Grid item>
+                <Typography>Data ultima Alteração</Typography>
+                <TextField
+                  type="date"
+                  placeholder="data"
+                  disabled={true}
+                  {...register("updatedAt")}
+                  onChange={(e) => {
+                    setValue("updatedAt", e.target.value);
+                  }}
+                />
+                
               </Grid>
             </Grid>
           </Grid>

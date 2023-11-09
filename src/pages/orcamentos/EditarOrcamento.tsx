@@ -85,12 +85,15 @@ export const EditarOrcamento = () => {
    if (result instanceof Error) {
      return;
    }
+   
+      
 
    setValue("idCliente", result.idCliente);
    setValue("observacoes", result.observacoes);
    setTipo(result.status.toString());
    setValue("status",result.status.toString())
    setValue("prazoEstimadoProducao", result.prazoEstimadoProducao);
+  
  });
 }
 catch(error){}
@@ -217,6 +220,7 @@ catch(error){}
                   </span>
                 )}
               </Grid>
+              
             </Grid>
           </Grid>
         </Box>

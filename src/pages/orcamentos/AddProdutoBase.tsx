@@ -39,7 +39,7 @@ export const AddProdutoBase = () => {
   const [opcaoiInsumos, setopcaoInsumo] = useState<IProdutoBase[]>([]);
 
   useEffect(() => {
-    ProdutosBaseService.getAll()
+    ProdutosBaseService.getAll({perPage:0})
       .then((response) => {
         if (response instanceof Error) {
           return;
