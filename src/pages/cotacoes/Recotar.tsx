@@ -82,6 +82,13 @@ export const Recotar = () => {
     resolver: zodResolver(shemaCotacao),
   });
   const { id } = useParams();
+  const getCurrentDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
 
   const fetchData = async () => {
     try {
@@ -98,7 +105,7 @@ export const Recotar = () => {
 
         setValue("idInsumo", data.idInsumo);
         setValue("idFornecedor", data.idFornecedor);
-        setValue("data", formattedDate);
+        setValue("data", getCurrentDate());
         setValue("unidade", data.unidade);
         setValue("valor", data.valor);
       } else {
@@ -114,21 +121,14 @@ export const Recotar = () => {
 
   const navigate = useNavigate();
   function createCotacao(data: any) {
-    CotacoesService.updateById(Number(id), data)
-      .then(() => {
-        setIsEditable(false);
-        setPageState("detalhes");
-      })
-      .catch(() => { });
-  }
-  function createCotacaoFechar(data: any) {
-    CotacoesService.updateById(Number(id), data)
+    CotacoesService.recotar(Number(id), data)
       .then(() => {
         navigate(-1);
       })
       .catch(() => { });
   }
-  const [pageState, setPageState] = useState<TTipo>("detalhes");
+  
+  const [pageState, setPageState] = useState<TTipo>("novo");
   const [isEditable, setIsEditable] = useState<boolean>(false);
 
   useEffect(() => {
@@ -149,11 +149,10 @@ export const Recotar = () => {
       titulo="Editar Cotação"
       barraDeFerramentas={
         <FerramentasDeDetalhes
-          tipo="detalhes"
+          tipo="novo"
           pageState={pageState}
           setPaiState={setPageState}
-          onClickCancelar={fetchData}
-          onClickSalvarEFechar={handleSubmit(createCotacaoFechar)}
+          
           onClickSalvar={handleSubmit(createCotacao)}
         />
       }
@@ -179,7 +178,7 @@ export const Recotar = () => {
                   disablePortal
                   {...register("idFornecedor")}
                   id="combo-box-demo"
-                  disabled={!isEditable}
+                  disabled={true}
                   options={opcoes}
                   value={
                     opcoes.find(
@@ -208,7 +207,7 @@ export const Recotar = () => {
                 <TextField
                   type="number"
                   placeholder="Valor do Insumo"
-                  disabled={!isEditable}
+                  disabled={false}
                   {...register("valor")}
                 />
                 {errors.valor && (
@@ -250,7 +249,7 @@ export const Recotar = () => {
                 <Autocomplete
                   disablePortal
                   id="combo-box-demo"
-                  disabled={!isEditable}
+                  disabled={true}
                   {...register("idInsumo")}
                   options={opcaoiInsumos}
                   getOptionLabel={(opcaoiInsumos) => opcaoiInsumos.titulo ?? ""}
@@ -272,7 +271,7 @@ export const Recotar = () => {
 
               <Grid item>
                 <Typography>Unidade de Medida</Typography>
-                <TextField placeholder="Unidade de Medida" disabled={!isEditable} {...register("unidade")} />
+                <TextField placeholder="Unidade de Medida" disabled={true} {...register("unidade")} />
                 {errors.unidade && (
                   <span>{errors.unidade.message?.toString()}</span>
                 )}
