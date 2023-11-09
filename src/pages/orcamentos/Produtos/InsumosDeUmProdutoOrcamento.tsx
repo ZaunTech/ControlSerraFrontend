@@ -1,4 +1,4 @@
-import { useMemo, useEffect } from "react";
+import { useMemo, useEffect, forwardRef, Ref, useRef } from "react";
 import { PaginaBase } from "../../../ui/layouts";
 import { FerramentasDaListagem } from "../../../ui/components";
 import {
@@ -36,6 +36,58 @@ import {
 } from "../../../data/services/api";
 import { CotacoesService } from "../../../data/services/api/modules/cotacoes";
 import { Actions } from "../../../ui/components/ferramentasDeListagem/Actions";
+import generatePDF from 'react-to-pdf';
+
+const PDF = forwardRef(({ data }: { data: IListaInsumo[] }, referencia: Ref<HTMLDivElement | null>) => {
+  return (
+    <div
+      style={{
+        position: "absolute",
+        left: "-9999px",
+        top: "-9999px",
+        width: "100%"
+      }}>
+      <TableContainer
+        component={Paper}
+        variant="outlined"
+        sx={{ m: 1, width: "auto" }}
+        ref={referencia}
+      >
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell style={{ fontWeight: "bold" }}>Titulo</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>
+                Variação
+              </TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>
+                Quantidade
+              </TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Valor Unitario</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Valor Total</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {data.map((row) => (
+              <TableRow key={row.id}>
+                <TableCell>
+                  <Typography>{row.insumo?.titulo}</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography></Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography></Typography>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </div>
+  )
+}
+)
 
 export const InsumosDeUmProdutoOrcamento = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -62,7 +114,7 @@ export const InsumosDeUmProdutoOrcamento = () => {
     try {
       setIsLoading(true);
 
-      const result = await ListaInsumosService.getListaByIdProduto({page: pagina, filter: busca }, Number(id));
+      const result = await ListaInsumosService.getListaByIdProduto({ page: pagina, filter: busca }, Number(id));
 
       if (result instanceof Error) {
         alert(result.message);
@@ -161,6 +213,8 @@ export const InsumosDeUmProdutoOrcamento = () => {
     }
   };
 
+  const pdfRef = useRef(null);
+
   return (
     <PaginaBase
       titulo={`Insumos do produto: ${id}`}
@@ -173,6 +227,9 @@ export const InsumosDeUmProdutoOrcamento = () => {
           }
           onClickBotaoNovo={() => navigate(`${location.pathname}/novo`)}
           mostrarBotaoVoltar
+          componentePersonalizado={<IconButton onClick={() => {
+            generatePDF(pdfRef, { filename: 'page.pdf' })
+          }}><Icon>picture_as_pdf</Icon></IconButton>}
         />
       }
     >
@@ -185,34 +242,37 @@ export const InsumosDeUmProdutoOrcamento = () => {
           <TableHead>
             <TableRow>
               <TableCell style={{ fontWeight: "bold" }}>Ações</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Titulo</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Categoria</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Titulo</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Quantidade</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>
-                Unidade de Medida
+                Variação
               </TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Descrição</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Fornecedor</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Cotação</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Valor Unitario</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Valor Total</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {rows.map((row) => (
               <TableRow key={row.id}>
-                
-                  <Actions
-                    id={row.id}
-                    showPersoButton
-                    persoButtonIcon="attach_money"
-                    
-                    handlePersoButton={() => { navigate(`${location.pathname}/${row.id}/cotar`) }}
-                  />
-                
+
+                <Actions
+                  id={row.id}
+                  showPersoButton
+                  persoButtonIcon="attach_money"
+
+                  handlePersoButton={() => { navigate(`${location.pathname}/${row.id}/cotar`) }}
+                />
+                <TableCell>
+                  <Typography>{row.insumo?.categoria?.titulo}</Typography>
+                </TableCell>
                 <TableCell>
                   <Typography>{row.insumo?.titulo}</Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{row.insumo?.categoria?.titulo}</Typography>
+                  <Typography>Quantidade</Typography>
                 </TableCell>
                 <TableCell>
                   <Typography>{row.insumo?.unidadeMedida}</Typography>
@@ -272,6 +332,7 @@ export const InsumosDeUmProdutoOrcamento = () => {
           </TableFooter>
         </Table>
       </TableContainer>
-    </PaginaBase>
+      <PDF ref={pdfRef} data={rows} />
+    </PaginaBase >
   );
 };

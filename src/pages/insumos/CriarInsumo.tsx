@@ -116,17 +116,6 @@ export const CriarInsumo = () => {
                   }}
                 />
               </Grid>
-              <Grid item>
-                <Typography>Descrição</Typography>
-                <TextField placeholder="Descrição" disabled={!isEditable} {...register("descricao")} />
-              </Grid>
-              <Grid item>
-                <Typography>Unidade de Medida</Typography>
-                <TextField
-                  placeholder="Unidade de Medida" disabled={!isEditable}
-                  {...register("unidadeMedida")}
-                />
-              </Grid>
             </Grid>
           </Grid>
         </Box>
