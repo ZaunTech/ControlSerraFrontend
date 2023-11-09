@@ -45,6 +45,23 @@ const getById = async (id: number): Promise<IOrcamento | Error> => {
     );
   }
 };
+
+const getFullById = async (id: number): Promise<IOrcamento | Error> => {
+  try {
+    const urlRelativa = `/${rota}/full/${id}`;
+    const response = await Api.get<IOrcamento>(urlRelativa);
+    if (response) {
+      return response.data;
+    }
+    return new Error(Environment.ERRO_AO_LISTAR_DADOS);
+  } catch (error) {
+    return new Error(
+      (error as { message: string }).message ||
+      Environment.ERRO_AO_ACESSAR_DADOS
+    );
+  }
+};
+
 const create = async (
   createOrcamentoDto: CreateOrcamentoDto
 ): Promise<IOrcamento | Error> => {
@@ -122,4 +139,5 @@ export const OrcamentosService = {
   updateById,
   deleteById,
   getCount,
+  getFullById,
 };

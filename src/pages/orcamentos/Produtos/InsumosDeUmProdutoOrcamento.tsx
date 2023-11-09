@@ -45,8 +45,12 @@ const PDF = forwardRef(({ data }: { data: IListaInsumo[] }, referencia: Ref<HTML
         position: "absolute",
         left: "-9999px",
         top: "-9999px",
-        width: "100%"
+        width: "100%",
+        height: "100%"
       }}>
+        <Typography>
+
+        </Typography>
       <TableContainer
         component={Paper}
         variant="outlined"

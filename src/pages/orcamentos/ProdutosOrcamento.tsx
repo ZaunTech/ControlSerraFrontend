@@ -1,4 +1,4 @@
-import { useMemo, useEffect } from "react";
+import { useMemo, useEffect, useRef, forwardRef, Ref } from "react";
 import { PaginaBase } from "../../ui/layouts";
 import { FerramentasDaListagem } from "../../ui/components";
 import {
@@ -24,6 +24,7 @@ import {
   IconButton,
   Icon,
   Button,
+  Box,
 } from "@mui/material";
 import { Environment } from "../../data/environment";
 import {
@@ -31,6 +32,105 @@ import {
   ProdutosService,
 } from "../../data/services/api/modules/produtos";
 import { Actions } from "../../ui/components/ferramentasDeListagem/Actions";
+import generatePDF from "react-to-pdf";
+import { FornecedoresService, ICliente, IFornecedor } from "../../data/services/api";
+import { OrcamentosService } from "../../data/services/api/modules/orcamentos";
+
+interface IPDF {
+  id: number,
+  referencia: Ref<HTMLDivElement | null>
+}
+
+const PDF = forwardRef(({ id, referencia }: IPDF) => {
+  const [fornecedor, setFornecedor] = useState<IFornecedor>();
+  const [cliente, setCliente] = useState<ICliente>();
+  const [produtos, setProdutos] = useState<IProduto[]>();
+  useEffect(() => {
+    OrcamentosService.getFullById(id).then((result) => {
+      if (result instanceof Error) {
+        return
+      }
+      setCliente(result.cliente);
+      setProdutos(result.produtos);
+    })
+    FornecedoresService.getById(1).then((result) => {
+      if (result instanceof Error) {
+        return
+      }
+      setFornecedor(result)
+    })
+  })
+  return (
+    <div
+      style={{
+        position: "absolute",
+        left: "-9999px",
+        top: "-9999px",
+        width: "100%",
+        height: "100%"
+      }}>
+
+      <TableContainer
+        component={Paper}
+        variant="outlined"
+        sx={{ m: 1, width: "auto" }}
+        ref={referencia}
+      >
+        {fornecedor && (
+          <Box>
+            <Typography>
+              {fornecedor.nome ??
+                fornecedor.nomeFantasia ??
+                fornecedor.razaoSocial}
+            </Typography>
+          </Box>
+        )}
+        {cliente && (<Box>
+          <Typography>
+            {cliente.nome ??
+              cliente.nomeFantasia ??
+              cliente.razaoSocial}
+          </Typography>
+        </Box>)}
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell style={{ fontWeight: "bold" }}>Titulo</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Descrição</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Quantidade</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>
+                Valor Unitario
+              </TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Valor Total</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {produtos && produtos.map((row) => (
+              <TableRow key={row.id}>
+                <TableCell>
+                  <Typography>{row.titulo}</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography>{row.observacoes}</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography>{row.quantidade}</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography>{row.valorUnitario}</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography>{row.valorUnitario * row.quantidade}</Typography>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </div>
+  )
+}
+)
 
 const BotoesOrcamento: React.FC = () => {
   const navigate = useNavigate();
@@ -93,7 +193,7 @@ export const ProdutosOrcamento = () => {
   useEffect(() => {
     setIsLoading(true);
     debounce(() => {
-      ProdutosService.getAll({page:pagina,filter: busca},Number(id)).then((result) => {
+      ProdutosService.getAll({ page: pagina, filter: busca }, Number(id)).then((result) => {
         if (result instanceof Error) {
           alert(result.message);
           return;
@@ -118,6 +218,8 @@ export const ProdutosOrcamento = () => {
     }
   };
 
+  const pdfRef = useRef(null);
+
   return (
     <PaginaBase
       titulo={`Produto do Orçamento:  ${id}`}
@@ -130,7 +232,13 @@ export const ProdutosOrcamento = () => {
           }
           mostrarBotaoNovo={false}
           mostrarBotaoVoltar
-          componentePersonalizado={<BotoesOrcamento />}
+          componentePersonalizado={<>
+            <IconButton onClick={() => {
+              generatePDF(pdfRef, { filename: 'page.pdf' })
+            }}><Icon>picture_as_pdf</Icon></IconButton>
+            <BotoesOrcamento />
+          </>
+          }
         />
       }
     >
@@ -216,6 +324,7 @@ export const ProdutosOrcamento = () => {
           </TableFooter>
         </Table>
       </TableContainer>
+      <PDF id={Number(id)} referencia={pdfRef} />
     </PaginaBase>
   );
 };

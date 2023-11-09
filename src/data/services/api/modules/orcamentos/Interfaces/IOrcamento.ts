@@ -1,4 +1,5 @@
 import { ICliente } from "../../clientes";
+import { IProduto } from "../../produtos";
 
 export interface IOrcamento {
   id: number;
@@ -12,6 +13,7 @@ export interface IOrcamento {
   idCliente: number;
   idPedido?: number;
   cliente: ICliente;
+  produtos: IProduto[];
   createdAt?: Date;
   updatedAt?: Date;
 }
