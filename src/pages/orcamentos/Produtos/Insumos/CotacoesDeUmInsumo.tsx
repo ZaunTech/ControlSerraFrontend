@@ -154,15 +154,30 @@ export const CotacoesDeUmInsumo = () => {
   const [filtro, setFiltro] = useState<string>();
   const [filtroId, setFiltroId] = useState<number>();
 
+  async function idInsumo(id: number) {
+    try {
+      const result = await ListaInsumosService.getById(id);
+      return  result.idInsumo;
+    } catch (erro) {
+      console.log(erro);
+      return null; // ou faça algo apropriado em caso de erro
+    }
+  }
+
+
   const setDados = async () => {
     try {
       setIsLoading(true);
       let result;
+     
+      const idInsumoValue = await idInsumo(Number(idItemListaInsumos));
 
      if (filtro === "Fornecedor" && filtroId != undefined) {
-      result = await CotacoesService.getAll({page:pagina, filter:busca}, Number(idItemListaInsumos), filtroId );
+      
+      result = await CotacoesService.getAll({page:pagina, filter:busca}, idInsumoValue,filtroId);
       } else {
-        result = await CotacoesService.getAll({page:pagina, filter:busca}, Number(idItemListaInsumos) );
+        console.log(idInsumo(Number(idItemListaInsumos)))
+        result = await CotacoesService.getAll({page:pagina, filter:busca}, idInsumoValue);
       }
 
       if (result instanceof Error) {

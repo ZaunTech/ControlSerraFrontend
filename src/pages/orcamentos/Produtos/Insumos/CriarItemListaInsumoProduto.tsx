@@ -28,6 +28,7 @@ export const CriarItemInsumoProdutoBase = () => {
     register,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(createUserFormSchema),
@@ -35,7 +36,7 @@ export const CriarItemInsumoProdutoBase = () => {
 
   const [opcaoiInsumos, setopcaoInsumo] = useState<IInsumo[]>([]);
   useEffect(() => {
-    InsumosService.getAll()
+    InsumosService.getAll({perPage:0})
       .then((response) => {
         if (response instanceof Error) {
           return;
@@ -112,6 +113,7 @@ export const CriarItemInsumoProdutoBase = () => {
                   options={opcaoiInsumos}
                   getOptionLabel={(opcaoiInsumos) => opcaoiInsumos.titulo ?? ""}
                   sx={{ width: 225 }}
+                  
                   renderInput={(params) => <TextField {...params} />}
                   onChange={(_, value) => {
                     setValue("idInsumo", value?.id);

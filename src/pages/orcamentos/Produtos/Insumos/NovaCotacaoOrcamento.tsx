@@ -23,6 +23,7 @@ import {
 } from "../../../../data/services/api";
 import { CotacoesService } from "../../../../data/services/api/modules/cotacoes";
 import { useNavigate, useParams } from "react-router-dom";
+import { ListaInsumosService } from "../../../../data/services/api/modules/listaInsumos";
 export const NovaCotacaoOrcamento = () => {
   const [opcoes, setOpcoes] = useState<IFornecedor[]>([]);
 
@@ -37,11 +38,12 @@ export const NovaCotacaoOrcamento = () => {
   });
 
   useEffect(() => {
-    InsumosService.getAll()
+    InsumosService.getAll({perPage:0})
       .then((response) => {
         if (response instanceof Error) {
           return;
         }
+        console.log(response)
 
         if (response && Array.isArray(response.data)) {
           const InsumosMapeadas = response.data;
@@ -53,7 +55,7 @@ export const NovaCotacaoOrcamento = () => {
   }, []);
 
   useEffect(() => {
-    FornecedoresService.getAll()
+    FornecedoresService.getAll({perPage:0})
       .then((response) => {
         if (response instanceof Error) {
           return;
@@ -111,8 +113,14 @@ export const NovaCotacaoOrcamento = () => {
   // Preencher o valor inicial ao montar o componente
   useEffect(() => {
     setValue('data', getCurrentDate());
-    
-    setValue("idInsumo", Number(idItemListaInsumos));
+
+    ListaInsumosService.getById(Number(idItemListaInsumos)).then((result)=>{
+      setValue("idInsumo", Number(result.idInsumo));
+    }).catch((erro)=>{
+      console.log(erro)
+    })
+
+   
 
     
   }, []);
