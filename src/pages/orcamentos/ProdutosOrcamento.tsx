@@ -25,6 +25,8 @@ import {
   Icon,
   Button,
   Box,
+  Card,
+  CardContent,
 } from "@mui/material";
 import { Environment } from "../../data/environment";
 import {
@@ -75,23 +77,73 @@ const PDF = forwardRef(({ id, referencia }: IPDF) => {
         variant="outlined"
         sx={{ m: 1, width: "auto" }}
         ref={referencia}
+        style={{
+          padding: '20px',
+          margin: '20px'
+        }}
       >
-        {fornecedor && (
-          <Box>
-            <Typography>
-              {fornecedor.nome ??
-                fornecedor.nomeFantasia ??
-                fornecedor.razaoSocial}
-            </Typography>
-          </Box>
-        )}
-        {cliente && (<Box>
-          <Typography>
-            {cliente.nome ??
-              cliente.nomeFantasia ??
-              cliente.razaoSocial}
+        <Box display={'flex'} flexDirection={'column'} gap={'10px'}>
+          {fornecedor && (
+            <Card sx={{ minWidth: 275 }}>
+              <CardContent>
+                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                  Empresa
+                </Typography>
+                <Typography variant="h5" component="div">
+                  {fornecedor.nome ??
+                    fornecedor.nomeFantasia ??
+                    fornecedor.razaoSocial}
+                </Typography>
+                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                  Contato
+                </Typography>
+                <Typography variant="body2">
+                  {fornecedor.telefone}
+                </Typography>
+                <Typography variant="body2">
+                  {fornecedor.email}
+                </Typography>
+                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                  Endereço
+                </Typography>
+                <Typography variant="body2">
+                  {`${fornecedor.rua},${fornecedor.numero}-${fornecedor.bairro},${fornecedor.cidade}-${fornecedor.estado}`}
+                </Typography>
+              </CardContent>
+            </Card>
+          )
+          }
+          {cliente && (<Card sx={{ minWidth: 275 }}>
+            <CardContent>
+              <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                Cliente
+              </Typography>
+              <Typography variant="h5" component="div">
+                {cliente.nome ??
+                  cliente.nomeFantasia ??
+                  cliente.razaoSocial}
+              </Typography>
+              <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                Contato
+              </Typography>
+              <Typography variant="body2">
+                {cliente.telefone}
+              </Typography>
+              <Typography variant="body2">
+                {cliente.email}
+              </Typography>
+              <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                Endereço
+              </Typography>
+              <Typography variant="body2">
+                {`${cliente.rua},${cliente.numero}-${cliente.bairro},${cliente.cidade}-${cliente.estado}`}
+              </Typography>
+            </CardContent>
+          </Card>)}
+          <Typography variant="h5">
+            {`Orçamento`}
           </Typography>
-        </Box>)}
+        </Box>
         <Table>
           <TableHead>
             <TableRow>
@@ -127,7 +179,7 @@ const PDF = forwardRef(({ id, referencia }: IPDF) => {
           </TableBody>
         </Table>
       </TableContainer>
-    </div>
+    </div >
   )
 }
 )

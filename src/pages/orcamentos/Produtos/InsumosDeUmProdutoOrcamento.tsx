@@ -23,6 +23,9 @@ import {
   Pagination,
   IconButton,
   Icon,
+  Box,
+  Card,
+  CardContent,
 } from "@mui/material";
 import { Environment } from "../../../data/environment";
 import {
@@ -32,31 +35,122 @@ import {
 import {
   CategoriasService,
   FornecedoresService,
+  IFornecedor,
   InsumosService,
 } from "../../../data/services/api";
 import { CotacoesService } from "../../../data/services/api/modules/cotacoes";
 import { Actions } from "../../../ui/components/ferramentasDeListagem/Actions";
 import generatePDF from 'react-to-pdf';
 
-const PDF = forwardRef(({ data }: { data: IListaInsumo[] }, referencia: Ref<HTMLDivElement | null>) => {
+interface IPDF {
+  idFornecedor: number,
+  referencia: Ref<HTMLDivElement | null>,
+  insumos: IListaInsumo[]
+}
+
+const PDF = forwardRef(({ idFornecedor, referencia, insumos }: IPDF) => {
+  const [minhaEmpresa, setMinhaEmpresa] = useState<IFornecedor>();
+  const [fornecedor, setFornecedor] = useState<IFornecedor>();
+  useEffect(() => {
+    FornecedoresService.getById(1).then((result) => {
+      if (result instanceof Error) {
+        return
+      }
+      setMinhaEmpresa(result)
+    })
+    FornecedoresService.getById(idFornecedor).then((result) => {
+      if (result instanceof Error) {
+        return
+      }
+      setFornecedor(result);
+    })
+
+  })
   return (
     <div
       style={{
-        position: "absolute",
-        left: "-9999px",
-        top: "-9999px",
+        //position: "absolute",
+        //left: "-9999px",
+        //top: "-9999px",
         width: "100%",
         height: "100%"
       }}>
-        <Typography>
 
-        </Typography>
       <TableContainer
         component={Paper}
         variant="outlined"
         sx={{ m: 1, width: "auto" }}
         ref={referencia}
+        style={{
+          padding: '20px',
+          margin: '20px'
+        }}
       >
+        <Box display={'flex'} flexDirection={'column'} gap={'10px'}>
+          {minhaEmpresa && (
+            <Card sx={{ minWidth: 275 }}>
+              <CardContent>
+                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                  Empresa Solicitante
+                </Typography>
+                <Typography variant="h5" component="div">
+                  {minhaEmpresa.nome ??
+                    minhaEmpresa.nomeFantasia ??
+                    minhaEmpresa.razaoSocial}
+                </Typography>
+                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                  Contato
+                </Typography>
+                <Typography variant="body2">
+                  {minhaEmpresa.telefone}
+                </Typography>
+                <Typography variant="body2">
+                  {minhaEmpresa.email}
+                </Typography>
+                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                  Endereço
+                </Typography>
+                <Typography variant="body2">
+                  {`${minhaEmpresa.rua},${minhaEmpresa.numero}-${minhaEmpresa.bairro},${minhaEmpresa.cidade}-${minhaEmpresa.estado}`}
+                </Typography>
+              </CardContent>
+            </Card>
+          )
+          }
+          {fornecedor && (
+            <Card sx={{ minWidth: 275 }}>
+              <CardContent>
+                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                  Empresa Solicitada
+                </Typography>
+                <Typography variant="h5" component="div">
+                  {fornecedor.nome ??
+                    fornecedor.nomeFantasia ??
+                    fornecedor.razaoSocial}
+                </Typography>
+                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                  Contato
+                </Typography>
+                <Typography variant="body2">
+                  {fornecedor.telefone}
+                </Typography>
+                <Typography variant="body2">
+                  {fornecedor.email}
+                </Typography>
+                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                  Endereço
+                </Typography>
+                <Typography variant="body2">
+                  {`${fornecedor.rua},${fornecedor.numero}-${fornecedor.bairro},${fornecedor.cidade}-${fornecedor.estado}`}
+                </Typography>
+              </CardContent>
+            </Card>
+          )
+          }
+          <Typography variant="h5">
+            {`Solicitação de orçamento`}
+          </Typography>
+        </Box>
         <Table>
           <TableHead>
             <TableRow>
@@ -72,7 +166,7 @@ const PDF = forwardRef(({ data }: { data: IListaInsumo[] }, referencia: Ref<HTML
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map((row) => (
+            {insumos.map((row) => (
               <TableRow key={row.id}>
                 <TableCell>
                   <Typography>{row.insumo?.titulo}</Typography>
@@ -336,7 +430,7 @@ export const InsumosDeUmProdutoOrcamento = () => {
           </TableFooter>
         </Table>
       </TableContainer>
-      <PDF ref={pdfRef} data={rows} />
+      <PDF idFornecedor={Number(id)} referencia={pdfRef} insumos={rows} />
     </PaginaBase >
   );
 };
