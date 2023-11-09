@@ -100,16 +100,15 @@ export const ProdutosBase = () => {
           <TableBody>
             {rows.map((row) => (
               <TableRow key={row.id}>
-                
                 <Actions
                   id={row.id}
                   showListButton
                   handleDelete={handleDelete}
                   handleShowList={() => {
-                   navigate(`${location.pathname}/${row.id}/listaInsumos`)
+                    navigate(`${location.pathname}/${row.id}/listaInsumos`)
                   }}
+                  toolTipListButton="Listar Insumos"
                 />
-                
                 <TableCell>
                   <Typography>{row.titulo}</Typography>
                 </TableCell>

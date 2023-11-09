@@ -287,6 +287,7 @@ export const Cotacoes = () => {
                     handlePersoButton={() => {
                       navigate(`${location.pathname}/${row.id}/recotar`);
                     }}
+                    persoButtonToolTipText="Cotar novamente"
                   />
                   <TableCell>
                     <Typography>
