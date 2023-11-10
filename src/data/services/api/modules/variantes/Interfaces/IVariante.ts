@@ -1,12 +1,11 @@
+import { IInsumo } from "../..";
 import { ICategoria } from "../../categorias/Interfaces/ICategoria";
 
 export interface IVariante {
   id: number;
-  titulo: string;
-  descricao?: string;
-  unidadeMedida?: string;
-  idCategoria?: number;
-  categoria?: ICategoria;
+  variante: string;
+  idInsumo: number;
+  insumo: IInsumo;
   createdAt: Date;
   updatedAt: Date;
 }
