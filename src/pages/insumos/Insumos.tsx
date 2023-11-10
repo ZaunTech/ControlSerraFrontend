@@ -50,7 +50,10 @@ export const Insumos = () => {
     try {
       setIsLoading(true);
 
-      const result = await InsumosService.getAll({ page: pagina, filter: busca });
+      const result = await InsumosService.getAll({
+        page: pagina,
+        filter: busca,
+      });
 
       if (result instanceof Error) {
         alert(result.message);
@@ -120,13 +123,11 @@ export const Insumos = () => {
           }
           onClickBotaoNovo={() => navigate(`${location.pathname}/novo`)}
         />
-      }
-    >
+      }>
       <TableContainer
         component={Paper}
         variant="outlined"
-        sx={{ m: 1, width: "auto" }}
-      >
+        sx={{ m: 1, width: "auto" }}>
         <Table>
           <TableHead>
             <TableRow>
@@ -146,7 +147,7 @@ export const Insumos = () => {
                   id={row.id}
                   handleDelete={handleDelete}
                   handleShowList={() => {
-                    navigate(`${location.pathname}/variantes`);
+                    navigate(`${location.pathname}/${row.id}/variantes`);
                   }}
                   showListButton
                 />

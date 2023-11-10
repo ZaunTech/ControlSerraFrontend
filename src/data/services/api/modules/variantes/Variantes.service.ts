@@ -9,9 +9,34 @@ const getAll = async (
   { page = 1,
     filter = "",
     perPage = Environment.LIMITE_DE_LINHAS }: Partial<IGetAll> = {},
+   ): Promise<TListVariantes | Error> => {
+  try {
+    const urlRelativa = `/${rota}?page=${page}&perPage=${perPage == 0 ? '' : perPage}&titulo_like=${filter}`;
+    
+    const { data, headers } = await Api.get(urlRelativa);
+    if (data) {
+      return {
+        data,
+        totalCount: Number(
+          headers["x-total-count"] || Environment.LIMITE_DE_LINHAS
+        ),
+      };
+    }
+    return new Error(Environment.ERRO_AO_LISTAR_DADOS);
+  } catch (error) {
+    return new Error(
+      (error as { message: string }).message ||
+      Environment.ERRO_AO_ACESSAR_DADOS
+    );
+  }
+};
+const getAllId = async (
+  { page = 1,
+    filter = "",
+    perPage = Environment.LIMITE_DE_LINHAS }: Partial<IGetAll> = {},
     idInsumo: number): Promise<TListVariantes | Error> => {
   try {
-    const urlRelativa = `/${rota}/${idInsumo}?page=${page}&perPage=${perPage == 0 ? '' : perPage}&titulo_like=${filter}`;
+    const urlRelativa = `/${rota}/insumo/${idInsumo}?page=${page}&perPage=${perPage == 0 ? '' : perPage}&titulo_like=${filter}`;
     const { data, headers } = await Api.get(urlRelativa);
     if (data) {
       return {
@@ -31,7 +56,7 @@ const getAll = async (
 };
 const getById = async (id: number): Promise<IVariante | Error> => {
   try {
-    const urlRelativa = `/${rota}/insumo/${id}`;
+    const urlRelativa = `/${rota}/${id}`;
     const response = await Api.get<IVariante>(urlRelativa);
     if (response) {
       return response.data;
@@ -111,11 +136,12 @@ const getCount = async (): Promise<number | Error> => {
   }
 };
 
-export const VariantesService = {
+export const  VariantesService = {
   getAll,
   getById,
   create,
   updateById,
   deleteById,
   getCount,
+  getAllId,
 };

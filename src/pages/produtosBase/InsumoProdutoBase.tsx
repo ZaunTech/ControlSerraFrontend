@@ -12,7 +12,11 @@ import {
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { IInsumo, InsumosService } from "../../data/services/api";
+import {
+  IInsumo,
+  InsumosService,
+  VariantesService,
+} from "../../data/services/api";
 import {
   IInsumosProdutoBase,
   InsumosProdutoBaseService,
@@ -22,7 +26,7 @@ import { useNavigate, useParams } from "react-router-dom";
 const createUserFormSchema = z.object({
   idProdutoBase: z.coerce.number(),
   quantidade: z.coerce.number(),
-  idInsumo: z.coerce.number(),
+  idVariante: z.coerce.number(),
   unidade: z.string(),
 });
 
@@ -39,7 +43,7 @@ export const InsumoProdutoBase = () => {
 
   const [opcaoiInsumos, setopcaoInsumo] = useState<IInsumo[]>([]);
   useEffect(() => {
-    InsumosService.getAll()
+    VariantesService.getAll({ perPage: 0 })
       .then((response) => {
         if (response instanceof Error) {
           return;
@@ -67,7 +71,7 @@ export const InsumoProdutoBase = () => {
       if (data instanceof Error) {
         return;
       }
-      setValue("idInsumo", data.idInsumo);
+      setValue("idVariante", data.idVariante);
       setValue("quantidade", data.quantidade);
       setValue("unidade", data.unidade);
     } catch (error) {}
@@ -144,12 +148,12 @@ export const InsumoProdutoBase = () => {
                   sx={{ width: 225 }}
                   value={
                     opcaoiInsumos.find(
-                      (option) => option.id === watch("idInsumo")
+                      (option) => option.id === watch("idVariante")
                     ) || null
                   }
                   renderInput={(params) => <TextField {...params} />}
                   onChange={(_, value) => {
-                    setValue("idInsumo", value?.id);
+                    setValue("idVariante", value?.id);
                   }}
                 />
                 {errors.idInsumo && (

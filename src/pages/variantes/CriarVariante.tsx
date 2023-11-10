@@ -17,15 +17,17 @@ import { useForm } from "react-hook-form";
 import {
   CategoriasService,
   ICategoria,
+  IInsumo,
   InsumosService,
+  VariantesService,
 } from "../../data/services/api";
 import { useNavigate } from "react-router-dom";
 
 const createUserFormSchema = z.object({
-  titulo: z.string().min(1, "Preencha o Titulo"),
-  idCategoria: z.coerce.number().optional(),
-  descricao: z.string(),
-  unidadeMedida: z.string(),
+ 
+  idInsumo: z.coerce.number(),
+  variante: z.string(),
+  
 });
 
 export const CriarVariante = () => {
@@ -34,16 +36,16 @@ export const CriarVariante = () => {
   });
   const navigate = useNavigate();
   function createUser(data: any) {
-    InsumosService.create(data)
+    VariantesService.create(data)
       .then(() => {
         navigate(-1);
       })
       .catch((erro) => { });
   }
-  const [opcoes, setOpcoes] = useState<ICategoria[]>([]);
+  const [opcoes, setOpcoes] = useState<IInsumo[]>([]);
 
   useEffect(() => {
-    CategoriasService.getAll({ perPage: 0 })
+    InsumosService.getAll({ perPage: 0 })
       .then((response) => {
         if (response instanceof Error) {
           return;
@@ -94,12 +96,9 @@ export const CriarVariante = () => {
         >
           <Grid container direction="column" padding={2} spacing={3}>
             <Grid container item direction="column" spacing={4}>
+              
               <Grid item>
-                <Typography>Titulo</Typography>
-                <TextField placeholder="Titulo" disabled={!isEditable} {...register("titulo")} />
-              </Grid>
-              <Grid item>
-                <Typography>Categoria</Typography>
+                <Typography>Insumow</Typography>
                 <Autocomplete
                   disablePortal
                   id="combo-box-demo"
@@ -110,11 +109,15 @@ export const CriarVariante = () => {
                   renderInput={(params) => <TextField {...params} />}
                   onChange={(_, value) => {
                     if (value !== null) {
-                      setValue("categoria", [value]);
-                      setValue("idCategoria", value.id);
+
+                      setValue("idInsumo", value.id);
                     }
                   }}
                 />
+              </Grid>
+              <Grid item>
+                <Typography>Variante</Typography>
+                <TextField   {...register("variante")}   />
               </Grid>
             </Grid>
           </Grid>
