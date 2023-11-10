@@ -1,27 +1,16 @@
-import {
-  CreateInsumosProdutoBaseDto,
-  IInsumosProdutoBase,
-  TListInsumosProdutoBase,
-  UpdateInsumosProdutoBaseDto,
-} from ".";
+import { CreateVarianteDto, IVariante, TListVariantes, UpdateVarianteDto } from ".";
 import { Api, IGetAll } from "../..";
 import { Environment } from "../../../../environment";
 
-const rota = "insumos-produtos-base";
+
+const rota = "variantes";
 
 const getAll = async (
-  {
-    page = 1,
+  { page = 1,
     filter = "",
-    perPage = Environment.LIMITE_DE_LINHAS,
-  }: Partial<IGetAll> = {},
-  id: number
-): Promise<TListInsumosProdutoBase | Error> => {
+    perPage = Environment.LIMITE_DE_LINHAS }: Partial<IGetAll> = {}): Promise<TListVariantes | Error> => {
   try {
-    console.log(id);
-    const urlRelativa = `/${rota}/${id}?page=${page}&perPage=${
-      perPage == 0 ? "" : perPage
-    }&titulo_like=${filter}`;
+    const urlRelativa = `/${rota}?page=${page}&perPage=${perPage == 0 ? '' : perPage}&titulo_like=${filter}`;
     const { data, headers } = await Api.get(urlRelativa);
     if (data) {
       return {
@@ -35,34 +24,32 @@ const getAll = async (
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
-const getById = async (id: number): Promise<IInsumosProdutoBase | Error> => {
+const getById = async (id: number): Promise<IVariante | Error> => {
   try {
-    const urlRelativa = `/${rota}/insumo/${id}`;
-    const response = await Api.get<IInsumosProdutoBase>(urlRelativa);
+    const urlRelativa = `/${rota}/${id}`;
+    const response = await Api.get<IVariante>(urlRelativa);
     if (response) {
       return response.data;
     }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {
+    console.error(error);
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
 const create = async (
-  createInsumosProdutoBaseDto: CreateInsumosProdutoBaseDto
-): Promise<IInsumosProdutoBase | Error> => {
+  createInsumoDto: CreateVarianteDto
+): Promise<IVariante | Error> => {
   try {
     const urlRelativa = `/${rota}`;
-    const response = await Api.post<IInsumosProdutoBase>(
-      urlRelativa,
-      createInsumosProdutoBaseDto
-    );
+    const response = await Api.post<IVariante>(urlRelativa, createInsumoDto);
     if (response) {
       return response.data;
     }
@@ -70,17 +57,17 @@ const create = async (
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
 const updateById = async (
   id: number,
-  updateInsumosProdutoBaseDto: UpdateInsumosProdutoBaseDto
-): Promise<IInsumosProdutoBase | Error> => {
+  updateInsumoaDto: UpdateVarianteDto
+): Promise<IVariante | Error> => {
   try {
     const urlRelativa = `/${rota}/${id}`;
-    const response = await Api.patch(urlRelativa, updateInsumosProdutoBaseDto);
+    const response = await Api.patch(urlRelativa, updateInsumoaDto);
     if (response.statusText === "OK") {
       return response.data;
     }
@@ -88,11 +75,11 @@ const updateById = async (
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
-const deleteById = async (id: number): Promise<IInsumosProdutoBase | Error> => {
+const deleteById = async (id: number): Promise<IVariante | Error> => {
   try {
     const urlRelativa = `/${rota}/${id}`;
     const response = await Api.delete(urlRelativa);
@@ -103,11 +90,10 @@ const deleteById = async (id: number): Promise<IInsumosProdutoBase | Error> => {
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
-
 const getCount = async (): Promise<number | Error> => {
   try {
     const urlRelativa = `/${rota}/count`;
@@ -119,12 +105,12 @@ const getCount = async (): Promise<number | Error> => {
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-        Environment.ERRO_AO_ACESSAR_DADOS
+      Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
 
-export const InsumosProdutoBaseService = {
+export const VariantesService = {
   getAll,
   getById,
   create,
