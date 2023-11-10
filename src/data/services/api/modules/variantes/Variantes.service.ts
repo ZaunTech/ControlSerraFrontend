@@ -8,9 +8,10 @@ const rota = "variantes";
 const getAll = async (
   { page = 1,
     filter = "",
-    perPage = Environment.LIMITE_DE_LINHAS }: Partial<IGetAll> = {}): Promise<TListVariantes | Error> => {
+    perPage = Environment.LIMITE_DE_LINHAS }: Partial<IGetAll> = {},
+    idInsumo: number): Promise<TListVariantes | Error> => {
   try {
-    const urlRelativa = `/${rota}?page=${page}&perPage=${perPage == 0 ? '' : perPage}&titulo_like=${filter}`;
+    const urlRelativa = `/${rota}/${idInsumo}?page=${page}&perPage=${perPage == 0 ? '' : perPage}&titulo_like=${filter}`;
     const { data, headers } = await Api.get(urlRelativa);
     if (data) {
       return {
@@ -30,7 +31,7 @@ const getAll = async (
 };
 const getById = async (id: number): Promise<IVariante | Error> => {
   try {
-    const urlRelativa = `/${rota}/${id}`;
+    const urlRelativa = `/${rota}/insumo/${id}`;
     const response = await Api.get<IVariante>(urlRelativa);
     if (response) {
       return response.data;
