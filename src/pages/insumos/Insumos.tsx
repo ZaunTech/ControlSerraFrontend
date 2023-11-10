@@ -150,6 +150,7 @@ export const Insumos = () => {
                     navigate(`${location.pathname}/${row.id}/variantes`);
                   }}
                   showListButton
+                  toolTipListButton="Listar Variações"
                 />
                 <TableCell>
                   <Typography>{row.titulo}</Typography>
