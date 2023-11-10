@@ -3,5 +3,5 @@ export interface CreateCotacaoDto {
   valor: number;
   idFornecedor: number;
   unidade: string;
-  idInsumo: number;
+  idVariante: number;
 }

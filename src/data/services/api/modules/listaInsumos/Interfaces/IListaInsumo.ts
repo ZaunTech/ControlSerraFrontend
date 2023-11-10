@@ -1,17 +1,18 @@
 import { ICotacao } from "../../cotacoes";
-import { IInsumo } from "../../insumos/Interfaces/IInsumo"
+
 import { IProduto } from "../../produtos";
+import { IVariante } from "../../variantes";
 
 export interface IListaInsumo {
     id: number;
     quantidade: number;
     idProduto: number;
-    idInsumo: number;
+    idVariante: number;
     idCotacao?: number;
     unidade: string;
     valorUnitario?: number;
     produto: IProduto;
-    insumo: IInsumo;
+    variante?: IVariante;
     cotacao?: ICotacao;
     createdAt: Date;
     updatedAt: Date;

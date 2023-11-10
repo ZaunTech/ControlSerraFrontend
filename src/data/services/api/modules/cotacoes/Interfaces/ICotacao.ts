@@ -1,4 +1,5 @@
 import { IFornecedor, IInsumo } from "../..";
+import { IVariante } from "../../variantes";
 
 export interface ICotacao {
   id: number;
@@ -7,8 +8,8 @@ export interface ICotacao {
   unidade: string;
   idFornecedor: number;
   fornecedor: IFornecedor;
-  idInsumo: number;
-  insumo: IInsumo;
+  idVariante: number;
+  variante: IVariante;
   createdAt: Date;
   updatedAt: Date;
 }

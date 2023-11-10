@@ -2,6 +2,6 @@
 export interface CreateInsumosProdutoBaseDto {
   quantidade?: number;
   idProdutoBase: number;
-  idInsumo: number;
+  idVariante: number;
   unidade: string;
 }

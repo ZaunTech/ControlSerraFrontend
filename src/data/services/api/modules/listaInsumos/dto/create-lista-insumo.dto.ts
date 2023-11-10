@@ -4,7 +4,7 @@ export interface CreateListaInsumosDto {
    
     quantidade: number;
     idProduto: number;
-    idInsumo: number;
+    idVariante: number;
     valorUnitario?: number;
     idCotacao?: number;
     unidade?: string;

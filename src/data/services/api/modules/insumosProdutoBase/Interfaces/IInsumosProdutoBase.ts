@@ -1,14 +1,15 @@
-import {  IInsumo } from "../../insumos/Interfaces/IInsumo"
+
 import { IProdutoBase } from "../../produtosBase";
+import { IVariante } from "../../variantes";
 
 export interface IInsumosProdutoBase {
     id: number;
     quantidade?: number;
     idProdutoBase: number;
-    idInsumo: number;
+    idVariante: number;
     produtoBase?: IProdutoBase;
     unidade: string;
-    insumo?: IInsumo;
+    variante?: IVariante;
     createdAt?: Date;
     updatedAt?: Date;
 }
