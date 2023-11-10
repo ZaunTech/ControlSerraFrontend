@@ -19,25 +19,27 @@ import {
   FornecedoresService,
   IFornecedor,
   IInsumo,
+  IVariante,
   InsumosService,
+  VariantesService,
 } from "../../data/services/api";
 import { CotacoesService } from "../../data/services/api/modules/cotacoes";
 import { useNavigate } from "react-router-dom";
 export const CriarCotacao = () => {
   const [opcoes, setOpcoes] = useState<IFornecedor[]>([]);
 
-  const [opcaoiInsumos, setopcaoInsumo] = useState<IInsumo[]>([]);
+  const [opcaoiInsumos, setopcaoInsumo] = useState<IVariante[]>([]);
 
   const shemaCotacao = z.object({
     idFornecedor: z.number(),
-    idInsumo: z.number(),
+    idVariante: z.number(),
     valor: z.coerce.number(),
     unidade: z.string(),
     data: z.coerce.date(),
   });
 
   useEffect(() => {
-    InsumosService.getAll()
+    VariantesService.getAll()
       .then((response) => {
         if (response instanceof Error) {
           return;
@@ -207,17 +209,17 @@ export const CriarCotacao = () => {
                 <Autocomplete
                   disablePortal
                   id="combo-box-demo"
-                  {...register("idInsumo")}
+                  {...register("idVariante")}
                   options={opcaoiInsumos}
-                  getOptionLabel={(opcaoiInsumos) => opcaoiInsumos.titulo ?? ""}
+                  getOptionLabel={(opcaoInsumo) => ` ${opcaoInsumo.insumo.titulo || ''}  -  ${opcaoInsumo.variante || ''}`}
                   sx={{ width: 225 }}
                   renderInput={(params) => <TextField {...params} />}
                   onChange={(_, value) => {
-                    setValue("idInsumo", value?.id);
+                    setValue("idVariante", value?.id);
                   }}
                 />
-                {errors.idInsumo && (
-                  <span>{errors.idInsumo.message?.toString()}</span>
+                {errors.idVariante && (
+                  <span>{errors.idVariante.message?.toString()}</span>
                 )}
               </Grid>
 

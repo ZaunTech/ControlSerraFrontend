@@ -12,7 +12,7 @@ import {
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { IInsumo, InsumosService } from "../../../../data/services/api";
+import { IInsumo, IVariante, InsumosService, VariantesService } from "../../../../data/services/api";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   IListaInsumo,
@@ -21,7 +21,7 @@ import {
 
 const createUserFormSchema = z.object({
   quantidade: z.coerce.number(),
-  idInsumo: z.coerce.number(),
+  idVariante: z.coerce.number(),
   unidade: z.string(),
 });
 
@@ -38,9 +38,9 @@ export const ItemListaInsumoProduto = () => {
     resolver: zodResolver(createUserFormSchema),
   });
 
-  const [opcaoiInsumos, setopcaoInsumo] = useState<IInsumo[]>([]);
+  const [opcaoiInsumos, setopcaoInsumo] = useState<IVariante[]>([]);
   useEffect(() => {
-    InsumosService.getAll()
+    VariantesService.getAll()
       .then((response) => {
         if (response instanceof Error) {
           return;
@@ -67,15 +67,13 @@ export const ItemListaInsumoProduto = () => {
       if (data instanceof Error) {
         return;
       }
-      setValue("idInsumo", data.idInsumo);
+      setValue("idVariante", data.idVariante);
       setValue("quantidade", data.quantidade);
       setValue("unidade", data.unidade);
     } catch (error) {}
   };
 
   useEffect(() => {
-    
-
     fetchData();
   }, []);
 
@@ -146,15 +144,15 @@ export const ItemListaInsumoProduto = () => {
                   {...register("idInsumo")}
                   value={
                     opcaoiInsumos.find(
-                      (opcaoiInsumos) => opcaoiInsumos.id === watch("idInsumo")
+                      (opcaoiInsumos) => opcaoiInsumos.id === watch("idVariante")
                     ) || null
                   }
                   options={opcaoiInsumos}
-                  getOptionLabel={(opcaoiInsumos) => opcaoiInsumos.titulo ?? ""}
+                  getOptionLabel={(opcaoInsumo) => ` ${opcaoInsumo.insumo.titulo || ''}  -  ${opcaoInsumo.variante || ''}`}
                   sx={{ width: 225 }}
                   renderInput={(params) => <TextField {...params} />}
                   onChange={(_, value) => {
-                    setValue("idInsumo", value?.id);
+                    setValue("idVariante", value?.id);
                   }}
                 />
                 {errors.idInsumo && (

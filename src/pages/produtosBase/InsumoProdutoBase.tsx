@@ -14,6 +14,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import {
   IInsumo,
+  IVariante,
   InsumosService,
   VariantesService,
 } from "../../data/services/api";
@@ -41,7 +42,7 @@ export const InsumoProdutoBase = () => {
     resolver: zodResolver(createUserFormSchema),
   });
 
-  const [opcaoiInsumos, setopcaoInsumo] = useState<IInsumo[]>([]);
+  const [opcaoiInsumos, setopcaoInsumo] = useState<IVariante[]>([]);
   useEffect(() => {
     VariantesService.getAll({ perPage: 0 })
       .then((response) => {
@@ -61,7 +62,7 @@ export const InsumoProdutoBase = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    setValue("idProdutoBase", Number(id));
+    
   });
   const { id } = useParams();
   const fetchData = async () => {
@@ -74,12 +75,15 @@ export const InsumoProdutoBase = () => {
       setValue("idVariante", data.idVariante);
       setValue("quantidade", data.quantidade);
       setValue("unidade", data.unidade);
+      setValue("idProdutoBase",data.idProdutoBase)
     } catch (error) {}
   };
 
   function editarInsumo(data: any) {
     InsumosProdutoBaseService.updateById(Number(id), data)
       .then((result) => {
+        console.log(result)
+        console.log(id)
         if (!(result instanceof Error)) {
           setIsEditable(false);
           setPageState("detalhes");
@@ -142,9 +146,9 @@ export const InsumoProdutoBase = () => {
                   disablePortal
                   disabled={!isEditable}
                   id="combo-box-demo"
-                  {...register("idInsumo")}
+                  {...register("idVariante")}
                   options={opcaoiInsumos}
-                  getOptionLabel={(opcaoiInsumos) => opcaoiInsumos.titulo ?? ""}
+                  getOptionLabel={(opcaoInsumo) => ` ${opcaoInsumo.insumo.titulo || ''}  -  ${opcaoInsumo.variante || ''}`}
                   sx={{ width: 225 }}
                   value={
                     opcaoiInsumos.find(

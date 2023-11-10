@@ -12,14 +12,14 @@ import {
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { IInsumo, InsumosService } from "../../../../data/services/api";
+import { IInsumo, IVariante, InsumosService, VariantesService } from "../../../../data/services/api";
 import { useNavigate, useParams } from "react-router-dom";
 import { ListaInsumosService } from "../../../../data/services/api/modules/listaInsumos";
 
 const createUserFormSchema = z.object({
   idProduto: z.coerce.number(),
   quantidade: z.coerce.number(),
-  idInsumo: z.coerce.number(),
+  idVariante: z.coerce.number(),
   unidade: z.string(),
 });
 
@@ -34,9 +34,9 @@ export const CriarItemInsumoProdutoBase = () => {
     resolver: zodResolver(createUserFormSchema),
   });
 
-  const [opcaoiInsumos, setopcaoInsumo] = useState<IInsumo[]>([]);
+  const [opcaoiInsumos, setopcaoInsumo] = useState<IVariante[]>([]);
   useEffect(() => {
-    InsumosService.getAll({perPage:0})
+    VariantesService.getAll({perPage:0})
       .then((response) => {
         if (response instanceof Error) {
           return;
@@ -109,14 +109,14 @@ export const CriarItemInsumoProdutoBase = () => {
                 <Autocomplete
                   disablePortal
                   id="combo-box-demo"
-                  {...register("idInsumo")}
+                  {...register("idVariante")}
                   options={opcaoiInsumos}
-                  getOptionLabel={(opcaoiInsumos) => opcaoiInsumos.titulo ?? ""}
+                  getOptionLabel={(opcaoInsumo) => ` ${opcaoInsumo.insumo.titulo || ''}  -  ${opcaoInsumo.variante || ''}`}
                   sx={{ width: 225 }}
                   
                   renderInput={(params) => <TextField {...params} />}
                   onChange={(_, value) => {
-                    setValue("idInsumo", value?.id);
+                    setValue("idVariante", value?.id);
                   }}
                 />
                 {errors.idInsumo && (

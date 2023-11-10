@@ -13,7 +13,7 @@ import { ProdutosService } from "../../../data/services/api/modules/produtos";
 const createUserFormSchema = z.object({
   titulo: z.string().min(1, "Titulo não pode ser vazio"),
   observacoes: z.string(),
-  orcamentoId: z.coerce.number(),
+  idOrcamento: z.coerce.number(),
   quantidade: z.coerce.number().min(1),
 });
 
@@ -30,7 +30,7 @@ export const CriarProduto = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   useEffect(() => {
-    setValue("orcamentoId", id);
+    setValue("idOrcamento", id);
   }, []);
 
   function createUser(data: any) {

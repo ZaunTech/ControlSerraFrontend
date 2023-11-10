@@ -19,7 +19,9 @@ import {
   FornecedoresService,
   IFornecedor,
   IInsumo,
+  IVariante,
   InsumosService,
+  VariantesService,
 } from "../../data/services/api";
 import {
   CotacoesService,
@@ -30,18 +32,18 @@ import { useNavigate, useParams } from "react-router-dom";
 export const Cotacao = () => {
   const [opcoes, setOpcoes] = useState<IFornecedor[]>([]);
 
-  const [opcaoiInsumos, setopcaoInsumo] = useState<IInsumo[]>([]);
+  const [opcaoiInsumos, setopcaoInsumo] = useState<IVariante[]>([]);
 
   const shemaCotacao = z.object({
     idFornecedor: z.number(),
-    idInsumo: z.number(),
+    idVariante: z.number(),
     valor: z.coerce.number(),
     unidade: z.string(),
     data: z.coerce.date(),
   });
 
   useEffect(() => {
-    InsumosService.getAll()
+    VariantesService.getAll({perPage: 0})
       .then((response) => {
         if (response instanceof Error) {
           return;
@@ -96,7 +98,7 @@ export const Cotacao = () => {
       if (!isNaN(dateObject.getTime())) {
         const formattedDate = dateObject.toISOString().split("T")[0];
 
-        setValue("idInsumo", data.idInsumo);
+        setValue("idVariante", data.idVariante);
         setValue("idFornecedor", data.idFornecedor);
         setValue("data", formattedDate);
         setValue("unidade", data.unidade);
@@ -114,6 +116,7 @@ export const Cotacao = () => {
 
   const navigate = useNavigate();
   function createCotacao(data: any) {
+   
     CotacoesService.updateById(Number(id), data)
       .then(() => {
         setIsEditable(false);
@@ -251,22 +254,22 @@ export const Cotacao = () => {
                   disablePortal
                   id="combo-box-demo"
                   disabled={!isEditable}
-                  {...register("idInsumo")}
+                  {...register("idVariante")}
                   options={opcaoiInsumos}
-                  getOptionLabel={(opcaoiInsumos) => opcaoiInsumos.titulo ?? ""}
+                  getOptionLabel={(opcaoInsumo) => ` ${opcaoInsumo.insumo.titulo || ''}  -  ${opcaoInsumo.variante || ''}`}
                   value={
                     opcaoiInsumos.find(
-                      (option) => option.id === watch("idInsumo")
+                      (option) => option.id === watch("idVariante")
                     ) || null
                   }
                   sx={{ width: 225 }}
                   renderInput={(params) => <TextField {...params} />}
                   onChange={(_, value) => {
-                    setValue("idInsumo", value?.id);
+                    setValue("idVariante", value?.id);
                   }}
                 />
-                {errors.idInsumo && (
-                  <span>{errors.idInsumo.message?.toString()}</span>
+                {errors.idVariante && (
+                  <span>{errors.idVariante.message?.toString()}</span>
                 )}
               </Grid>
 
