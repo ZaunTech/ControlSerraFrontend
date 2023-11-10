@@ -7,6 +7,6 @@ export interface IVariante {
   unidadeMedida?: string;
   idCategoria?: number;
   categoria?: ICategoria;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }
