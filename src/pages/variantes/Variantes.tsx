@@ -27,7 +27,7 @@ import {
 import { Environment } from "../../data/environment";
 import { Actions } from "../../ui/components/ferramentasDeListagem/Actions";
 
-export const Insumos = () => {
+export const Variantes = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { debounce } = useDebounce();
 
@@ -50,7 +50,7 @@ export const Insumos = () => {
     try {
       setIsLoading(true);
 
-      const result = await InsumosService.getAll({ page: pagina, filter: busca });
+      const result = await InsumosService.getAll({page:pagina,filter: busca});
 
       if (result instanceof Error) {
         alert(result.message);
@@ -110,7 +110,7 @@ export const Insumos = () => {
 
   return (
     <PaginaBase
-      titulo="Insumos"
+      titulo="Variantes"
       barraDeFerramentas={
         <FerramentasDaListagem
           mostrarInputBusca
@@ -146,9 +146,8 @@ export const Insumos = () => {
                   id={row.id}
                   handleDelete={handleDelete}
                   handleShowList={() => {
-                    navigate(`${location.pathname}/variantes`);
+                    navigate(`${location.pathname}/${row.id}`);
                   }}
-                  showListButton
                 />
                 <TableCell>
                   <Typography>{row.titulo}</Typography>

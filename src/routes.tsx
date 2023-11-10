@@ -35,7 +35,10 @@ import { Home } from "./pages/home/Home.tsx";
 import Error from "./pages/error/Error.tsx";
 import { Login, RecuperarSenha } from "./pages/login";
 import { Cotacoes, Cotacao, CriarCotacao, Recotar } from "./pages/cotacoes";
-import { CriarUsuario, Usuario, Usuarios } from "./pages/Usuarios";
+import { CriarUsuario, Usuario, Usuarios } from "./pages/usuarios/index.tsx";
+import { Variantes } from "./pages/variantes/Variantes.tsx";
+import { Variante } from "./pages/variantes/Variante.tsx";
+import { CriarVariante } from "./pages/variantes/CriarVariante.tsx";
 
 const router = createBrowserRouter([
   {
@@ -210,7 +213,29 @@ const router = createBrowserRouter([
           },
           {
             path: ":id",
-            element: <Insumo />,
+            children: [
+              {
+                index: true,
+                element: <Insumo />,
+              },
+              {
+                path: 'variantes',
+                children: [
+                  {
+                    index: true,
+                    element: <Variantes />
+                  },
+                  {
+                    path: 'novo',
+                    element: <CriarVariante />
+                  },
+                  {
+                    path: ':idVariante',
+                    element: <Variante />
+                  }
+                ]
+              }
+            ]
           },
         ],
       },
