@@ -1,7 +1,7 @@
 import { useMemo, useEffect } from "react";
 import { PaginaBase } from "../../ui/layouts";
 import { FerramentasDaListagem } from "../../ui/components";
-import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
+import { useNavigate, useSearchParams, useLocation, useParams } from "react-router-dom";
 import {
   CategoriasService,
   IInsumo,
@@ -26,12 +26,15 @@ import {
 } from "@mui/material";
 import { Environment } from "../../data/environment";
 import { Actions } from "../../ui/components/ferramentasDeListagem/Actions";
+import { VariantesService, IVariante } from "../../data/services/api/modules/variantes";
 
 export const Variantes = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { debounce } = useDebounce();
 
-  const [rows, setRows] = useState<IInsumo[]>([]);
+  const { id } = useParams();
+
+  const [rows, setRows] = useState<IVariante[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -50,35 +53,14 @@ export const Variantes = () => {
     try {
       setIsLoading(true);
 
-      const result = await InsumosService.getAll({page:pagina,filter: busca});
+      const result = await VariantesService.getAllId({ page: pagina, filter: busca }, Number(id));
 
       if (result instanceof Error) {
         alert(result.message);
         return;
       }
-
-      const insumosData = await Promise.all(
-        result.data.map(async (insumo: IInsumo) => {
-          try {
-            if (!insumo.idCategoria) {
-              return insumo;
-            }
-            const result2 = await CategoriasService.getById(insumo.idCategoria);
-
-            if (result2 instanceof Error) {
-              alert(result2.message);
-              return insumo;
-            }
-
-            insumo.categoria = result2;
-            return insumo;
-          } catch (error) {
-            return null;
-          }
-        })
-      );
       setTotalCount(result.totalCount);
-      setRows(insumosData);
+      setRows(result.data);
     } catch (error) {
       alert("Error fetching data.");
     } finally {
@@ -93,7 +75,7 @@ export const Variantes = () => {
 
   const handleDelete = (id: number) => {
     if (confirm("Você realmente quer apagar?")) {
-      InsumosService.deleteById(id).then((result) => {
+      VariantesService.deleteById(id).then((result) => {
         if (result instanceof Error) {
           alert(result.message);
           return;
@@ -131,12 +113,8 @@ export const Variantes = () => {
           <TableHead>
             <TableRow>
               <TableCell style={{ fontWeight: "bold" }}>Ações</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Titulo</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Categoria</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>
-                Unidade de Medida
-              </TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Descrição</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Insumo</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Variante</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -150,16 +128,10 @@ export const Variantes = () => {
                   }}
                 />
                 <TableCell>
-                  <Typography>{row.titulo}</Typography>
+                  <Typography>{row.insumo.titulo}</Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{row.categoria?.titulo}</Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography>{row.unidadeMedida}</Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography>{row.descricao}</Typography>
+                  <Typography>{row.variante}</Typography>
                 </TableCell>
               </TableRow>
             ))}
