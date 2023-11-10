@@ -13,7 +13,10 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { IInsumo, InsumosService } from "../../data/services/api";
-import { IInsumosProdutoBase, InsumosProdutoBaseService } from "../../data/services/api/modules/insumosProdutoBase";
+import {
+  IInsumosProdutoBase,
+  InsumosProdutoBaseService,
+} from "../../data/services/api/modules/insumosProdutoBase";
 import { useNavigate, useParams } from "react-router-dom";
 
 const createUserFormSchema = z.object({
@@ -52,38 +55,36 @@ export const InsumoProdutoBase = () => {
   }, []);
 
   const navigate = useNavigate();
-  
 
   useEffect(() => {
     setValue("idProdutoBase", Number(id));
   });
-  const {id} = useParams();
-    const fetchData = async () => {
-      try {
-        const data: IInsumosProdutoBase | Error = await InsumosProdutoBaseService.getById(Number(id));
-        if (data instanceof Error) {
-          return;
-        }
-        setValue("idInsumo", data.idInsumo);
-        setValue("quantidade", data.quantidade);
-        setValue("unidade", data.unidade);
-        
-      
-      } catch (error) {}
-    };
+  const { id } = useParams();
+  const fetchData = async () => {
+    try {
+      const data: IInsumosProdutoBase | Error =
+        await InsumosProdutoBaseService.getById(Number(id));
+      if (data instanceof Error) {
+        return;
+      }
+      setValue("idInsumo", data.idInsumo);
+      setValue("quantidade", data.quantidade);
+      setValue("unidade", data.unidade);
+    } catch (error) {}
+  };
 
   function editarInsumo(data: any) {
-    InsumosProdutoBaseService.updateById(Number(id),data)
+    InsumosProdutoBaseService.updateById(Number(id), data)
       .then((result) => {
         if (!(result instanceof Error)) {
-          setIsEditable(false)
-          setPageState("detalhes")
+          setIsEditable(false);
+          setPageState("detalhes");
         }
       })
       .catch((error) => {});
   }
   function editarInsumoEFechar(data: any) {
-    InsumosProdutoBaseService.updateById(Number(id),data)
+    InsumosProdutoBaseService.updateById(Number(id), data)
       .then((result) => {
         if (!(result instanceof Error)) {
           navigate(-1);
@@ -91,7 +92,7 @@ export const InsumoProdutoBase = () => {
       })
       .catch((error) => {});
   }
-  const [pageState, setPageState] = useState<TTipo>("novo");
+  const [pageState, setPageState] = useState<TTipo>("detalhes");
   const [isEditable, setIsEditable] = useState<boolean>(false);
 
   useEffect(() => {
@@ -105,10 +106,9 @@ export const InsumoProdutoBase = () => {
     }
   }, [pageState]);
 
-  useEffect(()=>{
-    fetchData()
-  },[])
-
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <PaginaBase
@@ -117,22 +117,19 @@ export const InsumoProdutoBase = () => {
         <FerramentasDeDetalhes
           tipo="detalhes"
           pageState={pageState}
-        
           setPaiState={setPageState}
           onClickSalvar={handleSubmit(editarInsumo)}
           onClickSalvarEFechar={handleSubmit(editarInsumoEFechar)}
           onClickCancelar={fetchData}
         />
-      }
-    >
+      }>
       <Box component={"form"} onSubmit={handleSubmit(editarInsumo)}>
         <Box
           display={"flex"}
           margin={1}
           flexDirection={"column"}
           component={Paper}
-          variant="outlined"
-        >
+          variant="outlined">
           <Grid container direction="column" padding={2} spacing={3}>
             <Grid container item direction="row" spacing={4}>
               <Grid item>
@@ -162,7 +159,8 @@ export const InsumoProdutoBase = () => {
               <Grid item>
                 <Typography>Quantidade</Typography>
                 <TextField
-                  type="number" disabled={!isEditable}
+                  type="number"
+                  disabled={!isEditable}
                   placeholder="Quantidade"
                   {...register("quantidade")}
                 />
@@ -172,7 +170,11 @@ export const InsumoProdutoBase = () => {
               </Grid>
               <Grid item>
                 <Typography>unidade</Typography>
-                <TextField placeholder="unidade" disabled={!isEditable} {...register("unidade")} />
+                <TextField
+                  placeholder="unidade"
+                  disabled={!isEditable}
+                  {...register("unidade")}
+                />
                 {errors.dimensoes && (
                   <span>{errors.dimensoes.message?.toString()}</span>
                 )}

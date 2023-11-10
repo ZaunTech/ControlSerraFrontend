@@ -10,16 +10,18 @@ import { Environment } from "../../../../environment";
 const rota = "insumos-produtos-base";
 
 const getAll = async (
-  { page = 1,
+  {
+    page = 1,
     filter = "",
-    perPage = Environment.LIMITE_DE_LINHAS }: Partial<IGetAll> = {},
-    id: number
-    
+    perPage = Environment.LIMITE_DE_LINHAS,
+  }: Partial<IGetAll> = {},
+  id: number
 ): Promise<TListInsumosProdutoBase | Error> => {
-  
   try {
-    console.log(id)
-    const urlRelativa = `/${rota}/${id}?page=${page}&perPage=${perPage == 0 ? '' : perPage}&titulo_like=${filter}`;
+    console.log(id);
+    const urlRelativa = `/${rota}/${id}?page=${page}&perPage=${
+      perPage == 0 ? "" : perPage
+    }&titulo_like=${filter}`;
     const { data, headers } = await Api.get(urlRelativa);
     if (data) {
       return {
@@ -33,14 +35,13 @@ const getAll = async (
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-      Environment.ERRO_AO_ACESSAR_DADOS
+        Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
 const getById = async (id: number): Promise<IInsumosProdutoBase | Error> => {
   try {
-    
-    const urlRelativa = `/${rota}/${id}`;
+    const urlRelativa = `/${rota}/insumo/${id}`;
     const response = await Api.get<IInsumosProdutoBase>(urlRelativa);
     if (response) {
       return response.data;
@@ -49,7 +50,7 @@ const getById = async (id: number): Promise<IInsumosProdutoBase | Error> => {
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-      Environment.ERRO_AO_ACESSAR_DADOS
+        Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -69,7 +70,7 @@ const create = async (
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-      Environment.ERRO_AO_ACESSAR_DADOS
+        Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -87,7 +88,7 @@ const updateById = async (
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-      Environment.ERRO_AO_ACESSAR_DADOS
+        Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -102,7 +103,7 @@ const deleteById = async (id: number): Promise<IInsumosProdutoBase | Error> => {
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-      Environment.ERRO_AO_ACESSAR_DADOS
+        Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
@@ -118,7 +119,7 @@ const getCount = async (): Promise<number | Error> => {
   } catch (error) {
     return new Error(
       (error as { message: string }).message ||
-      Environment.ERRO_AO_ACESSAR_DADOS
+        Environment.ERRO_AO_ACESSAR_DADOS
     );
   }
 };
