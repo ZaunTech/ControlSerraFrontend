@@ -37,6 +37,7 @@ import {
   FornecedoresService,
   IFornecedor,
   InsumosService,
+  VariantesService,
 } from "../../../data/services/api";
 import { CotacoesService } from "../../../data/services/api/modules/cotacoes";
 import { Actions } from "../../../ui/components/ferramentasDeListagem/Actions";
@@ -72,8 +73,8 @@ const PDF = forwardRef(({ idFornecedor, referencia, insumos }: IPDF) => {
         position: "absolute",
         left: "-9999px",
         top: "-9999px",
-        width: "100%",
-        height: "100%"
+        width: "60%",
+        height: "60%"
       }}>
 
       <TableContainer
@@ -88,7 +89,7 @@ const PDF = forwardRef(({ idFornecedor, referencia, insumos }: IPDF) => {
       >
         <Box display={'flex'} flexDirection={'column'} gap={'10px'}>
           {minhaEmpresa && (
-            <Card sx={{ minWidth: 275 }}>
+            <Card sx={{ minWidth: 275, border:1 }}>
               <CardContent>
                 <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                   Empresa Solicitante
@@ -147,10 +148,12 @@ const PDF = forwardRef(({ idFornecedor, referencia, insumos }: IPDF) => {
             </Card>
           )
           }
+           
+        </Box>
+        <Box sx={{ border: 1 }} display={'flex'} flexDirection={'column'} padding={'10px'} gap={'10px'} marginTop={'10px'}>
           <Typography variant="h5">
             {`Solicitação de orçamento`}
           </Typography>
-        </Box>
         <Table>
           <TableHead>
             <TableRow>
@@ -169,7 +172,13 @@ const PDF = forwardRef(({ idFornecedor, referencia, insumos }: IPDF) => {
             {insumos.map((row) => (
               <TableRow key={row.id}>
                 <TableCell>
-                  <Typography>{row.insumo?.titulo}</Typography>
+                  <Typography>{row.variante.insumo?.titulo}</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography>{row.variante.variante}</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography></Typography>
                 </TableCell>
                 <TableCell>
                   <Typography></Typography>
@@ -181,6 +190,7 @@ const PDF = forwardRef(({ idFornecedor, referencia, insumos }: IPDF) => {
             ))}
           </TableBody>
         </Table>
+        </Box>
       </TableContainer>
     </div>
   )
@@ -222,18 +232,18 @@ export const InsumosDeUmProdutoOrcamento = () => {
       const listaInsumosData = await Promise.all(
         result.data.map(async (listaInsumos: IListaInsumo) => {
           const fetchInsumos = async () => {
-            const result2 = await InsumosService.getById(listaInsumos.idInsumo);
+            const result2 = await VariantesService.getById(listaInsumos.idVariante);
 
             if (result2 instanceof Error) {
               alert(result2.message);
               return null;
             }
-            listaInsumos.insumo = result2;
+            listaInsumos.variante = result2;
 
-            if (!listaInsumos.insumo.idCategoria) return;
+            if (!listaInsumos.variante.insumo.idCategoria) return;
 
             const result3 = await CategoriasService.getById(
-              listaInsumos.insumo.idCategoria
+              listaInsumos.variante.insumo.idCategoria
             );
 
             if (result3 instanceof Error) {
@@ -241,7 +251,7 @@ export const InsumosDeUmProdutoOrcamento = () => {
               return null;
             }
 
-            listaInsumos.insumo.categoria = result3;
+            listaInsumos.variante.insumo.categoria = result3;
 
             return listaInsumos;
           };
@@ -340,13 +350,13 @@ export const InsumosDeUmProdutoOrcamento = () => {
           <TableHead>
             <TableRow>
               <TableCell style={{ fontWeight: "bold" }}>Ações</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Categoria</TableCell>
+              
               <TableCell style={{ fontWeight: "bold" }}>Titulo</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Variação</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Quantidade</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>
-                Variação
-              </TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Categoria</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Descrição</TableCell>
+
               <TableCell style={{ fontWeight: "bold" }}>Fornecedor</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Valor Unitario</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Valor Total</TableCell>
@@ -363,20 +373,22 @@ export const InsumosDeUmProdutoOrcamento = () => {
 
                   handlePersoButton={() => { navigate(`${location.pathname}/${row.id}/cotar`) }}
                 />
+               
                 <TableCell>
-                  <Typography>{row.insumo?.categoria?.titulo}</Typography>
+                  <Typography>{row.variante?.insumo?.titulo}</Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{row.insumo?.titulo}</Typography>
+                  <Typography>{row.variante?.variante}</Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>Quantidade</Typography>
+                  <Typography>{row.quantidade}</Typography>
+                </TableCell>
+             
+                <TableCell>
+                  <Typography>{row.variante?.insumo?.categoria?.titulo}</Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{row.insumo?.unidadeMedida}</Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography>{row.insumo?.descricao}</Typography>
+                  <Typography>{row.variante?.insumo?.descricao}</Typography>
                 </TableCell>
                 <TableCell>
                   <Typography>

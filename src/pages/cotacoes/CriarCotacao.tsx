@@ -34,7 +34,7 @@ export const CriarCotacao = () => {
     idFornecedor: z.number(),
     idVariante: z.number(),
     valor: z.coerce.number(),
-    unidade: z.string(),
+
     data: z.coerce.date(),
   });
 
@@ -223,13 +223,7 @@ export const CriarCotacao = () => {
                 )}
               </Grid>
 
-              <Grid item>
-                <Typography>Unidade de Medida</Typography>
-                <TextField placeholder="Unidade de Medida" {...register("unidade")} />
-                {errors.unidade && (
-                  <span>{errors.unidade.message?.toString()}</span>
-                )}
-              </Grid>
+              
             </Grid>
           </Grid>
         </Box>

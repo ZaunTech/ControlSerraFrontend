@@ -7,6 +7,7 @@ import {
   IFornecedor,
   IInsumo,
   InsumosService,
+  VariantesService,
 } from "../../data/services/api";
 import { useDebounce } from "../../data/hooks";
 import { useState } from "react";
@@ -197,7 +198,7 @@ export const Cotacoes = () => {
               return null;
             }
 
-            const result3 = await InsumosService.getById(cotacao.idInsumo);
+            const result3 = await VariantesService.getById(cotacao.idVariante);
 
             if (result3 instanceof Error) {
               alert(result3.message);
@@ -205,7 +206,7 @@ export const Cotacoes = () => {
             }
 
             cotacao.fornecedor = result2;
-            cotacao.insumo = result3;
+            cotacao.variante = result3;
 
             return cotacao;
           } catch (error) {
@@ -268,6 +269,7 @@ export const Cotacoes = () => {
               <TableCell style={{ fontWeight: "bold" }}>Ações</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Fornecedor</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Insumo</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>variante</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Valor</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Data</TableCell>
             </TableRow>
@@ -297,7 +299,10 @@ export const Cotacoes = () => {
                     </Typography>
                   </TableCell>
                   <TableCell>
-                    <Typography>{row.insumo?.titulo || "Vazop"}</Typography>
+                    <Typography>{row.variante.insumo?.titulo || "Vazop"}</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography>{row.variante.variante || "Vazop"}</Typography>
                   </TableCell>
                   <TableCell>
                     <Typography>{row.valor.toLocaleString('pt-BR', {

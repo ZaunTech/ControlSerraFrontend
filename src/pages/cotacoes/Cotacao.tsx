@@ -38,7 +38,7 @@ export const Cotacao = () => {
     idFornecedor: z.number(),
     idVariante: z.number(),
     valor: z.coerce.number(),
-    unidade: z.string(),
+
     data: z.coerce.date(),
   });
 
@@ -101,7 +101,7 @@ export const Cotacao = () => {
         setValue("idVariante", data.idVariante);
         setValue("idFornecedor", data.idFornecedor);
         setValue("data", formattedDate);
-        setValue("unidade", data.unidade);
+
         setValue("valor", data.valor);
       } else {
       }
@@ -273,13 +273,7 @@ export const Cotacao = () => {
                 )}
               </Grid>
 
-              <Grid item>
-                <Typography>Unidade de Medida</Typography>
-                <TextField placeholder="Unidade de Medida" disabled={!isEditable} {...register("unidade")} />
-                {errors.unidade && (
-                  <span>{errors.unidade.message?.toString()}</span>
-                )}
-              </Grid>
+              
             </Grid>
           </Grid>
         </Box>

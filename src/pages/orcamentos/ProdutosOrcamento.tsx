@@ -68,8 +68,8 @@ const PDF = forwardRef(({ id, referencia }: IPDF) => {
         position: "absolute",
         left: "-9999px",
         top: "-9999px",
-        width: "100%",
-        height: "100%"
+        width: "60%",
+        height: "60%"
       }}>
 
       <TableContainer
@@ -84,7 +84,7 @@ const PDF = forwardRef(({ id, referencia }: IPDF) => {
       >
         <Box display={'flex'} flexDirection={'column'} gap={'10px'}>
           {fornecedor && (
-            <Card sx={{ minWidth: 275 }}>
+            <Card sx={{ minWidth: 400, border:1 }}>
               <CardContent>
                 <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                   Empresa
@@ -113,7 +113,7 @@ const PDF = forwardRef(({ id, referencia }: IPDF) => {
             </Card>
           )
           }
-          {cliente && (<Card sx={{ minWidth: 275 }}>
+          {cliente && (<Card sx={{ minWidth: 400 , border:1 }}>
             <CardContent>
               <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                 Cliente
@@ -140,11 +140,13 @@ const PDF = forwardRef(({ id, referencia }: IPDF) => {
               </Typography>
             </CardContent>
           </Card>)}
-          <Typography variant="h5">
+          
+        </Box>
+        <Box sx={{ border: 1 }} display={'flex'} flexDirection={'column'} padding={'10px'} gap={'10px'} marginTop={'10px'}> 
+        <Typography variant="h5">
             {`Orçamento`}
           </Typography>
-        </Box>
-        <Table>
+        <Table  aria-label="simple table" >
           <TableHead>
             <TableRow>
               <TableCell style={{ fontWeight: "bold" }}>Titulo</TableCell>
@@ -156,7 +158,7 @@ const PDF = forwardRef(({ id, referencia }: IPDF) => {
               <TableCell style={{ fontWeight: "bold" }}>Valor Total</TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
+          <TableBody   >
             {produtos && produtos.map((row) => (
               <TableRow key={row.id}>
                 <TableCell>
@@ -178,7 +180,9 @@ const PDF = forwardRef(({ id, referencia }: IPDF) => {
             ))}
           </TableBody>
         </Table>
+        </Box>
       </TableContainer>
+  
     </div >
   )
 }

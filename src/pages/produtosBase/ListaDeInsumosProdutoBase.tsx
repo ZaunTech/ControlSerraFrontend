@@ -7,7 +7,7 @@ import {
   useLocation,
   useParams,
 } from "react-router-dom";
-import { InsumosService, ProdutosBaseService } from "../../data/services/api";
+import { InsumosService, ProdutosBaseService, VariantesService } from "../../data/services/api";
 import { useState } from "react";
 import {
   Paper,
@@ -79,8 +79,8 @@ export const ListaDeInsumosProdutoBase = () => {
       const insumosData = await Promise.all(
         result.data.map(async (insumoProdutoBase: IInsumosProdutoBase) => {
           try {
-            const result2 = await InsumosService.getById(
-              insumoProdutoBase.idInsumo
+            const result2 = await VariantesService.getById(
+              insumoProdutoBase.idVariante
             );
 
             if (result2 instanceof Error) {
@@ -88,7 +88,7 @@ export const ListaDeInsumosProdutoBase = () => {
               return null;
             }
 
-            insumoProdutoBase.insumo = result2;
+            insumoProdutoBase.variante = result2;
             return insumoProdutoBase;
           } catch (error) {
             return null;
@@ -147,8 +147,8 @@ export const ListaDeInsumosProdutoBase = () => {
             <TableRow>
               <TableCell style={{ fontWeight: "bold" }}>Ações</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Titulo</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Variação</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Quantidade</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Dimensões</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -171,13 +171,13 @@ export const ListaDeInsumosProdutoBase = () => {
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{row.insumo?.titulo}</Typography>
+                  <Typography>{row.variante.insumo?.titulo}</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography>{row.variante.variante}</Typography>
                 </TableCell>
                 <TableCell>
                   <Typography>{row.quantidade}</Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography>{row.unidade}</Typography>
                 </TableCell>
               </TableRow>
             ))}
