@@ -9,7 +9,7 @@ export interface IListaInsumo {
     idProduto: number;
     idVariante: number;
     idCotacao?: number;
-    unidade: string;
+   
     valorUnitario?: number;
     produto: IProduto;
     variante?: IVariante;

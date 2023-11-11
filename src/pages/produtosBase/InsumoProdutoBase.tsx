@@ -28,7 +28,7 @@ const createUserFormSchema = z.object({
   idProdutoBase: z.coerce.number(),
   quantidade: z.coerce.number(),
   idVariante: z.coerce.number(),
-  unidade: z.string(),
+
 });
 
 export const InsumoProdutoBase = () => {
@@ -74,7 +74,7 @@ export const InsumoProdutoBase = () => {
       }
       setValue("idVariante", data.idVariante);
       setValue("quantidade", data.quantidade);
-      setValue("unidade", data.unidade);
+      
       setValue("idProdutoBase",data.idProdutoBase)
     } catch (error) {}
   };
@@ -176,17 +176,7 @@ export const InsumoProdutoBase = () => {
                   <span>{errors.quantidade.message?.toString()}</span>
                 )}
               </Grid>
-              <Grid item>
-                <Typography>unidade</Typography>
-                <TextField
-                  placeholder="unidade"
-                  disabled={!isEditable}
-                  {...register("unidade")}
-                />
-                {errors.dimensoes && (
-                  <span>{errors.dimensoes.message?.toString()}</span>
-                )}
-              </Grid>
+              
             </Grid>
           </Grid>
         </Box>

@@ -24,8 +24,8 @@ import { useNavigate } from "react-router-dom";
 const createUserFormSchema = z.object({
   titulo: z.string().min(1, "Preencha o Titulo"),
   idCategoria: z.coerce.number().optional(),
-  descricao: z.string(),
-  unidadeMedida: z.string(),
+  
+ 
 });
 
 export const CriarInsumo = () => {

@@ -59,7 +59,7 @@ export const Cotacao = () => {
   }, []);
 
   useEffect(() => {
-    FornecedoresService.getAll()
+    FornecedoresService.getAll({perPage:0})
       .then((response) => {
         if (response instanceof Error) {
           return;

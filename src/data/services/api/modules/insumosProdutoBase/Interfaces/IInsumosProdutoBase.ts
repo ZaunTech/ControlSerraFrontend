@@ -8,7 +8,7 @@ export interface IInsumosProdutoBase {
     idProdutoBase: number;
     idVariante: number;
     produtoBase?: IProdutoBase;
-    unidade: string;
+    
     variante?: IVariante;
     createdAt?: Date;
     updatedAt?: Date;

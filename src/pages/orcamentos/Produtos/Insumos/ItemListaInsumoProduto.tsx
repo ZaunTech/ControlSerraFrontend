@@ -22,7 +22,7 @@ import {
 const createUserFormSchema = z.object({
   quantidade: z.coerce.number(),
   idVariante: z.coerce.number(),
-  unidade: z.string(),
+  
 });
 
 export const ItemListaInsumoProduto = () => {
@@ -69,7 +69,7 @@ export const ItemListaInsumoProduto = () => {
       }
       setValue("idVariante", data.idVariante);
       setValue("quantidade", data.quantidade);
-      setValue("unidade", data.unidade);
+    
     } catch (error) {}
   };
 
@@ -168,13 +168,6 @@ export const ItemListaInsumoProduto = () => {
                 />
                 {errors.quantidade && (
                   <span>{errors.quantidade.message?.toString()}</span>
-                )}
-              </Grid>
-              <Grid item>
-                <Typography>unidade</Typography>
-                <TextField placeholder="unidade" disabled={!isEditable} {...register("unidade")} />
-                {errors.unidade && (
-                  <span>{errors.unidade.message?.toString()}</span>
                 )}
               </Grid>
             </Grid>

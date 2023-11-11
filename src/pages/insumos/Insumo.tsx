@@ -23,8 +23,7 @@ import {
 const createUserFormSchema = z.object({
   titulo: z.string().min(1, "Preencha o Titulo"),
   idCategoria: z.coerce.number().optional(),
-  descricao: z.string(),
-  unidadeMedida: z.string(),
+ 
 });
 
 export const Insumo = () => {
@@ -81,8 +80,8 @@ export const Insumo = () => {
         return;
       }
       setValue("titulo", data.titulo);
-      setValue("descricao", data.descricao);
-      setValue("unidadeMedida", data.unidadeMedida);
+      
+     
       setValue("idCategoria", data.idCategoria);
     } catch (error) {}
   };
@@ -160,23 +159,7 @@ export const Insumo = () => {
                   <span>{errors.idCategoria.message?.toString()}</span>
                 )}
               </Grid>
-              <Grid item>
-                <Typography>Descrição</Typography>
-                <TextField placeholder="Descrição" disabled={!isEditable} {...register("descricao")} />
-                {errors.descricao && (
-                  <span>{errors.descricao.message?.toString()}</span>
-                )}
-              </Grid>
-              <Grid item>
-                <Typography>Unidade de Medida</Typography>
-                <TextField
-                  placeholder="Unidade de Medida" disabled={!isEditable}
-                  {...register("unidadeMedida")}
-                />
-                {errors.unidadeMedida && (
-                  <span>{errors.unidadeMedida.message?.toString()}</span>
-                )}
-              </Grid>
+              
             </Grid>
           </Grid>
         </Box>

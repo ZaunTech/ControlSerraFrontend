@@ -7,7 +7,7 @@ export interface UpdateListaInsumosDto {
     idVariante: number;
     idCotacao?: number;
     valorUnitario?: number;
-    unidade?: string; 
+    
   
     
 }

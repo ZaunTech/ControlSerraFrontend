@@ -20,7 +20,7 @@ const createUserFormSchema = z.object({
   idProdutoBase: z.coerce.number(),
   quantidade: z.coerce.number(),
   idVariante: z.coerce.number(),
-  unidade: z.string(),
+
 });
 
 export const AdicionarInsumo = () => {
@@ -132,13 +132,7 @@ export const AdicionarInsumo = () => {
                   <span>{errors.quantidade.message?.toString()}</span>
                 )}
               </Grid>
-              <Grid item>
-                <Typography>unidade</Typography>
-                <TextField placeholder="unidade" {...register("unidade")} />
-                {errors.dimensoes && (
-                  <span>{errors.dimensoes.message?.toString()}</span>
-                )}
-              </Grid>
+            
             </Grid>
           </Grid>
         </Box>
