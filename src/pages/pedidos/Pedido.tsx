@@ -73,14 +73,14 @@ export const Pedido = () => {
   const [opcoes, setOpcoes] = useState<IOrcamento[]>([]);
 
   useEffect(() => {
-    OrcamentosService.getAll()
+    OrcamentosService.getAllConcluded()
       .then((response) => {
         if (response instanceof Error) {
           return;
         }
 
-        if (response && Array.isArray(response.data)) {
-          const FornecedoresMapeadas = response.data;
+        if (response && Array.isArray(response)) {
+          const FornecedoresMapeadas = response;
           setOpcoes(FornecedoresMapeadas);
         } else {
         }
@@ -148,7 +148,7 @@ export const Pedido = () => {
                  
                   options={opcoes}
                   getOptionLabel={(option) =>
-                    option.id.toString() 
+                    option.id.toString()+ " - "+ option.cliente.nome ?? option.cliente.nomeFantasia ?? option.cliente.razaoSocial
                   }
                   value={
                     opcoes.find(

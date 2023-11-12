@@ -63,14 +63,14 @@ export const CriarPedido = () => {
   const [opcoes, setOpcoes] = useState<IOrcamento[]>([]);
 
   useEffect(() => {
-    OrcamentosService.getAll()
+    OrcamentosService.getAllConcluded()
       .then((response) => {
         if (response instanceof Error) {
           return;
         }
-
-        if (response && Array.isArray(response.data)) {
-          const FornecedoresMapeadas = response.data;
+        console.log(response)
+        if (response && Array.isArray(response)) {
+          const FornecedoresMapeadas = response;
           setOpcoes(FornecedoresMapeadas);
         } else {
         }
@@ -114,7 +114,7 @@ export const CriarPedido = () => {
                  
                   options={opcoes}
                   getOptionLabel={(option) =>
-                    option.id.toString() 
+                    option.id.toString()+ " - "+ option.cliente.nome ?? option.cliente.nomeFantasia ?? option.cliente.razaoSocial
                   }
                   disabled={!isEditable}
                   sx={{ width: 225 }}
