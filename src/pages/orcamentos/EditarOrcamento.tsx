@@ -21,10 +21,10 @@ import { OrcamentosService } from "../../data/services/api/modules/orcamentos";
 import { useNavigate, useParams } from "react-router-dom";
 
 const createUserFormSchema = z.object({
-  idCliente: z.coerce.number(),
-  observacoes: z.string(),
+  idCliente: z.coerce.number().min(1,"Selecione o cliente"),
+  observacoes: z.string().optional(),
   status: z.string(),
-  prazoEstimadoProducao: z.coerce.number(),
+  prazoEstimadoProducao: z.coerce.number().min(1,"Digite um prazo estimado"),
 });
 
 export const EditarOrcamento = () => {
@@ -148,6 +148,7 @@ catch(error){}
             </Grid>
             <Grid container item direction="row" spacing={4}>
               <Grid item>
+                <Box>
                 <Typography>Selecione o Cliente</Typography>
                 <Autocomplete
                   disablePortal
@@ -171,7 +172,7 @@ catch(error){}
                     setValue("idCliente", value?.id);
                   }}
                 />
-
+                </Box>
                 {errors.idCliente && (
                   <span>{errors.idCliente.message?.toString()}</span>
                 )}
@@ -208,12 +209,14 @@ catch(error){}
                 )}
               </Grid>
               <Grid item>
+                <Box>
                 <Typography>Prazo Estimado de produção (Dias) </Typography>
                 <TextField
                   type="number" disabled={!isEditable}
                   placeholder="Prazo Estimado em Dias"
                   {...register("prazoEstimadoProducao")}
                 />
+                </Box>
                 {errors.prazoEstimadoProducao && (
                   <span>
                     {errors.prazoEstimadoProducao.message?.toString()}

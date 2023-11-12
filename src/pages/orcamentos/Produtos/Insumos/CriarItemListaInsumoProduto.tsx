@@ -18,8 +18,8 @@ import { ListaInsumosService } from "../../../../data/services/api/modules/lista
 
 const createUserFormSchema = z.object({
   idProduto: z.coerce.number(),
-  quantidade: z.coerce.number(),
-  idVariante: z.coerce.number(),
+  quantidade: z.coerce.number().min(1,"Informe a quantidade"),
+  idVariante: z.coerce.number().min(1,"Selecione o insumo"),
 
 });
 
@@ -105,6 +105,7 @@ export const CriarItemInsumoProdutoBase = () => {
           <Grid container direction="column" padding={2} spacing={3}>
             <Grid container item direction="row" spacing={4}>
               <Grid item>
+                <Box>
                 <Typography>Selecione o Insumo</Typography>
                 <Autocomplete
                   disablePortal
@@ -119,17 +120,20 @@ export const CriarItemInsumoProdutoBase = () => {
                     setValue("idVariante", value?.id);
                   }}
                 />
-                {errors.idInsumo && (
-                  <span>{errors.idInsumo.message?.toString()}</span>
+                </Box>
+                {errors.idVariante && (
+                  <span>{errors.idVariante.message?.toString()}</span>
                 )}
               </Grid>
               <Grid item>
+                <Box>
                 <Typography>Quantidade</Typography>
                 <TextField
                   type="number"
                   placeholder="Quantidade"
                   {...register("quantidade")}
                 />
+                </Box>
                 {errors.quantidade && (
                   <span>{errors.quantidade.message?.toString()}</span>
                 )}

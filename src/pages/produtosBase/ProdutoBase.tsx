@@ -12,8 +12,8 @@ import { useEffect, useState } from "react";
 import { IInsumosProdutoBase } from "../../data/services/api/modules/insumosProdutoBase";
 
 const createUserFormSchema = z.object({
-  titulo: z.string(),
-  observacoes: z.string(),
+  titulo: z.string().min(1,"Digite o nome do Produto"),
+  observacoes: z.string().optional(),
 });
 
 export const ProdutoBase = () => {
@@ -103,8 +103,10 @@ export const ProdutoBase = () => {
           <Grid container direction="column" padding={2} spacing={3}>
             <Grid container item direction="row" spacing={4}>
               <Grid item>
+                <Box>
                 <Typography>Titulo</Typography>
                 <TextField placeholder="Titulo" {...register("titulo")}   disabled={!isEditable} />
+                </Box>
                 {errors.titulo && (
                   <span>{errors.titulo.message?.toString()}</span>
                 )}

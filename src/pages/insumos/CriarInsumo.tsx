@@ -23,13 +23,13 @@ import { useNavigate } from "react-router-dom";
 
 const createUserFormSchema = z.object({
   titulo: z.string().min(1, "Preencha o Titulo"),
-  idCategoria: z.coerce.number().optional(),
+  idCategoria: z.coerce.number().min(1,"Selecione uma categoria"),
   
  
 });
 
 export const CriarInsumo = () => {
-  const { register, handleSubmit, setValue } = useForm({
+  const { register, handleSubmit, setValue,formState: { errors }, } = useForm({
     resolver: zodResolver(createUserFormSchema),
   });
   const navigate = useNavigate();
@@ -95,15 +95,21 @@ export const CriarInsumo = () => {
           <Grid container direction="column" padding={2} spacing={3}>
             <Grid container item direction="column" spacing={4}>
               <Grid item>
+                <Box>
                 <Typography>Titulo</Typography>
                 <TextField placeholder="Titulo" disabled={!isEditable} {...register("titulo")} />
+                </Box>
+                {errors.titulo && (
+                      <span>{errors.titulo.message?.toString()}</span>)}
               </Grid>
               <Grid item>
+                <Box>
                 <Typography>Categoria</Typography>
                 <Autocomplete
                   disablePortal
                   id="combo-box-demo"
                   options={opcoes}
+                  {...register("idCategoria")}
                   getOptionLabel={(option) => option.titulo}
                   sx={{ width: 225 }}
                   disabled={!isEditable}
@@ -115,6 +121,11 @@ export const CriarInsumo = () => {
                     }
                   }}
                 />
+                </Box>
+
+{errors.idCategoria && (
+                      <span>{errors.idCategoria.message?.toString()}</span>
+                    )}
               </Grid>
             </Grid>
           </Grid>

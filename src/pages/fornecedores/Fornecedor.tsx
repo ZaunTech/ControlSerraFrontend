@@ -254,28 +254,34 @@ export const Fornecedor = () => {
               {tipo === "Juridica" && (
                 <>
                   <Grid item>
+                  <Box>
                     <Typography>Razão Social</Typography>
                     <TextField
                       placeholder="Razão Social" disabled={!isEditable}
                       {...register("razaoSocial")}
                     />
+                    </Box>
                     {errors.razaoSocial && (
                       <span>{errors.razaoSocial.message?.toString()}</span>
                     )}
                   </Grid>
                   <Grid item>
+                  <Box>
                     <Typography>Nome Fantasia</Typography>
                     <TextField
                       placeholder="Nome Fantasia" disabled={!isEditable}
                       {...register("nomeFantasia")}
                     />
+                    </Box>
                     {errors.nomeFantasia && (
                       <span>{errors.nomeFantasia.message?.toString()}</span>
                     )}
                   </Grid>
                   <Grid item>
+                  <Box>
                     <Typography>CNPJ</Typography>
                     <TextField placeholder="CNPJ"  disabled={!isEditable} {...register("cnpj")} />
+                    </Box>
                     {errors.cnpj && (
                       <span>{errors.cnpj.message?.toString()}</span>
                     )}
@@ -285,23 +291,30 @@ export const Fornecedor = () => {
               {tipo === "Fisica" && (
                 <>
                   <Grid item>
+                  <Box>
                     <Typography>Nome Completo</Typography>
                     <TextField
                       placeholder="Nome Completo" disabled={!isEditable}
                       {...register("nome")}
                     />
+                    </Box>
                     {errors.nome && (
                       <span>{errors.nome.message?.toString()}</span>
                     )}
                   </Grid>
                   <Grid item>
+                  <Box>
                     <Typography>RG</Typography>
                     <TextField placeholder="RG" disabled={!isEditable} {...register("rg")} />
+                    </Box>
+                    {errors.rg && <span>{errors.rg.message?.toString()}</span>}
                   </Grid>
-                  {errors.rg && <span>{errors.rg.message?.toString()}</span>}
+                 
                   <Grid item>
+                  <Box>
                     <Typography>CPF</Typography>
                     <TextField placeholder="CPF" disabled={!isEditable} {...register("cpf")} />
+                    </Box>
                     {errors.cpf && (
                       <span>{errors.cpf.message?.toString()}</span>
                     )}
@@ -325,17 +338,27 @@ export const Fornecedor = () => {
               </Grid>
             </Grid>
             <Grid container item direction="row" spacing={4}>
-              <Grid item>
+            <Grid item>
+                <Box>
                 <Typography>Email</Typography>
                 <TextField
                   placeholder="Email"
                   type="email" disabled={!isEditable}
                   {...register("email")}
                 />
+                </Box>
+                {errors.email && (
+                      <span>{errors.email.message?.toString()}</span>
+                    )}
               </Grid>
               <Grid item>
+                <Box>
                 <Typography>Telefone</Typography>
                 <TextField placeholder="Telefone" disabled={!isEditable} {...register("telefone")} />
+                </Box>
+                {errors.telefone && (
+                      <span>{errors.telefone.message?.toString()}</span>
+                    )}
               </Grid>
             </Grid>
           </Grid>

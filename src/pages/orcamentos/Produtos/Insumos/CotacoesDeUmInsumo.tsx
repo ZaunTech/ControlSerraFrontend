@@ -11,7 +11,9 @@ import {
   FornecedoresService,
   IFornecedor,
   IInsumo,
+  IVariante,
   InsumosService,
+  VariantesService,
 } from "../../../../data/services/api";
 import { useDebounce } from "../../../../data/hooks";
 import { useState } from "react";
@@ -51,7 +53,7 @@ interface IPesquisa {
 
 const Pesquisas: React.FC<IPesquisa> = ({ setFiltro, setFiltroId }) => {
   const [opcoesFornecedor, setOpcoesFornecedor] = useState<IFornecedor[]>([]);
-  const [opcoesInsumos, setOpcoesInsumos] = useState<IInsumo[]>([]);
+  const [opcoesInsumos, setOpcoesInsumos] = useState<IVariante[]>([]);
 
   useEffect(() => {
     FornecedoresService.getAll()
@@ -70,7 +72,7 @@ const Pesquisas: React.FC<IPesquisa> = ({ setFiltro, setFiltroId }) => {
   }, []);
 
   useEffect(() => {
-    InsumosService.getAll()
+    VariantesService.getAll()
       .then((response) => {
         if (response instanceof Error) {
           return;
@@ -154,10 +156,11 @@ export const CotacoesDeUmInsumo = () => {
   const [filtro, setFiltro] = useState<string>();
   const [filtroId, setFiltroId] = useState<number>();
 
-  async function idInsumo(id: number) {
+  async function idVariantes(id: number) {
     try {
-      const result = await ListaInsumosService.getById(id);
-      return  result.idInsumo;
+      const result = await VariantesService.getById(id);
+      console.log(result)
+      return  result.id;
     } catch (erro) {
       console.log(erro);
       return null; // ou faça algo apropriado em caso de erro
@@ -170,14 +173,14 @@ export const CotacoesDeUmInsumo = () => {
       setIsLoading(true);
       let result;
      
-      const idInsumoValue = await idInsumo(Number(idItemListaInsumos));
-
+      const idVarianteValue = await idVariantes(Number(idItemListaInsumos));
+      console.log(idVarianteValue)
      if (filtro === "Fornecedor" && filtroId != undefined) {
-      
-      result = await CotacoesService.getAll({page:pagina, filter:busca}, idInsumoValue,filtroId);
+     
+      result = await CotacoesService.getAll({page:pagina, filter:busca}, idVarianteValue,filtroId);
       } else {
-        console.log(idInsumo(Number(idItemListaInsumos)))
-        result = await CotacoesService.getAll({page:pagina, filter:busca}, idInsumoValue);
+        
+        result = await CotacoesService.getAll({page:pagina, filter:busca}, idVarianteValue);
       }
 
       if (result instanceof Error) {
@@ -197,7 +200,7 @@ export const CotacoesDeUmInsumo = () => {
               return null;
             }
 
-            const result3 = await InsumosService.getById(cotacao.idInsumo);
+            const result3 = await VariantesService.getById(cotacao.idVariante);
 
             if (result3 instanceof Error) {
               alert(result3.message);
@@ -205,7 +208,7 @@ export const CotacoesDeUmInsumo = () => {
             }
 
             cotacao.fornecedor = result2;
-            cotacao.insumo = result3;
+            cotacao.variante = result3;
 
             return cotacao;
           } catch (error) {
@@ -304,7 +307,7 @@ export const CotacoesDeUmInsumo = () => {
                     </Typography>
                   </TableCell>
                   <TableCell>
-                    <Typography>{row.insumo?.titulo || "Vazop"}</Typography>
+                    <Typography>{row.variante?.insumo?.titulo || "Vazop"}</Typography>
                   </TableCell>
                   <TableCell>
                     <Typography>{row.valor}</Typography>

@@ -21,17 +21,17 @@ import {
   InsumosService,
   VariantesService,
 } from "../../data/services/api";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const createUserFormSchema = z.object({
  
   idInsumo: z.coerce.number(),
-  variante: z.string(),
+  variante: z.string().min(1,"Informe a variação"),
   
 });
 
 export const CriarVariante = () => {
-  const { register, handleSubmit, setValue } = useForm({
+  const { register, handleSubmit, setValue,watch, formState: { errors }, } = useForm({
     resolver: zodResolver(createUserFormSchema),
   });
   const navigate = useNavigate();
@@ -44,6 +44,7 @@ export const CriarVariante = () => {
   }
   const [opcoes, setOpcoes] = useState<IInsumo[]>([]);
 
+  const {id} = useParams();
   useEffect(() => {
     InsumosService.getAll({ perPage: 0 })
       .then((response) => {
@@ -58,6 +59,8 @@ export const CriarVariante = () => {
         }
       })
       .catch((error) => { });
+      console.log(id)
+      setValue("idInsumo",id)
   }, []);
 
   const [pageState, setPageState] = useState<TTipo>("novo");
@@ -96,28 +99,12 @@ export const CriarVariante = () => {
         >
           <Grid container direction="column" padding={2} spacing={3}>
             <Grid container item direction="column" spacing={4}>
-              
               <Grid item>
-                <Typography>Insumow</Typography>
-                <Autocomplete
-                  disablePortal
-                  id="combo-box-demo"
-                  options={opcoes}
-                  getOptionLabel={(option) => option.titulo}
-                  sx={{ width: 225 }}
-                  disabled={!isEditable}
-                  renderInput={(params) => <TextField {...params} />}
-                  onChange={(_, value) => {
-                    if (value !== null) {
-
-                      setValue("idInsumo", value.id);
-                    }
-                  }}
-                />
-              </Grid>
-              <Grid item>
+                <Box>
                 <Typography>Variante</Typography>
                 <TextField   {...register("variante")}   />
+                </Box>
+                {errors.variante && <span>{errors.variante.message?.toString()}</span>}
               </Grid>
             </Grid>
           </Grid>

@@ -12,10 +12,10 @@ import { UsuariosService } from '../../data/services/api/modules/usuario'
 const shemaUsuario = z.object({
     email: z.string().min(1,"Preencha o email"),
     senha: z.string().min(6,"Digite pelo menos 6 caracteres"),
-    tipoUsuario: z.string().min(1,"Preencha o email"),
+    tipoUsuario: z.string(),
     nome: z.string().min(1,"Digite seu nome"),
-    cpf:z.string(),
-    telefone: z.string(),
+    cpf:z.string().min(11,"Digite o CPF").max(11,"Digite somente os 11 numeros do CPF"),
+    telefone: z.string().min(1,"Digite o telefone"),
    
   });
 
@@ -47,10 +47,12 @@ export const CriarUsuario = () => {
         return;
       }
     }, [pageState]);
+    const navigate = useNavigate();
 
     function criarUsuario(data: any){
       UsuariosService.create(data).then((result)=>{
-        console.log(result);
+        navigate(-1)
+        
       }).catch((error)=>{
         console.log(error)
       })
@@ -92,27 +94,40 @@ export const CriarUsuario = () => {
                     <MenuItem value={"Vendedor"}>Vendedor</MenuItem>
                   </Select>
 
-                {errors.contaTipo && <span>{errors.contaTipo.message?.toString()}</span>}
+                {errors.tipoUsuario && <span>{errors.tipoUsuario.message?.toString()}</span>}
               </Grid>
-              <Grid item>
+              <Grid item   xs={4}>
+                <div>
                 <Typography>Nome</Typography>
                 <TextField   {...register("nome")}   />
+                </div>
+                {errors.nome && <span>{errors.nome.message?.toString()}</span>}
               </Grid>
               <Grid item>
+              <div>
                 <Typography>Email</Typography>
                 <TextField type='email'  {...register("email")}   />
+                </div>
+                {errors.email && <span>{errors.email.message?.toString()}</span>}
               </Grid>
               <Grid item>
+              <div>
                 <Typography>Senha</Typography>
                 <TextField type='password' {...register("senha")} />
+                </div>
+                {errors.senha && <span>{errors.senha.message?.toString()}</span>}
               </Grid>
               <Grid item>
+                <div>
                 <Typography>CPF</Typography>
                 <TextField   {...register("cpf")}   />
+                </div>
+                {errors.cpf && <span>{errors.cpf.message?.toString()}</span>}
               </Grid>
               <Grid item>
                 <Typography>Telefone</Typography>
                 <TextField   {...register("telefone")}   />
+                {errors.telefone && <span>{errors.telefone.message?.toString()}</span>}
               </Grid>
             </Grid>
         </Grid>      

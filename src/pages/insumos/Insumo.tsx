@@ -22,7 +22,7 @@ import {
 
 const createUserFormSchema = z.object({
   titulo: z.string().min(1, "Preencha o Titulo"),
-  idCategoria: z.coerce.number().optional(),
+  idCategoria: z.coerce.number().min(1,"Selecione uma categoria"),
  
 });
 
@@ -134,6 +134,7 @@ export const Insumo = () => {
               </Grid>
 
               <Grid item>
+                <Box>
                 <Typography>Categoria</Typography>
                 <Autocomplete
                 disabled={!isEditable}
@@ -155,6 +156,7 @@ export const Insumo = () => {
                     }
                   }}
                 />
+                </Box>
                 {errors.idCategoria && (
                   <span>{errors.idCategoria.message?.toString()}</span>
                 )}

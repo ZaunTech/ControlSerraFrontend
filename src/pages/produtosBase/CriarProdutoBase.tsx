@@ -11,8 +11,8 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 const createUserFormSchema = z.object({
-  titulo: z.string(),
-  observacoes: z.string(),
+  titulo: z.string().min(1,"Digite o nome do Produto"),
+  observacoes: z.string().optional(),
 });
 
 export const CriarProdutoBase = () => {
@@ -74,8 +74,10 @@ export const CriarProdutoBase = () => {
           <Grid container direction="column" padding={2} spacing={3}>
             <Grid container item direction="row" spacing={4}>
               <Grid item>
+                <Box>
                 <Typography>Titulo</Typography>
                 <TextField placeholder="Titulo" {...register("titulo")} />
+                </Box>
                 {errors.titulo && (
                   <span>{errors.titulo.message?.toString()}</span>
                 )}

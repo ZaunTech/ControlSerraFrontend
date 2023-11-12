@@ -19,11 +19,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import { ProdutosService } from "../../data/services/api/modules/produtos";
 
 const createUserFormSchema = z.object({
-  titulo: z.string(),
-  quantidade: z.coerce.number(),
+  titulo: z.string().min(1,"Selecione um produto base"),
+  quantidade: z.coerce.number().min(1,"Informe a quantidade"),
   orcamentoId: z.coerce.number(),
-  observacoes: z.string(),
-  id: z.coerce.number(),
+  observacoes: z.string().optional(),
+  id: z.coerce.number().min(1,"Selecione um Produto Base"),
 });
 
 export const AddProdutoBase = () => {
@@ -111,6 +111,7 @@ export const AddProdutoBase = () => {
           <Grid container direction="column" padding={2} spacing={3}>
             <Grid container item direction="row" spacing={4}>
               <Grid item>
+                <Box>
                 <Typography>Selecione o Produto</Typography>
                 <Autocomplete
                   disablePortal
@@ -125,8 +126,9 @@ export const AddProdutoBase = () => {
                     setValue("id",value?.id);
                   }}
                 />
-                {errors.idInsumo && (
-                  <span>{errors.idInsumo.message?.toString()}</span>
+                </Box>
+                {errors.titulo && (
+                  <span>{errors.titulo.message?.toString()}</span>
                 )}
               </Grid>
 
@@ -141,11 +143,13 @@ export const AddProdutoBase = () => {
                 )}
               </Grid>
               <Grid item>
+                <Box>
                 <Typography>Quantidade</Typography>
                 <TextField
                   placeholder="Quantidade"
                   {...register("quantidade")}
                 />
+                </Box>
                 {errors.quantidade && (
                   <span>{errors.quantidade.message?.toString()}</span>
                 )}

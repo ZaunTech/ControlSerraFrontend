@@ -8,7 +8,9 @@ import {
   CategoriasService,
   ICategoria,
   IInsumo,
+  IVariante,
   InsumosService,
+  VariantesService,
 } from "../../data/services/api";
 import { z } from "zod";
 import {
@@ -21,14 +23,13 @@ import {
 } from "@mui/material";
 
 const createUserFormSchema = z.object({
-  titulo: z.string().min(1, "Preencha o Titulo"),
-  idCategoria: z.coerce.number().optional(),
-  descricao: z.string(),
-  unidadeMedida: z.string(),
+  variante: z.string().min(1, "Informe a variação"),
+  idInsumo: z.coerce.number(),
+ 
 });
 
 export const Variante = () => {
-  const { id } = useParams();
+  const { idVariante } = useParams();
 
   const {
     register,
@@ -43,23 +44,25 @@ export const Variante = () => {
 
   const navigate = useNavigate();
   function createInsumo(data: any) {
-    InsumosService.updateById(Number(id), data)
+    VariantesService.updateById(Number(idVariante), data)
       .then(() => {
-        navigate(-1);
+        setPageState("detalhes")
+        setIsEditable(false)
       })
       .catch((error) => {});
   }
   function createInsumoFechar(data: any) {
-    InsumosService.updateById(Number(id), data)
+ 
+    VariantesService.updateById(Number(idVariante), data)
       .then(() => {
         navigate(-1);
       })
       .catch((error) => {});
   }
-  const [opcoes, setOpcoes] = useState<ICategoria[]>([]);
+  const [opcoes, setOpcoes] = useState<IInsumo[]>([]);
 
   useEffect(() => {
-    CategoriasService.getAll()
+    InsumosService.getAll({perPage:0})
       .then((response) => {
         if (response instanceof Error) {
           return;
@@ -76,20 +79,20 @@ export const Variante = () => {
 
   const fetchData = async () => {
     try {
-      const data: IInsumo | Error = await InsumosService.getById(Number(id));
+      const data: IVariante | Error = await VariantesService.getById(Number(idVariante));
       if (data instanceof Error) {
         return;
       }
-      setValue("titulo", data.titulo);
-      setValue("descricao", data.descricao);
-      setValue("unidadeMedida", data.unidadeMedida);
-      setValue("idCategoria", data.idCategoria);
+      setValue("idInsumo", data.idInsumo);
+   
+      setValue("variante", data.variante);
+      
     } catch (error) {}
   };
   useEffect(() => {
     fetchData();
   }, []);
-  const [pageState, setPageState] = useState<TTipo>("novo");
+  const [pageState, setPageState] = useState<TTipo>("detalhes");
   const [isEditable, setIsEditable] = useState<boolean>(false);
 
   useEffect(() => {
@@ -127,55 +130,11 @@ export const Variante = () => {
           <Grid container direction="column" padding={2} spacing={3}>
             <Grid container item direction="column" spacing={4}>
               <Grid item>
-                <Typography>Titulo</Typography>
-                <TextField placeholder="Titulo" disabled={!isEditable} {...register("titulo")} />
-                {errors.titulo && (
-                  <span>{errors.titulo.message?.toString()}</span>
-                )}
-              </Grid>
-
-              <Grid item>
-                <Typography>Categoria</Typography>
-                <Autocomplete
-                disabled={!isEditable}
-                  disablePortal
-                  id="combo-box-demo"
-                  options={opcoes}
-                  getOptionLabel={(option) => option.titulo}
-                  sx={{ width: 225 }}
-                  renderInput={(params) => <TextField {...params} />}
-                  value={
-                    opcoes.find(
-                      (option) => option.id === watch("idCategoria")
-                    ) || null
-                  }
-                  onChange={(_, value) => {
-                    if (value !== null) {
-                      setValue("categoria", [value]);
-                      setValue("idCategoria", value.id);
-                    }
-                  }}
-                />
-                {errors.idCategoria && (
-                  <span>{errors.idCategoria.message?.toString()}</span>
-                )}
-              </Grid>
-              <Grid item>
-                <Typography>Descrição</Typography>
-                <TextField placeholder="Descrição" disabled={!isEditable} {...register("descricao")} />
-                {errors.descricao && (
-                  <span>{errors.descricao.message?.toString()}</span>
-                )}
-              </Grid>
-              <Grid item>
-                <Typography>Unidade de Medida</Typography>
-                <TextField
-                  placeholder="Unidade de Medida" disabled={!isEditable}
-                  {...register("unidadeMedida")}
-                />
-                {errors.unidadeMedida && (
-                  <span>{errors.unidadeMedida.message?.toString()}</span>
-                )}
+                <Box>
+                <Typography>Variante</Typography>
+                <TextField  disabled={!isEditable}  {...register("variante")}   />
+                </Box>
+                {errors.variante && <span>{errors.variante.message?.toString()}</span>}
               </Grid>
             </Grid>
           </Grid>

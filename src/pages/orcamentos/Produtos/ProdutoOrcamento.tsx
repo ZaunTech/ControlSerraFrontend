@@ -11,9 +11,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import { ProdutosService } from "../../../data/services/api/modules/produtos";
 
 const createUserFormSchema = z.object({
-  titulo: z.string().min(1, "Titulo não pode ser vazio"),
-  observacoes: z.string(),
-  quantidade: z.coerce.number().min(1),
+  titulo: z.string().min(1, "Informe o nome do produto"),
+  observacoes: z.string().optional(),
+  quantidade: z.coerce.number().min(1,"Informe a quantidade"),
 });
 
 export const ProdutoOrcamento = () => {
@@ -101,19 +101,23 @@ export const ProdutoOrcamento = () => {
           <Grid container direction="column" padding={2} spacing={3}>
             <Grid container item direction="row" spacing={4}>
               <Grid item>
+                <Box>
                 <Typography>Titulo</Typography>
                 <TextField placeholder="Titulo" disabled={!isEditable} {...register("titulo")} />
+                </Box>
                 {errors.titulo && (
                   <span>{errors.titulo.message?.toString()}</span>
                 )}
               </Grid>
               <Grid item>
+                <Box>
                 <Typography>Quantidade</Typography>
                 <TextField
                   type="number" disabled={!isEditable}
                   placeholder="Quantidade"
                   {...register("quantidade")}
                 />
+                </Box>
                 {errors.quantidade && (
                   <span>{errors.quantidade.message?.toString()}</span>
                 )}

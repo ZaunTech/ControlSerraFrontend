@@ -24,7 +24,7 @@ import { useNavigate } from "react-router-dom";
 
 const createUserFormSchema = z.object({
   titulo: z.string().min(1, "Preencha esta campo"),
-  descricao: z.string(),
+  descricao: z.string().optional(),
   tipo: z.string(),
 });
 
@@ -86,8 +86,11 @@ export const CriarCategoria = () => {
           <Grid container direction="column" padding={2} spacing={3}>
             <Grid container item direction="column" spacing={4}>
               <Grid item>
+                <Box>
                 <Typography>Titulo</Typography>
                 <TextField placeholder="Titulo" {...register("titulo")} />
+                </Box>
+                {errors.titulo && <span>{errors.titulo.message?.toString()}</span>}
               </Grid>
               <Grid item xs={6}>
                 <InputLabel id="tipo">Tipo</InputLabel>

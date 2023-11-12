@@ -31,9 +31,9 @@ export const CriarCotacao = () => {
   const [opcaoiInsumos, setopcaoInsumo] = useState<IVariante[]>([]);
 
   const shemaCotacao = z.object({
-    idFornecedor: z.number(),
-    idVariante: z.number(),
-    valor: z.coerce.number(),
+    idFornecedor: z.number().min(1,"Selecione um fornecedor"),
+    idVariante: z.number().min(1,"Selecione um insumo"),
+    valor: z.coerce.number().min(1,"Informe o valor do insumo"),
 
     data: z.coerce.date(),
   });
@@ -141,6 +141,7 @@ export const CriarCotacao = () => {
             </Grid>
             <Grid container item direction="row" spacing={4}>
               <Grid item>
+                <Box>
                 <Typography>Selecione o Fonernecedor</Typography>
                 <Autocomplete
                   disablePortal
@@ -159,18 +160,20 @@ export const CriarCotacao = () => {
                     setValue("idFornecedor", value?.id);
                   }}
                 />
-
+                </Box>
                 {errors.idFornecedor && (
                   <span>{errors.idFornecedor.message?.toString()}</span>
                 )}
               </Grid>
               <Grid item>
+                <Box>
                 <Typography>Valor Do Insumo</Typography>
                 <TextField
                   type="number"
                   placeholder="Valor do Insumo"
                   {...register("valor")}
                 />
+                </Box>
                 {errors.valor && (
                   <span>{errors.valor.message?.toString()}</span>
                 )}
@@ -205,6 +208,7 @@ export const CriarCotacao = () => {
             </Grid>
             <Grid container item direction="row" spacing={4}>
               <Grid item>
+                <Box>
                 <Typography>Selecione o Insumo</Typography>
                 <Autocomplete
                   disablePortal
@@ -218,6 +222,7 @@ export const CriarCotacao = () => {
                     setValue("idVariante", value?.id);
                   }}
                 />
+                </Box>
                 {errors.idVariante && (
                   <span>{errors.idVariante.message?.toString()}</span>
                 )}

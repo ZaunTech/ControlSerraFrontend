@@ -19,7 +19,9 @@ import {
   FornecedoresService,
   IFornecedor,
   IInsumo,
+  IVariante,
   InsumosService,
+  VariantesService,
 } from "../../../../data/services/api";
 import { CotacoesService } from "../../../../data/services/api/modules/cotacoes";
 import { useNavigate, useParams } from "react-router-dom";
@@ -27,18 +29,18 @@ import { ListaInsumosService } from "../../../../data/services/api/modules/lista
 export const NovaCotacaoOrcamento = () => {
   const [opcoes, setOpcoes] = useState<IFornecedor[]>([]);
 
-  const [opcaoiInsumos, setopcaoInsumo] = useState<IInsumo[]>([]);
+  const [opcaoiInsumos, setopcaoInsumo] = useState<IVariante[]>([]);
 
   const shemaCotacao = z.object({
     idFornecedor: z.number(),
-    idInsumo: z.number(),
+    idVariante: z.number(),
     valor: z.coerce.number(),
-    unidade: z.string(),
+   
     data: z.coerce.date(),
   });
 
   useEffect(() => {
-    InsumosService.getAll({perPage:0})
+    VariantesService.getAll({perPage:0})
       .then((response) => {
         if (response instanceof Error) {
           return;
@@ -113,9 +115,8 @@ export const NovaCotacaoOrcamento = () => {
   // Preencher o valor inicial ao montar o componente
   useEffect(() => {
     setValue('data', getCurrentDate());
-
-    ListaInsumosService.getById(Number(idItemListaInsumos)).then((result)=>{
-      setValue("idInsumo", Number(result.idInsumo));
+    VariantesService.getById(Number(idItemListaInsumos)).then((result)=>{
+      setValue("idVariante", Number(result.id));
     }).catch((erro)=>{
       console.log(erro)
     })
@@ -153,6 +154,7 @@ export const NovaCotacaoOrcamento = () => {
             </Grid>
             <Grid container item direction="row" spacing={4}>
               <Grid item>
+                <Box>
                 <Typography>Selecione o Fonernecedor</Typography>
                 <Autocomplete
                   disablePortal
@@ -171,6 +173,7 @@ export const NovaCotacaoOrcamento = () => {
                     setValue("idFornecedor", value?.id);
                   }}
                 />
+                </Box>
 
                 {errors.idFornecedor && (
                   <span>{errors.idFornecedor.message?.toString()}</span>
@@ -223,29 +226,21 @@ export const NovaCotacaoOrcamento = () => {
                   id="combo-box-demo"
                   {...register("idInsumo")}
                   options={opcaoiInsumos}
-                  getOptionLabel={(opcaoiInsumos) => opcaoiInsumos.titulo ?? ""}
+                  getOptionLabel={(opcaoiInsumos) => opcaoiInsumos.insumo.titulo ?? ""}
                   sx={{ width: 225 }}
                   value={
                     opcaoiInsumos.find(
-                      (option) => option.id === watch("idInsumo")
+                      (option) => option.id === watch("idVariante")
                     ) || null
                   }
                   disabled={true}
                   renderInput={(params) => <TextField {...params} />}
                   onChange={(_, value) => {
-                    setValue("idInsumo", value?.id);
+                    setValue("idVariante", value?.id);
                   }}
                 />
-                {errors.idInsumo && (
-                  <span>{errors.idInsumo.message?.toString()}</span>
-                )}
-              </Grid>
-
-              <Grid item>
-                <Typography>Unidade de Medida</Typography>
-                <TextField placeholder="Unidade de Medida" {...register("unidade")} />
-                {errors.unidade && (
-                  <span>{errors.unidade.message?.toString()}</span>
+                {errors.idVariante && (
+                  <span>{errors.idVariante.message?.toString()}</span>
                 )}
               </Grid>
             </Grid>

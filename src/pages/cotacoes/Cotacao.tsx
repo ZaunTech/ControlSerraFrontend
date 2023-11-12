@@ -35,9 +35,9 @@ export const Cotacao = () => {
   const [opcaoiInsumos, setopcaoInsumo] = useState<IVariante[]>([]);
 
   const shemaCotacao = z.object({
-    idFornecedor: z.number(),
-    idVariante: z.number(),
-    valor: z.coerce.number(),
+    idFornecedor: z.number().min(1,"Selecione um fornecedor"),
+    idVariante: z.number().min(1,"Selecione um insumo"),
+    valor: z.coerce.number().min(1,"Informe o valor do insumo"),
 
     data: z.coerce.date(),
   });
@@ -177,6 +177,7 @@ export const Cotacao = () => {
             </Grid>
             <Grid container item direction="row" spacing={4}>
               <Grid item>
+                <Box>
                 <Typography>Selecione o Fonernecedor</Typography>
                 <Autocomplete
                   disablePortal
@@ -201,12 +202,13 @@ export const Cotacao = () => {
                     setValue("idFornecedor", value?.id);
                   }}
                 />
-
+                </Box>
                 {errors.idFornecedor && (
                   <span>{errors.idFornecedor.message?.toString()}</span>
                 )}
               </Grid>
               <Grid item>
+                <Box>
                 <Typography>Valor Do Insumo</Typography>
                 <TextField
                   type="number"
@@ -214,11 +216,13 @@ export const Cotacao = () => {
                   disabled={!isEditable}
                   {...register("valor")}
                 />
+                </Box>
                 {errors.valor && (
                   <span>{errors.valor.message?.toString()}</span>
                 )}
               </Grid>
               <Grid item>
+                <Box>
                 <Typography>Data que foi cotado</Typography>
                 <TextField
                   type="date"
@@ -229,6 +233,7 @@ export const Cotacao = () => {
                     setValue("data", e.target.value);
                   }}
                 />
+                </Box>
                 {errors.data && <span>{errors.data.message?.toString()}</span>}
               </Grid>
             </Grid>
@@ -249,6 +254,7 @@ export const Cotacao = () => {
             </Grid>
             <Grid container item direction="row" spacing={4}>
               <Grid item>
+                <Box>
                 <Typography>Selecione o Insumo</Typography>
                 <Autocomplete
                   disablePortal
@@ -268,6 +274,7 @@ export const Cotacao = () => {
                     setValue("idVariante", value?.id);
                   }}
                 />
+                </Box>
                 {errors.idVariante && (
                   <span>{errors.idVariante.message?.toString()}</span>
                 )}
