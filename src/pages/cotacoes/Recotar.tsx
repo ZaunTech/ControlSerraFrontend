@@ -19,7 +19,9 @@ import {
   FornecedoresService,
   IFornecedor,
   IInsumo,
+  IVariante,
   InsumosService,
+  VariantesService,
 } from "../../data/services/api";
 import {
   CotacoesService,
@@ -30,18 +32,18 @@ import { useNavigate, useParams } from "react-router-dom";
 export const Recotar = () => {
   const [opcoes, setOpcoes] = useState<IFornecedor[]>([]);
 
-  const [opcaoiInsumos, setopcaoInsumo] = useState<IInsumo[]>([]);
+  const [opcaoiInsumos, setopcaoInsumo] = useState<IVariante[]>([]);
 
   const shemaCotacao = z.object({
     idFornecedor: z.number(),
-    idInsumo: z.number(),
+    idVariante: z.number(),
     valor: z.coerce.number(),
-    unidade: z.string(),
+    
     data: z.coerce.date(),
   });
 
   useEffect(() => {
-    InsumosService.getAll()
+    VariantesService.getAll({perPage:0})
       .then((response) => {
         if (response instanceof Error) {
           return;
@@ -57,7 +59,7 @@ export const Recotar = () => {
   }, []);
 
   useEffect(() => {
-    FornecedoresService.getAll()
+    FornecedoresService.getAll({perPage:0})
       .then((response) => {
         if (response instanceof Error) {
           return;
@@ -103,10 +105,10 @@ export const Recotar = () => {
       if (!isNaN(dateObject.getTime())) {
         const formattedDate = dateObject.toISOString().split("T")[0];
 
-        setValue("idInsumo", data.idInsumo);
+        setValue("idVariante", data.idVariante);
         setValue("idFornecedor", data.idFornecedor);
         setValue("data", getCurrentDate());
-        setValue("unidade", data.unidade);
+        
         setValue("valor", data.valor);
       } else {
       }
@@ -122,7 +124,8 @@ export const Recotar = () => {
   const navigate = useNavigate();
   function createCotacao(data: any) {
     CotacoesService.recotar(Number(id), data)
-      .then(() => {
+      .then((result) => {
+        console.log(result)
         navigate(-1);
       })
       .catch(() => { });
@@ -252,10 +255,10 @@ export const Recotar = () => {
                   disabled={true}
                   {...register("idInsumo")}
                   options={opcaoiInsumos}
-                  getOptionLabel={(opcaoiInsumos) => opcaoiInsumos.titulo ?? ""}
+                  getOptionLabel={(opcaoiInsumos) => opcaoiInsumos.insumo.titulo ?? "" + opcaoiInsumos.variante}
                   value={
                     opcaoiInsumos.find(
-                      (option) => option.id === watch("idInsumo")
+                      (option) => option.id === watch("idVariante")
                     ) || null
                   }
                   sx={{ width: 225 }}
@@ -266,14 +269,6 @@ export const Recotar = () => {
                 />
                 {errors.idInsumo && (
                   <span>{errors.idInsumo.message?.toString()}</span>
-                )}
-              </Grid>
-
-              <Grid item>
-                <Typography>Unidade de Medida</Typography>
-                <TextField placeholder="Unidade de Medida" disabled={true} {...register("unidade")} />
-                {errors.unidade && (
-                  <span>{errors.unidade.message?.toString()}</span>
                 )}
               </Grid>
             </Grid>

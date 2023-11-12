@@ -26,6 +26,7 @@ import {
   PedidosService,
 } from "../../data/services/api/modules/pedidos";
 import { OrcamentosService } from "../../data/services/api/modules/orcamentos";
+import { Actions } from "../../ui/components/ferramentasDeListagem/Actions";
 
 export const Pedidos = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -144,22 +145,15 @@ export const Pedidos = () => {
           <TableBody>
             {rows.map((row) => (
               <TableRow key={row.id}>
-                <TableCell>
-                  <Typography>
-                    <IconButton
-                      onClick={() =>
-                        navigate(`${location.pathname}/${row.id}`)
-                      }>
-                      <Icon>edit</Icon>
-                    </IconButton>
-                    <IconButton
-                      onClick={() => {
-                        handleDelete(row.id);
-                      }}>
-                      <Icon>delete</Icon>
-                    </IconButton>
-                  </Typography>
-                </TableCell>
+                <Actions
+                  id={row.id}
+                  showListButton
+                  handleDelete={handleDelete}
+                  handleShowList={() => {
+                    navigate(`${location.pathname}/${row.id}/produtos`);
+                  }}
+                  toolTipListButton="Listar produtos"
+                />
                 <TableCell>
                   <Typography>{row.id}</Typography>
                 </TableCell>

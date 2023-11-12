@@ -13,10 +13,12 @@ import {
   IInsumo,
   IVariante,
   InsumosService,
+  ProdutosService,
   VariantesService,
 } from "../../../../data/services/api";
 import { useDebounce } from "../../../../data/hooks";
 import { useState } from "react";
+import { format, parseISO } from "date-fns";
 import {
   Paper,
   Table,
@@ -45,6 +47,7 @@ import {
 import React from "react";
 import { Actions } from "../../../../ui/components/ferramentasDeListagem/Actions";
 import { ListaInsumosService } from "../../../../data/services/api/modules/listaInsumos";
+import { ProdutoBase } from "../../../produtosBase";
 
 interface IPesquisa {
   setFiltro: (text: string) => void;
@@ -156,11 +159,12 @@ export const CotacoesDeUmInsumo = () => {
   const [filtro, setFiltro] = useState<string>();
   const [filtroId, setFiltroId] = useState<number>();
 
-  async function idVariantes(id: number) {
+  async function idVaraintes(id: number) {
     try {
-      const result = await VariantesService.getById(id);
+      console.log("Id é:", id)
+      const result = await ListaInsumosService.getById(id);
       console.log(result)
-      return  result.id;
+      return  result.idVariante;
     } catch (erro) {
       console.log(erro);
       return null; // ou faça algo apropriado em caso de erro
@@ -172,15 +176,16 @@ export const CotacoesDeUmInsumo = () => {
     try {
       setIsLoading(true);
       let result;
-     
-      const idVarianteValue = await idVariantes(Number(idItemListaInsumos));
+    
+    
+      const idVarianteValue = await idVaraintes(Number(idItemListaInsumos));
       console.log(idVarianteValue)
      if (filtro === "Fornecedor" && filtroId != undefined) {
      
-      result = await CotacoesService.getAll({page:pagina, filter:busca}, idVarianteValue,filtroId);
+      result = await CotacoesService.getAll({page:pagina, filter:busca}, Number(idVarianteValue),filtroId);
       } else {
         
-        result = await CotacoesService.getAll({page:pagina, filter:busca}, idVarianteValue);
+        result = await CotacoesService.getAll({page:pagina, filter:busca},  Number(idVarianteValue));
       }
 
       if (result instanceof Error) {
@@ -313,7 +318,10 @@ export const CotacoesDeUmInsumo = () => {
                     <Typography>{row.valor}</Typography>
                   </TableCell>
                   <TableCell>
-                    <Typography>{row.data.toString()}</Typography>
+                    <Typography>  {format(
+                      parseISO(String(row.data)),
+                      "dd/MM/yyyy HH:mm"
+                    )}</Typography>
                   </TableCell>
                 </TableRow>
               );

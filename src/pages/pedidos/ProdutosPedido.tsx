@@ -35,7 +35,7 @@ import {
 } from "../../data/services/api/modules/produtos";
 import { Actions } from "../../ui/components/ferramentasDeListagem/Actions";
 import generatePDF from "react-to-pdf";
-import { FornecedoresService, ICliente, IFornecedor } from "../../data/services/api";
+import { FornecedoresService, ICliente, IFornecedor, PedidosService } from "../../data/services/api";
 import { OrcamentosService } from "../../data/services/api/modules/orcamentos";
 
 interface IPDF {
@@ -188,44 +188,9 @@ const PDF = forwardRef(({ id, referencia }: IPDF) => {
 }
 )
 
-const BotoesOrcamento: React.FC = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  return (
-    <>
-      <Button
-        variant="contained"
-        onClick={() => navigate(`${location.pathname}/CriarProduto`)}
-        size="medium"
-      >
-        <Typography
-          whiteSpace={"nowrap"}
-          textOverflow={"ellipsis"}
-          overflow={"hidden"}
-          variant="inherit"
-        >
-          Novo Produto
-        </Typography>
-      </Button>
-      <Button
-        variant="contained"
-        onClick={() => navigate(`${location.pathname}/AddProdutoBase`)}
-        size="medium"
-      >
-        <Typography
-          whiteSpace={"nowrap"}
-          textOverflow={"ellipsis"}
-          overflow={"hidden"}
-          variant="inherit"
-        >
-          Add Produto Base
-        </Typography>
-      </Button>
-    </>
-  );
-};
 
-export const ProdutosOrcamento = () => {
+
+export const ProdutosPedido = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { debounce } = useDebounce();
 
@@ -246,18 +211,34 @@ export const ProdutosOrcamento = () => {
     return Number(searchParams.get("pagina") || "1");
   }, [searchParams]);
 
+  
+  async function getID() {
+    try {
+      const result = await PedidosService.getById(Number(id));
+      return result.idOrcamento;
+    } catch (error) {
+      console.error("Erro ao obter o pedido:", error);
+      throw error; // Se quiser propagar o erro para quem chamou a função
+    }
+  }
+
   useEffect(() => {
     setIsLoading(true);
-    debounce(() => {
-      ProdutosService.getAll({ page: pagina, filter: busca }, Number(id)).then((result) => {
+    debounce(async () => {
+      try {
+        const idOrcamento = await getID();
+        const result = await ProdutosService.getAll({ page: pagina, filter: busca },idOrcamento);
         if (result instanceof Error) {
           alert(result.message);
           return;
         }
         setRows(result.data);
         setTotalCount(result.totalCount);
+      } catch (error) {
+        console.error("Erro durante a execução do efeito:", error);
+      } finally {
         setIsLoading(false);
-      });
+      }
     });
   }, [busca, pagina]);
 
@@ -292,7 +273,7 @@ export const ProdutosOrcamento = () => {
             <IconButton onClick={() => {
               generatePDF(pdfRef, { filename: 'page.pdf' })
             }}><Icon>picture_as_pdf</Icon></IconButton>
-            <BotoesOrcamento />
+          
           </>
           }
         />
@@ -324,8 +305,10 @@ export const ProdutosOrcamento = () => {
                   showListButton
                   handleDelete={handleDelete}
                   handleShowList={() => {
-                    navigate(`${location.pathname}/${row.id}/insumos`);
+                    navigate(`${location.pathname}/${row.id}`);
                   }}
+                  showEditButton={false}
+                  showDeleteButton={false}
                   toolTipListButton="Listar Insumos"
                 />
                 <TableCell>

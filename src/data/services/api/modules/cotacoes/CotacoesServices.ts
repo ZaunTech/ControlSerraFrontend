@@ -64,7 +64,7 @@ const getByInsumo = async (
   filter = ""
 ): Promise<TListCotacao | Error> => {
   try {
-    const urlRelativa = `/${rota}/findByInsumo/${id}?_page=${page}&_limit=${Environment.LIMITE_DE_LINHAS}&nome_like=${filter}`;
+    const urlRelativa = `/${rota}/findByInsumo/${id}?page=${page}&perPage=${Environment.LIMITE_DE_LINHAS}&nome_like=${filter}`;
     const { data, headers } = await Api.get(urlRelativa);
     if (data) {
       return {

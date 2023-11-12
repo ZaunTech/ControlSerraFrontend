@@ -16,7 +16,7 @@ import {
   NovaCotacaoOrcamento,
   ProdutoOrcamento,
 } from "./pages/orcamentos";
-import { Pedido, Pedidos, CriarPedido } from "./pages/pedidos";
+import { Pedido, Pedidos, CriarPedido, ProdutosPedido, InsumosProduto } from "./pages/pedidos";
 import { Categoria, Categorias, CriarCategoria } from "./pages/categorias";
 import {
   Fornecedor,
@@ -196,7 +196,25 @@ const router = createBrowserRouter([
           },
           {
             path: ":id",
-            element: <Pedido />,
+            children:[
+            {
+              index:true,
+              element: <Pedido/>,
+            },
+            {
+              path:"Produtos",
+              children:[
+                {
+                  index:true,
+                  element: <ProdutosPedido/>
+                },
+                {
+                  path:":idProduto",
+                  element:<InsumosProduto/>
+                }
+              ]
+            },
+          ]
           },
         ],
       },

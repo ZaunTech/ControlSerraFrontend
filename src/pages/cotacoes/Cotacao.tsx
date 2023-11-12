@@ -101,16 +101,12 @@ export const Cotacao = () => {
         setValue("idVariante", data.idVariante);
         setValue("idFornecedor", data.idFornecedor);
         setValue("data", formattedDate);
-
         setValue("valor", data.valor);
       } else {
       }
     } catch (error) { }
   };
   useEffect(() => {
-
-
-
     fetchData();
   }, []);
 
@@ -118,7 +114,8 @@ export const Cotacao = () => {
   function createCotacao(data: any) {
    
     CotacoesService.updateById(Number(id), data)
-      .then(() => {
+      .then((result) => {
+        console.log(result)
         setIsEditable(false);
         setPageState("detalhes");
       })

@@ -115,8 +115,8 @@ export const NovaCotacaoOrcamento = () => {
   // Preencher o valor inicial ao montar o componente
   useEffect(() => {
     setValue('data', getCurrentDate());
-    VariantesService.getById(Number(idItemListaInsumos)).then((result)=>{
-      setValue("idVariante", Number(result.id));
+    ListaInsumosService.getById(Number(idItemListaInsumos)).then((result)=>{
+      setValue("idVariante", Number(result.idVariante));
     }).catch((erro)=>{
       console.log(erro)
     })
