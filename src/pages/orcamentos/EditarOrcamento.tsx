@@ -20,10 +20,19 @@ import { ClientesService, ICliente } from "../../data/services/api";
 import { OrcamentosService } from "../../data/services/api/modules/orcamentos";
 import { useNavigate, useParams } from "react-router-dom";
 
+const getCurrentDate = () => {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
 const createUserFormSchema = z.object({
   idCliente: z.coerce.number().min(1,"Selecione o cliente"),
   observacoes: z.string().optional(),
   status: z.string(),
+  validade: z.coerce.date().min( new Date(getCurrentDate()),"Informe uma data valida"),
   prazoEstimadoProducao: z.coerce.number().min(1,"Digite um prazo estimado"),
 });
 
@@ -86,14 +95,19 @@ export const EditarOrcamento = () => {
      return;
    }
    
-      
+   const dateObject = new Date(result.validade);
+   if (!isNaN(dateObject.getTime())) {
+     const formattedDate = dateObject.toISOString().split("T")[0];
+
+    
 
    setValue("idCliente", result.idCliente);
    setValue("observacoes", result.observacoes);
    setTipo(result.status.toString());
+   setValue("validade",formattedDate)
    setValue("status",result.status.toString())
    setValue("prazoEstimadoProducao", result.prazoEstimadoProducao);
-  
+   }
  });
 }
 catch(error){}
@@ -206,6 +220,21 @@ catch(error){}
                 />
                 {errors.observacoes && (
                   <span>{errors.observacoes.message?.toString()}</span>
+                )}
+              </Grid>
+              <Grid item>
+                <Box>
+                <Typography>Data de Validade </Typography>
+                <TextField
+                  type="date" disabled={!isEditable}
+                  placeholder="Data de Validade"
+                  {...register("validade")}
+                />
+                </Box>
+                {errors.validade && (
+                  <span>
+                    {errors.validade.message?.toString()}
+                  </span>
                 )}
               </Grid>
               <Grid item>

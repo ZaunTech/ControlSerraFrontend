@@ -136,6 +136,7 @@ export const Orcamentos = () => {
               <TableCell style={{ fontWeight: "bold" }}>Data Solicitado</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Cliente</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Status</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Validade</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -170,6 +171,14 @@ export const Orcamentos = () => {
                 </TableCell>
                 <TableCell>
                   <Typography>{row.status}</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography>
+                    {format(
+                      parseISO(String(row.validade)),
+                      "dd/MM/yyyy HH:mm"
+                    )}
+                  </Typography>
                 </TableCell>
               </TableRow>
             ))}
