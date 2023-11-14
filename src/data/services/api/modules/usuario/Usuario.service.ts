@@ -1,5 +1,6 @@
 import { Api, IGetAll } from "../..";
 import { Environment } from "../../../../environment";
+import { IChangePassword } from "./Interfaces/IChangePassword";
 import { IUsuario } from "./Interfaces/IUsuario";
 import { TListUsuarios } from "./Interfaces/TListUsuario";
 import { CreateUsuarioDto } from "./dto/create-usuario.dto";
@@ -122,6 +123,27 @@ const getCount = async (): Promise<number | Error> => {
   }
 };
 
+const alterarSenha = async (
+  id: number,
+  data: IChangePassword
+): Promise<IUsuario | Error> => {
+  try {
+    console.log(data)
+    const urlRelativa = `/${rota}/${id}`;
+    const response = await Api.post(urlRelativa, data); 
+    if (response.statusText === "OK") {
+      return response.data;
+    }
+    return new Error(Environment.ERRO_AO_LISTAR_DADOS);
+  } catch (error) {
+    console.error(error);
+    return new Error(
+      (error as { message: string }).message ||
+      Environment.ERRO_AO_ACESSAR_DADOS
+    );
+  }
+};
+
 export const UsuariosService = {
   getAll,
   getById,
@@ -129,4 +151,5 @@ export const UsuariosService = {
   updateById,
   deleteById,
   getCount,
+  alterarSenha,
 };

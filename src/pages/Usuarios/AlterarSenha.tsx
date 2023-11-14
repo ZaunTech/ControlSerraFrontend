@@ -49,7 +49,9 @@ export const AlterarSenha = () => {
     const {id}= useParams();
 
     function criarUsuario(data: any){
-     console.log(data)
+     UsuariosService.alterarSenha(Number(id),data).then(()=>{
+        navigate(-1);
+     })
     }
 
   return (
