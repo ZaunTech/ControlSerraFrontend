@@ -22,7 +22,7 @@ import { useNavigate } from "react-router-dom";
 
 const createUserFormSchema = z.object({
   email: z.string().min(1, "Faltou o nome").email("isso não é email"),
-  senha: z.string().min(1, "Preencha a senha"),
+  password: z.string().min(1, "Preencha a senha"),
 });
 
 export const Login = () => {
@@ -44,6 +44,7 @@ export const Login = () => {
     setIsLoading(true);
     login(email, password)
       .then((result) => {
+        console.log("resukt", result);
         setIsLoading(false);
         // @ts-ignore
         if (result instanceof Error) {
@@ -53,6 +54,7 @@ export const Login = () => {
         return;
       })
       .catch((err) => {
+        console.log(err);
         setIsLoading(false);
         return err;
       });
@@ -76,8 +78,7 @@ export const Login = () => {
         flexDirection={"column"}
         bgcolor={"text.primary"}
         justifyContent={"center"}
-        alignItems={"center"}
-      >
+        alignItems={"center"}>
         <Box
           id="Conteudo"
           width={"70%"}
@@ -88,8 +89,7 @@ export const Login = () => {
           flexDirection={"column"}
           alignItems={"center"}
           justifyContent={"space-evenly"}
-          color={"secondary.contrastText"}
-        >
+          color={"secondary.contrastText"}>
           <Box id="Imagens" flexDirection={"row"} display={"flex"}>
             <Icon>handyman</Icon>
             <Icon>handyman</Icon>
@@ -113,8 +113,7 @@ export const Login = () => {
             justifyContent={"space-between"}
             justifyItems={"space-between"}
             alignItems={"space-between"}
-            width={"100%"}
-          >
+            width={"100%"}>
             <Typography variant="body1">Versão 1</Typography>
             <Typography variant="body1">NossoEmail@Fatec.sp.gov.br</Typography>
           </Box>
@@ -130,8 +129,7 @@ export const Login = () => {
         justifyItems={"center"}
         alignItems={"center"}
         alignContent={"center"}
-        justifyContent={"center"}
-      >
+        justifyContent={"center"}>
         <Box
           id="ConteudoLogin"
           width={"40%"}
@@ -139,8 +137,7 @@ export const Login = () => {
           display={"flex"}
           flexDirection={"column"}
           justifyContent={"space-around"}
-          alignContent={"center"}
-        >
+          alignContent={"center"}>
           <Box>
             <Typography variant="h4">Olá, seja bem-vindo</Typography>
             <Typography variant="h5">Faça login para continuar</Typography>
@@ -160,20 +157,21 @@ export const Login = () => {
             type="password"
             size="small"
             placeholder="Senha"
-            {...register("senha")}
+            {...register("password")}
             endAdornment={
               <IconButton>
                 <Icon>visibility</Icon>
               </IconButton>
             }
           />
-          {errors.senha && <span>{errors.senha.message?.toString()}</span>}
+          {errors.password && (
+            <span>{errors.password.message?.toString()}</span>
+          )}
           <Box
             display={"flex"}
             flexDirection={"row"}
             justifyContent={"space-between"}
-            alignItems={"center"}
-          >
+            alignItems={"center"}>
             <FormControlLabel
               control={<Checkbox defaultChecked size="small" />}
               label="Lembrar Senha?"
@@ -183,8 +181,7 @@ export const Login = () => {
               href="https://www.exemplo.com"
               target="_blank"
               rel="noopener"
-              variant="body2"
-            >
+              variant="body2">
               {"Esqueci Minha Senha"}
             </Link>
           </Box>
@@ -201,8 +198,7 @@ export const Login = () => {
                   color="inherit"
                 />
               ) : undefined
-            }
-          >
+            }>
             Login
           </Button>
         </Box>

@@ -11,7 +11,7 @@ import { IUsuario, UsuariosService } from '../../data/services/api/modules/usuar
 
 const shemaUsuario = z.object({
   email: z.string().min(1,"Preencha o email"),
-  senha: z.string().min(6,"Digite pelo menos 6 caracteres"),
+  
   tipoUsuario: z.string(),
   nome: z.string().min(1,"Digite seu nome"),
   cpf:z.string().min(11,"Digite o CPF").max(11,"Digite somente os 11 numeros do CPF"),
@@ -56,7 +56,7 @@ export const Usuario = () => {
         }
         setValue("nome", data.nome);
         setValue("email", data.email);
-        setValue("senha", data.senha);
+        
         setValue("cpf", data.cpf);
         setValue("telefone", data.telefone);
         setTipo(data.tipoUsuario.toString());
@@ -143,13 +143,7 @@ export const Usuario = () => {
                 </div>
                 {errors.email && <span>{errors.email.message?.toString()}</span>}
               </Grid>
-              <Grid item>
-                <Box>
-                <Typography>Senha</Typography>
-                <TextField type='password'disabled={!isEditable} {...register("senha")} />
-                </Box>
-                {errors.senha && <span>{errors.senha.message?.toString()}</span>}
-              </Grid>
+              
               <Grid item>
               <div>
                 <Typography>CPF</Typography>

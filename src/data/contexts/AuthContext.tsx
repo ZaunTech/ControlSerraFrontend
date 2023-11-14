@@ -22,25 +22,37 @@ interface IAuthProvider {
 
 const LOCAL_STORAGE_STORAGE_KEY__ACCESS_TOKEN = "APP_ACCESS_TOKEN";
 
+const GetToken = () => {
+  let token = localStorage.getItem("APP_ACCESS_TOKEN");
+
+  if (token !== "undefined") {
+    try {
+      // Tenta fazer o parse apenas se o token existir
+      token = JSON.parse(token);
+      return token;
+    } catch (error) {
+      console.error("Erro ao fazer parse do token:", error);
+      return null;
+    }
+  } else {
+    console.error("O token não está presente no localStorage.");
+    return null;
+  }
+};
+
 export const AuthProvider: React.FC<IAuthProvider> = ({ children }) => {
   const [accessToken, setAccessToken] = useState<string>();
 
   useEffect(() => {
-    const localStorageAccessToken = localStorage.getItem(
-      LOCAL_STORAGE_STORAGE_KEY__ACCESS_TOKEN
-    );
-    if (localStorageAccessToken) {
-      setAccessToken(JSON.parse(localStorageAccessToken));
-      return;
-    }
-
-    setAccessToken(undefined);
+    const token = GetToken();
+    setAccessToken(token);
     return;
   }, []);
 
   const handleLogin = useCallback(async (email: string, password: string) => {
     const result = await AuthService.auth(email, password);
-    console.log(result);
+    console.log("Result no handle", result);
+    console.log("Accesssss tokenenennene", result.access_token);
     if (result instanceof Error) {
       return result.message;
     }
@@ -49,6 +61,7 @@ export const AuthProvider: React.FC<IAuthProvider> = ({ children }) => {
       JSON.stringify(result.accessToken)
     );
     setAccessToken(result.accessToken);
+    return accessToken;
   }, []);
 
   const handleLogout = useCallback(() => {
@@ -60,8 +73,7 @@ export const AuthProvider: React.FC<IAuthProvider> = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, login: handleLogin, logout: handleLogout }}
-    >
+      value={{ isAuthenticated, login: handleLogin, logout: handleLogout }}>
       {children}
     </AuthContext.Provider>
   );

@@ -109,6 +109,12 @@ export const Usuarios = () => {
                 <Actions
                   id={row.id}
                   handleDelete={handleDelete}
+                  showPersoButton
+                  persoButtonIcon="password"
+                  persoButtonToolTipText="Mudar Senha"
+                  handlePersoButton={()=>{
+                    navigate(`${location.pathname}/${row.id}/alterarsenha`)
+                  }}
                   handleShowList={() => {
                     navigate(`${location.pathname}/${row.id}`);
                   }}
