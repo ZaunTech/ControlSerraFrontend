@@ -23,7 +23,7 @@ const App = () => {
     { icon: "attach_money", label: "Cotações", path: "/cotacoes" },
     { icon: "local_offer", label: "Categorias", path: "/categorias" },
     { icon: "store", label: "Fornecedores", path: "/fornecedores" },
-    { icon: "settings", label: "Usuarios", path: "/usuarios" },
+    { icon: "group", label: "Usuarios", path: "/usuarios" },
   ];
 
   return <AppInner menuSize={menuSize} DrawerOptions={DrawerOptions} />;

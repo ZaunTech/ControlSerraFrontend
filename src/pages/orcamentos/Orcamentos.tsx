@@ -58,7 +58,10 @@ export const Orcamentos = () => {
     try {
       setIsLoading(true);
 
-      const result = await OrcamentosService.getAll({ page: pagina, filter: busca });
+      const result = await OrcamentosService.getAll({
+        page: pagina,
+        filter: busca,
+      });
 
       if (result instanceof Error) {
         alert(result.message);
@@ -133,10 +136,13 @@ export const Orcamentos = () => {
             <TableRow>
               <TableCell style={{ fontWeight: "bold" }}>Ações</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Codigo</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Data Solicitado</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>
+                Data Solicitado
+              </TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Cliente</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Status</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Validade</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Valor Total</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -174,10 +180,12 @@ export const Orcamentos = () => {
                 </TableCell>
                 <TableCell>
                   <Typography>
-                    {format(
-                      parseISO(String(row.validade)),
-                      "dd/MM/yyyy HH:mm"
-                    )}
+                    {format(parseISO(String(row.validade)), "dd/MM/yyyy HH:mm")}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography>
+                    {row.totalMaoObra + row.totalMateriais}
                   </Typography>
                 </TableCell>
               </TableRow>

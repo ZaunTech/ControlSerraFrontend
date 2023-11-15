@@ -110,7 +110,7 @@ export const Usuarios = () => {
                   id={row.id}
                   handleDelete={handleDelete}
                   showPersoButton
-                  persoButtonIcon="password"
+                  persoButtonIcon="key"
                   persoButtonToolTipText="Mudar Senha"
                   handlePersoButton={()=>{
                     navigate(`${location.pathname}/${row.id}/alterarsenha`)

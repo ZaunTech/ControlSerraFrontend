@@ -26,6 +26,7 @@ import {
   Box,
   Card,
   CardContent,
+  Button,
 } from "@mui/material";
 import { Environment } from "../../../data/environment";
 import {
@@ -41,12 +42,12 @@ import {
 } from "../../../data/services/api";
 import { CotacoesService } from "../../../data/services/api/modules/cotacoes";
 import { Actions } from "../../../ui/components/ferramentasDeListagem/Actions";
-import generatePDF from 'react-to-pdf';
+import generatePDF from "react-to-pdf";
 
 interface IPDF {
-  idFornecedor: number,
-  referencia: Ref<HTMLDivElement | null>,
-  insumos: IListaInsumo[]
+  idFornecedor: number;
+  referencia: Ref<HTMLDivElement | null>;
+  insumos: IListaInsumo[];
 }
 
 const PDF = forwardRef(({ idFornecedor, referencia, insumos }: IPDF) => {
@@ -55,18 +56,17 @@ const PDF = forwardRef(({ idFornecedor, referencia, insumos }: IPDF) => {
   useEffect(() => {
     FornecedoresService.getById(1).then((result) => {
       if (result instanceof Error) {
-        return
+        return;
       }
-      setMinhaEmpresa(result)
-    })
+      setMinhaEmpresa(result);
+    });
     FornecedoresService.getById(idFornecedor).then((result) => {
       if (result instanceof Error) {
-        return
+        return;
       }
       setFornecedor(result);
-    })
-
-  })
+    });
+  });
   return (
     <div
       style={{
@@ -74,24 +74,28 @@ const PDF = forwardRef(({ idFornecedor, referencia, insumos }: IPDF) => {
         left: "-9999px",
         top: "-9999px",
         width: "60%",
-        height: "60%"
-      }}>
-
+        height: "60%",
+      }}
+    >
       <TableContainer
         component={Paper}
         variant="outlined"
         sx={{ m: 1, width: "auto" }}
         ref={referencia}
         style={{
-          padding: '20px',
-          margin: '20px'
+          padding: "20px",
+          margin: "20px",
         }}
       >
-        <Box display={'flex'} flexDirection={'column'} gap={'10px'}>
+        <Box display={"flex"} flexDirection={"column"} gap={"10px"}>
           {minhaEmpresa && (
-            <Card sx={{ minWidth: 275, border:1 }}>
+            <Card sx={{ minWidth: 275, border: 1 }}>
               <CardContent>
-                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                <Typography
+                  sx={{ fontSize: 14 }}
+                  color="text.secondary"
+                  gutterBottom
+                >
                   Empresa Solicitante
                 </Typography>
                 <Typography variant="h5" component="div">
@@ -102,12 +106,8 @@ const PDF = forwardRef(({ idFornecedor, referencia, insumos }: IPDF) => {
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
                   Contato
                 </Typography>
-                <Typography variant="body2">
-                  {minhaEmpresa.telefone}
-                </Typography>
-                <Typography variant="body2">
-                  {minhaEmpresa.email}
-                </Typography>
+                <Typography variant="body2">{minhaEmpresa.telefone}</Typography>
+                <Typography variant="body2">{minhaEmpresa.email}</Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
                   Endereço
                 </Typography>
@@ -116,12 +116,15 @@ const PDF = forwardRef(({ idFornecedor, referencia, insumos }: IPDF) => {
                 </Typography>
               </CardContent>
             </Card>
-          )
-          }
+          )}
           {fornecedor && (
             <Card sx={{ minWidth: 275 }}>
               <CardContent>
-                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                <Typography
+                  sx={{ fontSize: 14 }}
+                  color="text.secondary"
+                  gutterBottom
+                >
                   Empresa Solicitada
                 </Typography>
                 <Typography variant="h5" component="div">
@@ -132,12 +135,8 @@ const PDF = forwardRef(({ idFornecedor, referencia, insumos }: IPDF) => {
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
                   Contato
                 </Typography>
-                <Typography variant="body2">
-                  {fornecedor.telefone}
-                </Typography>
-                <Typography variant="body2">
-                  {fornecedor.email}
-                </Typography>
+                <Typography variant="body2">{fornecedor.telefone}</Typography>
+                <Typography variant="body2">{fornecedor.email}</Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
                   Endereço
                 </Typography>
@@ -146,56 +145,58 @@ const PDF = forwardRef(({ idFornecedor, referencia, insumos }: IPDF) => {
                 </Typography>
               </CardContent>
             </Card>
-          )
-          }
-           
+          )}
         </Box>
-        <Box sx={{ border: 1 }} display={'flex'} flexDirection={'column'} padding={'10px'} gap={'10px'} marginTop={'10px'}>
-          <Typography variant="h5">
-            {`Solicitação de orçamento`}
-          </Typography>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell style={{ fontWeight: "bold" }}>Titulo</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>
-                Variação
-              </TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>
-                Quantidade
-              </TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Valor Unitario</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Valor Total</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {insumos.map((row) => (
-              <TableRow key={row.id}>
-                <TableCell>
-                  <Typography>{row.variante.insumo?.titulo}</Typography>
+        <Box
+          sx={{ border: 1 }}
+          display={"flex"}
+          flexDirection={"column"}
+          padding={"10px"}
+          gap={"10px"}
+          marginTop={"10px"}
+        >
+          <Typography variant="h5">{`Solicitação de orçamento`}</Typography>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell style={{ fontWeight: "bold" }}>Titulo</TableCell>
+                <TableCell style={{ fontWeight: "bold" }}>Variação</TableCell>
+                <TableCell style={{ fontWeight: "bold" }}>Quantidade</TableCell>
+                <TableCell style={{ fontWeight: "bold" }}>
+                  Valor Unitario
                 </TableCell>
-                <TableCell>
-                  <Typography>{row.variante.variante}</Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography></Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography></Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography></Typography>
+                <TableCell style={{ fontWeight: "bold" }}>
+                  Valor Total
                 </TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHead>
+            <TableBody>
+              {insumos.map((row) => (
+                <TableRow key={row.id}>
+                  <TableCell>
+                    <Typography>{row.variante.insumo?.titulo}</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography>{row.variante.variante}</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography></Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography></Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography></Typography>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </Box>
       </TableContainer>
     </div>
-  )
-}
-)
+  );
+});
 
 export const InsumosDeUmProdutoOrcamento = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -222,7 +223,10 @@ export const InsumosDeUmProdutoOrcamento = () => {
     try {
       setIsLoading(true);
 
-      const result = await ListaInsumosService.getListaByIdProduto({ page: pagina, filter: busca }, Number(id));
+      const result = await ListaInsumosService.getListaByIdProduto(
+        { page: pagina, filter: busca },
+        Number(id)
+      );
 
       if (result instanceof Error) {
         alert(result.message);
@@ -232,7 +236,9 @@ export const InsumosDeUmProdutoOrcamento = () => {
       const listaInsumosData = await Promise.all(
         result.data.map(async (listaInsumos: IListaInsumo) => {
           const fetchInsumos = async () => {
-            const result2 = await VariantesService.getById(listaInsumos.idVariante);
+            const result2 = await VariantesService.getById(
+              listaInsumos.idVariante
+            );
 
             if (result2 instanceof Error) {
               alert(result2.message);
@@ -335,9 +341,17 @@ export const InsumosDeUmProdutoOrcamento = () => {
           }
           onClickBotaoNovo={() => navigate(`${location.pathname}/novo`)}
           mostrarBotaoVoltar
-          componentePersonalizado={<IconButton onClick={() => {
-            generatePDF(pdfRef, { filename: 'page.pdf' })
-          }}><Icon>picture_as_pdf</Icon></IconButton>}
+          componentePersonalizado={
+            <Button
+              startIcon={<Icon>picture_as_pdf</Icon>}
+              onClick={() => {
+                generatePDF(pdfRef, { filename: "page.pdf" });
+              }}
+              variant="contained"
+            >
+              Gerar PDF
+            </Button>
+          }
         />
       }
     >
@@ -350,7 +364,7 @@ export const InsumosDeUmProdutoOrcamento = () => {
           <TableHead>
             <TableRow>
               <TableCell style={{ fontWeight: "bold" }}>Ações</TableCell>
-              
+
               <TableCell style={{ fontWeight: "bold" }}>Titulo</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Variação</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Quantidade</TableCell>
@@ -358,22 +372,25 @@ export const InsumosDeUmProdutoOrcamento = () => {
               <TableCell style={{ fontWeight: "bold" }}>Descrição</TableCell>
 
               <TableCell style={{ fontWeight: "bold" }}>Fornecedor</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Valor Unitario</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>
+                Valor Unitario
+              </TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Valor Total</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {rows.map((row) => (
               <TableRow key={row.id}>
-
                 <Actions
                   id={row.id}
                   showPersoButton
                   persoButtonIcon="attach_money"
-
-                  handlePersoButton={() => { navigate(`${location.pathname}/${row.id}/cotar`) }}
+                  persoButtonToolTipText="Selecionar Cotação"
+                  handlePersoButton={() => {
+                    navigate(`${location.pathname}/${row.id}/cotar`);
+                  }}
                 />
-               
+
                 <TableCell>
                   <Typography>{row.variante?.insumo?.titulo}</Typography>
                 </TableCell>
@@ -383,9 +400,11 @@ export const InsumosDeUmProdutoOrcamento = () => {
                 <TableCell>
                   <Typography>{row.quantidade}</Typography>
                 </TableCell>
-             
+
                 <TableCell>
-                  <Typography>{row.variante?.insumo?.categoria?.titulo}</Typography>
+                  <Typography>
+                    {row.variante?.insumo?.categoria?.titulo}
+                  </Typography>
                 </TableCell>
                 <TableCell>
                   <Typography>{row.variante?.insumo?.descricao}</Typography>
@@ -443,6 +462,6 @@ export const InsumosDeUmProdutoOrcamento = () => {
         </Table>
       </TableContainer>
       <PDF idFornecedor={Number(id)} referencia={pdfRef} insumos={rows} />
-    </PaginaBase >
+    </PaginaBase>
   );
 };

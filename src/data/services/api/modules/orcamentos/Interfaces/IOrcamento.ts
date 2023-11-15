@@ -5,8 +5,8 @@ export interface IOrcamento {
   id: number;
   validade?: Date;
   dataOrcamento: Date;
-  totalMaoObra?: number;
-  totalMateriais?: number;
+  totalMaoObra: number;
+  totalMateriais: number;
   status: status;
   prazoEstimadoProducao: number;
   observacoes?: string;

@@ -7,7 +7,11 @@ import {
   useLocation,
   useParams,
 } from "react-router-dom";
-import { InsumosService, ProdutosBaseService, VariantesService } from "../../data/services/api";
+import {
+  InsumosService,
+  ProdutosBaseService,
+  VariantesService,
+} from "../../data/services/api";
 import { useState } from "react";
 import {
   Paper,
@@ -29,6 +33,7 @@ import {
   IInsumosProdutoBase,
   InsumosProdutoBaseService,
 } from "../../data/services/api/modules/insumosProdutoBase";
+import { Actions } from "../../ui/components/ferramentasDeListagem/Actions";
 
 export const ListaDeInsumosProdutoBase = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -64,12 +69,14 @@ export const ListaDeInsumosProdutoBase = () => {
     });
   }, []);
 
- 
   const setDados = async () => {
     try {
       setIsLoading(true);
-      
-      const result = await InsumosProdutoBaseService.getAll({page: pagina, filter: busca }, Number(id));
+
+      const result = await InsumosProdutoBaseService.getAll(
+        { page: pagina, filter: busca },
+        Number(id)
+      );
 
       if (result instanceof Error) {
         alert(result.message);
@@ -154,22 +161,12 @@ export const ListaDeInsumosProdutoBase = () => {
           <TableBody>
             {rows.map((row) => (
               <TableRow key={row.id}>
-                <TableCell>
-                  <Typography>
-                    <IconButton
-                      onClick={() => navigate(`${location.pathname}/${row.id}`)}
-                    >
-                      <Icon>edit</Icon>
-                    </IconButton>
-                    <IconButton
-                      onClick={() => {
-                        handleDelete(row.id);
-                      }}
-                    >
-                      <Icon>delete</Icon>
-                    </IconButton>
-                  </Typography>
-                </TableCell>
+                <Actions
+                  id={row.id}
+                  handleDelete={() => {
+                    handleDelete(row.id);
+                  }}
+                />
                 <TableCell>
                   <Typography>{row.variante.insumo?.titulo}</Typography>
                 </TableCell>

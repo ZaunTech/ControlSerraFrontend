@@ -1,4 +1,11 @@
-import { Button, Icon, IconButton, TableCell, Tooltip, Typography } from "@mui/material";
+import {
+  Button,
+  Icon,
+  IconButton,
+  TableCell,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 interface IActions {
@@ -34,21 +41,25 @@ export const Actions: React.FC<IActions> = ({
   persoButtonIcon,
   handlePersoButton,
   persoButtonText,
-  persoButtonToolTipText
+  persoButtonToolTipText,
 }) => {
   const navigate = useNavigate();
 
   return (
     <TableCell>
-      {showPersoButton && (
-        persoButtonText ?
-          (
-            <Button startIcon={<Icon>{persoButtonIcon}</Icon>} variant="text" onClick={() => {
+      {showPersoButton &&
+        (persoButtonText ? (
+          <Button
+            startIcon={<Icon>{persoButtonIcon}</Icon>}
+            variant="text"
+            onClick={() => {
               if (handlePersoButton) handlePersoButton();
-            }}>
-              <Typography>{persoButtonText}</Typography>
-            </Button>
-          ) : <Tooltip title={persoButtonToolTipText}>
+            }}
+          >
+            <Typography>{persoButtonText}</Typography>
+          </Button>
+        ) : (
+          <Tooltip title={persoButtonToolTipText}>
             <IconButton
               onClick={() => {
                 if (handlePersoButton) handlePersoButton();
@@ -58,7 +69,7 @@ export const Actions: React.FC<IActions> = ({
               <Typography>{persoButtonText}</Typography>
             </IconButton>
           </Tooltip>
-      )}
+        ))}
       {showListButton && (
         <Tooltip title={toolTipListButton}>
           <IconButton
@@ -71,24 +82,28 @@ export const Actions: React.FC<IActions> = ({
         </Tooltip>
       )}
       {showEditButton && (
-        <IconButton
-          onClick={
-            handleEdit
-              ? () => handleEdit()
-              : () => navigate(`${location.pathname}/${id}`)
-          }
-        >
-          <Icon>edit</Icon>
-        </IconButton>
+        <Tooltip title={"Visualizar Detalhes"}>
+          <IconButton
+            onClick={
+              handleEdit
+                ? () => handleEdit()
+                : () => navigate(`${location.pathname}/${id}`)
+            }
+          >
+            <Icon>info</Icon>
+          </IconButton>
+        </Tooltip>
       )}
       {showDeleteButton && (
-        <IconButton
-          onClick={() => {
-            if (handleDelete) handleDelete(id);
-          }}
-        >
-          <Icon>delete</Icon>
-        </IconButton>
+        <Tooltip title="Deletar">
+          <IconButton
+            onClick={() => {
+              if (handleDelete) handleDelete(id);
+            }}
+          >
+            <Icon>delete</Icon>
+          </IconButton>
+        </Tooltip>
       )}
       {showSelectButton && (
         <IconButton

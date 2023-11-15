@@ -35,12 +35,16 @@ import {
 } from "../../data/services/api/modules/produtos";
 import { Actions } from "../../ui/components/ferramentasDeListagem/Actions";
 import generatePDF from "react-to-pdf";
-import { FornecedoresService, ICliente, IFornecedor } from "../../data/services/api";
+import {
+  FornecedoresService,
+  ICliente,
+  IFornecedor,
+} from "../../data/services/api";
 import { OrcamentosService } from "../../data/services/api/modules/orcamentos";
 
 interface IPDF {
-  id: number,
-  referencia: Ref<HTMLDivElement | null>
+  id: number;
+  referencia: Ref<HTMLDivElement | null>;
 }
 
 const PDF = forwardRef(({ id, referencia }: IPDF) => {
@@ -50,18 +54,18 @@ const PDF = forwardRef(({ id, referencia }: IPDF) => {
   useEffect(() => {
     OrcamentosService.getFullById(id).then((result) => {
       if (result instanceof Error) {
-        return
+        return;
       }
       setCliente(result.cliente);
       setProdutos(result.produtos);
-    })
+    });
     FornecedoresService.getById(1).then((result) => {
       if (result instanceof Error) {
-        return
+        return;
       }
-      setFornecedor(result)
-    })
-  })
+      setFornecedor(result);
+    });
+  });
   return (
     <div
       style={{
@@ -69,24 +73,28 @@ const PDF = forwardRef(({ id, referencia }: IPDF) => {
         left: "-9999px",
         top: "-9999px",
         width: "1000px",
-        height: "1000px"
-      }}>
-
+        height: "1000px",
+      }}
+    >
       <TableContainer
         component={Paper}
         variant="outlined"
         sx={{ m: 1, width: "auto" }}
         ref={referencia}
         style={{
-          padding: '20px',
-          margin: '20px'
+          padding: "20px",
+          margin: "20px",
         }}
       >
-        <Box display={'flex'} flexDirection={'column'} gap={'10px'}>
+        <Box display={"flex"} flexDirection={"column"} gap={"10px"}>
           {fornecedor && (
-            <Card sx={{ minWidth: 400, border:1 }}>
+            <Card sx={{ minWidth: 400, border: 1 }}>
               <CardContent>
-                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                <Typography
+                  sx={{ fontSize: 14 }}
+                  color="text.secondary"
+                  gutterBottom
+                >
                   Empresa
                 </Typography>
                 <Typography variant="h5" component="div">
@@ -97,12 +105,8 @@ const PDF = forwardRef(({ id, referencia }: IPDF) => {
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
                   Contato
                 </Typography>
-                <Typography variant="body2">
-                  {fornecedor.telefone}
-                </Typography>
-                <Typography variant="body2">
-                  {fornecedor.email}
-                </Typography>
+                <Typography variant="body2">{fornecedor.telefone}</Typography>
+                <Typography variant="body2">{fornecedor.email}</Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
                   Endereço
                 </Typography>
@@ -111,82 +115,88 @@ const PDF = forwardRef(({ id, referencia }: IPDF) => {
                 </Typography>
               </CardContent>
             </Card>
-          )
-          }
-          {cliente && (<Card sx={{ minWidth: 400 , border:1 }}>
-            <CardContent>
-              <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                Cliente
-              </Typography>
-              <Typography variant="h5" component="div">
-                {cliente.nome ??
-                  cliente.nomeFantasia ??
-                  cliente.razaoSocial}
-              </Typography>
-              <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                Contato
-              </Typography>
-              <Typography variant="body2">
-                {cliente.telefone}
-              </Typography>
-              <Typography variant="body2">
-                {cliente.email}
-              </Typography>
-              <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                Endereço
-              </Typography>
-              <Typography variant="body2">
-                {`${cliente.rua},${cliente.numero}-${cliente.bairro},${cliente.cidade}-${cliente.estado}`}
-              </Typography>
-            </CardContent>
-          </Card>)}
-          
+          )}
+          {cliente && (
+            <Card sx={{ minWidth: 400, border: 1 }}>
+              <CardContent>
+                <Typography
+                  sx={{ fontSize: 14 }}
+                  color="text.secondary"
+                  gutterBottom
+                >
+                  Cliente
+                </Typography>
+                <Typography variant="h5" component="div">
+                  {cliente.nome ?? cliente.nomeFantasia ?? cliente.razaoSocial}
+                </Typography>
+                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                  Contato
+                </Typography>
+                <Typography variant="body2">{cliente.telefone}</Typography>
+                <Typography variant="body2">{cliente.email}</Typography>
+                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                  Endereço
+                </Typography>
+                <Typography variant="body2">
+                  {`${cliente.rua},${cliente.numero}-${cliente.bairro},${cliente.cidade}-${cliente.estado}`}
+                </Typography>
+              </CardContent>
+            </Card>
+          )}
         </Box>
-        <Box sx={{ border: 1 }} display={'flex'} flexDirection={'column'} padding={'10px'} gap={'10px'} marginTop={'10px'}> 
-        <Typography variant="h5">
-            {`Orçamento`}
-          </Typography>
-        <Table  aria-label="simple table" >
-          <TableHead>
-            <TableRow>
-              <TableCell style={{ fontWeight: "bold" }}>Titulo</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Descrição</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Quantidade</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>
-                Valor Unitario
-              </TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Valor Total</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody   >
-            {produtos && produtos.map((row) => (
-              <TableRow key={row.id}>
-                <TableCell>
-                  <Typography>{row.titulo}</Typography>
+        <Box
+          sx={{ border: 1 }}
+          display={"flex"}
+          flexDirection={"column"}
+          padding={"10px"}
+          gap={"10px"}
+          marginTop={"10px"}
+        >
+          <Typography variant="h5">{`Orçamento`}</Typography>
+          <Table aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell style={{ fontWeight: "bold" }}>Titulo</TableCell>
+                <TableCell style={{ fontWeight: "bold" }}>Descrição</TableCell>
+                <TableCell style={{ fontWeight: "bold" }}>Quantidade</TableCell>
+                <TableCell style={{ fontWeight: "bold" }}>
+                  Valor Unitario
                 </TableCell>
-                <TableCell>
-                  <Typography>{row.observacoes}</Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography>{row.quantidade}</Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography>{row.valorUnitario}</Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography>{row.valorUnitario * row.quantidade}</Typography>
+                <TableCell style={{ fontWeight: "bold" }}>
+                  Valor Total
                 </TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHead>
+            <TableBody>
+              {produtos &&
+                produtos.map((row) => (
+                  <TableRow key={row.id}>
+                    <TableCell>
+                      <Typography>{row.titulo}</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography>{row.observacoes}</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography>{row.quantidade}</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography>{row.valorUnitario}</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography>
+                        {row.valorUnitario * row.quantidade}
+                      </Typography>
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
         </Box>
       </TableContainer>
-  
-    </div >
-  )
-}
-)
+    </div>
+  );
+});
 
 const BotoesOrcamento: React.FC = () => {
   const navigate = useNavigate();
@@ -249,15 +259,17 @@ export const ProdutosOrcamento = () => {
   useEffect(() => {
     setIsLoading(true);
     debounce(() => {
-      ProdutosService.getAll({ page: pagina, filter: busca }, Number(id)).then((result) => {
-        if (result instanceof Error) {
-          alert(result.message);
-          return;
+      ProdutosService.getAll({ page: pagina, filter: busca }, Number(id)).then(
+        (result) => {
+          if (result instanceof Error) {
+            alert(result.message);
+            return;
+          }
+          setRows(result.data);
+          setTotalCount(result.totalCount);
+          setIsLoading(false);
         }
-        setRows(result.data);
-        setTotalCount(result.totalCount);
-        setIsLoading(false);
-      });
+      );
     });
   }, [busca, pagina]);
 
@@ -288,12 +300,19 @@ export const ProdutosOrcamento = () => {
           }
           mostrarBotaoNovo={false}
           mostrarBotaoVoltar
-          componentePersonalizado={<>
-            <IconButton onClick={() => {
-              generatePDF(pdfRef, { filename: 'page.pdf' })
-            }}><Icon>picture_as_pdf</Icon></IconButton>
-            <BotoesOrcamento />
-          </>
+          componentePersonalizado={
+            <>
+              <Button
+                startIcon={<Icon>picture_as_pdf</Icon>}
+                onClick={() => {
+                  generatePDF(pdfRef, { filename: "page.pdf" });
+                }}
+                variant="contained"
+              >
+                Gerar PDF
+              </Button>
+              <BotoesOrcamento />
+            </>
           }
         />
       }
