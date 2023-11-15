@@ -36,7 +36,8 @@ import {
 import { Actions } from "../../ui/components/ferramentasDeListagem/Actions";
 import generatePDF from "react-to-pdf";
 import { FornecedoresService, ICliente, IFornecedor, PedidosService } from "../../data/services/api";
-import { OrcamentosService } from "../../data/services/api/modules/orcamentos";
+import { IOrcamento, OrcamentosService } from "../../data/services/api/modules/orcamentos";
+import { format, parseISO } from "date-fns";
 
 interface IPDF {
   id: number,
@@ -47,6 +48,7 @@ const PDF = forwardRef(({ id, referencia }: IPDF) => {
   const [fornecedor, setFornecedor] = useState<IFornecedor>();
   const [cliente, setCliente] = useState<ICliente>();
   const [produtos, setProdutos] = useState<IProduto[]>();
+  const [orcamento, setOrcamento] = useState<IOrcamento>();
   useEffect(() => {
     OrcamentosService.getFullById(id).then((result) => {
       if (result instanceof Error) {
@@ -54,6 +56,7 @@ const PDF = forwardRef(({ id, referencia }: IPDF) => {
       }
       setCliente(result.cliente);
       setProdutos(result.produtos);
+      setOrcamento(result)
     })
     FornecedoresService.getById(1).then((result) => {
       if (result instanceof Error) {
@@ -178,11 +181,37 @@ const PDF = forwardRef(({ id, referencia }: IPDF) => {
                 </TableCell>
               </TableRow>
             ))}
-          </TableBody>
-        </Table>
+           </TableBody>
+          </Table>
+          
+        
+       <Box flexDirection={"column"} display={"flex"}>
+       {orcamento && (<>
+        <Box display={"flex"} flexDirection={"row"} justifyContent={"space-between"} width={"900px"}>
+        <Typography></Typography>
+        <Typography>Valor Materias: { orcamento.totalMateriais}</Typography>
         </Box>
+        <Box display={"flex"} flexDirection={"row"} justifyContent={"space-between"} width={"900px"}>
+        <Typography></Typography>
+        <Typography>Valor Mão de Obra: {orcamento.totalMaoObra }</Typography>
+        </Box>
+        <Box display={"flex"} flexDirection={"row"} justifyContent={"space-between"} width={"900px"}>
+        <Typography></Typography>
+        <Typography>Valor Total: {orcamento.totalMaoObra + orcamento.totalMateriais}</Typography>
+        </Box>
+        </>
+       )}
+       </Box>
+       </Box>
+       <Box>
+       {orcamento && (
+        <Box display={"flex"} flexDirection={"row"} justifyContent={"space-between"} width={"900px"}>
+        <Typography>Este orçamento é valido até:  {format(parseISO(String(orcamento.validade)), "dd/MM/yyyy")}</Typography>
+        <Typography>Prazo estimado de Produção: {orcamento.prazoEstimadoProducao} Dias</Typography>
+        </Box>
+       )}
+       </Box>
       </TableContainer>
-  
     </div >
   )
 }
@@ -259,7 +288,7 @@ export const ProdutosPedido = () => {
 
   return (
     <PaginaBase
-      titulo={`Produto do Orçamento:  ${id}`}
+      titulo={`Produto do Pedido:  ${id}`}
       barraDeFerramentas={
         <FerramentasDaListagem
           mostrarInputBusca
@@ -269,12 +298,19 @@ export const ProdutosPedido = () => {
           }
           mostrarBotaoNovo={false}
           mostrarBotaoVoltar
-          componentePersonalizado={<>
-            <IconButton onClick={() => {
-              generatePDF(pdfRef, { filename: 'page.pdf' })
-            }}><Icon>picture_as_pdf</Icon></IconButton>
-          
-          </>
+          componentePersonalizado={
+            <>
+              <Button
+                startIcon={<Icon>picture_as_pdf</Icon>}
+                onClick={() => {
+                  generatePDF(pdfRef, { filename: "page.pdf" });
+                }}
+                variant="contained"
+              >
+                Gerar PDF
+              </Button>
+              
+            </>
           }
         />
       }

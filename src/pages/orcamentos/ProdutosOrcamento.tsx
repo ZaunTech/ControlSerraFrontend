@@ -40,7 +40,8 @@ import {
   ICliente,
   IFornecedor,
 } from "../../data/services/api";
-import { OrcamentosService } from "../../data/services/api/modules/orcamentos";
+import { IOrcamento, OrcamentosService } from "../../data/services/api/modules/orcamentos";
+import { format, parseISO } from "date-fns";
 
 interface IPDF {
   id: number;
@@ -51,13 +52,15 @@ const PDF = forwardRef(({ id, referencia }: IPDF) => {
   const [fornecedor, setFornecedor] = useState<IFornecedor>();
   const [cliente, setCliente] = useState<ICliente>();
   const [produtos, setProdutos] = useState<IProduto[]>();
+  const [orcamento, setOrcamento] = useState<IOrcamento>();
   useEffect(() => {
-    OrcamentosService.getFullById(id).then((result) => {
+     OrcamentosService.getFullById(id).then((result) => {
       if (result instanceof Error) {
         return;
       }
       setCliente(result.cliente);
       setProdutos(result.produtos);
+      setOrcamento(result)
     });
     FornecedoresService.getById(1).then((result) => {
       if (result instanceof Error) {
@@ -189,10 +192,38 @@ const PDF = forwardRef(({ id, referencia }: IPDF) => {
                       </Typography>
                     </TableCell>
                   </TableRow>
+                  
                 ))}
             </TableBody>
           </Table>
+          
+        
+       <Box flexDirection={"column"} display={"flex"}>
+       {orcamento && (<>
+        <Box display={"flex"} flexDirection={"row"} justifyContent={"space-between"} width={"900px"}>
+        <Typography></Typography>
+        <Typography>Valor Materias: { orcamento.totalMateriais}</Typography>
         </Box>
+        <Box display={"flex"} flexDirection={"row"} justifyContent={"space-between"} width={"900px"}>
+        <Typography></Typography>
+        <Typography>Valor Mão de Obra: {orcamento.totalMaoObra }</Typography>
+        </Box>
+        <Box display={"flex"} flexDirection={"row"} justifyContent={"space-between"} width={"900px"}>
+        <Typography></Typography>
+        <Typography>Valor Total: {orcamento.totalMaoObra + orcamento.totalMateriais}</Typography>
+        </Box>
+        </>
+       )}
+       </Box>
+       </Box>
+       <Box>
+       {orcamento && (
+        <Box display={"flex"} flexDirection={"row"} justifyContent={"space-between"} width={"900px"}>
+        <Typography>Este orçamento é valido até:  {format(parseISO(String(orcamento.validade)), "dd/MM/yyyy")}</Typography>
+        <Typography>Prazo estimado de Produção: {orcamento.prazoEstimadoProducao} Dias</Typography>
+        </Box>
+       )}
+       </Box>
       </TableContainer>
     </div>
   );

@@ -5,6 +5,8 @@ export interface IProduto {
   tipo: string;
   titulo: string;
   observacoes?: string;
+  valorMaterial?:  number;
+  valorMaoDeObra?: number;
   quantidade: number;
   valorUnitario: number;
   idOrcamento: string;

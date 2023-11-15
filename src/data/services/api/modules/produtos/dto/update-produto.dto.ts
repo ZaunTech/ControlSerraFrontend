@@ -7,6 +7,8 @@ export interface UpdateProdutoDto {
     quantidade?: number;
     valorUnitario?: number;
     observacoes: string;
+    valorMaterial?:  number;
+    valorMaoDeObra?: number;
     Orcamento?: IOrcamento;
     orcamentoId: number;
 }

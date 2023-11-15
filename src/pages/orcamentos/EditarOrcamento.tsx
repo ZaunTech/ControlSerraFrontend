@@ -45,7 +45,7 @@ export const EditarOrcamento = () => {
   const [opcoes, setOpcoes] = useState<ICliente[]>([]);
   const [pageState, setPageState] = useState<TTipo>("detalhes");
   const [isEditable, setIsEditable] = useState<boolean>(false);
-
+  
   useEffect(() => {
     if (pageState === "detalhes") {
       setIsEditable(false);
@@ -111,6 +111,7 @@ export const EditarOrcamento = () => {
         setValue("status", result.status.toString());
         setValue("prazoEstimadoProducao", result.prazoEstimadoProducao);
         setOrcamento(result);
+      
       });
     } catch (error) {}
   };
@@ -136,7 +137,7 @@ export const EditarOrcamento = () => {
 
   return (
     <PaginaBase
-      titulo="Editar Orcamento"
+    titulo={`Editar Orçamento: ${id}`}
       barraDeFerramentas={
         <FerramentasDeDetalhes
           tipo="detalhes"

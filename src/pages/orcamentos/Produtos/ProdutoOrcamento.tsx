@@ -14,6 +14,7 @@ const createUserFormSchema = z.object({
   titulo: z.string().min(1, "Informe o nome do produto"),
   observacoes: z.string().optional(),
   quantidade: z.coerce.number().min(1,"Informe a quantidade"),
+  idOrcamento: z.coerce.number()
 });
 
 export const ProdutoOrcamento = () => {
@@ -39,6 +40,7 @@ export const ProdutoOrcamento = () => {
       setValue("titulo", result.titulo);
       setValue("observacoes", result.observacoes);
       setValue("quantidade", result.quantidade);
+      setValue("idOrcamento", result.idOrcamento)
     });
   }
 
@@ -47,19 +49,22 @@ export const ProdutoOrcamento = () => {
   }, []);
 
   function createProduto(data: any) {
+    console.log(data);
     ProdutosService.updateById(Number(id), data)
       .then((result) => {
         if (!(result instanceof Error)) {
+          
           setIsEditable(false);
           setPageState("detalhes");
         }
       })
-      .catch((error) => { });
+      .catch((error) => { console.log(error);});
   }
   function createProdutoFechar(data: any) {
     ProdutosService.updateById(Number(id), data)
       .then((result) => {
         if (!(result instanceof Error)) {
+          
           navigate(-1);
         }
       })

@@ -26,6 +26,7 @@ import {
   Box,
   Card,
   CardContent,
+  Button,
 } from "@mui/material";
 import { Environment } from "../../data/environment";
 import {
@@ -333,11 +334,19 @@ export const InsumosProduto = () => {
           onChangeBuscaTexto={(texto) =>
             setSearchParams({ busca: texto, pagina: "1" }, { replace: true })
           }
-          onClickBotaoNovo={() => navigate(`${location.pathname}/novo`)}
+          mostrarBotaoNovo={false}
           mostrarBotaoVoltar
-          componentePersonalizado={<IconButton onClick={() => {
-            generatePDF(pdfRef, { filename: 'page.pdf' })
-          }}><Icon>picture_as_pdf</Icon></IconButton>}
+          componentePersonalizado={
+            <Button
+              startIcon={<Icon>picture_as_pdf</Icon>}
+              onClick={() => {
+                generatePDF(pdfRef, { filename: "page.pdf" });
+              }}
+              variant="contained"
+            >
+              Gerar PDF
+            </Button>
+          }
         />
       }
     >
@@ -348,15 +357,12 @@ export const InsumosProduto = () => {
       >
         <Table>
           <TableHead>
-            <TableRow>
-              
-              
+            <TableRow>  
               <TableCell style={{ fontWeight: "bold" }}>Titulo</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Variação</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Quantidade</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Categoria</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Descrição</TableCell>
-
               <TableCell style={{ fontWeight: "bold" }}>Fornecedor</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Valor Unitario</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Valor Total</TableCell>

@@ -71,7 +71,7 @@ const addProdutoBase = async (
   addProdutoBase: AddProdutoBaseDto
 ): Promise<IProduto | Error> => {
   try {
-    console.log("este",addProdutoBase)
+    
     const urlRelativa = `/${rota}/addProdutoBase`;
     const response = await Api.post<IProduto>(urlRelativa, addProdutoBase);
     if (response) {
@@ -91,13 +91,17 @@ const updateById = async (
   updateProdutoDto: UpdateProdutoDto
 ): Promise<IProduto | Error> => {
   try {
+   
     const urlRelativa = `/${rota}/${id}`;
     const response = await Api.patch(urlRelativa, updateProdutoDto);
+    console.log(response)
     if (response.statusText === "OK") {
       return response.data;
     }
+    
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {
+    console.log(error)
     return new Error(
       (error as { message: string }).message ||
         Environment.ERRO_AO_ACESSAR_DADOS
