@@ -38,9 +38,10 @@ export const CriarVariante = () => {
   function createUser(data: any) {
     VariantesService.create(data)
       .then(() => {
+    
         navigate(-1);
       })
-      .catch((erro) => { });
+      .catch((erro) => { console.log(erro) });
   }
   const [opcoes, setOpcoes] = useState<IInsumo[]>([]);
 

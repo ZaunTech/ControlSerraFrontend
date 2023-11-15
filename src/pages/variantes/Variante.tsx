@@ -43,6 +43,8 @@ export const Variante = () => {
   });
 
   const navigate = useNavigate();
+
+
   function createInsumo(data: any) {
     VariantesService.updateById(Number(idVariante), data)
       .then(() => {
@@ -51,6 +53,8 @@ export const Variante = () => {
       })
       .catch((error) => {});
   }
+
+  
   function createInsumoFechar(data: any) {
  
     VariantesService.updateById(Number(idVariante), data)

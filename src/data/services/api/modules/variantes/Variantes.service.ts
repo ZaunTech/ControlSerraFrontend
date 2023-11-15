@@ -71,11 +71,11 @@ const getById = async (id: number): Promise<IVariante | Error> => {
   }
 };
 const create = async (
-  createInsumoDto: CreateVarianteDto
+  createVarianteDto: CreateVarianteDto
 ): Promise<IVariante | Error> => {
   try {
     const urlRelativa = `/${rota}`;
-    const response = await Api.post<IVariante>(urlRelativa, createInsumoDto);
+    const response = await Api.post<IVariante>(urlRelativa, createVarianteDto);
     if (response) {
       return response.data;
     }

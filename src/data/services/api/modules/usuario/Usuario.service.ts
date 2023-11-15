@@ -51,7 +51,7 @@ const getById = async (id: number): Promise<IUsuario | Error> => {
 const create = async (
   createUsuarioDto: CreateUsuarioDto
 ): Promise<IUsuario | Error> => {
-  console.log("entrou controler")
+  
   try {
     const urlRelativa = `/${rota}`;
     const { data } = await Api.post<IUsuario>(
@@ -128,7 +128,6 @@ const alterarSenha = async (
   data: IChangePassword
 ): Promise<IUsuario | Error> => {
   try {
-    console.log(data)
     const urlRelativa = `/${rota}/${id}`;
     const response = await Api.post(urlRelativa, data); 
     if (response.statusText === "OK") {

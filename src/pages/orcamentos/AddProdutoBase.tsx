@@ -19,7 +19,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { ProdutosService } from "../../data/services/api/modules/produtos";
 
 const createUserFormSchema = z.object({
-  titulo: z.string().min(1,"Selecione um produto base"),
+ 
   quantidade: z.coerce.number().min(1,"Informe a quantidade"),
   orcamentoId: z.coerce.number(),
   observacoes: z.string().optional(),
@@ -61,14 +61,13 @@ export const AddProdutoBase = () => {
   const navigate = useNavigate();
 
   function createUser(data: any) {
-    console.log(data);
     ProdutosService.addProdutoBase(data)
       .then((result) => {
-        if (!(result instanceof Error)) {
+        if (!(result instanceof Error)) {   
           navigate(-1);
         }
       })
-      .catch((error) => {});
+      .catch((error) => { console.log("Esse é o sucesso",error);});
   }
 
 

@@ -71,6 +71,7 @@ const addProdutoBase = async (
   addProdutoBase: AddProdutoBaseDto
 ): Promise<IProduto | Error> => {
   try {
+    console.log("este",addProdutoBase)
     const urlRelativa = `/${rota}/addProdutoBase`;
     const response = await Api.post<IProduto>(urlRelativa, addProdutoBase);
     if (response) {
