@@ -124,6 +124,7 @@ const deleteById = async (id: number): Promise<IOrcamento | Error> => {
     }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {
+    console.log(error)
     return new Error(
       (error as { message: string }).message ||
       Environment.ERRO_AO_ACESSAR_DADOS

@@ -176,14 +176,6 @@ export const Login = () => {
               control={<Checkbox defaultChecked size="small" />}
               label="Lembrar Senha?"
             />
-
-            <Link
-              href="https://www.exemplo.com"
-              target="_blank"
-              rel="noopener"
-              variant="body2">
-              {"Esqueci Minha Senha"}
-            </Link>
           </Box>
 
           <Button
