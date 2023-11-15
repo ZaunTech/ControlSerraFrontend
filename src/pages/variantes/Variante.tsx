@@ -48,13 +48,13 @@ export const Variante = () => {
   function createInsumo(data: any) {
     VariantesService.updateById(Number(idVariante), data)
       .then(() => {
+        setIsEditable(false);
         setPageState("detalhes")
-        setIsEditable(false)
       })
       .catch((error) => {});
   }
 
-  
+
   function createInsumoFechar(data: any) {
  
     VariantesService.updateById(Number(idVariante), data)
@@ -115,8 +115,9 @@ export const Variante = () => {
       titulo="Variante"
       barraDeFerramentas={
         <FerramentasDeDetalhes
-          tipo="detalhes"
-          setPaiState={setPageState}
+        tipo="detalhes"
+        pageState={pageState}
+        setPaiState={setPageState}
           onClickSalvarEFechar={handleSubmit(createInsumoFechar)}
           onClickSalvar={handleSubmit(createInsumo)}
           onClickCancelar={fetchData}
