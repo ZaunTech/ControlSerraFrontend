@@ -166,7 +166,7 @@ export const Pedidos = () => {
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{row.status}</Typography>
+                <Typography>{row.status.toString() == "Em_Processo"? "Em Processo" : row.status }</Typography>
                 </TableCell>
                 <TableCell>
                   <Typography>{row.pagamento.toLocaleString('pt-BR', {
