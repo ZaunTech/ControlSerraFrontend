@@ -138,7 +138,7 @@ export const CriarPedido = () => {
                   onChange={handleChange}
                 >
                   <MenuItem value={"Pendente"} disabled={!isEditable}>Pendente</MenuItem>             
-                  <MenuItem value={"Em Processo"} disabled={!isEditable}>Em Processo</MenuItem>
+                  <MenuItem value={"Em_Processo"} disabled={!isEditable}>Em Processo</MenuItem>
                   <MenuItem value={"Concluido"} disabled={!isEditable}>Concluido</MenuItem>
                 </Select>
 

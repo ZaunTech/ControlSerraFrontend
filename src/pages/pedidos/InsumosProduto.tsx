@@ -336,17 +336,7 @@ export const InsumosProduto = () => {
           }
           mostrarBotaoNovo={false}
           mostrarBotaoVoltar
-          componentePersonalizado={
-            <Button
-              startIcon={<Icon>picture_as_pdf</Icon>}
-              onClick={() => {
-                generatePDF(pdfRef, { filename: "page.pdf" });
-              }}
-              variant="contained"
-            >
-              Gerar PDF
-            </Button>
-          }
+          
         />
       }
     >
