@@ -16,7 +16,12 @@ import {
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { ClientesService, ICliente } from "../../data/services/api";
+import {
+  ClientesService,
+  ICliente,
+  IUsuario,
+  UsuariosService,
+} from "../../data/services/api";
 import {
   IOrcamento,
   OrcamentosService,
@@ -45,7 +50,7 @@ export const EditarOrcamento = () => {
   const [opcoes, setOpcoes] = useState<ICliente[]>([]);
   const [pageState, setPageState] = useState<TTipo>("detalhes");
   const [isEditable, setIsEditable] = useState<boolean>(false);
-  
+
   useEffect(() => {
     if (pageState === "detalhes") {
       setIsEditable(false);
@@ -91,10 +96,16 @@ export const EditarOrcamento = () => {
   const handleChange = (event: SelectChangeEvent) => {
     setTipo(event.target.value as string);
   };
+  const setarUsuario = async (id: number): Promise<IUsuario | Error> => {
+    console.log("id na função", id);
+    const usuario = await UsuariosService.getById(id);
+    if (usuario) return usuario;
+    return new Error("Erro");
+  };
 
   const setarOrcamento = async () => {
     try {
-      await OrcamentosService.getById(Number(id)).then((result) => {
+      await OrcamentosService.getById(Number(id)).then(async (result) => {
         if (result instanceof Error) {
           return;
         }
@@ -104,14 +115,17 @@ export const EditarOrcamento = () => {
           const formattedDate = dateObject.toISOString().split("T")[0];
           setValue("validade", formattedDate);
         }
+       
+        let usuario = await setarUsuario(result.criadorPor);
 
         setValue("idCliente", result.idCliente);
         setValue("observacoes", result.observacoes);
         setTipo(result.status.toString());
         setValue("status", result.status.toString());
+
         setValue("prazoEstimadoProducao", result.prazoEstimadoProducao);
         setOrcamento(result);
-      
+        setValue("serralheiro", usuario.nome);
       });
     } catch (error) {}
   };
@@ -137,7 +151,7 @@ export const EditarOrcamento = () => {
 
   return (
     <PaginaBase
-    titulo={`Editar Orçamento: ${id}`}
+      titulo={`Editar Orçamento: ${id}`}
       barraDeFerramentas={
         <FerramentasDeDetalhes
           tipo="detalhes"
@@ -147,16 +161,14 @@ export const EditarOrcamento = () => {
           onClickSalvarEFechar={handleSubmit(createOrcamentoFechar)}
           onClickCancelar={handleSubmit(setarOrcamento)}
         />
-      }
-    >
+      }>
       <Box component={"form"} onSubmit={handleSubmit(createOrcamento)}>
         <Box
           display={"flex"}
           margin={1}
           flexDirection={"column"}
           component={Paper}
-          variant="outlined"
-        >
+          variant="outlined">
           <Grid container direction="column" padding={2} spacing={3}>
             <Grid container item direction="row" spacing={4}>
               <Grid item>
@@ -203,8 +215,7 @@ export const EditarOrcamento = () => {
                   value={tipo}
                   {...register("status")}
                   onChange={handleChange}
-                  disabled={!isEditable}
-                >
+                  disabled={!isEditable}>
                   <MenuItem value={"Pendente"}>Pendente</MenuItem>
                   <MenuItem value={"Em_Processo"}>Em Processo</MenuItem>
                   <MenuItem value={"Concluido"}>Concluido</MenuItem>
@@ -257,6 +268,21 @@ export const EditarOrcamento = () => {
                   </span>
                 )}
               </Grid>
+              <Grid item>
+                <Box>
+                  <Typography>Serralheiro Responsavel </Typography>
+                  <TextField
+                    type="text"
+                    disabled={true}
+                    {...register("serralheiro")}
+                  />
+                </Box>
+                {errors.prazoEstimadoProducao && (
+                  <span>
+                    {errors.prazoEstimadoProducao.message?.toString()}
+                  </span>
+                )}
+              </Grid>
             </Grid>
           </Grid>
         </Box>
@@ -265,8 +291,7 @@ export const EditarOrcamento = () => {
           margin={1}
           flexDirection={"column"}
           component={Paper}
-          variant="outlined"
-        >
+          variant="outlined">
           <Grid container direction="column" padding={2} spacing={3}>
             <Grid container item direction="row" spacing={4}>
               <Grid item>

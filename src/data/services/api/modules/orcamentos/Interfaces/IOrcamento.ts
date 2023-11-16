@@ -12,6 +12,7 @@ export interface IOrcamento {
   observacoes?: string;
   idCliente: number;
   idPedido?: number;
+  criadorPor: number;
   cliente: ICliente;
   produtos: IProduto[];
   createdAt?: Date;

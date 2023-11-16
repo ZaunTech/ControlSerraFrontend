@@ -34,6 +34,7 @@ const getAll = async (
 };
 const getById = async (id: number): Promise<IUsuario | Error> => {
   try {
+  console.log(id)
     const urlRelativa = `/${rota}/${id}`;
     const { data } = await Api.get<IUsuario>(urlRelativa);
     if (data) {
