@@ -113,7 +113,7 @@ export const ItemListaInsumoProduto = () => {
 
   return (
     <PaginaBase
-      titulo="Editar Insumos prod"
+      titulo="Editar Insumos do Produto" 
       barraDeFerramentas={
         <FerramentasDeDetalhes
           tipo="detalhes"
