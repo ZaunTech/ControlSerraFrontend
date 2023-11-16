@@ -56,7 +56,7 @@ export const AlterarSenha = () => {
 
   return (
     <PaginaBase
-      titulo="Criar Usuario"
+      titulo="Alterar Senha"
       barraDeFerramentas={<FerramentasDeDetalhes
         tipo="novo"
         pageState={pageState}

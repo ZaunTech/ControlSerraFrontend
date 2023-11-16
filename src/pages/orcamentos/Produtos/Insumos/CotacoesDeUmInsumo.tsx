@@ -312,7 +312,7 @@ export const CotacoesDeUmInsumo = () => {
                     </Typography>
                   </TableCell>
                   <TableCell>
-                    <Typography>{row.variante?.insumo?.titulo || "Vazop"}</Typography>
+                    <Typography>{row.variante?.insumo?.titulo + row.variante?.variante || "Vazop"}</Typography>
                   </TableCell>
                   <TableCell>
                     <Typography>{row.valor}</Typography>

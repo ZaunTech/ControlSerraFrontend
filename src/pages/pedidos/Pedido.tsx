@@ -72,7 +72,7 @@ export const Pedido = () => {
 
   const [pageState, setPageState] = useState<TTipo>("detalhes");
   const [isEditable, setIsEditable] = useState<boolean>(false);
-
+  const [orcamento, setOrcamento] = useState<IOrcamento>();
   useEffect(() => {
     if (pageState === "detalhes") {
       setIsEditable(false);
@@ -126,7 +126,9 @@ export const Pedido = () => {
         setValue("pagamento", data.pagamento);
         setTipo(data.status.toString());
         setValue("updatedAt", formattedDate);
-      }
+        console.log(data)
+        setOrcamento(data.orcamento);
+      } 
     } catch (error) {}
   };
 
@@ -274,6 +276,46 @@ export const Pedido = () => {
                     Adicionar
                   </Button>
                 </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Box>
+        <Box
+          display={"flex"}
+          margin={1}
+          flexDirection={"column"}
+          component={Paper}
+          variant="outlined">
+          <Grid container direction="column" padding={2} spacing={3}>
+            <Grid container item direction="row" spacing={4}>
+              <Grid item>
+                <Typography>Valores</Typography>
+              </Grid>
+            </Grid>
+            <Grid container item direction="row" spacing={4}>
+              <Grid item>
+                <InputLabel id="valMaoDeObra">Mão de Obra</InputLabel>
+                <TextField
+                  type="number"
+                  disabled={true}
+                  value={orcamento?.totalMaoObra}
+                />
+              </Grid>
+              <Grid item>
+                <InputLabel id="valMaoDeObra">Insumos</InputLabel>
+                <TextField
+                  type="number"
+                  disabled={true}
+                  value={orcamento?.totalMateriais}
+                />
+              </Grid>
+              <Grid item>
+                <InputLabel id="valMaoDeObra">Total</InputLabel>
+                <TextField
+                  type="number"
+                  disabled={true}
+                  value={orcamento?.totalMaoObra + orcamento?.totalMateriais}
+                />
               </Grid>
             </Grid>
           </Grid>
