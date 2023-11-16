@@ -90,7 +90,6 @@ export const FerramentasDaListagem: React.FC<IFerramentasDaListagem> = ({
       )}
       {mostrarBotaoVoltar && (
         <>
-          <Divider variant="middle" orientation="vertical" />
           <Button
             color="primary"
             variant="outlined"

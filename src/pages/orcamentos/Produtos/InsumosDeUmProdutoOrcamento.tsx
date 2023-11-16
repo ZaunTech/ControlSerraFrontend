@@ -364,7 +364,6 @@ export const InsumosDeUmProdutoOrcamento = () => {
           <TableHead>
             <TableRow>
               <TableCell style={{ fontWeight: "bold" }}>Ações</TableCell>
-
               <TableCell style={{ fontWeight: "bold" }}>Titulo</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Variação</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Quantidade</TableCell>
@@ -417,11 +416,23 @@ export const InsumosDeUmProdutoOrcamento = () => {
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{row.cotacao?.valor}</Typography>
+                  <Typography>
+                    {row.cotacao?.valor.toLocaleString("pt-BR", {
+                      style: "currency",
+                      currency: "BRL",
+                      minimumFractionDigits: 2,
+                    })}
+                  </Typography>
                 </TableCell>
                 <TableCell>
                   <Typography>
-                    {row.quantidade * (row.cotacao?.valor ?? 0)}
+                    {(
+                      row.quantidade * (row.cotacao?.valor ?? 0)
+                    ).toLocaleString("pt-BR", {
+                      style: "currency",
+                      currency: "BRL",
+                      minimumFractionDigits: 2,
+                    })}
                   </Typography>
                 </TableCell>
               </TableRow>

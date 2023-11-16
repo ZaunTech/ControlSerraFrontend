@@ -12,7 +12,6 @@ import {
 import { useAppDrawerContext } from "../../data/contexts";
 import React from "react";
 
-
 export interface IPaginaBase {
   children: React.ReactNode;
   titulo: string;
@@ -75,10 +74,8 @@ export const PaginaBase: React.FC<IPaginaBase> = ({
                 justifyContent={"center"}
                 gap={theme.spacing(2)}
               >
-                
-                <Box display={'flex'} flexDirection={"row"}>
-              <Icon> personIcon
-              </Icon>
+                <Box display={"flex"} flexDirection={"row"}>
+                  <Icon> personIcon</Icon>
                   <Typography>Nivaldo - Administrador</Typography>
                 </Box>
               </Box>

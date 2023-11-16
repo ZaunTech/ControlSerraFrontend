@@ -35,13 +35,21 @@ import {
 } from "../../data/services/api/modules/produtos";
 import { Actions } from "../../ui/components/ferramentasDeListagem/Actions";
 import generatePDF from "react-to-pdf";
-import { FornecedoresService, ICliente, IFornecedor, PedidosService } from "../../data/services/api";
-import { IOrcamento, OrcamentosService } from "../../data/services/api/modules/orcamentos";
+import {
+  FornecedoresService,
+  ICliente,
+  IFornecedor,
+  PedidosService,
+} from "../../data/services/api";
+import {
+  IOrcamento,
+  OrcamentosService,
+} from "../../data/services/api/modules/orcamentos";
 import { format, parseISO } from "date-fns";
 
 interface IPDF {
-  id: number,
-  referencia: Ref<HTMLDivElement | null>
+  id: number;
+  referencia: Ref<HTMLDivElement | null>;
 }
 
 const PDF = forwardRef(({ id, referencia }: IPDF) => {
@@ -52,19 +60,19 @@ const PDF = forwardRef(({ id, referencia }: IPDF) => {
   useEffect(() => {
     OrcamentosService.getFullById(id).then((result) => {
       if (result instanceof Error) {
-        return
+        return;
       }
       setCliente(result.cliente);
       setProdutos(result.produtos);
-      setOrcamento(result)
-    })
+      setOrcamento(result);
+    });
     FornecedoresService.getById(1).then((result) => {
       if (result instanceof Error) {
-        return
+        return;
       }
-      setFornecedor(result)
-    })
-  })
+      setFornecedor(result);
+    });
+  });
   return (
     <div
       style={{
@@ -72,24 +80,28 @@ const PDF = forwardRef(({ id, referencia }: IPDF) => {
         left: "-9999px",
         top: "-9999px",
         width: "1000px",
-        height: "1000px"
-      }}>
-
+        height: "1000px",
+      }}
+    >
       <TableContainer
         component={Paper}
         variant="outlined"
         sx={{ m: 1, width: "auto" }}
         ref={referencia}
         style={{
-          padding: '20px',
-          margin: '20px'
+          padding: "20px",
+          margin: "20px",
         }}
       >
-        <Box display={'flex'} flexDirection={'column'} gap={'10px'}>
+        <Box display={"flex"} flexDirection={"column"} gap={"10px"}>
           {fornecedor && (
-            <Card sx={{ minWidth: 400, border:1 }}>
+            <Card sx={{ minWidth: 400, border: 1 }}>
               <CardContent>
-                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                <Typography
+                  sx={{ fontSize: 14 }}
+                  color="text.secondary"
+                  gutterBottom
+                >
                   Empresa
                 </Typography>
                 <Typography variant="h5" component="div">
@@ -100,12 +112,8 @@ const PDF = forwardRef(({ id, referencia }: IPDF) => {
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
                   Contato
                 </Typography>
-                <Typography variant="body2">
-                  {fornecedor.telefone}
-                </Typography>
-                <Typography variant="body2">
-                  {fornecedor.email}
-                </Typography>
+                <Typography variant="body2">{fornecedor.telefone}</Typography>
+                <Typography variant="body2">{fornecedor.email}</Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
                   Endereço
                 </Typography>
@@ -114,110 +122,161 @@ const PDF = forwardRef(({ id, referencia }: IPDF) => {
                 </Typography>
               </CardContent>
             </Card>
-          )
-          }
-          {cliente && (<Card sx={{ minWidth: 400 , border:1 }}>
-            <CardContent>
-              <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                Cliente
-              </Typography>
-              <Typography variant="h5" component="div">
-                {cliente.nome ??
-                  cliente.nomeFantasia ??
-                  cliente.razaoSocial}
-              </Typography>
-              <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                Contato
-              </Typography>
-              <Typography variant="body2">
-                {cliente.telefone}
-              </Typography>
-              <Typography variant="body2">
-                {cliente.email}
-              </Typography>
-              <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                Endereço
-              </Typography>
-              <Typography variant="body2">
-                {`${cliente.rua},${cliente.numero}-${cliente.bairro},${cliente.cidade}-${cliente.estado}`}
-              </Typography>
-            </CardContent>
-          </Card>)}
-          
+          )}
+          {cliente && (
+            <Card sx={{ minWidth: 400, border: 1 }}>
+              <CardContent>
+                <Typography
+                  sx={{ fontSize: 14 }}
+                  color="text.secondary"
+                  gutterBottom
+                >
+                  Cliente
+                </Typography>
+                <Typography variant="h5" component="div">
+                  {cliente.nome ?? cliente.nomeFantasia ?? cliente.razaoSocial}
+                </Typography>
+                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                  Contato
+                </Typography>
+                <Typography variant="body2">{cliente.telefone}</Typography>
+                <Typography variant="body2">{cliente.email}</Typography>
+                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                  Endereço
+                </Typography>
+                <Typography variant="body2">
+                  {`${cliente.rua},${cliente.numero}-${cliente.bairro},${cliente.cidade}-${cliente.estado}`}
+                </Typography>
+              </CardContent>
+            </Card>
+          )}
         </Box>
-        <Box sx={{ border: 1 }} display={'flex'} flexDirection={'column'} padding={'10px'} gap={'10px'} marginTop={'10px'}> 
-        <Typography variant="h5">
-            {`Orçamento`}
-          </Typography>
-        <Table  aria-label="simple table" >
-          <TableHead>
-            <TableRow>
-              <TableCell style={{ fontWeight: "bold" }}>Titulo</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Descrição</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Quantidade</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>
-                Valor Unitario
-              </TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Valor Total</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody   >
-            {produtos && produtos.map((row) => (
-              <TableRow key={row.id}>
-                <TableCell>
-                  <Typography>{row.titulo}</Typography>
+        <Box
+          sx={{ border: 1 }}
+          display={"flex"}
+          flexDirection={"column"}
+          padding={"10px"}
+          gap={"10px"}
+          marginTop={"10px"}
+        >
+          <Typography variant="h5">{`Orçamento`}</Typography>
+          <Table aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell style={{ fontWeight: "bold" }}>Titulo</TableCell>
+                <TableCell style={{ fontWeight: "bold" }}>Descrição</TableCell>
+                <TableCell style={{ fontWeight: "bold" }}>Quantidade</TableCell>
+                <TableCell style={{ fontWeight: "bold" }}>
+                  Valor Unitario
                 </TableCell>
-                <TableCell>
-                  <Typography>{row.observacoes}</Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography>{row.quantidade}</Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography>{row.valorUnitario}</Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography>{row.valorUnitario * row.quantidade}</Typography>
+                <TableCell style={{ fontWeight: "bold" }}>
+                  Valor Total
                 </TableCell>
               </TableRow>
-            ))}
-           </TableBody>
+            </TableHead>
+            <TableBody>
+              {produtos &&
+                produtos.map((row) => (
+                  <TableRow key={row.id}>
+                    <TableCell>
+                      <Typography>{row.titulo}</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography>{row.observacoes}</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography>{row.quantidade}</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography>
+                        {row.valorUnitario.toLocaleString("pt-BR", {
+                          style: "currency",
+                          currency: "BRL",
+                          minimumFractionDigits: 2,
+                        })}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography>
+                        {(row.valorUnitario * row.quantidade).toLocaleString(
+                          "pt-BR",
+                          {
+                            style: "currency",
+                            currency: "BRL",
+                            minimumFractionDigits: 2,
+                          }
+                        )}
+                      </Typography>
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
           </Table>
-          
-        
-       <Box flexDirection={"column"} display={"flex"}>
-       {orcamento && (<>
-        <Box display={"flex"} flexDirection={"row"} justifyContent={"space-between"} width={"900px"}>
-        <Typography></Typography>
-        <Typography>Valor Materias: { orcamento.totalMateriais}</Typography>
+
+          <Box flexDirection={"column"} display={"flex"}>
+            {orcamento && (
+              <>
+                <Box
+                  display={"flex"}
+                  flexDirection={"row"}
+                  justifyContent={"space-between"}
+                  width={"900px"}
+                >
+                  <Typography></Typography>
+                  <Typography>
+                    Valor Materias: {orcamento.totalMateriais}
+                  </Typography>
+                </Box>
+                <Box
+                  display={"flex"}
+                  flexDirection={"row"}
+                  justifyContent={"space-between"}
+                  width={"900px"}
+                >
+                  <Typography></Typography>
+                  <Typography>
+                    Valor Mão de Obra: {orcamento.totalMaoObra}
+                  </Typography>
+                </Box>
+                <Box
+                  display={"flex"}
+                  flexDirection={"row"}
+                  justifyContent={"space-between"}
+                  width={"900px"}
+                >
+                  <Typography></Typography>
+                  <Typography>
+                    Valor Total:{" "}
+                    {orcamento.totalMaoObra + orcamento.totalMateriais}
+                  </Typography>
+                </Box>
+              </>
+            )}
+          </Box>
         </Box>
-        <Box display={"flex"} flexDirection={"row"} justifyContent={"space-between"} width={"900px"}>
-        <Typography></Typography>
-        <Typography>Valor Mão de Obra: {orcamento.totalMaoObra }</Typography>
+        <Box>
+          {orcamento && (
+            <Box
+              display={"flex"}
+              flexDirection={"row"}
+              justifyContent={"space-between"}
+              width={"900px"}
+            >
+              <Typography>
+                Este orçamento é valido até:{" "}
+                {format(parseISO(String(orcamento.validade)), "dd/MM/yyyy")}
+              </Typography>
+              <Typography>
+                Prazo estimado de Produção: {orcamento.prazoEstimadoProducao}{" "}
+                Dias
+              </Typography>
+            </Box>
+          )}
         </Box>
-        <Box display={"flex"} flexDirection={"row"} justifyContent={"space-between"} width={"900px"}>
-        <Typography></Typography>
-        <Typography>Valor Total: {orcamento.totalMaoObra + orcamento.totalMateriais}</Typography>
-        </Box>
-        </>
-       )}
-       </Box>
-       </Box>
-       <Box>
-       {orcamento && (
-        <Box display={"flex"} flexDirection={"row"} justifyContent={"space-between"} width={"900px"}>
-        <Typography>Este orçamento é valido até:  {format(parseISO(String(orcamento.validade)), "dd/MM/yyyy")}</Typography>
-        <Typography>Prazo estimado de Produção: {orcamento.prazoEstimadoProducao} Dias</Typography>
-        </Box>
-       )}
-       </Box>
       </TableContainer>
-    </div >
-  )
-}
-)
-
-
+    </div>
+  );
+});
 
 export const ProdutosPedido = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -240,7 +299,6 @@ export const ProdutosPedido = () => {
     return Number(searchParams.get("pagina") || "1");
   }, [searchParams]);
 
-  
   async function getID() {
     try {
       const result = await PedidosService.getById(Number(id));
@@ -256,7 +314,10 @@ export const ProdutosPedido = () => {
     debounce(async () => {
       try {
         const idOrcamento = await getID();
-        const result = await ProdutosService.getAll({ page: pagina, filter: busca },idOrcamento);
+        const result = await ProdutosService.getAll(
+          { page: pagina, filter: busca },
+          idOrcamento
+        );
         if (result instanceof Error) {
           alert(result.message);
           return;
@@ -309,7 +370,6 @@ export const ProdutosPedido = () => {
               >
                 Gerar PDF
               </Button>
-              
             </>
           }
         />
@@ -341,7 +401,9 @@ export const ProdutosPedido = () => {
                   showListButton
                   handleDelete={handleDelete}
                   handleShowList={() => {
-                    navigate(`${location.pathname}/${row.id}`);
+                    navigate(`${location.pathname}/${row.id}`, {
+                      state: { qtdProd: row.quantidade },
+                    });
                   }}
                   showEditButton={false}
                   showDeleteButton={false}
@@ -357,10 +419,25 @@ export const ProdutosPedido = () => {
                   <Typography>{row.quantidade}</Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{row.valorUnitario}</Typography>
+                  <Typography>
+                    {row.valorUnitario.toLocaleString("pt-BR", {
+                      style: "currency",
+                      currency: "BRL",
+                      minimumFractionDigits: 2,
+                    })}
+                  </Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{row.valorUnitario * row.quantidade}</Typography>
+                  <Typography>
+                    {(row.valorUnitario * row.quantidade).toLocaleString(
+                      "pt-BR",
+                      {
+                        style: "currency",
+                        currency: "BRL",
+                        minimumFractionDigits: 2,
+                      }
+                    )}
+                  </Typography>
                 </TableCell>
               </TableRow>
             ))}

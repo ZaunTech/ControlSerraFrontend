@@ -27,7 +27,6 @@ const GetToken = () => {
 
   if (token !== "undefined") {
     try {
-      // Tenta fazer o parse apenas se o token existir
       token = JSON.parse(token);
       return token;
     } catch (error) {
@@ -51,8 +50,6 @@ export const AuthProvider: React.FC<IAuthProvider> = ({ children }) => {
 
   const handleLogin = useCallback(async (email: string, password: string) => {
     const result = await AuthService.auth(email, password);
-    console.log("Result no handle", result);
-    console.log("Accesssss tokenenennene", result.access_token);
     if (result instanceof Error) {
       return result.message;
     }

@@ -40,7 +40,10 @@ import {
   ICliente,
   IFornecedor,
 } from "../../data/services/api";
-import { IOrcamento, OrcamentosService } from "../../data/services/api/modules/orcamentos";
+import {
+  IOrcamento,
+  OrcamentosService,
+} from "../../data/services/api/modules/orcamentos";
 import { format, parseISO } from "date-fns";
 
 interface IPDF {
@@ -54,13 +57,13 @@ const PDF = forwardRef(({ id, referencia }: IPDF) => {
   const [produtos, setProdutos] = useState<IProduto[]>();
   const [orcamento, setOrcamento] = useState<IOrcamento>();
   useEffect(() => {
-     OrcamentosService.getFullById(id).then((result) => {
+    OrcamentosService.getFullById(id).then((result) => {
       if (result instanceof Error) {
         return;
       }
       setCliente(result.cliente);
       setProdutos(result.produtos);
-      setOrcamento(result)
+      setOrcamento(result);
     });
     FornecedoresService.getById(1).then((result) => {
       if (result instanceof Error) {
@@ -184,46 +187,107 @@ const PDF = forwardRef(({ id, referencia }: IPDF) => {
                       <Typography>{row.quantidade}</Typography>
                     </TableCell>
                     <TableCell>
-                      <Typography>{row.valorUnitario}</Typography>
+                      <Typography>
+                        {row.valorUnitario.toLocaleString("pt-BR", {
+                          style: "currency",
+                          currency: "BRL",
+                          minimumFractionDigits: 2,
+                        })}
+                      </Typography>
                     </TableCell>
                     <TableCell>
                       <Typography>
-                        {row.valorUnitario * row.quantidade}
+                        {(row.valorUnitario * row.quantidade).toLocaleString(
+                          "pt-BR",
+                          {
+                            style: "currency",
+                            currency: "BRL",
+                            minimumFractionDigits: 2,
+                          }
+                        )}
                       </Typography>
                     </TableCell>
                   </TableRow>
-                  
                 ))}
             </TableBody>
           </Table>
-          
-        
-       <Box flexDirection={"column"} display={"flex"}>
-       {orcamento && (<>
-        <Box display={"flex"} flexDirection={"row"} justifyContent={"space-between"} width={"900px"}>
-        <Typography></Typography>
-        <Typography>Valor Materias: { orcamento.totalMateriais}</Typography>
+
+          <Box flexDirection={"column"} display={"flex"}>
+            {orcamento && (
+              <>
+                <Box
+                  display={"flex"}
+                  flexDirection={"row"}
+                  justifyContent={"space-between"}
+                  width={"900px"}
+                >
+                  <Typography></Typography>
+                  <Typography>
+                    Valor Materias:{" "}
+                    {orcamento.totalMateriais.toLocaleString("pt-BR", {
+                      style: "currency",
+                      currency: "BRL",
+                      minimumFractionDigits: 2,
+                    })}
+                  </Typography>
+                </Box>
+                <Box
+                  display={"flex"}
+                  flexDirection={"row"}
+                  justifyContent={"space-between"}
+                  width={"900px"}
+                >
+                  <Typography></Typography>
+                  <Typography>
+                    Valor Mão de Obra:{" "}
+                    {orcamento.totalMaoObra.toLocaleString("pt-BR", {
+                      style: "currency",
+                      currency: "BRL",
+                      minimumFractionDigits: 2,
+                    })}
+                  </Typography>
+                </Box>
+                <Box
+                  display={"flex"}
+                  flexDirection={"row"}
+                  justifyContent={"space-between"}
+                  width={"900px"}
+                >
+                  <Typography></Typography>
+                  <Typography>
+                    Valor Total:{" "}
+                    {(
+                      orcamento.totalMaoObra + orcamento.totalMateriais
+                    ).toLocaleString("pt-BR", {
+                      style: "currency",
+                      currency: "BRL",
+                      minimumFractionDigits: 2,
+                    })}
+                  </Typography>
+                </Box>
+              </>
+            )}
+          </Box>
         </Box>
-        <Box display={"flex"} flexDirection={"row"} justifyContent={"space-between"} width={"900px"}>
-        <Typography></Typography>
-        <Typography>Valor Mão de Obra: {orcamento.totalMaoObra }</Typography>
+        <Box>
+          {orcamento && (
+            <Box
+              display={"flex"}
+              flexDirection={"row"}
+              justifyContent={"space-between"}
+              width={"900px"}
+            >
+              <Typography>
+                Este orçamento é valido até:{" "}
+                {format(parseISO(String(orcamento.validade)), "dd/MM/yyyy")}
+              </Typography>
+              <Typography>
+                Prazo estimado de Produção: {orcamento.prazoEstimadoProducao}{" "}
+                Dias
+              </Typography>
+            </Box>
+          )}
         </Box>
-        <Box display={"flex"} flexDirection={"row"} justifyContent={"space-between"} width={"900px"}>
-        <Typography></Typography>
-        <Typography>Valor Total: {orcamento.totalMaoObra + orcamento.totalMateriais}</Typography>
-        </Box>
-        </>
-       )}
-       </Box>
-       </Box>
-       <Box>
-       {orcamento && (
-        <Box display={"flex"} flexDirection={"row"} justifyContent={"space-between"} width={"900px"}>
-        <Typography>Este orçamento é valido até:  {format(parseISO(String(orcamento.validade)), "dd/MM/yyyy")}</Typography>
-        <Typography>Prazo estimado de Produção: {orcamento.prazoEstimadoProducao} Dias</Typography>
-        </Box>
-       )}
-       </Box>
       </TableContainer>
     </div>
   );
@@ -388,10 +452,25 @@ export const ProdutosOrcamento = () => {
                   <Typography>{row.quantidade}</Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{row.valorUnitario}</Typography>
+                  <Typography>
+                    {row.valorUnitario.toLocaleString("pt-BR", {
+                      style: "currency",
+                      currency: "BRL",
+                      minimumFractionDigits: 2,
+                    })}
+                  </Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{row.valorUnitario * row.quantidade}</Typography>
+                  <Typography>
+                    {(row.valorUnitario * row.quantidade).toLocaleString(
+                      "pt-BR",
+                      {
+                        style: "currency",
+                        currency: "BRL",
+                        minimumFractionDigits: 2,
+                      }
+                    )}
+                  </Typography>
                 </TableCell>
               </TableRow>
             ))}

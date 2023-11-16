@@ -2,7 +2,6 @@ import { useMemo, useEffect } from "react";
 import { PaginaBase } from "../../ui/layouts";
 import { FerramentasDaListagem } from "../../ui/components";
 import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
-import { CategoriasService, ICategoria } from "../../data/services/api";
 import { useDebounce } from "../../data/hooks";
 import { useState } from "react";
 import {
@@ -34,6 +33,11 @@ export const Usuarios = () => {
   const [rows, setRows] = useState<IUsuario[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [isAdministrador, setAdministrador] = useState<boolean>(false);
+
+  useEffect(() => {
+    setAdministrador(true);
+  }, []);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -106,19 +110,21 @@ export const Usuarios = () => {
           <TableBody>
             {rows.map((row) => (
               <TableRow key={row.id}>
-                <Actions
-                  id={row.id}
-                  handleDelete={handleDelete}
-                  showPersoButton
-                  persoButtonIcon="key"
-                  persoButtonToolTipText="Mudar Senha"
-                  handlePersoButton={()=>{
-                    navigate(`${location.pathname}/${row.id}/alterarsenha`)
-                  }}
-                  handleShowList={() => {
-                    navigate(`${location.pathname}/${row.id}`);
-                  }}
-                />
+                {isAdministrador && (
+                  <Actions
+                    id={row.id}
+                    handleDelete={handleDelete}
+                    showPersoButton
+                    persoButtonIcon="key"
+                    persoButtonToolTipText="Mudar Senha"
+                    handlePersoButton={() => {
+                      navigate(`${location.pathname}/${row.id}/alterarsenha`);
+                    }}
+                    handleShowList={() => {
+                      navigate(`${location.pathname}/${row.id}`);
+                    }}
+                  />
+                )}
                 <TableCell>
                   <Typography>{row.tipoUsuario}</Typography>
                 </TableCell>

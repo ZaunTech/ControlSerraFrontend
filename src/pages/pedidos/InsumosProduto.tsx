@@ -1,13 +1,7 @@
-import { useMemo, useEffect, forwardRef, Ref, useRef } from "react";
+import { useMemo, useEffect } from "react";
 import { PaginaBase } from "../../ui/layouts";
 import { FerramentasDaListagem } from "../../ui/components";
-import {
-  useNavigate,
-  useSearchParams,
-  useLocation,
-  useParams,
-} from "react-router-dom";
-import { useDebounce } from "../../data/hooks";
+import { useSearchParams, useLocation, useParams } from "react-router-dom";
 import { useState } from "react";
 import {
   Paper,
@@ -21,12 +15,6 @@ import {
   TableFooter,
   LinearProgress,
   Pagination,
-  IconButton,
-  Icon,
-  Box,
-  Card,
-  CardContent,
-  Button,
 } from "@mui/material";
 import { Environment } from "../../data/environment";
 import {
@@ -36,180 +24,21 @@ import {
 import {
   CategoriasService,
   FornecedoresService,
-  IFornecedor,
-  InsumosService,
   VariantesService,
 } from "../../data/services/api";
 import { CotacoesService } from "../../data/services/api/modules/cotacoes";
-import { Actions } from "../../ui/components/ferramentasDeListagem/Actions";
-import generatePDF from 'react-to-pdf';
-
-interface IPDF {
-  idFornecedor: number,
-  referencia: Ref<HTMLDivElement | null>,
-  insumos: IListaInsumo[]
-}
-
-const PDF = forwardRef(({ idFornecedor, referencia, insumos }: IPDF) => {
-  const [minhaEmpresa, setMinhaEmpresa] = useState<IFornecedor>();
-  const [fornecedor, setFornecedor] = useState<IFornecedor>();
-  useEffect(() => {
-    FornecedoresService.getById(1).then((result) => {
-      if (result instanceof Error) {
-        return
-      }
-      setMinhaEmpresa(result)
-    })
-    FornecedoresService.getById(idFornecedor).then((result) => {
-      if (result instanceof Error) {
-        return
-      }
-      setFornecedor(result);
-    })
-
-  })
-  return (
-    <div
-      style={{
-        position: "absolute",
-        left: "-9999px",
-        top: "-9999px",
-        width: "60%",
-        height: "60%"
-      }}>
-
-      <TableContainer
-        component={Paper}
-        variant="outlined"
-        sx={{ m: 1, width: "auto" }}
-        ref={referencia}
-        style={{
-          padding: '20px',
-          margin: '20px'
-        }}
-      >
-        <Box display={'flex'} flexDirection={'column'} gap={'10px'}>
-          {minhaEmpresa && (
-            <Card sx={{ minWidth: 275, border:1 }}>
-              <CardContent>
-                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                  Empresa Solicitante
-                </Typography>
-                <Typography variant="h5" component="div">
-                  {minhaEmpresa.nome ??
-                    minhaEmpresa.nomeFantasia ??
-                    minhaEmpresa.razaoSocial}
-                </Typography>
-                <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  Contato
-                </Typography>
-                <Typography variant="body2">
-                  {minhaEmpresa.telefone}
-                </Typography>
-                <Typography variant="body2">
-                  {minhaEmpresa.email}
-                </Typography>
-                <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  Endereço
-                </Typography>
-                <Typography variant="body2">
-                  {`${minhaEmpresa.rua},${minhaEmpresa.numero}-${minhaEmpresa.bairro},${minhaEmpresa.cidade}-${minhaEmpresa.estado}`}
-                </Typography>
-              </CardContent>
-            </Card>
-          )
-          }
-          {fornecedor && (
-            <Card sx={{ minWidth: 275 }}>
-              <CardContent>
-                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                  Empresa Solicitada
-                </Typography>
-                <Typography variant="h5" component="div">
-                  {fornecedor.nome ??
-                    fornecedor.nomeFantasia ??
-                    fornecedor.razaoSocial}
-                </Typography>
-                <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  Contato
-                </Typography>
-                <Typography variant="body2">
-                  {fornecedor.telefone}
-                </Typography>
-                <Typography variant="body2">
-                  {fornecedor.email}
-                </Typography>
-                <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  Endereço
-                </Typography>
-                <Typography variant="body2">
-                  {`${fornecedor.rua},${fornecedor.numero}-${fornecedor.bairro},${fornecedor.cidade}-${fornecedor.estado}`}
-                </Typography>
-              </CardContent>
-            </Card>
-          )
-          }
-           
-        </Box>
-        <Box sx={{ border: 1 }} display={'flex'} flexDirection={'column'} padding={'10px'} gap={'10px'} marginTop={'10px'}>
-          <Typography variant="h5">
-            {`Solicitação de orçamento`}
-          </Typography>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell style={{ fontWeight: "bold" }}>Titulo</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>
-                Variação
-              </TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>
-                Quantidade
-              </TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Valor Unitario</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Valor Total</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {insumos.map((row) => (
-              <TableRow key={row.id}>
-                <TableCell>
-                  <Typography>{row.variante.insumo?.titulo}</Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography>{row.variante.variante}</Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography></Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography></Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography></Typography>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-        </Box>
-      </TableContainer>
-    </div>
-  )
-}
-)
 
 export const InsumosProduto = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { debounce } = useDebounce();
 
   const [rows, setRows] = useState<IListaInsumo[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
-  const navigate = useNavigate();
-  const location = useLocation();
-
   const { idProduto } = useParams();
+
+  const location = useLocation();
+  const qtdProd = location.state.qtdProd;
 
   const busca = useMemo(() => {
     return searchParams.get("busca") || "";
@@ -223,7 +52,10 @@ export const InsumosProduto = () => {
     try {
       setIsLoading(true);
 
-      const result = await ListaInsumosService.getListaByIdProduto({ page: pagina, filter: busca }, Number(idProduto));
+      const result = await ListaInsumosService.getListaByIdProduto(
+        { page: pagina, filter: busca },
+        Number(idProduto)
+      );
 
       if (result instanceof Error) {
         alert(result.message);
@@ -233,7 +65,9 @@ export const InsumosProduto = () => {
       const listaInsumosData = await Promise.all(
         result.data.map(async (listaInsumos: IListaInsumo) => {
           const fetchInsumos = async () => {
-            const result2 = await VariantesService.getById(listaInsumos.idVariante);
+            const result2 = await VariantesService.getById(
+              listaInsumos.idVariante
+            );
 
             if (result2 instanceof Error) {
               alert(result2.message);
@@ -322,8 +156,6 @@ export const InsumosProduto = () => {
     }
   };
 
-  const pdfRef = useRef(null);
-
   return (
     <PaginaBase
       titulo={`Insumos do produto: ${idProduto}`}
@@ -336,17 +168,6 @@ export const InsumosProduto = () => {
           }
           mostrarBotaoNovo={false}
           mostrarBotaoVoltar
-          componentePersonalizado={
-            <Button
-              startIcon={<Icon>picture_as_pdf</Icon>}
-              onClick={() => {
-                generatePDF(pdfRef, { filename: "page.pdf" });
-              }}
-              variant="contained"
-            >
-              Gerar PDF
-            </Button>
-          }
         />
       }
     >
@@ -357,23 +178,30 @@ export const InsumosProduto = () => {
       >
         <Table>
           <TableHead>
-            <TableRow>  
+            <TableRow>
               <TableCell style={{ fontWeight: "bold" }}>Titulo</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Variação</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Quantidade</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>
+                Quantidade (1 produto)
+              </TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>
+                Quantidade (total)
+              </TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Categoria</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Descrição</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Fornecedor</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Valor Unitario</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Valor Total</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Cotação</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>
+                Valor (1 produto)
+              </TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>
+                Valor (total)
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {rows.map((row) => (
               <TableRow key={row.id}>
-
-                
-               
                 <TableCell>
                   <Typography>{row.variante?.insumo?.titulo}</Typography>
                 </TableCell>
@@ -383,9 +211,13 @@ export const InsumosProduto = () => {
                 <TableCell>
                   <Typography>{row.quantidade}</Typography>
                 </TableCell>
-             
                 <TableCell>
-                  <Typography>{row.variante?.insumo?.categoria?.titulo}</Typography>
+                  <Typography>{Number(qtdProd)}</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography>
+                    {row.variante?.insumo?.categoria?.titulo}
+                  </Typography>
                 </TableCell>
                 <TableCell>
                   <Typography>{row.variante?.insumo?.descricao}</Typography>
@@ -398,11 +230,34 @@ export const InsumosProduto = () => {
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{row.cotacao?.valor}</Typography>
+                  <Typography>
+                    {(row.cotacao?.valor).toLocaleString("pt-BR", {
+                      style: "currency",
+                      currency: "BRL",
+                      minimumFractionDigits: 2,
+                    })}
+                  </Typography>
                 </TableCell>
                 <TableCell>
                   <Typography>
-                    {row.quantidade * (row.cotacao?.valor ?? 0)}
+                    {(
+                      row.quantidade * (row.cotacao?.valor ?? 0)
+                    ).toLocaleString("pt-BR", {
+                      style: "currency",
+                      currency: "BRL",
+                      minimumFractionDigits: 2,
+                    })}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography>
+                    {(
+                      Number(qtdProd) * (row.cotacao?.valor ?? 0)
+                    ).toLocaleString("pt-BR", {
+                      style: "currency",
+                      currency: "BRL",
+                      minimumFractionDigits: 2,
+                    })}
                   </Typography>
                 </TableCell>
               </TableRow>
@@ -442,7 +297,6 @@ export const InsumosProduto = () => {
           </TableFooter>
         </Table>
       </TableContainer>
-      <PDF idFornecedor={Number(idProduto)} referencia={pdfRef} insumos={rows} />
-    </PaginaBase >
+    </PaginaBase>
   );
 };
