@@ -91,7 +91,7 @@ export const CriarUsuario = () => {
                   >
                     <MenuItem value={"Serralheiro"}>Serralheiro</MenuItem>
                     <MenuItem value={"Administrador"}>Administrador</MenuItem>
-                    <MenuItem value={"Vendedor"}>Vendedor</MenuItem>
+                    
                   </Select>
 
                 {errors.tipoUsuario && <span>{errors.tipoUsuario.message?.toString()}</span>}

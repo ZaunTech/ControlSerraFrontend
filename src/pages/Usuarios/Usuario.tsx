@@ -123,7 +123,7 @@ export const Usuario = () => {
                   >
                     <MenuItem value={"Serralheiro"}>Serralheiro</MenuItem>
                     <MenuItem value={"Administrador"}>Administrador</MenuItem>
-                    <MenuItem value={"Vendedor"}>Vendedor</MenuItem>
+                  
                   </Select>
 
                 {errors.contaTipo && <span>{errors.contaTipo.message?.toString()}</span>}

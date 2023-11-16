@@ -149,7 +149,7 @@ export const Recotar = () => {
 
   return (
     <PaginaBase
-      titulo="Editar Cotação"
+      titulo="Cotar Novamente"
       barraDeFerramentas={
         <FerramentasDeDetalhes
           tipo="novo"

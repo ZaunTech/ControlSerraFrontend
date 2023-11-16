@@ -428,11 +428,11 @@ export const InsumosDeUmProdutoOrcamento = () => {
                 </TableCell>
                 <TableCell>
                   <Typography>
-                    {(row.cotacao?.valor).toLocaleString("pt-BR", {
+                    {row.cotacao != null?   (row.cotacao?.valor).toLocaleString("pt-BR", {
                       style: "currency",
                       currency: "BRL",
                       minimumFractionDigits: 2,
-                    })}
+                    }) : 0}
                   </Typography>
                 </TableCell>
                 <TableCell>

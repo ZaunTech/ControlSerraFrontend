@@ -224,11 +224,11 @@ const PDF = forwardRef(({ id, referencia }: IPDF) => {
                   <Typography></Typography>
                   <Typography>
                     Valor Materias:{" "}
-                    {orcamento.totalMateriais.toLocaleString("pt-BR", {
+                    { orcamento.totalMateriais != null ? orcamento.totalMateriais.toLocaleString("pt-BR", {
                       style: "currency",
                       currency: "BRL",
                       minimumFractionDigits: 2,
-                    })}
+                    }) : ""}
                   </Typography>
                 </Box>
                 <Box
@@ -240,11 +240,11 @@ const PDF = forwardRef(({ id, referencia }: IPDF) => {
                   <Typography></Typography>
                   <Typography>
                     Valor Mão de Obra:{" "}
-                    {orcamento.totalMaoObra.toLocaleString("pt-BR", {
+                    {orcamento.totalMaoObra != null ? orcamento.totalMaoObra.toLocaleString("pt-BR", {
                       style: "currency",
                       currency: "BRL",
                       minimumFractionDigits: 2,
-                    })}
+                    }): ""}
                   </Typography>
                 </Box>
                 <Box
