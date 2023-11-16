@@ -212,7 +212,7 @@ export const InsumosProduto = () => {
                   <Typography>{row.quantidade}</Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{Number(qtdProd)}</Typography>
+                  <Typography>{Number(qtdProd) * row.quantidade}</Typography>
                 </TableCell>
                 <TableCell>
                   <Typography>
@@ -252,7 +252,9 @@ export const InsumosProduto = () => {
                 <TableCell>
                   <Typography>
                     {(
-                      Number(qtdProd) * (row.cotacao?.valor ?? 0)
+                      Number(qtdProd) *
+                      row.quantidade *
+                      (row.cotacao?.valor ?? 0)
                     ).toLocaleString("pt-BR", {
                       style: "currency",
                       currency: "BRL",
