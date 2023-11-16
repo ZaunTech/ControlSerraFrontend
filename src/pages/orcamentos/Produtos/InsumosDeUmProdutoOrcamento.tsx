@@ -329,9 +329,11 @@ export const InsumosDeUmProdutoOrcamento = () => {
 
   const pdfRef = useRef(null);
 
+  const qtdProd = location.state.qtdProd;
+  const tituloProd = location.state.tituloProd;
   return (
     <PaginaBase
-      titulo={`Insumos do produto: ${id}`}
+      titulo={`Insumos do produto: ${tituloProd}`}
       barraDeFerramentas={
         <FerramentasDaListagem
           mostrarInputBusca
@@ -366,15 +368,22 @@ export const InsumosDeUmProdutoOrcamento = () => {
               <TableCell style={{ fontWeight: "bold" }}>Ações</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Titulo</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Variação</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Quantidade</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>
+                Quantidade (1 produto)
+              </TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>
+                Quantidade (total)
+              </TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Categoria</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Descrição</TableCell>
-
               <TableCell style={{ fontWeight: "bold" }}>Fornecedor</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Cotação</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>
-                Valor Unitario
+                Valor (1 produto)
               </TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Valor Total</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>
+                Valor (total)
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -399,7 +408,9 @@ export const InsumosDeUmProdutoOrcamento = () => {
                 <TableCell>
                   <Typography>{row.quantidade}</Typography>
                 </TableCell>
-
+                <TableCell>
+                  <Typography>{Number(qtdProd) * row.quantidade}</Typography>
+                </TableCell>
                 <TableCell>
                   <Typography>
                     {row.variante?.insumo?.categoria?.titulo}
@@ -417,7 +428,7 @@ export const InsumosDeUmProdutoOrcamento = () => {
                 </TableCell>
                 <TableCell>
                   <Typography>
-                    {row.cotacao?.valor.toLocaleString("pt-BR", {
+                    {(row.cotacao?.valor).toLocaleString("pt-BR", {
                       style: "currency",
                       currency: "BRL",
                       minimumFractionDigits: 2,
@@ -428,6 +439,19 @@ export const InsumosDeUmProdutoOrcamento = () => {
                   <Typography>
                     {(
                       row.quantidade * (row.cotacao?.valor ?? 0)
+                    ).toLocaleString("pt-BR", {
+                      style: "currency",
+                      currency: "BRL",
+                      minimumFractionDigits: 2,
+                    })}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography>
+                    {(
+                      Number(qtdProd) *
+                      row.quantidade *
+                      (row.cotacao?.valor ?? 0)
                     ).toLocaleString("pt-BR", {
                       style: "currency",
                       currency: "BRL",

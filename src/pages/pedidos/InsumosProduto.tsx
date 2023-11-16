@@ -39,6 +39,7 @@ export const InsumosProduto = () => {
 
   const location = useLocation();
   const qtdProd = location.state.qtdProd;
+  const tituloProd = location.state.tituloProd;
 
   const busca = useMemo(() => {
     return searchParams.get("busca") || "";
@@ -158,7 +159,7 @@ export const InsumosProduto = () => {
 
   return (
     <PaginaBase
-      titulo={`Insumos do produto: ${idProduto}`}
+      titulo={`Insumos do produto: ${tituloProd}`}
       barraDeFerramentas={
         <FerramentasDaListagem
           mostrarInputBusca

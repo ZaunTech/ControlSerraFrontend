@@ -402,7 +402,10 @@ export const ProdutosPedido = () => {
                   handleDelete={handleDelete}
                   handleShowList={() => {
                     navigate(`${location.pathname}/${row.id}`, {
-                      state: { qtdProd: row.quantidade },
+                      state: {
+                        qtdProd: row.quantidade,
+                        tituloProd: row.titulo,
+                      },
                     });
                   }}
                   showEditButton={false}

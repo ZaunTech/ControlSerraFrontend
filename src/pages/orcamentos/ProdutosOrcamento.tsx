@@ -438,7 +438,12 @@ export const ProdutosOrcamento = () => {
                   showListButton
                   handleDelete={handleDelete}
                   handleShowList={() => {
-                    navigate(`${location.pathname}/${row.id}/insumos`);
+                    navigate(`${location.pathname}/${row.id}/insumos`, {
+                      state: {
+                        qtdProd: row.quantidade,
+                        tituloProd: row.titulo,
+                      },
+                    });
                   }}
                   toolTipListButton="Listar Insumos"
                 />
