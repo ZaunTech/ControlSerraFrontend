@@ -29,6 +29,7 @@ import {
 } from "../../data/services/api/modules/orcamentos";
 
 const createUserFormSchema = z.object({
+  
   pagamento: z.coerce.number(),
   idOrcamento: z.coerce.number(),
   status: z.string(),
@@ -126,6 +127,7 @@ export const Pedido = () => {
         setValue("pagamento", data.pagamento);
         setTipo(data.status.toString());
         setValue("updatedAt", formattedDate);
+       
         console.log(data)
         setOrcamento(data.orcamento);
       } 

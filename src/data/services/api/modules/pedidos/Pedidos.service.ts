@@ -69,6 +69,7 @@ const updateById = async (
     if (response.statusText === "OK") {
       return response.data;
     }
+    
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {
     return new Error(

@@ -180,7 +180,7 @@ const PDF = forwardRef(({ idFornecedor, referencia, insumos }: IPDF) => {
                     <Typography>{row.variante.variante}</Typography>
                   </TableCell>
                   <TableCell>
-                    <Typography></Typography>
+                    <Typography>{row.quantidade}</Typography>
                   </TableCell>
                   <TableCell>
                     <Typography></Typography>
