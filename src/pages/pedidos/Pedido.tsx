@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Grid,
+  InputAdornment,
   InputLabel,
   MenuItem,
   Paper,
@@ -27,9 +28,20 @@ import {
   IOrcamento,
   OrcamentosService,
 } from "../../data/services/api/modules/orcamentos";
+import InputMask from "react-input-mask";
+
+const formatarValor = (valor) => {
+  if (typeof valor === "number") {
+    return valor.toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+      minimumFractionDigits: 2,
+    });
+  }
+  return "";
+};
 
 const createUserFormSchema = z.object({
-  
   pagamento: z.coerce.number(),
   idOrcamento: z.coerce.number(),
   status: z.string(),
@@ -127,16 +139,22 @@ export const Pedido = () => {
         setValue("pagamento", data.pagamento);
         setTipo(data.status.toString());
         setValue("updatedAt", formattedDate);
-       
-        console.log(data)
+
+        console.log(data);
         setOrcamento(data.orcamento);
-      } 
+      }
     } catch (error) {}
   };
 
   useEffect(() => {
     fetchData();
   }, []);
+
+  const valorMaoObraFormatado = formatarValor(orcamento?.totalMaoObra);
+  const valorMateriaisFormatado = formatarValor(orcamento?.totalMateriais);
+  const valorTotalFormatado = formatarValor(
+    orcamento?.totalMaoObra + orcamento?.totalMateriais
+  );
 
   return (
     <PaginaBase
@@ -150,14 +168,16 @@ export const Pedido = () => {
           onClickSalvarEFechar={handleSubmit(createPedidoFechar)}
           onClickCancelar={fetchData}
         />
-      }>
+      }
+    >
       <Box component={"form"} onSubmit={handleSubmit(createPedido)}>
         <Box
           display={"flex"}
           margin={1}
           flexDirection={"column"}
           component={Paper}
-          variant="outlined">
+          variant="outlined"
+        >
           <Grid container direction="column" padding={2} spacing={3}>
             <Grid container item direction="row" spacing={4}>
               <Grid item>
@@ -201,7 +221,8 @@ export const Pedido = () => {
                   id="status"
                   value={tipo}
                   {...register("status")}
-                  onChange={handleChange}>
+                  onChange={handleChange}
+                >
                   <MenuItem value={"Pendente"} disabled={!isEditable}>
                     Pendente
                   </MenuItem>
@@ -251,7 +272,8 @@ export const Pedido = () => {
           margin={1}
           flexDirection={"column"}
           component={Paper}
-          variant="outlined">
+          variant="outlined"
+        >
           <Grid container direction="column" padding={2} spacing={3}>
             <Grid container item direction="row" spacing={4}>
               <Grid item>
@@ -264,6 +286,11 @@ export const Pedido = () => {
                     disabled={!isEditable}
                     {...register("valorPago")}
                     type="number"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">R$</InputAdornment>
+                      ),
+                    }}
                   />
                 </Grid>
                 <Grid item>
@@ -274,7 +301,8 @@ export const Pedido = () => {
                     disabled={!isEditable}
                     onClick={() => {
                       atualizarValor();
-                    }}>
+                    }}
+                  >
                     Adicionar
                   </Button>
                 </Grid>
@@ -287,7 +315,8 @@ export const Pedido = () => {
           margin={1}
           flexDirection={"column"}
           component={Paper}
-          variant="outlined">
+          variant="outlined"
+        >
           <Grid container direction="column" padding={2} spacing={3}>
             <Grid container item direction="row" spacing={4}>
               <Grid item>
@@ -298,25 +327,28 @@ export const Pedido = () => {
               <Grid item>
                 <InputLabel id="valMaoDeObra">Mão de Obra</InputLabel>
                 <TextField
-                  type="number"
+                  type="text"
                   disabled={true}
-                  value={orcamento?.totalMaoObra}
+                  value={valorMaoObraFormatado}
                 />
               </Grid>
               <Grid item>
                 <InputLabel id="valMaoDeObra">Insumos</InputLabel>
-                <TextField
-                  type="number"
+                <InputMask
+                  mask="R$ 9,999,999.99"
+                  maskChar={null}
                   disabled={true}
-                  value={orcamento?.totalMateriais}
-                />
+                  value={valorMateriaisFormatado || ""}
+                >
+                  {() => <TextField disabled={true} />}
+                </InputMask>
               </Grid>
               <Grid item>
                 <InputLabel id="valMaoDeObra">Total</InputLabel>
                 <TextField
-                  type="number"
+                  type="text"
                   disabled={true}
-                  value={orcamento?.totalMaoObra + orcamento?.totalMateriais}
+                  value={valorTotalFormatado}
                 />
               </Grid>
             </Grid>
