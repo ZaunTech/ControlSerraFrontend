@@ -262,6 +262,7 @@ export const CotacoesDeUmInsumo = () => {
           componentePersonalizado={
             <Pesquisas setFiltro={setFiltro} setFiltroId={setFiltroId} />
           }
+          mostrarBotaoVoltar
         />
       }
     >
