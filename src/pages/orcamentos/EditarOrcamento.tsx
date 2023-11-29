@@ -27,6 +27,18 @@ import {
   OrcamentosService,
 } from "../../data/services/api/modules/orcamentos";
 import { useNavigate, useParams } from "react-router-dom";
+import InputMask from "react-input-mask";
+
+const formatarValor = (valor) => {
+  if (typeof valor === "number") {
+    return valor.toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+      minimumFractionDigits: 2,
+    });
+  }
+  return "";
+};
 
 const getCurrentDate = () => {
   const today = new Date();
@@ -115,7 +127,7 @@ export const EditarOrcamento = () => {
           const formattedDate = dateObject.toISOString().split("T")[0];
           setValue("validade", formattedDate);
         }
-       
+
         let usuario = await setarUsuario(result.criadorPor);
 
         setValue("idCliente", result.idCliente);
@@ -149,6 +161,12 @@ export const EditarOrcamento = () => {
       .catch(() => {});
   }
 
+  const valorMaoObraFormatado = formatarValor(orcamento?.totalMaoObra);
+  const valorMateriaisFormatado = formatarValor(orcamento?.totalMateriais);
+  const valorTotalFormatado = formatarValor(
+    orcamento?.totalMaoObra + orcamento?.totalMateriais
+  );
+
   return (
     <PaginaBase
       titulo={`Editar Orçamento: ${id}`}
@@ -161,14 +179,16 @@ export const EditarOrcamento = () => {
           onClickSalvarEFechar={handleSubmit(createOrcamentoFechar)}
           onClickCancelar={handleSubmit(setarOrcamento)}
         />
-      }>
+      }
+    >
       <Box component={"form"} onSubmit={handleSubmit(createOrcamento)}>
         <Box
           display={"flex"}
           margin={1}
           flexDirection={"column"}
           component={Paper}
-          variant="outlined">
+          variant="outlined"
+        >
           <Grid container direction="column" padding={2} spacing={3}>
             <Grid container item direction="row" spacing={4}>
               <Grid item>
@@ -215,7 +235,8 @@ export const EditarOrcamento = () => {
                   value={tipo}
                   {...register("status")}
                   onChange={handleChange}
-                  disabled={!isEditable}>
+                  disabled={!isEditable}
+                >
                   <MenuItem value={"Pendente"}>Pendente</MenuItem>
                   <MenuItem value={"Em_Processo"}>Em Processo</MenuItem>
                   <MenuItem value={"Concluido"}>Concluido</MenuItem>
@@ -291,36 +312,35 @@ export const EditarOrcamento = () => {
           margin={1}
           flexDirection={"column"}
           component={Paper}
-          variant="outlined">
+          variant="outlined"
+        >
           <Grid container direction="column" padding={2} spacing={3}>
-            <Grid container item direction="row" spacing={4}>
-              <Grid item>
-                <Typography>Valores</Typography>
-              </Grid>
-            </Grid>
             <Grid container item direction="row" spacing={4}>
               <Grid item>
                 <InputLabel id="valMaoDeObra">Mão de Obra</InputLabel>
                 <TextField
-                  type="number"
+                  type="text"
                   disabled={true}
-                  value={orcamento?.totalMaoObra}
+                  value={valorMaoObraFormatado}
                 />
               </Grid>
               <Grid item>
                 <InputLabel id="valMaoDeObra">Insumos</InputLabel>
-                <TextField
-                  type="number"
+                <InputMask
+                  mask="R$ 9,999,999.99"
+                  maskChar={null}
                   disabled={true}
-                  value={orcamento?.totalMateriais}
-                />
+                  value={valorMateriaisFormatado || ""}
+                >
+                  {() => <TextField disabled={true} />}
+                </InputMask>
               </Grid>
               <Grid item>
                 <InputLabel id="valMaoDeObra">Total</InputLabel>
                 <TextField
-                  type="number"
+                  type="text"
                   disabled={true}
-                  value={orcamento?.totalMaoObra + orcamento?.totalMateriais}
+                  value={valorTotalFormatado}
                 />
               </Grid>
             </Grid>
