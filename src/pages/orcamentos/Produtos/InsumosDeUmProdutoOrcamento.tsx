@@ -48,155 +48,162 @@ interface IPDF {
   idFornecedor: number;
   referencia: Ref<HTMLDivElement | null>;
   insumos: IListaInsumo[];
+  qtdProd: number;
 }
 
-const PDF = forwardRef(({ idFornecedor, referencia, insumos }: IPDF) => {
-  const [minhaEmpresa, setMinhaEmpresa] = useState<IFornecedor>();
-  const [fornecedor, setFornecedor] = useState<IFornecedor>();
-  useEffect(() => {
-    FornecedoresService.getById(1).then((result) => {
-      if (result instanceof Error) {
-        return;
-      }
-      setMinhaEmpresa(result);
+const PDF = forwardRef(
+  ({ idFornecedor, referencia, insumos, qtdProd }: IPDF) => {
+    const [minhaEmpresa, setMinhaEmpresa] = useState<IFornecedor>();
+    const [fornecedor, setFornecedor] = useState<IFornecedor>();
+    useEffect(() => {
+      FornecedoresService.getById(1).then((result) => {
+        if (result instanceof Error) {
+          return;
+        }
+        setMinhaEmpresa(result);
+      });
+      FornecedoresService.getById(idFornecedor).then((result) => {
+        if (result instanceof Error) {
+          return;
+        }
+        setFornecedor(result);
+      });
     });
-    FornecedoresService.getById(idFornecedor).then((result) => {
-      if (result instanceof Error) {
-        return;
-      }
-      setFornecedor(result);
-    });
-  });
-  return (
-    <div
-      style={{
-        position: "absolute",
-        left: "-9999px",
-        top: "-9999px",
-        width: "60%",
-        height: "60%",
-      }}
-    >
-      <TableContainer
-        component={Paper}
-        variant="outlined"
-        sx={{ m: 1, width: "auto" }}
-        ref={referencia}
+    return (
+      <div
         style={{
-          padding: "20px",
-          margin: "20px",
+          position: "absolute",
+          left: "-9999px",
+          top: "-9999px",
+          width: "60%",
+          height: "60%",
         }}
       >
-        <Box display={"flex"} flexDirection={"column"} gap={"10px"}>
-          {minhaEmpresa && (
-            <Card sx={{ minWidth: 275, border: 1 }}>
-              <CardContent>
-                <Typography
-                  sx={{ fontSize: 14 }}
-                  color="text.secondary"
-                  gutterBottom
-                >
-                  Empresa Solicitante
-                </Typography>
-                <Typography variant="h5" component="div">
-                  {minhaEmpresa.nome ??
-                    minhaEmpresa.nomeFantasia ??
-                    minhaEmpresa.razaoSocial}
-                </Typography>
-                <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  Contato
-                </Typography>
-                <Typography variant="body2">{minhaEmpresa.telefone}</Typography>
-                <Typography variant="body2">{minhaEmpresa.email}</Typography>
-                <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  Endereço
-                </Typography>
-                <Typography variant="body2">
-                  {`${minhaEmpresa.rua},${minhaEmpresa.numero}-${minhaEmpresa.bairro},${minhaEmpresa.cidade}-${minhaEmpresa.estado}`}
-                </Typography>
-              </CardContent>
-            </Card>
-          )}
-          {fornecedor && (
-            <Card sx={{ minWidth: 275 }}>
-              <CardContent>
-                <Typography
-                  sx={{ fontSize: 14 }}
-                  color="text.secondary"
-                  gutterBottom
-                >
-                  Empresa Solicitada
-                </Typography>
-                <Typography variant="h5" component="div">
-                  {fornecedor.nome ??
-                    fornecedor.nomeFantasia ??
-                    fornecedor.razaoSocial}
-                </Typography>
-                <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  Contato
-                </Typography>
-                <Typography variant="body2">{fornecedor.telefone}</Typography>
-                <Typography variant="body2">{fornecedor.email}</Typography>
-                <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  Endereço
-                </Typography>
-                <Typography variant="body2">
-                  {`${fornecedor.rua},${fornecedor.numero}-${fornecedor.bairro},${fornecedor.cidade}-${fornecedor.estado}`}
-                </Typography>
-              </CardContent>
-            </Card>
-          )}
-        </Box>
-        <Box
-          sx={{ border: 1 }}
-          display={"flex"}
-          flexDirection={"column"}
-          padding={"10px"}
-          gap={"10px"}
-          marginTop={"10px"}
+        <TableContainer
+          component={Paper}
+          variant="outlined"
+          sx={{ m: 1, width: "auto" }}
+          ref={referencia}
+          style={{
+            padding: "20px",
+            margin: "20px",
+          }}
         >
-          <Typography variant="h5">{`Solicitação de orçamento`}</Typography>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell style={{ fontWeight: "bold" }}>Titulo</TableCell>
-                <TableCell style={{ fontWeight: "bold" }}>Variação</TableCell>
-                <TableCell style={{ fontWeight: "bold" }}>Quantidade</TableCell>
-                <TableCell style={{ fontWeight: "bold" }}>
-                  Valor Unitario
-                </TableCell>
-                <TableCell style={{ fontWeight: "bold" }}>
-                  Valor Total
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {insumos.map((row) => (
-                <TableRow key={row.id}>
-                  <TableCell>
-                    <Typography>{row.variante.insumo?.titulo}</Typography>
+          <Box display={"flex"} flexDirection={"column"} gap={"10px"}>
+            {minhaEmpresa && (
+              <Card sx={{ minWidth: 275, border: 1 }}>
+                <CardContent>
+                  <Typography
+                    sx={{ fontSize: 14 }}
+                    color="text.secondary"
+                    gutterBottom
+                  >
+                    Empresa Solicitante
+                  </Typography>
+                  <Typography variant="h5" component="div">
+                    {minhaEmpresa.nome ??
+                      minhaEmpresa.nomeFantasia ??
+                      minhaEmpresa.razaoSocial}
+                  </Typography>
+                  <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                    Contato
+                  </Typography>
+                  <Typography variant="body2">
+                    {minhaEmpresa.telefone}
+                  </Typography>
+                  <Typography variant="body2">{minhaEmpresa.email}</Typography>
+                  <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                    Endereço
+                  </Typography>
+                  <Typography variant="body2">
+                    {`${minhaEmpresa.rua},${minhaEmpresa.numero}-${minhaEmpresa.bairro},${minhaEmpresa.cidade}-${minhaEmpresa.estado}`}
+                  </Typography>
+                </CardContent>
+              </Card>
+            )}
+            {fornecedor && (
+              <Card sx={{ minWidth: 275 }}>
+                <CardContent>
+                  <Typography
+                    sx={{ fontSize: 14 }}
+                    color="text.secondary"
+                    gutterBottom
+                  >
+                    Empresa Solicitada
+                  </Typography>
+                  <Typography variant="h5" component="div">
+                    {fornecedor.nome ??
+                      fornecedor.nomeFantasia ??
+                      fornecedor.razaoSocial}
+                  </Typography>
+                  <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                    Contato
+                  </Typography>
+                  <Typography variant="body2">{fornecedor.telefone}</Typography>
+                  <Typography variant="body2">{fornecedor.email}</Typography>
+                  <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                    Endereço
+                  </Typography>
+                  <Typography variant="body2">
+                    {`${fornecedor.rua},${fornecedor.numero}-${fornecedor.bairro},${fornecedor.cidade}-${fornecedor.estado}`}
+                  </Typography>
+                </CardContent>
+              </Card>
+            )}
+          </Box>
+          <Box
+            sx={{ border: 1 }}
+            display={"flex"}
+            flexDirection={"column"}
+            padding={"10px"}
+            gap={"10px"}
+            marginTop={"10px"}
+          >
+            <Typography variant="h5">{`Solicitação de orçamento`}</Typography>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell style={{ fontWeight: "bold" }}>Titulo</TableCell>
+                  <TableCell style={{ fontWeight: "bold" }}>Variação</TableCell>
+                  <TableCell style={{ fontWeight: "bold" }}>
+                    Quantidade
                   </TableCell>
-                  <TableCell>
-                    <Typography>{row.variante.variante}</Typography>
+                  <TableCell style={{ fontWeight: "bold" }}>
+                    Valor Unitario
                   </TableCell>
-                  <TableCell>
-                    <Typography>{row.quantidade}</Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography></Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography></Typography>
+                  <TableCell style={{ fontWeight: "bold" }}>
+                    Valor Total
                   </TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Box>
-      </TableContainer>
-    </div>
-  );
-});
+              </TableHead>
+              <TableBody>
+                {insumos.map((row) => (
+                  <TableRow key={row.id}>
+                    <TableCell>
+                      <Typography>{row.variante.insumo?.titulo}</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography>{row.variante.variante}</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography>{row.quantidade * qtdProd}</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography></Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography></Typography>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </Box>
+        </TableContainer>
+      </div>
+    );
+  }
+);
 
 export const InsumosDeUmProdutoOrcamento = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -428,11 +435,13 @@ export const InsumosDeUmProdutoOrcamento = () => {
                 </TableCell>
                 <TableCell>
                   <Typography>
-                    {row.cotacao != null?   (row.cotacao?.valor).toLocaleString("pt-BR", {
-                      style: "currency",
-                      currency: "BRL",
-                      minimumFractionDigits: 2,
-                    }) : 0}
+                    {row.cotacao != null
+                      ? (row.cotacao?.valor).toLocaleString("pt-BR", {
+                          style: "currency",
+                          currency: "BRL",
+                          minimumFractionDigits: 2,
+                        })
+                      : 0}
                   </Typography>
                 </TableCell>
                 <TableCell>
@@ -496,7 +505,12 @@ export const InsumosDeUmProdutoOrcamento = () => {
           </TableFooter>
         </Table>
       </TableContainer>
-      <PDF idFornecedor={Number(id)} referencia={pdfRef} insumos={rows} />
+      <PDF
+        idFornecedor={Number(id)}
+        referencia={pdfRef}
+        insumos={rows}
+        qtdProd={qtdProd}
+      />
     </PaginaBase>
   );
 };
