@@ -51,7 +51,10 @@ export const Pedidos = () => {
     try {
       setIsLoading(true);
 
-      const result = await PedidosService.getAll({ page: pagina, filter: busca });
+      const result = await PedidosService.getAll({
+        page: pagina,
+        filter: busca,
+      });
 
       if (result instanceof Error) {
         alert(result.message);
@@ -78,7 +81,7 @@ export const Pedidos = () => {
                 return;
               }
               pedido.orcamento.cliente = result3;
-            } catch (error) { }
+            } catch (error) {}
             return pedido;
           } catch (error) {
             return null;
@@ -124,18 +127,26 @@ export const Pedidos = () => {
           }
           onClickBotaoNovo={() => navigate(`${location.pathname}/novo`)}
         />
-      }>
+      }
+    >
       <TableContainer
         component={Paper}
         variant="outlined"
-        sx={{ m: 1, width: "auto" }}>
+        sx={{ m: 1, width: "auto" }}
+      >
         <Table>
           <TableHead>
             <TableRow>
               <TableCell style={{ fontWeight: "bold" }}>Ações</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Codigo</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>
+                Codigo (Pedido)
+              </TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>
+                Codigo (Orçamento)
+              </TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Cliente</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Status</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Valor Total</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Valor Pago</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>
                 Porcentagem Pago
@@ -158,6 +169,9 @@ export const Pedidos = () => {
                   <Typography>{row.id}</Typography>
                 </TableCell>
                 <TableCell>
+                  <Typography>{row.orcamento.id}</Typography>
+                </TableCell>
+                <TableCell>
                   <Typography>
                     {row.orcamento.cliente.nome ||
                       row.orcamento.cliente.nomeFantasia ||
@@ -166,21 +180,40 @@ export const Pedidos = () => {
                   </Typography>
                 </TableCell>
                 <TableCell>
-                <Typography>{row.status.toString() == "Em_Processo"? "Em Processo" : row.status }</Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography>{row.pagamento.toLocaleString('pt-BR', {
-                    style: 'currency',
-                    currency: 'BRL',
-                    minimumFractionDigits: 2,
-                  })}</Typography>
+                  <Typography>
+                    {row.status.toString() == "Em_Processo"
+                      ? "Em Processo"
+                      : row.status}
+                  </Typography>
                 </TableCell>
                 <TableCell>
                   <Typography>
-                    {((row.pagamento /
-                      (row.orcamento?.totalMaoObra +
-                        row.orcamento?.totalMateriais)) *
-                      100).toFixed(2) + "%"}
+                    {(
+                      row.orcamento.totalMaoObra + row.orcamento.totalMateriais
+                    ).toLocaleString("pt-BR", {
+                      style: "currency",
+                      currency: "BRL",
+                      minimumFractionDigits: 2,
+                    })}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography>
+                    {row.pagamento.toLocaleString("pt-BR", {
+                      style: "currency",
+                      currency: "BRL",
+                      minimumFractionDigits: 2,
+                    })}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography>
+                    {(
+                      (row.pagamento /
+                        (row.orcamento?.totalMaoObra +
+                          row.orcamento?.totalMateriais)) *
+                      100
+                    ).toFixed(2) + "%"}
                   </Typography>
                 </TableCell>
               </TableRow>
