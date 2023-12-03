@@ -24,7 +24,9 @@ import { Actions } from "../../ui/components/ferramentasDeListagem/Actions";
 import {
   IUsuario,
   UsuariosService,
+  tipoUsuario,
 } from "../../data/services/api/modules/usuario";
+import { useAuthContext } from "../../data/contexts";
 
 export const Usuarios = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -34,6 +36,8 @@ export const Usuarios = () => {
   const [totalCount, setTotalCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [isAdministrador, setAdministrador] = useState<boolean>(false);
+
+  const { usuario } = useAuthContext();
 
   useEffect(() => {
     setAdministrador(true);
@@ -123,6 +127,16 @@ export const Usuarios = () => {
                     handleShowList={() => {
                       navigate(`${location.pathname}/${row.id}`);
                     }}
+                    showEditButton={
+                      usuario.tipoUsuario != tipoUsuario.Administrador
+                        ? false
+                        : true
+                    }
+                    showDeleteButton={
+                      usuario.tipoUsuario != tipoUsuario.Administrador
+                        ? false
+                        : true
+                    }
                   />
                 )}
                 <TableCell>

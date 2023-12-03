@@ -10,7 +10,7 @@ export interface IUsuario {
   createdAt: Date;
   updatedAt: Date;
 }
-enum tipoUsuario {
+export enum tipoUsuario {
   Serralheiro,
   Administrador,
   Vendedor
