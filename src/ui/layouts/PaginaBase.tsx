@@ -9,7 +9,7 @@ import {
   Icon,
   Avatar,
 } from "@mui/material";
-import { useAppDrawerContext } from "../../data/contexts";
+import { useAppDrawerContext, useAuthContext } from "../../data/contexts";
 import React from "react";
 
 export interface IPaginaBase {
@@ -27,6 +27,7 @@ export const PaginaBase: React.FC<IPaginaBase> = ({
   const smDown = useMediaQuery(theme.breakpoints.down("sm"));
   const menuSize = theme.spacing(28);
   const { toggleDrawerOpen } = useAppDrawerContext();
+  const { usuario } = useAuthContext();
 
   return (
     <Box
@@ -76,7 +77,7 @@ export const PaginaBase: React.FC<IPaginaBase> = ({
               >
                 <Box display={"flex"} flexDirection={"row"}>
                   <Icon> personIcon</Icon>
-                  <Typography>Nivaldo - Administrador</Typography>
+                  <Typography>{`${usuario?.nome} - ${usuario?.tipoUsuario}`}</Typography>
                 </Box>
               </Box>
             </Box>

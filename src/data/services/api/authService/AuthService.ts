@@ -1,7 +1,8 @@
-import { Api } from "..";
+import { Api, IUsuario } from "..";
 
 interface IAuth {
   accessToken: string;
+  usuario: IUsuario;
 }
 
 const auth = async (

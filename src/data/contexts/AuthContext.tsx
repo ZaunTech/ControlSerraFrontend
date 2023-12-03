@@ -6,12 +6,13 @@ import {
   useMemo,
   useState,
 } from "react";
-import { AuthService } from "../services/api";
+import { AuthService, IUsuario } from "../services/api";
 
 interface IAuthContext {
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<string | void>;
   logout: () => void;
+  usuario: IUsuario | undefined;
 }
 
 const AuthContext = createContext({} as IAuthContext);
@@ -21,6 +22,7 @@ interface IAuthProvider {
 }
 
 const LOCAL_STORAGE_STORAGE_KEY__ACCESS_TOKEN = "APP_ACCESS_TOKEN";
+const LOCAL_STORAGE_STORAGE_KEY__USER = "APP_USER";
 
 const GetToken = () => {
   let token = localStorage.getItem("APP_ACCESS_TOKEN");
@@ -41,10 +43,19 @@ const GetToken = () => {
 
 export const AuthProvider: React.FC<IAuthProvider> = ({ children }) => {
   const [accessToken, setAccessToken] = useState<string>();
+  const [usuario, setUsuario] = useState<IUsuario | undefined>();
 
   useEffect(() => {
     const token = GetToken();
     setAccessToken(token);
+    const user = localStorage.getItem(LOCAL_STORAGE_STORAGE_KEY__USER);
+    if (user) {
+      try {
+        setUsuario(JSON.parse(user));
+      } catch (error) {
+        console.error("Erro ao fazer parse do usuário:", error);
+      }
+    }
     return;
   }, []);
 
@@ -57,20 +68,36 @@ export const AuthProvider: React.FC<IAuthProvider> = ({ children }) => {
       LOCAL_STORAGE_STORAGE_KEY__ACCESS_TOKEN,
       JSON.stringify(result.accessToken)
     );
+
+    localStorage.setItem(
+      LOCAL_STORAGE_STORAGE_KEY__USER,
+      JSON.stringify(result.usuario)
+    );
+
     setAccessToken(result.accessToken);
+    setUsuario(result.usuario);
+
     return accessToken;
   }, []);
 
   const handleLogout = useCallback(() => {
     localStorage.removeItem(LOCAL_STORAGE_STORAGE_KEY__ACCESS_TOKEN);
+    localStorage.removeItem(LOCAL_STORAGE_STORAGE_KEY__USER);
     setAccessToken(undefined);
+    setUsuario(undefined);
   }, []);
 
   const isAuthenticated = useMemo(() => !!accessToken, [accessToken]);
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, login: handleLogin, logout: handleLogout }}>
+      value={{
+        isAuthenticated,
+        usuario,
+        login: handleLogin,
+        logout: handleLogout,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
