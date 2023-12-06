@@ -204,7 +204,6 @@ const PDF = forwardRef(
     );
   }
 );
-
 export const InsumosDeUmProdutoOrcamento = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { debounce } = useDebounce();
@@ -346,7 +345,12 @@ export const InsumosDeUmProdutoOrcamento = () => {
           mostrarInputBusca
           textoDaBusca={busca}
           onChangeBuscaTexto={(texto) =>
-            setSearchParams({ busca: texto, pagina: "1" }, { replace: true })
+            navigate(`${location.pathname}?busca=${texto}&pagina=1`, {
+              state: {
+                qtdProd: qtdProd,
+                tituloProd: tituloProd,
+              },
+            })
           }
           onClickBotaoNovo={() => navigate(`${location.pathname}/novo`)}
           mostrarBotaoVoltar
@@ -493,9 +497,14 @@ export const InsumosDeUmProdutoOrcamento = () => {
                         totalCount / Environment.LIMITE_DE_LINHAS
                       )}
                       onChange={(_, newPage) => {
-                        setSearchParams(
-                          { busca, pagina: newPage.toString() },
-                          { replace: true }
+                        navigate(
+                          `${location.pathname}?busca=${busca}&pagina=${newPage}`,
+                          {
+                            state: {
+                              qtdProd: qtdProd,
+                              tituloProd: tituloProd,
+                            },
+                          }
                         );
                       }}
                     />

@@ -177,7 +177,10 @@ export const Usuarios = () => {
                       )}
                       onChange={(_, newPage) => {
                         setSearchParams(
-                          { busca, pagina: newPage.toString() },
+                          {
+                            busca,
+                            pagina: newPage.toString(),
+                          },
                           { replace: true }
                         );
                       }}
