@@ -49,7 +49,9 @@ const getCurrentDate = () => {
 };
 
 const createUserFormSchema = z.object({
-  idCliente: z.coerce.number().min(1, "Selecione o cliente"),
+  idCliente: z.coerce.number().optional().refine((value) => value >= 1, {
+    message: "Selecione um Cliente",
+  }),
   observacoes: z.string().optional(),
   status: z.string(),
   validade: z.coerce

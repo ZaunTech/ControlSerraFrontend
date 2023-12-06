@@ -23,7 +23,9 @@ import { useNavigate } from "react-router-dom";
 
 const createUserFormSchema = z.object({
   titulo: z.string().min(1, "Preencha o Titulo"),
-  idCategoria: z.coerce.number().min(1,"Selecione uma categoria"),
+  idCategoria: z.number().optional().refine((value) => value >= 1, {
+    message: "Selecione uma Opção",
+  }),
   
  
 });
@@ -116,7 +118,7 @@ export const CriarInsumo = () => {
                   renderInput={(params) => <TextField {...params} />}
                   onChange={(_, value) => {
                     if (value !== null) {
-                      setValue("categoria", [value]);
+                      
                       setValue("idCategoria", value.id);
                     }
                   }}

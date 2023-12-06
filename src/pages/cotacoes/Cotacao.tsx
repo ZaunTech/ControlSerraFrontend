@@ -35,8 +35,12 @@ export const Cotacao = () => {
   const [opcaoiInsumos, setopcaoInsumo] = useState<IVariante[]>([]);
 
   const shemaCotacao = z.object({
-    idFornecedor: z.number().min(1,"Selecione um fornecedor"),
-    idVariante: z.number().min(1,"Selecione um insumo"),
+    idFornecedor: z.coerce.number().optional().refine((value) => value >= 1, {
+      message: "Selecione um Fornecedor",
+    }),
+    idVariante: z.coerce.number().optional().refine((value) => value >= 1, {
+      message: "Selecione um Insumo",
+    }),
     valor: z.coerce.number().min(1,"Informe o valor do insumo"),
 
     data: z.coerce.date(),

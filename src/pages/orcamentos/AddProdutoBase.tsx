@@ -23,7 +23,9 @@ const createUserFormSchema = z.object({
   quantidade: z.coerce.number().min(1,"Informe a quantidade"),
   orcamentoId: z.coerce.number(),
   observacoes: z.string().optional(),
-  id: z.coerce.number().min(1,"Selecione um Produto Base"),
+  id: z.coerce.number().optional().refine((value) => value >= 1, {
+    message: "Selecione um Produto",
+  }),
 });
 
 export const AddProdutoBase = () => {
@@ -126,8 +128,8 @@ export const AddProdutoBase = () => {
                   }}
                 />
                 </Box>
-                {errors.titulo && (
-                  <span>{errors.titulo.message?.toString()}</span>
+                {errors.id && (
+                  <span>{errors.id.message?.toString()}</span>
                 )}
               </Grid>
 

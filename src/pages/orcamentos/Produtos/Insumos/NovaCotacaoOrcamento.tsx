@@ -226,8 +226,8 @@ export const NovaCotacaoOrcamento = () => {
                   id="combo-box-demo"
                   {...register("idInsumo")}
                   options={opcaoiInsumos}
-                  getOptionLabel={(opcaoiInsumos) => opcaoiInsumos.insumo.titulo ?? ""}
-                  sx={{ width: 225 }}
+                  getOptionLabel={(opcaoInsumo) => ` ${opcaoInsumo.insumo.titulo || ''}  -  ${opcaoInsumo.variante || ''}`}
+                  sx={{ width: 255 }}
                   value={
                     opcaoiInsumos.find(
                       (option) => option.id === watch("idVariante")

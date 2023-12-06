@@ -6,6 +6,7 @@ import {
   FornecedoresService,
   IFornecedor,
   IInsumo,
+  IVariante,
   InsumosService,
   VariantesService,
 } from "../../data/services/api";
@@ -47,7 +48,7 @@ interface IPesquisa {
 
 const Pesquisas: React.FC<IPesquisa> = ({ setFiltro, setFiltroId }) => {
   const [opcoesFornecedor, setOpcoesFornecedor] = useState<IFornecedor[]>([]);
-  const [opcoesInsumos, setOpcoesInsumos] = useState<IInsumo[]>([]);
+  const [opcoesInsumos, setOpcoesInsumos] = useState<IVariante[]>([]);
 
   useEffect(() => {
     FornecedoresService.getAll({ perPage: 0 })
@@ -66,7 +67,7 @@ const Pesquisas: React.FC<IPesquisa> = ({ setFiltro, setFiltroId }) => {
   }, []);
 
   useEffect(() => {
-    InsumosService.getAll({ perPage: 0 })
+    VariantesService.getAll({ perPage: 0 })
       .then((response) => {
         if (response instanceof Error) {
           return;
@@ -130,7 +131,7 @@ const Pesquisas: React.FC<IPesquisa> = ({ setFiltro, setFiltroId }) => {
           disablePortal
           id="combo-box-demo"
           options={opcoesInsumos}
-          getOptionLabel={(option) => option.titulo ?? ""}
+          getOptionLabel={(option) => option.insumo.titulo + option.variante ?? ""}
           sx={{ width: 225 }}
           size="small"
           renderInput={(params) => <TextField {...params} />}
@@ -299,7 +300,7 @@ export const Cotacoes = () => {
                     </Typography>
                   </TableCell>
                   <TableCell>
-                    <Typography>{row.variante.insumo?.titulo || "Vazop"}</Typography>
+                    <Typography>{row.variante.insumo?.titulo   || "Vazop"}</Typography>
                   </TableCell>
                   <TableCell>
                     <Typography>{row.variante.variante || "Vazop"}</Typography>

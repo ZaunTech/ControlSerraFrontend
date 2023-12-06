@@ -30,15 +30,17 @@ const createUserFormSchema = z
     nome: z.string().optional(),
     contaTipo: z.string(),
     email: z.string().min(1, "Digite seu Email").email("isso não é email"),
-    telefone: z.string().min(1,"Digite seu Telefone"),
+    telefone: z.string().refine((value) => /^\d+$/.test(value), {
+      message: "Por favor, insira apenas números para o telefone",
+    }),
     cep: z.string().min(8),
     pais: z.string(),
     estado: z.string(),
     cidade: z.string(),
     bairro: z.string(),
     rua: z.string(),
-    numero: z.string(),
-    complemento: z.string(),
+    numero: z.string().optional(),
+    complemento: z.string().optional(),
   })
   .refine(
     (data) => {

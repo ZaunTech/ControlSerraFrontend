@@ -31,9 +31,11 @@ const createUserFormSchema = z
     cpf: z.string().optional(),
     nome: z.string().optional(),
     contaTipo: z.string(),
-    email: z.string().min(1, "Faltou o nome").email("isso não é email"),
-    telefone: z.string(),
-    cep: z.string().min(8),
+    email: z.string().min(1, "Digite seu email").email("isso não é email"),
+    telefone: z.string().refine((value) => /^\d+$/.test(value), {
+      message: "Por favor, insira apenas números para o telefone",
+    }),
+    cep: z.string().min(1,"Digite o CEP").optional(),
     pais: z.string(),
     estado: z.string(),
     cidade: z.string(),
@@ -66,14 +68,14 @@ const createUserFormSchema = z
   );
 
 const createCepFormSchema = z.object({
-  cep: z.coerce.number().min(8),
+  cep: z.coerce.number().min(1,"Digite um CEP"),
   pais: z.string(),
   estado: z.string(),
   cidade: z.string(),
   bairro: z.string(),
   rua: z.string(),
-  numero: z.string(),
-  complemento: z.string(),
+  numero: z.string().optional(),
+  complemento: z.string().optional(),
 });
 
 export const CriarFornecedor = () => {
@@ -332,8 +334,10 @@ export const CriarFornecedor = () => {
             </Grid>
             <Grid container item direction="row" spacing={3}>
               <Grid item>
+                <Box>
                 <Typography>CEP</Typography>
                 <TextField placeholder="CEP" disabled={!isEditable} {...register("cep")} />
+                </Box>
                 {errors.cep && <span>{errors.cep.message?.toString()}</span>}
               </Grid>
               <Grid item xs={5}>

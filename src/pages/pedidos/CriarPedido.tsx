@@ -14,7 +14,9 @@ import { IOrcamento, OrcamentosService } from "../../data/services/api/modules/o
 
 const createUserFormSchema = z.object({
   pagamento: z.coerce.number(),
-  idOrcamento: z.coerce.number(),
+  idOrcamento: z.coerce.number().optional().refine((value) => value >= 1, {
+    message: "Selecione um Orçamento",
+  }),
   status: z.string(),
   
 });

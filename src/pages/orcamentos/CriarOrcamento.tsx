@@ -29,11 +29,13 @@ const getCurrentDate = () => {
 };
 
 const createUserFormSchema = z.object({
-  idCliente: z.coerce.number().min(1,"Selecione o cliente"),
+  idCliente: z.coerce.number().optional().refine((value) => value >= 1, {
+    message: "Selecione um Cliente",
+  }),
   observacoes: z.string().optional(),
   status: z.string(),
   validade: z.coerce.date().min( new Date(getCurrentDate()),"Informe uma data valida"),
-  prazoEstimadoProducao: z.coerce.number().min(1,"Digite um prazo estimado"),
+  prazoEstimadoProducao: z.coerce.number().min(1,"Digite um prazo estimado maior que 1"),
 });
 
 
@@ -92,6 +94,7 @@ export const CriarOrcamento = () => {
       setIsEditable(true);
       return;
     }
+    setValue("prazoEstimadoProducao", 0)
   }, [pageState]);
   
 
@@ -201,6 +204,7 @@ export const CriarOrcamento = () => {
                 <TextField
                   type="number" disabled={!isEditable}
                   placeholder="Prazo Estimado em Dias"
+                  defaultValue={Number(0)}
                   {...register("prazoEstimadoProducao")}
                 />
                 </Box>

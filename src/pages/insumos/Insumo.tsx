@@ -22,7 +22,9 @@ import {
 
 const createUserFormSchema = z.object({
   titulo: z.string().min(1, "Preencha o Titulo"),
-  idCategoria: z.coerce.number().min(1,"Selecione uma categoria"),
+  idCategoria: z.number().optional().refine((value) => value >= 1, {
+    message: "Selecione uma Opção",
+  }),
  
 });
 
@@ -58,7 +60,7 @@ export const Insumo = () => {
   const [opcoes, setOpcoes] = useState<ICategoria[]>([]);
 
   useEffect(() => {
-    CategoriasService.getAll()
+    CategoriasService.getAll({perPage: 0})
       .then((response) => {
         if (response instanceof Error) {
           return;
@@ -151,7 +153,7 @@ export const Insumo = () => {
                   }
                   onChange={(_, value) => {
                     if (value !== null) {
-                      setValue("categoria", [value]);
+                      
                       setValue("idCategoria", value.id);
                     }
                   }}

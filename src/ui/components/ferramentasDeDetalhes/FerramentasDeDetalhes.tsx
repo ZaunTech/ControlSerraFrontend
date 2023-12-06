@@ -102,7 +102,7 @@ export const FerramentasDeDetalhes: React.FC<IFerramentasDeDetalhes> = (
         : tipo === "editar"
         ? false
         : tipo === "detalhes"
-        ? true
+        ? false
         : false
     );
     setMostrarBotaoNovo(
