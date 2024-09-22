@@ -1,6 +1,6 @@
 import axios from "axios";
 import { errorInterceptor, responseInterceptor } from "./interceptors";
-import { Environment } from "../../../environment";
+const VITE_API_URL = import.meta.env.VITE_API_URL
 
 const GetToken = () => {
   let token = localStorage.getItem("APP_ACCESS_TOKEN");
@@ -22,7 +22,7 @@ const GetToken = () => {
 };
 
 const Api = axios.create({
-  baseURL: Environment.URL_BASE,
+  baseURL: VITE_API_URL,
   headers: {
     Authorization: `Bearer ${GetToken()}`,
   },
