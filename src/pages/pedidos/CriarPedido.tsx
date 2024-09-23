@@ -1,4 +1,15 @@
-import { Autocomplete, Box, Grid, InputLabel, MenuItem, Paper, Select, SelectChangeEvent, TextField, Typography } from "@mui/material";
+import {
+  Autocomplete,
+  Box,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  SelectChangeEvent,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { FerramentasDeDetalhes, TTipo } from "../../ui/components";
 import { PaginaBase } from "../../ui/layouts";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -6,33 +17,35 @@ import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { z } from "zod";
 import React from "react";
-import { IPedido, PedidosService } from "../../data/services/api/modules/pedidos";
+import {
+  IPedido,
+  PedidosService,
+} from "../../data/services/api/modules/pedidos";
 import { useNavigate } from "react-router-dom";
-import { IOrcamento, OrcamentosService } from "../../data/services/api/modules/orcamentos";
-
-
+import {
+  IOrcamento,
+  OrcamentosService,
+} from "../../data/services/api/modules/orcamentos";
 
 const createUserFormSchema = z.object({
   pagamento: z.coerce.number(),
-  idOrcamento: z.coerce.number().optional().refine((value) => value >= 1, {
-    message: "Selecione um Orçamento",
-  }),
+  idOrcamento: z.coerce
+    .number()
+    .optional()
+    .refine((value) => value >= 1, {
+      message: "Selecione um Orçamento",
+    }),
   status: z.string(),
-  
 });
 
-
 export const CriarPedido = () => {
-
   const navigate = useNavigate();
   function createPedido(data: any) {
-    console.log(data)
     PedidosService.create(data)
       .then((result) => {
-        console.log(result);
         navigate(-1);
       })
-      .catch((error) => { console.log(error)});
+      .catch((error) => {});
   }
 
   const {
@@ -57,7 +70,7 @@ export const CriarPedido = () => {
       return;
     }
   }, [pageState]);
-  
+
   const [tipo, setTipo] = React.useState("Pendente");
   const handleChange = (event: SelectChangeEvent) => {
     setTipo(event.target.value as string);
@@ -70,7 +83,6 @@ export const CriarPedido = () => {
         if (response instanceof Error) {
           return;
         }
-        console.log(response)
         if (response && Array.isArray(response)) {
           const FornecedoresMapeadas = response;
           setOpcoes(FornecedoresMapeadas);
@@ -82,17 +94,17 @@ export const CriarPedido = () => {
 
   return (
     <PaginaBase
-    titulo="Novo Pedido"
-    barraDeFerramentas={
-      <FerramentasDeDetalhes
-        tipo="detalhes"
-        pageState={pageState}
-        setPaiState={setPageState}
-        onClickSalvar={handleSubmit(createPedido)}
-      />
-    }
-  >
-   <Box component={"form"} onSubmit={handleSubmit(createPedido)}>
+      titulo="Novo Pedido"
+      barraDeFerramentas={
+        <FerramentasDeDetalhes
+          tipo="detalhes"
+          pageState={pageState}
+          setPaiState={setPageState}
+          onClickSalvar={handleSubmit(createPedido)}
+        />
+      }
+    >
+      <Box component={"form"} onSubmit={handleSubmit(createPedido)}>
         <Box
           display={"flex"}
           margin={1}
@@ -113,10 +125,11 @@ export const CriarPedido = () => {
                   disablePortal
                   {...register("idOrcamento")}
                   id="combo-box-demo"
-                 
                   options={opcoes}
                   getOptionLabel={(option) =>
-                    option.id.toString()+ " - "+ option.cliente.nome ?? option.cliente.nomeFantasia ?? option.cliente.razaoSocial
+                    option.id.toString() + " - " + option.cliente.nome ??
+                    option.cliente.nomeFantasia ??
+                    option.cliente.razaoSocial
                   }
                   disabled={!isEditable}
                   sx={{ width: 225 }}
@@ -139,9 +152,15 @@ export const CriarPedido = () => {
                   {...register("status")}
                   onChange={handleChange}
                 >
-                  <MenuItem value={"Pendente"} disabled={!isEditable}>Pendente</MenuItem>             
-                  <MenuItem value={"Em_Processo"} disabled={!isEditable}>Em Processo</MenuItem>
-                  <MenuItem value={"Concluido"} disabled={!isEditable}>Concluido</MenuItem>
+                  <MenuItem value={"Pendente"} disabled={!isEditable}>
+                    Pendente
+                  </MenuItem>
+                  <MenuItem value={"Em_Processo"} disabled={!isEditable}>
+                    Em Processo
+                  </MenuItem>
+                  <MenuItem value={"Concluido"} disabled={!isEditable}>
+                    Concluido
+                  </MenuItem>
                 </Select>
 
                 {errors.status && (
@@ -151,7 +170,8 @@ export const CriarPedido = () => {
               <Grid item>
                 <Typography>Valor Pago</Typography>
                 <TextField
-                  type="number" disabled={!isEditable}
+                  type="number"
+                  disabled={!isEditable}
                   placeholder="Valor Pago"
                   {...register("pagamento")}
                 />
@@ -165,9 +185,6 @@ export const CriarPedido = () => {
           </Grid>
         </Box>
       </Box>
-
-
-  </PaginaBase>
-  
-    );
+    </PaginaBase>
+  );
 };

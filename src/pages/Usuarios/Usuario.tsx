@@ -70,16 +70,13 @@ export const Usuario = () => {
         setIsEditable(false);
         setPageState("detalhes")
       }).catch((error)=>{
-        console.log(error)
       })
     }
 
     function salvarUsuarioFechar(data: any){
-      console.log("Salvar")
       UsuariosService.updateById(Number(id),data).then((result)=>{
         navigate(-1);
       }).catch((error)=>{
-        console.log(error)
       })
     }
 

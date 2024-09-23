@@ -16,7 +16,6 @@ const getAll = async (
     const urlRelativa = `/${rota}?page=${page}&perPage=${perPage == 0 ? '' : perPage}&titulo_like=${filter}`;
     const response = await Api.get(urlRelativa);
     const { data, headers } = response;
-    console.log(response);
     if (data) {
       return {
         data,

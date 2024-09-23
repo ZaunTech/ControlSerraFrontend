@@ -23,7 +23,6 @@ const createUserFormSchema = z
 
 export const RecuperarSenha = () => {
   function createUser(data: any) {
-    console.log(data);
   }
 
   const {

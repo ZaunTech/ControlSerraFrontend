@@ -10,7 +10,6 @@ const getAll = async (
     perPage = Environment.LIMITE_DE_LINHAS }: Partial<IGetAll> = {}
 ): Promise<TListOrcamentos | Error> => {
   try {
-    console.log(filter)
     const urlRelativa = `/${rota}?page=${page}&perPage=${perPage == 0 ? '' : perPage}&titulo_like=${filter}`;
     const { data, headers } = await Api.get(urlRelativa);
     if (data) {
@@ -124,7 +123,6 @@ const deleteById = async (id: number): Promise<IOrcamento | Error> => {
     }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);
   } catch (error) {
-    console.log(error)
     return new Error(
       (error as { message: string }).message ||
       Environment.ERRO_AO_ACESSAR_DADOS

@@ -59,7 +59,6 @@ const create = async (
       CreateProdutoBaseDto
     );
     if (response) {
-      console.log(response);
       return response.data;
     }
     return new Error(Environment.ERRO_AO_LISTAR_DADOS);

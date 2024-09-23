@@ -41,7 +41,7 @@ export const CriarVariante = () => {
     
         navigate(-1);
       })
-      .catch((erro) => { console.log(erro) });
+      .catch((erro) => {});
   }
   const [opcoes, setOpcoes] = useState<IInsumo[]>([]);
 
@@ -60,7 +60,6 @@ export const CriarVariante = () => {
         }
       })
       .catch((error) => { });
-      console.log(id)
       setValue("idInsumo",id)
   }, []);
 

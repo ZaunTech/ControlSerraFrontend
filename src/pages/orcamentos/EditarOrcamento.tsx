@@ -111,7 +111,6 @@ export const EditarOrcamento = () => {
     setTipo(event.target.value as string);
   };
   const setarUsuario = async (id: number): Promise<IUsuario | Error> => {
-    console.log("id na função", id);
     const usuario = await UsuariosService.getById(id);
     if (usuario) return usuario;
     return new Error("Erro");
@@ -157,7 +156,6 @@ export const EditarOrcamento = () => {
   function createOrcamentoFechar(data: any) {
     OrcamentosService.updateById(Number(id), data)
       .then(() => {
-        console.log(data);
         navigate(-1);
       })
       .catch(() => {});

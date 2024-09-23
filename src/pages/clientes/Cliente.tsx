@@ -155,7 +155,6 @@ export const Cliente = () => {
       const data: ICliente | Error = await ClientesService.getById(
         Number(id)
       );
-      console.log(data)
       if (data instanceof Error) {
         return;
       }

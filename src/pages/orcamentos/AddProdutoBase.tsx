@@ -69,7 +69,7 @@ export const AddProdutoBase = () => {
           navigate(-1);
         }
       })
-      .catch((error) => { console.log("Esse é o sucesso",error);});
+      .catch((error) => {});
   }
 
 

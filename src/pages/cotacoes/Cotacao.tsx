@@ -119,7 +119,6 @@ export const Cotacao = () => {
    
     CotacoesService.updateById(Number(id), data)
       .then((result) => {
-        console.log(result)
         setIsEditable(false);
         setPageState("detalhes");
       })

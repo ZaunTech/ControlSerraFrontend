@@ -44,7 +44,6 @@ export const Login = () => {
     setIsLoading(true);
     login(email, password)
       .then((result) => {
-        console.log("resukt", result);
         setIsLoading(false);
         // @ts-ignore
         if (result instanceof Error) {
@@ -54,7 +53,6 @@ export const Login = () => {
         return;
       })
       .catch((err) => {
-        console.log(err);
         setIsLoading(false);
         return err;
       });
@@ -63,7 +61,6 @@ export const Login = () => {
   const { isAuthenticated } = useAuthContext();
 
   useEffect(() => {
-    console.log(isAuthenticated);
     if (isAuthenticated) {
       navigate("/");
     }

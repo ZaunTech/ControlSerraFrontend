@@ -18,7 +18,6 @@ const getAll = async (
   id: number
 ): Promise<TListInsumosProdutoBase | Error> => {
   try {
-    console.log(id);
     const urlRelativa = `/${rota}/${id}?page=${page}&perPage=${
       perPage == 0 ? "" : perPage
     }&titulo_like=${filter}`;

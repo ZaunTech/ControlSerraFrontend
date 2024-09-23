@@ -74,7 +74,6 @@ export const CriarOrcamento = () => {
 
   const navigate = useNavigate();
   function createOrcamento(data: any) {
-    console.log(data)
     OrcamentosService.create(data)
       .then(() => {
         navigate(-1);

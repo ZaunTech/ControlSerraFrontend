@@ -54,7 +54,6 @@ export const CriarUsuario = () => {
         navigate(-1)
         
       }).catch((error)=>{
-        console.log(error)
       })
     }
 

@@ -108,7 +108,6 @@ export const Insumos = () => {
   };
 
   useEffect(() => {
-    console.log(rows);
   }, [rows]);
 
   return (

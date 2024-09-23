@@ -50,7 +50,6 @@ const createUserFormSchema = z.object({
 export const Pedido = () => {
   const navigate = useNavigate();
   function createPedido(data: any) {
-    console.log(data);
     PedidosService.updateById(Number(id), data)
       .then((result) => {
         setPageState("detalhes");
@@ -58,18 +57,15 @@ export const Pedido = () => {
         fetchData();
       })
       .catch((error) => {
-        console.log(error);
       });
   }
   function createPedidoFechar(data: any) {
-    console.log(data);
     PedidosService.updateById(Number(id), data)
       .then((result) => {
         setPageState("detalhes");
         navigate(-1);
       })
       .catch((error) => {
-        console.log(error);
       });
   }
 
@@ -139,8 +135,6 @@ export const Pedido = () => {
         setValue("pagamento", data.pagamento);
         setTipo(data.status.toString());
         setValue("updatedAt", formattedDate);
-
-        console.log(data);
         setOrcamento(data.orcamento);
       }
     } catch (error) {}

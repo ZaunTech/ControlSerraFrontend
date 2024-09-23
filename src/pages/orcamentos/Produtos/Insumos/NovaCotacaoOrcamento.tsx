@@ -45,7 +45,6 @@ export const NovaCotacaoOrcamento = () => {
         if (response instanceof Error) {
           return;
         }
-        console.log(response)
 
         if (response && Array.isArray(response.data)) {
           const InsumosMapeadas = response.data;
@@ -118,7 +117,6 @@ export const NovaCotacaoOrcamento = () => {
     ListaInsumosService.getById(Number(idItemListaInsumos)).then((result)=>{
       setValue("idVariante", Number(result.idVariante));
     }).catch((erro)=>{
-      console.log(erro)
     })
 
    

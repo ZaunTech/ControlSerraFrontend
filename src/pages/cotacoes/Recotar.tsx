@@ -125,7 +125,6 @@ export const Recotar = () => {
   function createCotacao(data: any) {
     CotacoesService.recotar(Number(id), data)
       .then((result) => {
-        console.log(result)
         navigate(-1);
       })
       .catch(() => { });

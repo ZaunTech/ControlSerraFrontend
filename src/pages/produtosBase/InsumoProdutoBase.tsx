@@ -82,8 +82,6 @@ export const InsumoProdutoBase = () => {
   function editarInsumo(data: any) {
     InsumosProdutoBaseService.updateById(Number(id), data)
       .then((result) => {
-        console.log(result)
-        console.log(id)
         if (!(result instanceof Error)) {
           setIsEditable(false);
           setPageState("detalhes");

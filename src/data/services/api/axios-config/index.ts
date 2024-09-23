@@ -7,8 +7,6 @@ const GetToken = () => {
 
   if (token) {
     try {
-      // Tenta fazer o parse apenas se o token existir
-      console.log("Token no axios", token);
       token = JSON.parse(token);
       return token;
     } catch (error) {

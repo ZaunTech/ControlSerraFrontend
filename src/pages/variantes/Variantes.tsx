@@ -87,7 +87,6 @@ export const Variantes = () => {
   };
 
   useEffect(() => {
-    console.log(rows);
   }, [rows]);
 
   return (

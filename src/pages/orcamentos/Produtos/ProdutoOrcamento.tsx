@@ -49,7 +49,6 @@ export const ProdutoOrcamento = () => {
   }, []);
 
   function createProduto(data: any) {
-    console.log(data);
     ProdutosService.updateById(Number(id), data)
       .then((result) => {
         if (!(result instanceof Error)) {
@@ -58,7 +57,7 @@ export const ProdutoOrcamento = () => {
           setPageState("detalhes");
         }
       })
-      .catch((error) => { console.log(error);});
+      .catch((error) => {});
   }
   function createProdutoFechar(data: any) {
     ProdutosService.updateById(Number(id), data)

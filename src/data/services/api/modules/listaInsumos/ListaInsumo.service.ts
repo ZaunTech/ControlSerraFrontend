@@ -14,7 +14,6 @@ const getAll = async (
     filter = "",
     perPage = Environment.LIMITE_DE_LINHAS }: Partial<IGetAll> = {}
 ): Promise<TListListaInsumos | Error> => {
-  console.log("numero 1")
   try {
     const urlRelativa = `/${rota}?page=${page}&perPage=${perPage == 0 ? '' : perPage}&titulo_like=${filter}`;
     const { data, headers } = await Api.get(urlRelativa);

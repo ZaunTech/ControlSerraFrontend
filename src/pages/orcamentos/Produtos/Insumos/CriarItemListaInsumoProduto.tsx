@@ -59,13 +59,11 @@ export const CriarItemInsumoProdutoBase = () => {
   });
 
   function createUser(data: any) {
-    console.log(data);
     ListaInsumosService.create(data)
       .then((result) => {
         if (!(result instanceof Error)) {
           navigate(-1);
         }
-        console.log(result);
       })
       .catch((error) => {});
   }

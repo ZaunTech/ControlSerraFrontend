@@ -161,13 +161,10 @@ export const CotacoesDeUmInsumo = () => {
 
   async function idVaraintes(id: number) {
     try {
-      console.log("Id é:", id)
       const result = await ListaInsumosService.getById(id);
-      console.log(result)
       return  result.idVariante;
     } catch (erro) {
-      console.log(erro);
-      return null; // ou faça algo apropriado em caso de erro
+      return null;
     }
   }
 
@@ -179,7 +176,6 @@ export const CotacoesDeUmInsumo = () => {
     
     
       const idVarianteValue = await idVaraintes(Number(idItemListaInsumos));
-      console.log(idVarianteValue)
      if (filtro === "Fornecedor" && filtroId != undefined) {
      
       result = await CotacoesService.getAll({page:pagina, filter:busca}, Number(idVarianteValue),filtroId);
