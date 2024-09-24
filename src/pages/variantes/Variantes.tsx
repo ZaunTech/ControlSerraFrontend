@@ -1,12 +1,12 @@
 import { useMemo, useEffect } from "react";
 import { PaginaBase } from "../../ui/layouts";
 import { FerramentasDeListagem } from "../../ui/components";
-import { useNavigate, useSearchParams, useLocation, useParams } from "react-router-dom";
 import {
-  CategoriasService,
-  IInsumo,
-  InsumosService,
-} from "../../data/services/api";
+  useNavigate,
+  useSearchParams,
+  useLocation,
+  useParams,
+} from "react-router-dom";
 import { useDebounce } from "../../data/hooks";
 import { useState } from "react";
 import {
@@ -25,8 +25,11 @@ import {
   Icon,
 } from "@mui/material";
 import { Environment } from "../../data/environment";
-import { Actions } from "../../ui/components/FerramentasDeListagem/Actions";
-import { VariantesService, IVariante } from "../../data/services/api/modules/variantes";
+import { Actions } from "../../ui/components";
+import {
+  VariantesService,
+  IVariante,
+} from "../../data/services/api/modules/variantes";
 
 export const Variantes = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -53,7 +56,10 @@ export const Variantes = () => {
     try {
       setIsLoading(true);
 
-      const result = await VariantesService.getAllId({ page: pagina, filter: busca }, Number(id));
+      const result = await VariantesService.getAllId(
+        { page: pagina, filter: busca },
+        Number(id)
+      );
 
       if (result instanceof Error) {
         alert(result.message);
@@ -86,8 +92,7 @@ export const Variantes = () => {
     }
   };
 
-  useEffect(() => {
-  }, [rows]);
+  useEffect(() => {}, [rows]);
 
   return (
     <PaginaBase

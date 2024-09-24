@@ -41,7 +41,7 @@ import {
   VariantesService,
 } from "../../../data/services/api";
 import { CotacoesService } from "../../../data/services/api/modules/cotacoes";
-import { Actions } from "../../../ui/components/FerramentasDeListagem/Actions";
+import { Actions } from "../../../ui/components/ferramentasDeListagem/Actions";
 import generatePDF from "react-to-pdf";
 
 interface IPDF {

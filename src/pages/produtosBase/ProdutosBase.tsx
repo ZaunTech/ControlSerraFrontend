@@ -21,7 +21,7 @@ import {
   Icon,
 } from "@mui/material";
 import { Environment } from "../../data/environment";
-import { Actions } from "../../ui/components/FerramentasDeListagem/Actions";
+import { Actions } from "../../ui/components/ferramentasDeListagem/Actions";
 
 export const ProdutosBase = () => {
   const [searchParams, setSearchParams] = useSearchParams();

@@ -19,7 +19,7 @@ import {
   Pagination,
 } from "@mui/material";
 import { Environment } from "../../data/environment";
-import { Actions } from "../../ui/components/FerramentasDeListagem/Actions";
+import { Actions } from "../../ui/components/ferramentasDeListagem/Actions";
 
 export const Clientes = () => {
   const [searchParams, setSearchParams] = useSearchParams();

@@ -24,7 +24,7 @@ import {
   IOrcamento,
   OrcamentosService,
 } from "../../data/services/api/modules/orcamentos";
-import { Actions } from "../../ui/components/FerramentasDeListagem/Actions";
+import { Actions } from "../../ui/components/ferramentasDeListagem/Actions";
 import { format, parseISO } from "date-fns";
 
 const opcoesDeFormatacao = {
