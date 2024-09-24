@@ -1,3 +1,3 @@
-export * from "./ferramentasDeListagem/FerramentasDeListagem";
-export * from "./navigation/SideMenu";
-export * from "./ferramentasDeDetalhes/FerramentasDeDetalhes";
+  export * from "./ferramentasDeListagem/FerramentasDeListagem.tsx";
+  export * from "./navigation/SideMenu.tsx";
+  export * from "./ferramentasDeDetalhes/FerramentasDeDetalhes.tsx";
