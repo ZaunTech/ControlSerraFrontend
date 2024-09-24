@@ -33,7 +33,7 @@ import {
   IProduto,
   ProdutosService,
 } from "../../data/services/api/modules/produtos";
-import { Actions } from "../../ui/components/ferramentasDeListagem/Actions";
+import { Actions } from "../../ui/components/listTools/Actions";
 import generatePDF from "react-to-pdf";
 import {
   FornecedoresService,

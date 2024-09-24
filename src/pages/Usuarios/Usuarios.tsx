@@ -20,7 +20,7 @@ import {
   Icon,
 } from "@mui/material";
 import { Environment } from "../../data/environment";
-import { Actions } from "../../ui/components/ferramentasDeListagem/Actions";
+import { Actions } from "../../ui/components/listTools/Actions";
 import {
   IUsuario,
   UsuariosService,
