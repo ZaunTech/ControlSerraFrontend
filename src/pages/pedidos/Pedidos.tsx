@@ -26,7 +26,7 @@ import {
   PedidosService,
 } from "../../data/services/api/modules/pedidos";
 import { OrcamentosService } from "../../data/services/api/modules/orcamentos";
-import { Actions } from "../../ui/components/ferramentasDeListagem/Actions";
+import { Actions } from "../../ui/components/FerramentasDeListagem/Actions";
 
 export const Pedidos = () => {
   const [searchParams, setSearchParams] = useSearchParams();

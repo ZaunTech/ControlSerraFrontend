@@ -45,7 +45,7 @@ import {
   ICotacao,
 } from "../../../../data/services/api/modules/cotacoes";
 import React from "react";
-import { Actions } from "../../../../ui/components/ferramentasDeListagem/Actions";
+import { Actions } from "../../../../ui/components/FerramentasDeListagem/Actions";
 import { ListaInsumosService } from "../../../../data/services/api/modules/listaInsumos";
 import { ProdutoBase } from "../../../produtosBase";
 

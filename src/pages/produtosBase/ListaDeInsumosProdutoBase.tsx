@@ -33,7 +33,7 @@ import {
   IInsumosProdutoBase,
   InsumosProdutoBaseService,
 } from "../../data/services/api/modules/insumosProdutoBase";
-import { Actions } from "../../ui/components/ferramentasDeListagem/Actions";
+import { Actions } from "../../ui/components/FerramentasDeListagem/Actions";
 
 export const ListaDeInsumosProdutoBase = () => {
   const [searchParams, setSearchParams] = useSearchParams();
