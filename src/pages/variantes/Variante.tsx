@@ -11,7 +11,10 @@ import {
 } from "../../data/services/api";
 import { z } from "zod";
 import { Box, Grid, Paper, TextField, Typography } from "@mui/material";
-import { FerramentasDeDetalhes, type TTipo } from "../../ui/components/ferramentasDeDetalhes/FerramentasDeDetalhes";
+import {
+  FerramentasDeDetalhes,
+  type TTipo,
+} from "../../ui/components/ferramentasDeDetalhes/FerramentasDeDetalhes";
 
 const createUserFormSchema = z.object({
   variante: z.string().min(1, "Informe a variação"),

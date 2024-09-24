@@ -5,3 +5,4 @@ export {
   IFerramentasDeDetalhes,
   TTipo,
 } from "./ferramentasDeDetalhes/FerramentasDeDetalhes.tsx";
+export * from "./FerramentasDeListagem/Actions.tsx";
