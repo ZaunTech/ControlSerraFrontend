@@ -1,31 +1,21 @@
 import { useEffect, useState } from "react";
 import { PaginaBase } from "../../ui/layouts";
-import { FerramentasDeDetalhes, TTipo } from "../../ui/components";
 import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  CategoriasService,
-  ICategoria,
   IInsumo,
   IVariante,
   InsumosService,
   VariantesService,
 } from "../../data/services/api";
 import { z } from "zod";
-import {
-  Autocomplete,
-  Box,
-  Grid,
-  Paper,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Grid, Paper, TextField, Typography } from "@mui/material";
+import { FerramentasDeDetalhes, type TTipo } from "../../ui/components/ferramentasDeDetalhes/FerramentasDeDetalhes";
 
 const createUserFormSchema = z.object({
   variante: z.string().min(1, "Informe a variação"),
   idInsumo: z.coerce.number(),
- 
 });
 
 export const Variante = () => {
@@ -44,19 +34,16 @@ export const Variante = () => {
 
   const navigate = useNavigate();
 
-
   function createInsumo(data: any) {
     VariantesService.updateById(Number(idVariante), data)
       .then(() => {
         setIsEditable(false);
-        setPageState("detalhes")
+        setPageState("detalhes");
       })
       .catch((error) => {});
   }
 
-
   function createInsumoFechar(data: any) {
- 
     VariantesService.updateById(Number(idVariante), data)
       .then(() => {
         navigate(-1);
@@ -66,7 +53,7 @@ export const Variante = () => {
   const [opcoes, setOpcoes] = useState<IInsumo[]>([]);
 
   useEffect(() => {
-    InsumosService.getAll({perPage:0})
+    InsumosService.getAll({ perPage: 0 })
       .then((response) => {
         if (response instanceof Error) {
           return;
@@ -83,14 +70,15 @@ export const Variante = () => {
 
   const fetchData = async () => {
     try {
-      const data: IVariante | Error = await VariantesService.getById(Number(idVariante));
+      const data: IVariante | Error = await VariantesService.getById(
+        Number(idVariante)
+      );
       if (data instanceof Error) {
         return;
       }
       setValue("idInsumo", data.idInsumo);
-   
+
       setValue("variante", data.variante);
-      
     } catch (error) {}
   };
   useEffect(() => {
@@ -115,9 +103,9 @@ export const Variante = () => {
       titulo="Variante"
       barraDeFerramentas={
         <FerramentasDeDetalhes
-        tipo="detalhes"
-        pageState={pageState}
-        setPaiState={setPageState}
+          tipo="detalhes"
+          pageState={pageState}
+          setPaiState={setPageState}
           onClickSalvarEFechar={handleSubmit(createInsumoFechar)}
           onClickSalvar={handleSubmit(createInsumo)}
           onClickCancelar={fetchData}
@@ -136,10 +124,12 @@ export const Variante = () => {
             <Grid container item direction="column" spacing={4}>
               <Grid item>
                 <Box>
-                <Typography>Variante</Typography>
-                <TextField  disabled={!isEditable}  {...register("variante")}   />
+                  <Typography>Variante</Typography>
+                  <TextField disabled={!isEditable} {...register("variante")} />
                 </Box>
-                {errors.variante && <span>{errors.variante.message?.toString()}</span>}
+                {errors.variante && (
+                  <span>{errors.variante.message?.toString()}</span>
+                )}
               </Grid>
             </Grid>
           </Grid>
