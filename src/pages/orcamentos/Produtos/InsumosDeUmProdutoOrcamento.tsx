@@ -1,6 +1,6 @@
 import { useMemo, useEffect, forwardRef, Ref, useRef } from "react";
 import { PaginaBase } from "../../../ui/layouts";
-import { FerramentasDaListagem } from "../../../ui/components";
+import { FerramentasDeListagem } from "../../../ui/components";
 import {
   useNavigate,
   useSearchParams,
@@ -341,7 +341,7 @@ export const InsumosDeUmProdutoOrcamento = () => {
     <PaginaBase
       titulo={`Insumos do produto: ${tituloProd}`}
       barraDeFerramentas={
-        <FerramentasDaListagem
+        <FerramentasDeListagem
           mostrarInputBusca
           textoDaBusca={busca}
           onChangeBuscaTexto={(texto) =>

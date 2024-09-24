@@ -1,6 +1,6 @@
 import { useMemo, useEffect } from "react";
 import { PaginaBase } from "../../ui/layouts";
-import { FerramentasDaListagem } from "../../ui/components";
+import { FerramentasDeListagem } from "../../ui/components";
 import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import { ClientesService } from "../../data/services/api";
 import { useState } from "react";
@@ -116,7 +116,7 @@ export const Orcamentos = () => {
     <PaginaBase
       titulo="Orçamentos"
       barraDeFerramentas={
-        <FerramentasDaListagem
+        <FerramentasDeListagem
           mostrarInputBusca
           textoDaBusca={busca}
           onChangeBuscaTexto={(texto) =>

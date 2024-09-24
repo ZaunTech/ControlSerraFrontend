@@ -7,12 +7,11 @@ import {
   useTheme,
   InputAdornment,
   Typography,
-  Divider,
 } from "@mui/material";
 import { Environment } from "../../../data/environment";
 import { useNavigate } from "react-router-dom";
 
-interface IFerramentasDaListagem {
+interface IFerramentasDeListagem {
   textoDaBusca?: string;
   mostrarInputBusca?: boolean;
   onChangeBuscaTexto?: (novoTexto: string) => void;
@@ -24,7 +23,7 @@ interface IFerramentasDaListagem {
   componentePersonalizado?: React.ReactNode;
 }
 
-export const FerramentasDaListagem: React.FC<IFerramentasDaListagem> = ({
+export const FerramentasDeListagem: React.FC<IFerramentasDeListagem> = ({
   textoDaBusca = "Pesquisar...",
   mostrarInputBusca = false,
   onChangeBuscaTexto,

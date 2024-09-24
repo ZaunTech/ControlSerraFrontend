@@ -1,6 +1,6 @@
 import { useMemo, useEffect } from "react";
 import { PaginaBase } from "../../ui/layouts";
-import { FerramentasDaListagem } from "../../ui/components";
+import { FerramentasDeListagem } from "../../ui/components";
 import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import { IProdutoBase, ProdutosBaseService } from "../../data/services/api";
 import { useDebounce } from "../../data/hooks";
@@ -74,7 +74,7 @@ export const ProdutosBase = () => {
     <PaginaBase
       titulo="Produtos"
       barraDeFerramentas={
-        <FerramentasDaListagem
+        <FerramentasDeListagem
           mostrarInputBusca
           textoDaBusca={busca}
           onChangeBuscaTexto={(texto) =>

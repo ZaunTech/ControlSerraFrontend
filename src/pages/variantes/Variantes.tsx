@@ -1,6 +1,6 @@
 import { useMemo, useEffect } from "react";
 import { PaginaBase } from "../../ui/layouts";
-import { FerramentasDaListagem } from "../../ui/components";
+import { FerramentasDeListagem } from "../../ui/components";
 import { useNavigate, useSearchParams, useLocation, useParams } from "react-router-dom";
 import {
   CategoriasService,
@@ -93,7 +93,7 @@ export const Variantes = () => {
     <PaginaBase
       titulo="Variantes"
       barraDeFerramentas={
-        <FerramentasDaListagem
+        <FerramentasDeListagem
           mostrarInputBusca
           textoDaBusca={busca}
           onChangeBuscaTexto={(texto) =>
