@@ -63,7 +63,7 @@ const Pesquisas: React.FC<IPesquisa> = ({ setFiltro, setFiltroId }) => {
         } else {
         }
       })
-      .catch((error) => { });
+      .catch((error) => {});
   }, []);
 
   useEffect(() => {
@@ -79,7 +79,7 @@ const Pesquisas: React.FC<IPesquisa> = ({ setFiltro, setFiltroId }) => {
         } else {
         }
       })
-      .catch((error) => { });
+      .catch((error) => {});
   }, []);
 
   const [tipo, setTipo] = React.useState<string>("Todos");
@@ -131,7 +131,9 @@ const Pesquisas: React.FC<IPesquisa> = ({ setFiltro, setFiltroId }) => {
           disablePortal
           id="combo-box-demo"
           options={opcoesInsumos}
-          getOptionLabel={(option) => option.insumo.titulo + option.variante ?? ""}
+          getOptionLabel={(option) =>
+            option.insumo.titulo + (option.variante ?? "")
+          }
           sx={{ width: 225 }}
           size="small"
           renderInput={(params) => <TextField {...params} />}
@@ -300,23 +302,27 @@ export const Cotacoes = () => {
                     </Typography>
                   </TableCell>
                   <TableCell>
-                    <Typography>{row.variante.insumo?.titulo   || "Vazop"}</Typography>
+                    <Typography>
+                      {row.variante.insumo?.titulo || "Vazop"}
+                    </Typography>
                   </TableCell>
                   <TableCell>
                     <Typography>{row.variante.variante || "Vazop"}</Typography>
                   </TableCell>
                   <TableCell>
-                    <Typography>{row.valor.toLocaleString('pt-BR', {
-                      style: 'currency',
-                      currency: 'BRL',
-                      minimumFractionDigits: 2,
-                    })}</Typography>
+                    <Typography>
+                      {row.valor.toLocaleString("pt-BR", {
+                        style: "currency",
+                        currency: "BRL",
+                        minimumFractionDigits: 2,
+                      })}
+                    </Typography>
                   </TableCell>
                   <TableCell>
-                    <Typography>                    {format(
-                      parseISO(String(row.data)),
-                      "dd/MM/yyyy HH:mm"
-                    )}</Typography>
+                    <Typography>
+                      {" "}
+                      {format(parseISO(String(row.data)), "dd/MM/yyyy HH:mm")}
+                    </Typography>
                   </TableCell>
                 </TableRow>
               );

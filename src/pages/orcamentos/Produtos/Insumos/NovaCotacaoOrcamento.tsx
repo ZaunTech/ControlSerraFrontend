@@ -35,12 +35,12 @@ export const NovaCotacaoOrcamento = () => {
     idFornecedor: z.number(),
     idVariante: z.number(),
     valor: z.coerce.number(),
-   
+
     data: z.coerce.date(),
   });
 
   useEffect(() => {
-    VariantesService.getAll({perPage:0})
+    VariantesService.getAll({ perPage: 0 })
       .then((response) => {
         if (response instanceof Error) {
           return;
@@ -52,11 +52,11 @@ export const NovaCotacaoOrcamento = () => {
         } else {
         }
       })
-      .catch((error) => { });
+      .catch((error) => {});
   }, []);
 
   useEffect(() => {
-    FornecedoresService.getAll({perPage:0})
+    FornecedoresService.getAll({ perPage: 0 })
       .then((response) => {
         if (response instanceof Error) {
           return;
@@ -68,7 +68,7 @@ export const NovaCotacaoOrcamento = () => {
         } else {
         }
       })
-      .catch((error) => { });
+      .catch((error) => {});
   }, []);
 
   const {
@@ -87,7 +87,7 @@ export const NovaCotacaoOrcamento = () => {
       .then(() => {
         navigate(-1);
       })
-      .catch(() => { });
+      .catch(() => {});
   }
   const [pageState, setPageState] = useState<TTipo>("novo");
   const [isEditable, setIsEditable] = useState<boolean>(false);
@@ -105,23 +105,20 @@ export const NovaCotacaoOrcamento = () => {
   const getCurrentDate = () => {
     const today = new Date();
     const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, '0');
-    const day = String(today.getDate()).padStart(2, '0');
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
   };
 
-  const{ idItemListaInsumos  } = useParams();
-  // Preencher o valor inicial ao montar o componente
+  const { idItemListaInsumos } = useParams();
   useEffect(() => {
-    setValue('data', getCurrentDate());
-    ListaInsumosService.getById(Number(idItemListaInsumos)).then((result)=>{
-      setValue("idVariante", Number(result.idVariante));
-    }).catch((erro)=>{
-    })
-
-   
-
-    
+    setValue("data", getCurrentDate());
+    ListaInsumosService.getById(Number(idItemListaInsumos))
+      .then((result) => {
+        // @ts-ignore
+        setValue("idVariante", Number(result.idVariante));
+      })
+      .catch((erro) => {});
   }, []);
 
   return (
@@ -153,24 +150,24 @@ export const NovaCotacaoOrcamento = () => {
             <Grid container item direction="row" spacing={4}>
               <Grid item>
                 <Box>
-                <Typography>Selecione o Fonernecedor</Typography>
-                <Autocomplete
-                  disablePortal
-                  {...register("idFornecedor")}
-                  id="combo-box-demo"
-                  options={opcoes}
-                  getOptionLabel={(option) =>
-                    option.nomeFantasia ??
-                    option.nome ??
-                    option.razaoSocial ??
-                    ""
-                  }
-                  sx={{ width: 225 }}
-                  renderInput={(params) => <TextField {...params} />}
-                  onChange={(_, value) => {
-                    setValue("idFornecedor", value?.id);
-                  }}
-                />
+                  <Typography>Selecione o Fonernecedor</Typography>
+                  <Autocomplete
+                    disablePortal
+                    {...register("idFornecedor")}
+                    id="combo-box-demo"
+                    options={opcoes}
+                    getOptionLabel={(option) =>
+                      option.nomeFantasia ??
+                      option.nome ??
+                      option.razaoSocial ??
+                      ""
+                    }
+                    sx={{ width: 225 }}
+                    renderInput={(params) => <TextField {...params} />}
+                    onChange={(_, value) => {
+                      setValue("idFornecedor", value?.id);
+                    }}
+                  />
                 </Box>
 
                 {errors.idFornecedor && (
@@ -224,7 +221,9 @@ export const NovaCotacaoOrcamento = () => {
                   id="combo-box-demo"
                   {...register("idInsumo")}
                   options={opcaoiInsumos}
-                  getOptionLabel={(opcaoInsumo) => ` ${opcaoInsumo.insumo.titulo || ''}  -  ${opcaoInsumo.variante || ''}`}
+                  getOptionLabel={(opcaoInsumo) =>
+                    ` ${opcaoInsumo.insumo.titulo || ""}  -  ${opcaoInsumo.variante || ""}`
+                  }
                   sx={{ width: 255 }}
                   value={
                     opcaoiInsumos.find(

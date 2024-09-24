@@ -127,9 +127,11 @@ export const CriarPedido = () => {
                   id="combo-box-demo"
                   options={opcoes}
                   getOptionLabel={(option) =>
-                    option.id.toString() + " - " + option.cliente.nome ??
-                    option.cliente.nomeFantasia ??
-                    option.cliente.razaoSocial
+                    option.id.toString() +
+                    " - " +
+                    (option.cliente.nome ??
+                      option.cliente.nomeFantasia ??
+                      option.cliente.razaoSocial)
                   }
                   disabled={!isEditable}
                   sx={{ width: 225 }}

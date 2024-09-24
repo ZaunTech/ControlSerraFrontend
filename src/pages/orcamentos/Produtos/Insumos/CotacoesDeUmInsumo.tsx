@@ -71,7 +71,7 @@ const Pesquisas: React.FC<IPesquisa> = ({ setFiltro, setFiltroId }) => {
         } else {
         }
       })
-      .catch((error) => { });
+      .catch((error) => {});
   }, []);
 
   useEffect(() => {
@@ -87,7 +87,7 @@ const Pesquisas: React.FC<IPesquisa> = ({ setFiltro, setFiltroId }) => {
         } else {
         }
       })
-      .catch((error) => { });
+      .catch((error) => {});
   }, []);
 
   const [tipo, setTipo] = React.useState<string>("Todos");
@@ -162,26 +162,30 @@ export const CotacoesDeUmInsumo = () => {
   async function idVaraintes(id: number) {
     try {
       const result = await ListaInsumosService.getById(id);
-      return  result.idVariante;
+      // @ts-ignore
+      return result.idVariante;
     } catch (erro) {
       return null;
     }
   }
 
-
   const setDados = async () => {
     try {
       setIsLoading(true);
       let result;
-    
-    
+
       const idVarianteValue = await idVaraintes(Number(idItemListaInsumos));
-     if (filtro === "Fornecedor" && filtroId != undefined) {
-     
-      result = await CotacoesService.getAll({page:pagina, filter:busca}, Number(idVarianteValue),filtroId);
+      if (filtro === "Fornecedor" && filtroId != undefined) {
+        result = await CotacoesService.getAll(
+          { page: pagina, filter: busca },
+          Number(idVarianteValue),
+          filtroId
+        );
       } else {
-        
-        result = await CotacoesService.getAll({page:pagina, filter:busca},  Number(idVarianteValue));
+        result = await CotacoesService.getAll(
+          { page: pagina, filter: busca },
+          Number(idVarianteValue)
+        );
       }
 
       if (result instanceof Error) {
@@ -309,16 +313,19 @@ export const CotacoesDeUmInsumo = () => {
                     </Typography>
                   </TableCell>
                   <TableCell>
-                    <Typography>{row.variante?.insumo?.titulo + row.variante?.variante || "Vazop"}</Typography>
+                    <Typography>
+                      {row.variante?.insumo?.titulo + row.variante?.variante ||
+                        "Vazop"}
+                    </Typography>
                   </TableCell>
                   <TableCell>
                     <Typography>{row.valor}</Typography>
                   </TableCell>
                   <TableCell>
-                    <Typography>  {format(
-                      parseISO(String(row.data)),
-                      "dd/MM/yyyy HH:mm"
-                    )}</Typography>
+                    <Typography>
+                      {" "}
+                      {format(parseISO(String(row.data)), "dd/MM/yyyy HH:mm")}
+                    </Typography>
                   </TableCell>
                 </TableRow>
               );

@@ -49,9 +49,12 @@ const getCurrentDate = () => {
 };
 
 const createUserFormSchema = z.object({
-  idCliente: z.coerce.number().optional().refine((value) => value >= 1, {
-    message: "Selecione um Cliente",
-  }),
+  idCliente: z.coerce
+    .number()
+    .optional()
+    .refine((value) => value >= 1, {
+      message: "Selecione um Cliente",
+    }),
   observacoes: z.string().optional(),
   status: z.string(),
   validade: z.coerce
@@ -135,9 +138,9 @@ export const EditarOrcamento = () => {
         setValue("observacoes", result.observacoes);
         setTipo(result.status.toString());
         setValue("status", result.status.toString());
-
         setValue("prazoEstimadoProducao", result.prazoEstimadoProducao);
         setOrcamento(result);
+        // @ts-ignore
         setValue("serralheiro", usuario.nome);
       });
     } catch (error) {}

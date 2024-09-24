@@ -302,6 +302,7 @@ export const ProdutosPedido = () => {
   async function getID() {
     try {
       const result = await PedidosService.getById(Number(id));
+      // @ts-ignore
       return result.idOrcamento;
     } catch (error) {
       console.error("Erro ao obter o pedido:", error);

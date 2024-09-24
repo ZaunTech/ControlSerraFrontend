@@ -56,8 +56,7 @@ export const Pedido = () => {
         setIsEditable(false);
         fetchData();
       })
-      .catch((error) => {
-      });
+      .catch((error) => {});
   }
   function createPedidoFechar(data: any) {
     PedidosService.updateById(Number(id), data)
@@ -65,8 +64,7 @@ export const Pedido = () => {
         setPageState("detalhes");
         navigate(-1);
       })
-      .catch((error) => {
-      });
+      .catch((error) => {});
   }
 
   const {
@@ -187,9 +185,11 @@ export const Pedido = () => {
                   id="combo-box-demo"
                   options={opcoes}
                   getOptionLabel={(option) =>
-                    option.id.toString() + " - " + option.cliente.nome ??
-                    option.cliente.nomeFantasia ??
-                    option.cliente.razaoSocial
+                    option.id.toString() +
+                    " - " +
+                    (option.cliente.nome ??
+                      option.cliente.nomeFantasia ??
+                      option.cliente.razaoSocial)
                   }
                   value={
                     opcoes.find(

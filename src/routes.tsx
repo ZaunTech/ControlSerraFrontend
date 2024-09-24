@@ -16,7 +16,13 @@ import {
   NovaCotacaoOrcamento,
   ProdutoOrcamento,
 } from "./pages/orcamentos";
-import { Pedido, Pedidos, CriarPedido, ProdutosPedido, InsumosProduto } from "./pages/pedidos";
+import {
+  Pedido,
+  Pedidos,
+  CriarPedido,
+  ProdutosPedido,
+  InsumosProduto,
+} from "./pages/pedidos";
 import { Categoria, Categorias, CriarCategoria } from "./pages/categorias";
 import {
   Fornecedor,
@@ -35,7 +41,12 @@ import { Home } from "./pages/home/Home.tsx";
 import Error from "./pages/error/Error.tsx";
 import { Login, RecuperarSenha } from "./pages/login";
 import { Cotacoes, Cotacao, CriarCotacao, Recotar } from "./pages/cotacoes";
-import { AlterarSenha, CriarUsuario, Usuario, Usuarios } from "./pages/usuarios/index.tsx";
+import {
+  AlterarSenha,
+  CriarUsuario,
+  Usuario,
+  Usuarios,
+} from "./pages/usuarios/index.tsx";
 import { Variantes } from "./pages/variantes/Variantes.tsx";
 import { Variante } from "./pages/variantes/Variante.tsx";
 import { CriarVariante } from "./pages/variantes/CriarVariante.tsx";
@@ -196,25 +207,25 @@ const router = createBrowserRouter([
           },
           {
             path: ":id",
-            children:[
-            {
-              index:true,
-              element: <Pedido/>,
-            },
-            {
-              path:"Produtos",
-              children:[
-                {
-                  index:true,
-                  element: <ProdutosPedido/>
-                },
-                {
-                  path:":idProduto",
-                  element:<InsumosProduto/>
-                }
-              ]
-            },
-          ]
+            children: [
+              {
+                index: true,
+                element: <Pedido />,
+              },
+              {
+                path: "Produtos",
+                children: [
+                  {
+                    index: true,
+                    element: <ProdutosPedido />,
+                  },
+                  {
+                    path: ":idProduto",
+                    element: <InsumosProduto />,
+                  },
+                ],
+              },
+            ],
           },
         ],
       },
@@ -237,23 +248,23 @@ const router = createBrowserRouter([
                 element: <Insumo />,
               },
               {
-                path: 'variantes',
+                path: "variantes",
                 children: [
                   {
                     index: true,
-                    element: <Variantes />
+                    element: <Variantes />,
                   },
                   {
-                    path: 'novo',
-                    element: <CriarVariante />
+                    path: "novo",
+                    element: <CriarVariante />,
                   },
                   {
-                    path: ':idVariante',
-                    element: <Variante />
-                  }
-                ]
-              }
-            ]
+                    path: ":idVariante",
+                    element: <Variante />,
+                  },
+                ],
+              },
+            ],
           },
         ],
       },
@@ -276,10 +287,10 @@ const router = createBrowserRouter([
                 element: <Cotacao />,
               },
               {
-                path: 'recotar',
-                element: <Recotar />
-              }
-            ]
+                path: "recotar",
+                element: <Recotar />,
+              },
+            ],
           },
         ],
       },
@@ -352,18 +363,16 @@ const router = createBrowserRouter([
           },
           {
             path: ":id",
-            children:
-            [
+            children: [
               {
-                index:true,
-                element:<Usuario />,
-                
+                index: true,
+                element: <Usuario />,
               },
               {
-                path:"alterarsenha",
-                element:<AlterarSenha/>
+                path: "alterarsenha",
+                element: <AlterarSenha />,
               },
-            ]
+            ],
           },
         ],
       },
