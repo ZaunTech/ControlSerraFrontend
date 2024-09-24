@@ -46,7 +46,7 @@ import {
   CriarUsuario,
   Usuario,
   Usuarios,
-} from "./pages/usuarios/index.tsx";
+} from "./pages/Usuarios/index.tsx";
 import { Variantes } from "./pages/variantes/Variantes.tsx";
 import { Variante } from "./pages/variantes/Variante.tsx";
 import { CriarVariante } from "./pages/variantes/CriarVariante.tsx";
